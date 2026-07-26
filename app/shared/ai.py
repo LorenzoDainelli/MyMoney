@@ -594,7 +594,22 @@ def _genera(superficie: str, contesto: str = "", fatti=None, domanda: str = "",
     # decide quali frasi sono lecite. Serve ovunque, anche su un titolo: lì la
     # confusione fra storia di mercato e possesso è ancora più facile.
     from shared import insights as _ins
-    parti.append(_ins.come_testo_orizzonte())
+    if superficie == "metrica":
+        # Sulle metriche il vincolo è ROVESCIATO: molte (performance, volatilità,
+        # rischio) misurano la storia di MERCATO del titolo, lunga anni. Bollarle
+        # come «basate su 22 giorni di dati» è l'errore che l'agente faceva qui.
+        parti.append(
+            "QUANTA STORIA — tieni distinte due cose:\n"
+            "- l'utente traccia i propri dati e possiede i titoli da POCHI giorni;\n"
+            "- ma diverse metriche (performance, volatilità, rischio) misurano la "
+            "storia di MERCATO del titolo, che può essere lunga anni.\n"
+            "La storia di mercato è lecita e NON va liquidata come «basata su pochi "
+            "giorni di dati dell'app»: si basa sui dati di mercato, e la scheda qui "
+            "sotto ti dice su quale periodo. Resta sempre distinto l'andamento del "
+            "titolo dal risultato dell'utente: un «+X% a 12 mesi» è successo al "
+            "titolo prima che lui lo comprasse, non è il suo guadagno.\n")
+    else:
+        parti.append(_ins.come_testo_orizzonte())
 
     if memoria:
         from shared import ai_memory
@@ -685,11 +700,17 @@ def analizza_posizione(descr: str) -> dict:
     return _genera("titolo", contesto=descr)
 
 
-def spiega_metrica(label: str, valore: str, contesto: str = "") -> dict:
+def spiega_metrica(label: str, valore: str, contesto: str = "", scheda: dict = None) -> dict:
     """Spiega una singola metrica dell'analisi (popup ✨ della pagina Analisi).
     Ritorna {ok, text, conf} oppure {ok: False, error}."""
     domanda = (f"L'indicatore da spiegare è: \"{privacy.scrub_text(label)}\", "
                f"e il valore del suo portafoglio è {privacy.scrub_text(valore)}.")
+    if scheda:
+        domanda += (
+            "\nSCHEDA VERIFICATA DELLA METRICA (attieniti a QUESTI, non indovinare):\n"
+            f"- COSA MISURA: {scheda['cosa']}.\n"
+            f"- SU QUALI DATI/PERIODO: {scheda['dati']}.\n"
+            f"- LIMITE DA DIRE ALL'UTENTE: {scheda['limite']}.")
     return _genera("metrica", contesto=contesto, domanda=domanda)
 
 

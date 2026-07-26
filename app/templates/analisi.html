@@ -6,15 +6,15 @@
 {% extends "base.html" %}
 {% block title %}{{ t('analisi.title') }} — {{ t('app.name') }}{% endblock %}
 
-{% macro aibtn(label, value) -%}
-  {%- if ai_on %}<button type="button" class="mm-aibtn" data-label="{{ label }}" data-value="{{ value }}" aria-label="{{ t('an.ai_title') }}" title="{{ t('an.ai_title') }}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;cursor:pointer;border:1px solid var(--ai-bd);background:var(--ai-bg);color:var(--ai);border-radius:999px;flex:none;padding:0;font-size:12px;">✨</button>{% endif -%}
+{% macro aibtn(label, value, key='') -%}
+  {%- if ai_on %}<button type="button" class="mm-aibtn" data-label="{{ label }}" data-value="{{ value }}" data-metric="{{ key }}" aria-label="{{ t('an.ai_title') }}" title="{{ t('an.ai_title') }}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;cursor:pointer;border:1px solid var(--ai-bd);background:var(--ai-bg);color:var(--ai);border-radius:999px;flex:none;padding:0;font-size:12px;">✨</button>{% endif -%}
 {%- endmacro %}
 
-{% macro metric(label, value, sub='', tone='') -%}
+{% macro metric(label, value, sub='', tone='', key='') -%}
   <div style="border:1px solid var(--border);border-radius:var(--r-md);padding:13px 14px;background:var(--surface);display:flex;flex-direction:column;gap:2px;min-width:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
       <span class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ label }}</span>
-      {{ aibtn(label, value) }}
+      {{ aibtn(label, value, key) }}
     </div>
     <div class="num" style="font-size:var(--text-xl);font-weight:800;letter-spacing:var(--ls-tight);color:{{ 'var(--neg)' if tone=='warn' else 'var(--pos)' if tone=='ok' else 'var(--ink)' }};">{{ value }}</div>
     {% if sub %}<div class="faint" style="font-size:12px;">{{ sub }}</div>{% endif %}
@@ -36,13 +36,24 @@
   <div class="card" style="margin-top:4px;">
     {{ sechead(t('an.sintesi_h'), t('an.sintesi_t')) }}
     <div class="mm-grid-3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;">
-      {{ metric(t('an.valore'), (an.valore_totale | eur) if an.valore_totale is not none else '—') }}
-      {{ metric(t('an.perf'), ('+' if an.perf12m >= 0 else '') ~ (an.perf12m | pct) if an.perf12m is not none else '—', '', ('ok' if an.perf12m >= 0 else 'warn') if an.perf12m is not none else '') }}
-      {{ metric(t('an.divyield'), (an.div_yield | pct) if an.div_yield is not none else '—') }}
-      {% if an.div_income is not none %}{{ metric(t('an.divincome'), an.div_income | eur, t('an.divincome_sub')) }}{% endif %}
-      {{ metric(t('an.ter'), (an.ter | pct) if an.ter is not none else '—', t('an.ter_sub')) }}
-      {{ metric(t('an.eff'), (lt.eff_holdings | qty) if lt.eff_holdings else '—', t('an.eff_sub')) }}
+      {{ metric(t('an.valore'), (an.valore_totale | eur) if an.valore_totale is not none else '—', '', '', 'valore') }}
+      {% if an.risultato_pct is not none %}
+        {{ metric(t('an.risultato'), ('+' if an.risultato_pct >= 0 else '') ~ (an.risultato_pct | pct),
+                  t('an.risultato_sub', v=(an.versato_totale | eur)),
+                  'ok' if an.risultato_pct >= 0 else 'warn', 'risultato') }}
+      {% endif %}
+      {% if an.perf12m is not none %}
+        {{ metric(t('an.mkt12m'), ('+' if an.perf12m >= 0 else '') ~ (an.perf12m | pct),
+                  t('an.mkt12m_sub', cop=((an.perf12m_cop | default(0, true)) ~ '%')), '', 'mkt12m') }}
+      {% endif %}
+      {{ metric(t('an.divyield'), (an.div_yield | pct) if an.div_yield is not none else '—',
+                t('an.divyield_sub', cop=((an.div_coverage | default(0, true)) ~ '%')) if an.div_yield is not none else '', '', 'divyield') }}
+      {% if an.div_income is not none %}{{ metric(t('an.divincome'), an.div_income | eur, t('an.divincome_sub'), '', 'divincome') }}{% endif %}
+      {{ metric(t('an.ter'), (an.ter | pct) if an.ter is not none else '—',
+                t('an.ter_cov', n=an.ter_n_con, tot=an.ter_n_etf) if an.ter is not none else '', '', 'ter') }}
+      {{ metric(t('an.eff'), (lt.eff_holdings | qty) if lt.eff_holdings else '—', t('an.eff_sub'), '', 'eff') }}
     </div>
+    {% if an.esclusi %}<p class="faint" style="font-size:12px;margin-top:10px;">{{ t('an.esclusi_note', tk=(an.esclusi | join(', '))) }}</p>{% endif %}
   </div>
 
   {# ---------- Rischio ---------- #}
@@ -50,12 +61,12 @@
     {{ sechead(t('an.rischio_h'), t('an.rischio_t')) }}
     {% if risk %}
       <div class="mm-grid-3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;">
-        {{ metric(t('analisi.vol'), risk.vol | pct, t('analisi.vol_hint')) }}
-        {{ metric(t('analisi.mdd'), risk.mdd | pct, t('analisi.mdd_hint'), 'warn') }}
-        {{ metric(t('analisi.sharpe'), risk.sharpe if risk.sharpe is not none else '—', t('analisi.sharpe_hint')) }}
-        {{ metric(t('analisi.beta'), risk.beta if risk.beta is not none else '—', t('analisi.beta_hint')) }}
-        {% if risk.var95m is defined and risk.var95m is not none %}{{ metric(t('an.var'), '−' ~ (risk.var95m | pct), t('an.var_sub'), 'warn') }}{% endif %}
-        {% if risk.r2 is defined and risk.r2 is not none %}{{ metric(t('an.r2'), risk.r2 | pct, t('an.r2_sub')) }}{% endif %}
+        {{ metric(t('analisi.vol'), risk.vol | pct, t('analisi.vol_hint'), '', 'vol') }}
+        {{ metric(t('analisi.mdd'), risk.mdd | pct, t('analisi.mdd_hint'), 'warn', 'mdd') }}
+        {{ metric(t('analisi.sharpe'), risk.sharpe if risk.sharpe is not none else '—', t('analisi.sharpe_hint'), '', 'sharpe') }}
+        {{ metric(t('analisi.beta'), risk.beta if risk.beta is not none else '—', t('analisi.beta_hint'), '', 'beta') }}
+        {% if risk.var95m is defined and risk.var95m is not none %}{{ metric(t('an.var'), '−' ~ (risk.var95m | pct), t('an.var_sub'), 'warn', 'var') }}{% endif %}
+        {% if risk.r2 is defined and risk.r2 is not none %}{{ metric(t('an.r2'), risk.r2 | pct, t('an.r2_sub'), '', 'r2') }}{% endif %}
       </div>
       <p class="faint" style="font-size:12px;margin-top:10px;">{{ t('analisi.risk_meta', n=risk.n, weeks=risk.weeks, when=risk.when) }}</p>
     {% else %}
@@ -71,10 +82,10 @@
     <div class="card" style="margin:0;">
       {{ sechead(t('an.divers_h'), t('an.divers_t')) }}
       <div class="mm-grid-2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;">
-        {{ metric(t('analisi.tech_conc'), lt.tech | pct, t('analisi.tech_alert') if lt.tech_alert else t('analisi.tech_ok'), 'warn' if lt.tech_alert else 'ok') }}
-        {{ metric(t('an.top5'), (an.top5 | pct) if an.top5 is not none else '—', t('an.top5_sub')) }}
-        {{ metric(t('an.top1'), (an.top1 | pct) if an.top1 is not none else '—', an.top1_tk) }}
-        {{ metric(t('an.nsett'), lt.settori | length, t('an.nsett_sub')) }}
+        {{ metric(t('analisi.tech_conc'), lt.tech | pct, t('analisi.tech_alert') if lt.tech_alert else t('analisi.tech_ok'), 'warn' if lt.tech_alert else 'ok', 'tech') }}
+        {{ metric(t('an.top5'), (an.top5 | pct) if an.top5 is not none else '—', t('an.top5_sub'), '', 'top5') }}
+        {{ metric(t('an.top1'), (an.top1 | pct) if an.top1 is not none else '—', an.top1_tk, '', 'top1') }}
+        {{ metric(t('an.nsett'), lt.settori | length, t('an.nsett_sub'), '', 'nsett') }}
       </div>
     </div>
     <div class="card" style="margin:0;">
@@ -110,7 +121,7 @@
         </div>
         {% endfor %}
       </div>
-      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=lt.coperto, tot=lt.totale_target) }}</div>
+      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=lt.coperto_pct) }}{% if not lt.usa_valori %} {{ t('an.base_target') }}{% endif %}</div>
       {% else %}<div class="faint">{{ t('pf.unavailable') }}</div>{% endif %}
     </div>
     <div class="card" style="margin:0;">
@@ -211,6 +222,7 @@
     modal.style.display = 'block';
     var fd = new FormData();
     fd.append('label', b.dataset.label); fd.append('valore', b.dataset.value);
+    fd.append('metric', b.dataset.metric || '');
     fetch('/analisi/ai', { method: 'POST', body: fd })
       .then(function (r) { return r.json(); })
       .then(function (j) {
