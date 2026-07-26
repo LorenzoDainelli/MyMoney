@@ -3,9 +3,14 @@
 Tutto DESCRITTIVO, mai prescrittivo: mostra fatti (esposizioni, volatilità, ...)
 così decidi tu. Niente segnali operativi. I dati mancanti restano fuori dal calcolo
 e la copertura viene dichiarata (onestà intellettuale).
+
+Una regola di igiene sui PESI: quando l'utente ha valori reali (quantità × prezzo),
+TUTTA la pagina pesa sul valore; quando non li ha, pesa sulla % target. Mai
+mescolare le due basi nella stessa schermata — sarebbe confrontare mele con pere.
 """
 import json
 import math
+import re
 from datetime import datetime
 
 from portfolio import market
@@ -18,27 +23,72 @@ def _sector_key(label: str) -> str:
     return "realestate" if s == "real_estate" else s
 
 
+def _valore_posizione(p, qmap) -> float | None:
+    """Valore reale in euro (quantità × prezzo), o None se il prezzo manca.
+    Un prezzo fallito nell'ultimo aggiornamento (ok=False) conta come mancante:
+    meglio escludere la riga che gonfiarla con un dato vecchio o sbagliato."""
+    q = qmap.get((p.ticker or "").upper())
+    if q and q.ok and q.price_eur is not None and p.quantita:
+        return round(q.price_eur * p.quantita, 2)
+    return None
+
+
+def _canon_titolo(symbol: str, name: str) -> str:
+    """Chiave canonica di un titolo per il look-through: il SIMBOLO quando c'è —
+    così 'NVIDIA Corp' dentro un ETF e la tua 'NVIDIA' diretta risultano lo
+    stesso titolo — altrimenti il nome normalizzato. Le classi azionarie diverse
+    (GOOG vs GOOGL) restano distinte apposta: sono strumenti diversi."""
+    s = (symbol or "").strip().upper().split(".")[0]
+    if s and any(c.isalpha() for c in s):
+        return s
+    return "n:" + re.sub(r"[^a-z0-9]", "", (name or "").lower())
+
+
 def look_through(cached_only: bool = False) -> dict:
-    """Esposizione settoriale aggregata (ETF per pesi settoriali, azioni per settore),
-    pesata sulla % target. Più rendimento da dividendo e diversificazione.
-    Con cached_only=True legge SOLO la cache locale (mai HTTP): per la dashboard."""
+    """Esposizione settoriale aggregata (ETF scomposti nei loro settori, azioni
+    per settore). Pesi sul VALORE reale quando c'è, altrimenti sulla % target
+    (una base sola per tutta la pagina). Con cached_only=True legge SOLO la cache
+    locale (mai HTTP): per la dashboard.
+
+    La copertura dichiarata conta solo il peso che porta DAVVERO un settore: un
+    fondo di cui Yahoo non pubblica la scomposizione non «copre» nulla e non deve
+    gonfiare il denominatore (era il caso di GIFL)."""
     posizioni = [p for p in lista_posizioni() if not p.is_fisso and (p.ticker or "").strip()]
     fetch = market.get_fundamentals_cached if cached_only else market.get_fundamentals
+    qmap = market.quotes_map()
+
+    valori = {p.id: _valore_posizione(p, qmap) for p in posizioni}
+    usa_valori = sum(v for v in valori.values() if v) > 0
+
+    def peso(p):
+        return (valori[p.id] if usa_valori else p.pct_target) or 0.0
+
+    base = sum(peso(p) for p in posizioni)          # peso analizzabile in totale
     sett: dict[str, float] = {}
-    coperto = 0.0
+    coperto = 0.0                                   # peso che contribuisce un settore
     div_acc = div_w = 0.0
     for p in posizioni:
+        w = peso(p)
+        if not w:
+            continue                                # in modalità valore: niente prezzo → fuori
         f = fetch(p.ticker) if cached_only else fetch(p.ticker, tipo=p.tipo)
         if not f:
             continue
-        w = p.pct_target
-        coperto += w
+        porta_settore = False
         if p.tipo == "ETF" and f.get("sectors"):
             for s in f["sectors"]:
-                sett[s["name"]] = sett.get(s["name"], 0.0) + w * s["weight"] / 100.0
-        elif f.get("sector"):
+                # stessa normalizzazione delle azioni: così un ETF con
+                # "Technology"/"real_estate" e un'azione con "technology"/"Real
+                # Estate" finiscono nella STESSA voce, non in due
+                k = _sector_key(s["name"])
+                sett[k] = sett.get(k, 0.0) + w * s["weight"] / 100.0
+            porta_settore = True
+        elif p.tipo != "ETF" and f.get("sector"):
             k = _sector_key(f["sector"])
             sett[k] = sett.get(k, 0.0) + w
+            porta_settore = True
+        if porta_settore:
+            coperto += w
         if f.get("div_yield"):
             div_acc += w * f["div_yield"]
             div_w += w
@@ -47,18 +97,18 @@ def look_through(cached_only: bool = False) -> dict:
         for k, v in sorted(sett.items(), key=lambda x: -x[1]):
             settori.append({"key": k, "pct": round(v / coperto * 100, 1)})
     tech = next((s["pct"] for s in settori if s["key"] == "technology"), 0.0)
-    weights = [p.pct_target for p in posizioni]
+    weights = [peso(p) for p in posizioni if peso(p)]
     sw = sum(weights)
     hhi = sum((x / sw) ** 2 for x in weights) if sw else 0
     return {
         "settori": settori,
         "tech": tech,
         "tech_alert": tech > 50,
-        "coperto": round(coperto, 1),
-        "totale_target": round(sw, 1),
+        "usa_valori": usa_valori,
+        "coperto_pct": round(coperto / base * 100, 1) if base else 0.0,
         "div_yield": round(div_acc / div_w * 100, 2) if div_w else None,
         "eff_holdings": round(1 / hhi, 1) if hhi else 0,
-        "n_titoli": len(posizioni),
+        "n_titoli": len(weights),
     }
 
 
@@ -67,18 +117,30 @@ def analisi_completa() -> dict:
 
     Pesi: il VALORE reale se inserito (quantità/valori), altrimenti la % target.
     Il reddito da dividendi in euro esiste solo coi valori reali. I dati mancanti
-    restano None: la pagina li mostra vuoti, mai inventati."""
+    restano None: la pagina li mostra vuoti, mai inventati.
+
+    Due onestà importanti vivono qui:
+    - il RISULTATO dell'utente (valore di oggi vs quanto ha versato) è il numero
+      che lo riguarda davvero; la performance a 12 mesi del titolo è storia di
+      MERCATO, avvenuta prima che comprasse, e va tenuta separata e dichiarata;
+    - ogni media parziale (dividendi, TER, performance) porta con sé la sua
+      COPERTURA: su quanta parte del portafoglio è calcolata."""
     vista = vista_portafoglio()
     snapshot = market.get_perf_snapshot()
     usa_valori = vista["ha_totale"]
 
     pesi = []           # (posizione, peso, fondamentali, quotazione)
+    versato_tot = 0.0
+    esclusi = []        # titoli con quantità ma senza prezzo: fuori dal calcolo, dichiarati
     for r in vista["righe"]:
         p = r["p"]
         if p.is_fisso:
             continue
+        versato_tot += (p.versato_totale or 0.0)
         w = r["valore"] if usa_valori else p.pct_target
         if not w:
+            if usa_valori and (p.ticker or "").strip() and p.quantita:
+                esclusi.append(p.ticker)      # ha quantità ma il prezzo è mancato
             continue
         f = market.get_fundamentals(p.ticker, tipo=p.tipo) if (p.ticker or "").strip() else None
         pesi.append((p, float(w), f, r.get("q")))
@@ -87,8 +149,10 @@ def analisi_completa() -> dict:
     perf_n = perf_d = 0.0
     div_n = div_d = reddito = 0.0
     ter_n = ter_d = 0.0
+    n_etf = n_etf_ter = 0
     etf_w = 0.0
-    expo: dict[str, float] = {}
+    expo: dict[str, float] = {}         # chiave canonica -> peso (quota nel portafoglio)
+    nomi_expo: dict[str, str] = {}      # chiave canonica -> nome da mostrare
     valute: dict[str, float] = {}       # valuta di QUOTAZIONE (dato reale)
     geo: dict[str, float] = {}          # paese: noto solo per le azioni
     geo_cop = 0.0
@@ -99,6 +163,7 @@ def analisi_completa() -> dict:
             perf_d += w
         if p.tipo == "ETF":
             etf_w += w
+            n_etf += 1
         if f:
             if f.get("div_yield"):
                 div_n += w * f["div_yield"]
@@ -108,15 +173,21 @@ def analisi_completa() -> dict:
             if p.tipo == "ETF" and f.get("expense_ratio"):
                 ter_n += w * f["expense_ratio"]
                 ter_d += w
-            # esposizione reale: quote dentro gli ETF + azioni dirette
+                n_etf_ter += 1
+            # esposizione reale: quote dentro gli ETF + azioni dirette, UNITE per
+            # titolo (stesso simbolo = stessa riga, mai sdoppiato per il nome)
             if p.tipo == "ETF" and f.get("holdings"):
                 for h in f["holdings"]:
                     nome = h.get("name") or h.get("symbol") or ""
                     peso_h = (h.get("weight") or 0) / 100.0
                     if nome and peso_h:
-                        expo[nome] = expo.get(nome, 0.0) + w / somma * peso_h
+                        k = _canon_titolo(h.get("symbol"), nome)
+                        expo[k] = expo.get(k, 0.0) + w / somma * peso_h
+                        nomi_expo.setdefault(k, nome)
         if p.tipo != "ETF":
-            expo[p.nome] = expo.get(p.nome, 0.0) + w / somma
+            k = _canon_titolo(p.ticker, p.nome)
+            expo[k] = expo.get(k, 0.0) + w / somma
+            nomi_expo[k] = p.nome           # la tua posizione ha la precedenza sul nome
             if f and f.get("country"):
                 geo[f["country"]] = geo.get(f["country"], 0.0) + w
                 geo_cop += w
@@ -128,27 +199,48 @@ def analisi_completa() -> dict:
     top1 = round(ordinati[0][1] / somma * 100, 1) if ordinati else None
     top1_tk = ordinati[0][0].ticker if ordinati else ""
     top5 = round(sum(w for _, w, _, _ in ordinati[:5]) / somma * 100, 1) if ordinati else None
-    look = [{"n": n, "w": round(v * 100, 1)} for n, v in
+    look = [{"n": nomi_expo[k], "w": round(v * 100, 1)} for k, v in
             sorted(expo.items(), key=lambda x: -x[1])[:8]]
     lista_valute = [{"n": k, "w": round(v / somma * 100, 1)} for k, v in
                     sorted(valute.items(), key=lambda x: -x[1])]
     lista_geo = [{"n": k, "w": round(v / geo_cop * 100, 1)} for k, v in
                  sorted(geo.items(), key=lambda x: -x[1])] if geo_cop else []
 
+    valore_tot = vista["totale"] if usa_valori else None
+    # il RISULTATO: quanto vale oggi contro quanto ci hai messo. Questo è il tuo
+    # numero; la perf a 12 mesi qui sotto è un'altra cosa (storia del mercato).
+    risultato_eur = risultato_pct = None
+    if usa_valori and versato_tot > 0:
+        risultato_eur = round(valore_tot - versato_tot, 2)
+        risultato_pct = round((valore_tot / versato_tot - 1) * 100, 2)
+
     return {
         "valute": lista_valute,
         "geo": lista_geo,
         "geo_coverage": round(geo_cop / somma * 100, 1) if geo_cop else 0,
         "usa_valori": usa_valori,
-        "valore_totale": vista["totale"] if usa_valori else None,
+        "valore_totale": valore_tot,
+        "versato_totale": round(versato_tot, 2) if usa_valori else None,
+        "risultato_eur": risultato_eur,
+        "risultato_pct": risultato_pct,
         "perf12m": round(perf_n / perf_d, 2) if perf_d else None,
+        # su quanta parte del valore è calcolata la perf di mercato (il resto:
+        # titoli senza storia a 12 mesi su Yahoo)
+        "perf12m_cop": round(perf_d / somma * 100) if (perf_d and somma) else None,
         "div_yield": round(div_n / div_d * 100, 2) if div_d else None,
+        # copertura del rendimento da dividendo: gli ETF non pubblicano il dato,
+        # quindi la media vale solo sui titoli che lo dichiarano
+        "div_coverage": round(div_d / somma * 100) if (div_d and somma) else None,
         "div_income": round(reddito, 2) if (usa_valori and reddito) else None,
         "ter": round(ter_n / ter_d * 100, 2) if ter_d else None,
+        "ter_n_etf": n_etf,
+        "ter_n_con": n_etf_ter,
         "quota_etf": round(etf_w / somma * 100, 1) if pesi else None,
         "top1": top1, "top1_tk": top1_tk, "top5": top5,
         "look": look, "look_max": look[0]["w"] if look else 1,
+        "look_coverage": round(sum(expo.values()) * 100, 1) if expo else 0,
         "n_titoli": len(pesi),
+        "esclusi": esclusi,
     }
 
 

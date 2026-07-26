@@ -32,18 +32,103 @@ def analisi(request: Request):
     })
 
 
+def _scheda_metrica(metric: str, an: dict, lt: dict, risk: dict | None) -> dict | None:
+    """La CARTA D'IDENTITÀ della metrica: cosa misura, su quali dati/periodo/
+    copertura è calcolato QUESTO valore, e il suo limite. Serve a togliere
+    all'agente il bisogno di indovinare — la causa più frequente delle sue
+    risposte sbagliate su questa pagina (es. spacciare una perf di mercato per
+    guadagno dell'utente, o attribuire una volatilità a «22 giorni di dati»)."""
+    def _cop(v):
+        return f"{v}% del valore" if v is not None else "una parte del valore"
+    riskbase = (f"{risk['n']} titoli, {risk['weeks']} settimane di prezzi "
+                f"settimanali (calcolato il {risk['when']})") if risk else "dati settimanali"
+    risklimite = ("misura la storia di MERCATO del titolo, non i pochi giorni in "
+                  "cui l'utente lo possiede; ed è su prezzi in valuta di quotazione, "
+                  "quindi non include il rischio di cambio")
+    schede = {
+        "valore": {
+            "cosa": "la somma del valore attuale (quantità × prezzo di oggi) di tutte le posizioni con prezzo noto",
+            "dati": "prezzi live da Yahoo Finance, convertiti in euro",
+            "limite": "esclude i titoli di cui manca il prezzo, quindi può essere leggermente sottostimato"},
+        "risultato": {
+            "cosa": "quanto vale oggi il portafoglio rispetto a quanto l'utente ci ha versato",
+            "dati": f"valore di oggi {an.get('valore_totale')}€ contro {an.get('versato_totale')}€ versati",
+            "limite": "è il risultato REALE dell'utente sui SUOI soldi; non c'entra con la performance storica di mercato dei titoli"},
+        "mkt12m": {
+            "cosa": "la variazione media (pesata) del prezzo dei titoli negli ultimi ~12 mesi",
+            "dati": f"chiusure settimanali da Yahoo, su {_cop(an.get('perf12m_cop'))}",
+            "limite": "è la storia del titolo sul MERCATO, avvenuta PRIMA che l'utente comprasse (lui possiede da pochi giorni): NON è il suo guadagno. Ed è dominata da pochi titoli con storia estrema"},
+        "divyield": {
+            "cosa": "il rendimento da dividendo medio dei soli titoli che lo dichiarano",
+            "dati": f"media pesata su {_cop(an.get('div_coverage'))} (gli ETF non pubblicano il dato)",
+            "limite": "è una stima prospettica basata sull'ultimo dato noto, non su incassi realizzati"},
+        "divincome": {
+            "cosa": "il reddito annuo STIMATO in euro dai dividendi (rendimento × valore), sui titoli che li pagano",
+            "dati": f"stessa base del rendimento: {_cop(an.get('div_coverage'))}",
+            "limite": "è una proiezione annua, non denaro già incassato"},
+        "ter": {
+            "cosa": "il costo di gestione annuo medio degli ETF, pesato",
+            "dati": f"{an.get('ter_n_con')} ETF su {an.get('ter_n_etf')} pubblicano il TER",
+            "limite": "riguarda solo gli ETF e non include le commissioni di transazione"},
+        "eff": {
+            "cosa": "quanti titoli a peso uguale darebbero la stessa concentrazione che ha oggi il portafoglio",
+            "dati": f"indice di concentrazione (HHI) su {an.get('n_titoli')} posizioni",
+            "limite": "guarda solo la distribuzione dei pesi, non la diversificazione per settore o paese"},
+        "tech": {
+            "cosa": "quanto pesa il settore tecnologico nel portafoglio scomposto (ETF nei loro settori + azioni)",
+            "dati": f"sul {lt.get('coperto_pct')}% del portafoglio di cui si conosce il settore",
+            "limite": "i settori dentro gli ETF vengono dai «top sectors» di Yahoo, possono non sommare esattamente a 100"},
+        "top5": {
+            "cosa": "quanto pesano insieme le 5 posizioni più grandi",
+            "dati": "pesato sul valore reale delle posizioni",
+            "limite": "descrittivo: alta concentrazione non è di per sé un bene o un male"},
+        "top1": {
+            "cosa": f"quanto pesa la posizione più grande ({an.get('top1_tk')})",
+            "dati": "pesato sul valore reale",
+            "limite": "descrittivo"},
+        "nsett": {
+            "cosa": "quanti settori distinti sono rappresentati nel portafoglio",
+            "dati": f"sul {lt.get('coperto_pct')}% coperto",
+            "limite": "conta i settori presenti, non quanto sono bilanciati"},
+        "vol": {"cosa": "quanto oscilla il valore del portafoglio su base annua", "dati": riskbase,
+                "limite": risklimite},
+        "mdd": {"cosa": "la peggior caduta dal picco nel periodo osservato", "dati": riskbase,
+                "limite": risklimite},
+        "sharpe": {"cosa": "il rendimento ottenuto per ogni unità di rischio (oscillazione)", "dati": riskbase,
+                   "limite": risklimite + "; premia i periodi fortunati, non prevede il futuro"},
+        "beta": {"cosa": "quanto il portafoglio amplifica o attenua i movimenti del mercato globale (MSCI World)",
+                 "dati": riskbase, "limite": risklimite},
+        "var": {"cosa": "la perdita mensile massima attesa nel 95% dei casi (stima parametrica)", "dati": riskbase,
+                "limite": risklimite + "; nel 5% dei casi la perdita può essere maggiore"},
+        "r2": {"cosa": "quanto dei movimenti del portafoglio è spiegato dal mercato globale", "dati": riskbase,
+               "limite": risklimite},
+    }
+    return schede.get(metric)
+
+
 @router.post("/analisi/ai")
-async def analisi_ai(label: str = Form(""), valore: str = Form("")):
-    """Spiega una metrica dell'analisi (popup ✨): risposta JSON per il modal."""
+async def analisi_ai(label: str = Form(""), valore: str = Form(""), metric: str = Form("")):
+    """Spiega una metrica dell'analisi (popup ✨): risposta JSON per il modal.
+
+    All'agente non diamo più solo etichetta+valore (lo costringeva a indovinare):
+    gli passiamo la SCHEDA della metrica — cosa misura, su quali dati e con quale
+    copertura è calcolato QUESTO numero — così spiega invece di inventare."""
     from fastapi.responses import JSONResponse
     label, valore = (label or "").strip()[:120], (valore or "").strip()[:60]
+    metric = (metric or "").strip()[:40]
     if not label:
         return JSONResponse({"ok": False, "error": "vuoto"})
-    lt = analytics.look_through()
-    settori = ", ".join(f"{s['key']} {s['pct']}%" for s in lt["settori"][:6])
-    contesto = (f"Portafoglio personale diversificato: {lt['n_titoli']} titoli; "
-                f"settori principali: {settori or 'n/d'}.")
-    return JSONResponse(ai.spiega_metrica(label, valore, contesto))
+    scheda, contesto = None, ""
+    try:
+        lt = analytics.look_through(cached_only=True)       # niente HTTP nel popup
+        an = analytics.analisi_completa()
+        scheda = _scheda_metrica(metric, an, lt, analytics.get_cached_risk())
+        settori = ", ".join(f"{s['key']} {s['pct']}%" for s in lt["settori"][:6])
+        contesto = (f"Portafoglio personale diversificato: {lt['n_titoli']} titoli; "
+                    f"settori principali: {settori or 'n/d'}.")
+    except Exception:
+        pass
+    return JSONResponse(ai.spiega_metrica(label, valore, contesto, scheda=scheda))
 
 
 @router.post("/analisi/rischio")

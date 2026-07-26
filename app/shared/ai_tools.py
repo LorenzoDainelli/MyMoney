@@ -119,7 +119,11 @@ def posizione(ticker: str) -> dict:
         "versato": versato, "prezzo_eur": riga["prezzo_eur"],
         "risultato_utente": (round(riga["valore"] - versato, 2)
                              if (riga["valore"] and versato) else None),
-        "settori": (fond.get("settori") or [])[:5],
+        # i fondamentali normalizzati chiamano il campo 'sectors' (era letto
+        # 'settori', che non esisteva: tornava sempre vuoto); per un'azione, che
+        # ha un solo settore in 'sector', lo confezioniamo nella stessa forma.
+        "settori": (fond.get("sectors")
+                    or ([{"name": fond["sector"]}] if fond.get("sector") else []))[:5],
         "div_yield": fond.get("div_yield"),
     }
 
@@ -202,7 +206,7 @@ STRUMENTI = {
     "posizione": {
         "fn": posizione,
         "description": "Scheda di un titolo in portafoglio: peso, valore, versato, "
-                       "andamento a 12 mesi, settori, rendimento da dividendo.",
+                       "risultato dell'utente, settori, rendimento da dividendo.",
         "parameters": {
             "type": "object",
             "properties": {"ticker": {"type": "string", "description": "Es. IWDA, ORCL."}},

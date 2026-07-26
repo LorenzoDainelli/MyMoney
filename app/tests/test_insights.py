@@ -214,13 +214,29 @@ def test_mercato_e_possesso_restano_distinti(monkeypatch):
     assert "non il suo guadagno" in testo
 
 
-def test_l_orizzonte_e_in_cima_a_ogni_prompt(monkeypatch):
+def test_l_orizzonte_e_in_cima_ai_prompt_sui_dati_dell_utente(monkeypatch):
+    """Dove si parla dei SOLI dati dell'utente (dashboard, finanze, titolo) il
+    vincolo è quanta storia esiste nell'app."""
     visto = _cattura_prompt(monkeypatch)
     monkeypatch.setattr(insights, "come_testo_orizzonte",
                         lambda oz=None: "QUANTA STORIA ESISTE: 20 giorni.\n")
-    for superficie in ("dashboard", "finanze", "titolo", "metrica"):
+    for superficie in ("dashboard", "finanze", "titolo"):
         ai._genera(superficie)
         assert "QUANTA STORIA ESISTE: 20 giorni." in visto["prompt"], superficie
+
+
+def test_sulle_metriche_l_orizzonte_e_rovesciato(monkeypatch):
+    """Sulle metriche il vincolo è OPPOSTO: molte misurano la storia di mercato
+    (lunga anni), e bollarle come «basate su pochi giorni di dati dell'app» era
+    proprio l'errore da togliere. Quindi lì NON entra l'orizzonte generico, ma una
+    nota che distingue mercato e possesso."""
+    visto = _cattura_prompt(monkeypatch)
+    monkeypatch.setattr(insights, "come_testo_orizzonte",
+                        lambda oz=None: "QUANTA STORIA ESISTE: 20 giorni.\n")
+    ai._genera("metrica")
+    assert "QUANTA STORIA ESISTE: 20 giorni." not in visto["prompt"]
+    assert "storia di MERCATO" in visto["prompt"]
+    assert "non è il suo guadagno" in visto["prompt"]
 
 
 def test_la_regola_sui_periodi_e_nel_system(monkeypatch):
