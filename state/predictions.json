@@ -5111,6 +5111,227 @@
       "inviata": true,
       "titolo": "La guerra India-Iran spinge Coca-Cola a lanciare in India una lattina più grande a prezzo più alto",
       "url": "https://finnhub.io/api/news?id=8137466bca568cb58c2ac4cbeb2f366c4cdf320f00c7d9849b8b788b4ba6e37a"
+    },
+    {
+      "id": "bigtech-earnings-q2-2026",
+      "ticker": "MSFT",
+      "data": "2026-07-27",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 78,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Settimana degli utili Big Tech: Apple, Amazon, Microsoft e Meta sotto esame sulla spesa AI",
+      "url": "https://finnhub.io/api/news?id=e33f09dde5e51a4ed01776e4d16a2d3d0c1520b8c0c309b80db0900874770c6a"
+    },
+    {
+      "id": "samsung-broadcom-200b-deal",
+      "ticker": "AVGO",
+      "data": "2026-07-27",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 73,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Samsung e Broadcom firmano un accordo chip AI da 200 miliardi di dollari fino al 2030; SK Hynix e Samsung raggiungono 950 miliardi con Nvidia e Broadcom nel 2026",
+      "url": "https://finnhub.io/api/news?id=03ad968deb3073a123f3b6d4ef09c105244faa7a3f40e81fa9e507b945d880c7"
+    },
+    {
+      "id": "nvda-250b-openai-datacenter",
+      "ticker": "NVDA",
+      "data": "2026-07-27",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Nvidia offre 250 miliardi di dollari come garanzia per il megaprogetto datacenter di OpenAI; Oracle balza in Borsa",
+      "url": "https://finnhub.io/api/news?id=293c00ae6fd92828326ce362de4a20ec4e14ed143939475821cc4df9859c0250"
+    },
+    {
+      "id": "ko-earnings-q2-2026",
+      "ticker": "KO",
+      "data": "2026-07-27",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Coca-Cola pubblica i risultati domani (28 luglio): focus su dazi, materie prime e dollaro",
+      "url": "https://finnhub.io/api/news?id=85e6524eb348ab6c4797ccbf54ced134ee94a45afeaebb362f7c044da826e903"
+    },
+    {
+      "id": "iran-ceasefire-oil-drop-fed",
+      "ticker": "SHEL",
+      "data": "2026-07-27",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Pausa USA-Iran abbatte il petrolio del 4%; Federal Reserve si riunisce questa settimana con possibile rialzo dei tassi",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNZXVDd2dEeUdKdzZkTFduSnE1cGp0S2YtaGwyNTRxekczRW5TdGdtM3JGTFFtYlNiSzNsTVFmTzlYZ0ttZmtJdGtjU3g4U0FPUnFPenFkaWp3ZENtbzFGVFdtUk11TzRSbzg3dmZvWVFqRHZDR3FBZEpxR2dSZEUwU0w3d0pRUkVHd3dWZXg3Yk95SjdMbUZxdDEyTDlaRHdFN3JXLQ?oc=5"
+    },
+    {
+      "id": "lly-goldman-sachs-note",
+      "ticker": "LLY",
+      "data": "2026-07-27",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Goldman Sachs avverte sui limiti del rimbalzo di Eli Lilly: il titolo è già a 1.196 dollari dopo la forte ripresa del 2026",
+      "url": "https://finnhub.io/api/news?id=1dd3cf08ec35aeda44ee0a4ccf7716da4158c17427dfba9ff88325edbfbf3649"
+    },
+    {
+      "id": "samsung-us-job-cuts",
+      "ticker": "SSNLF",
+      "data": "2026-07-27",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Samsung taglia dipendenti negli USA nella guerra dei dazi: segnale di pressione sui costi",
+      "url": "https://finnhub.io/api/news?id=27557f7abf6fce0573f24d367f64cec89c8c27a77f3ce3281a64efdbe6a0434b"
+    },
+    {
+      "id": "ibm-ceo-ai-strategy-apology",
+      "ticker": "IBM",
+      "data": "2026-07-27",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il CEO di IBM chiede scusa agli azionisti dopo il crollo del 25% e annuncia un cambio di rotta sull'AI enterprise",
+      "url": "https://finnhub.io/api/news?id=a44ca25e169b839bc4e447751e1e2d49c3ad3f543a3497ec18241040beb1a923"
+    },
+    {
+      "id": "nflx-52week-low-buybacks",
+      "ticker": "NFLX",
+      "data": "2026-07-27",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Netflix ai minimi di 52 settimane (-40% nell'anno) ma con buyback record e margini in crescita: un trade-off da valutare",
+      "url": "https://finnhub.io/api/news?id=5a6087b54c3cfafa2c7d7d14b81f17db0f96d697b725b7ad143aead04da50a21"
+    },
+    {
+      "id": "jpm-kinexys-kookmin",
+      "ticker": "JPM",
+      "data": "2026-07-27",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La principale banca sudcoreana adotta la blockchain Kinexys di JPMorgan per i pagamenti commerciali internazionali",
+      "url": "https://finnhub.io/api/news?id=33479dc16492ca54e04eab7ef0889aa90e4c98d053f6a91a7baea582f389769a"
+    },
+    {
+      "id": "sndk-earnings-preview-aug5",
+      "ticker": "SNDK",
+      "data": "2026-07-27",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "SanDisk verso le trimestrali del 5 agosto: il boom AI della memoria è ancora in corso",
+      "url": "https://finnhub.io/api/news?id=6bc1d84411d39b727f02aa1a86ab55aee933872be490c0ab935c47b2be9e7b9a"
+    },
+    {
+      "id": "pltr-earnings-preview-aug3",
+      "ticker": "PLTR",
+      "data": "2026-07-27",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 53,
+      "descrittivo": true,
+      "inviata": false,
+      "titolo": "Palantir giù del 30% nel 2026: attese prudenti per le trimestrali del 3 agosto",
+      "url": "https://finnhub.io/api/news?id=d28b8dc49f813352311f8ba80eed3e67f1a208412b19a94fb6ab03a79481a23c"
+    },
+    {
+      "id": "meta-nudify-ads-regulatory",
+      "ticker": "META",
+      "data": "2026-07-27",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Meta nella bufera per annunci AI nudify cinesi su Instagram e Facebook: rischi regolatori in arrivo",
+      "url": "https://finnhub.io/api/news?id=0a16b612b069fcbb20f5374ae8e2d50071da0ac20c1e967f52bc813aefb1777e"
     }
   ]
 }
