@@ -1,94 +1,6 @@
 {
   "items": [
     {
-      "id": "meta_whatsapp_shah_20260626",
-      "ticker": "META",
-      "titolo": "Kunal Shah nuovo direttore globale di WhatsApp",
-      "tipo_evento": "leadership_change",
-      "url": "https://finnhub.io/api/news?id=3f2b67e69304d7f641e4af813675df0627593537d46a9cb2e94d6cabca985861",
-      "data_invio": "2026-06-26T10:17:51Z"
-    },
-    {
-      "id": "amgn-tavneos-ema-revoca-20260626",
-      "ticker": "AMGN",
-      "titolo": "L'EMA rischia di revocare l'autorizzazione europea di Tavneos di Amgen",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=697be9a0bbdfd62ad3a98d6d254809b54fed16eba256c9ba51b67caeb1cc1d46",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "aapl-china-iphone-sellin-19-20260626",
-      "ticker": "AAPL",
-      "titolo": "Vendite iPhone in Cina giù del 19%: UBS taglia le aspettative per il trimestre di giugno",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c1ded3eb065e0f42796d1853f63d3bc6424ece241e71a108c83caa021a4ed19e",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "jnj-scotus-roundup-talco-20260626",
-      "ticker": "JNJ",
-      "titolo": "Sentenza SCOTUS sul Roundup (Bayer): possibile scudo per il contenzioso talco di J&J",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=c01e8635a6b3c4916ec59375b07a81ffb4f6aaf73bf6fbcb651c9f89f3d2234c",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "ttwo-gta6-preorder-7999-20260626",
-      "ticker": "TTWO",
-      "titolo": "GTA 6 apre i pre-order a 79,99 dollari senza multiplayer al lancio: azione Take-Two cede il 2,8%",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=46cc28fff8b6f7bf6bf0621deeb2cebf45184b1bb880053c490b0ab1e9967b35",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "spacex-ai-pivot-nvda-intc-20260626",
-      "ticker": "NVDA,SPCX,INTC",
-      "titolo": "SpaceX si espande nell'AI: analisti vedono un potenziale boost per Nvidia e Intel",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=3121684a30011f588c350f52da3f0df3392b0ccb43bf9eed98da0424ff26f396",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "msft-openai-ipo-2027-gpt56-20260626",
-      "ticker": "MSFT",
-      "titolo": "OpenAI rinvia l'IPO al 2027 e rallenta GPT-5.6 per pressioni governative: incertezza su Microsoft",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=69085ae6aba3869b57eeb4c317397bda0e1e21067d3be6d4e80e49a955443c36",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "sndk-wdc-memoria-rally-cooling-20260626",
-      "ticker": "SNDK,WDC",
-      "titolo": "Il rally della memoria si raffredda: SanDisk e Western Digital cedono il 7%",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=ed3f8d6d98fb37bbf17bc76006032426c89bdff07fa028077656c75fe32dc643",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "pltr-software-rotation-rimbalzo-20260626",
-      "ticker": "PLTR",
-      "titolo": "Palantir interrompe sette sessioni negative grazie alla rotazione verso il software",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=f780541b2acc86532bcc74b9793e0e61098e9be9d7bfc1390444f1b6a159c512",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "goog-amzn-robotaxi-nhtsa-rollback-20260626",
-      "ticker": "GOOG,AMZN",
-      "titolo": "USA allentano i requisiti per i robotaxi: vantaggio per Waymo (Alphabet) e Zoox (Amazon)",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=8f5106206abacd688e2d524847f238c7e874905876fb7f2620511bd7423b7126",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
-      "id": "amzn-aws-gpu-pricing-power-20260626",
-      "ticker": "AMZN",
-      "titolo": "Amazon testa prezzi più alti per le GPU cloud: possibile boost per i ricavi AWS",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=a0f0b19c24fc4cb2c96ee507b9a1922c5ac449c4aec7f8f95aed1062bed1bc4e",
-      "data_invio": "2026-06-26T17:15:00+00:00"
-    },
-    {
       "id": "coreweave-99b-backlog-msft-meta-2026-06-28",
       "ticker": "MSFT",
       "titolo": "CoreWeave rivela un portafoglio ordini AI da 99 miliardi di dollari, con contratti da Microsoft, Meta e OpenAI",
@@ -2311,6 +2223,86 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=8137466bca568cb58c2ac4cbeb2f366c4cdf320f00c7d9849b8b788b4ba6e37a",
       "data_invio": "2026-07-24T17:10:00+00:00"
+    },
+    {
+      "id": "bigtech-earnings-q2-2026",
+      "ticker": "MSFT",
+      "titolo": "Settimana degli utili Big Tech: Apple, Amazon, Microsoft e Meta sotto esame sulla spesa AI",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=e33f09dde5e51a4ed01776e4d16a2d3d0c1520b8c0c309b80db0900874770c6a",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "samsung-broadcom-200b-deal",
+      "ticker": "AVGO",
+      "titolo": "Samsung e Broadcom firmano un accordo chip AI da 200 miliardi di dollari fino al 2030; SK Hynix e Samsung raggiungono 950 miliardi con Nvidia e Broadcom nel 2026",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=03ad968deb3073a123f3b6d4ef09c105244faa7a3f40e81fa9e507b945d880c7",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "nvda-250b-openai-datacenter",
+      "ticker": "NVDA",
+      "titolo": "Nvidia offre 250 miliardi di dollari come garanzia per il megaprogetto datacenter di OpenAI; Oracle balza in Borsa",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=293c00ae6fd92828326ce362de4a20ec4e14ed143939475821cc4df9859c0250",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "ko-earnings-q2-2026",
+      "ticker": "KO",
+      "titolo": "Coca-Cola pubblica i risultati domani (28 luglio): focus su dazi, materie prime e dollaro",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=85e6524eb348ab6c4797ccbf54ced134ee94a45afeaebb362f7c044da826e903",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "iran-ceasefire-oil-drop-fed",
+      "ticker": "SHEL",
+      "titolo": "Pausa USA-Iran abbatte il petrolio del 4%; Federal Reserve si riunisce questa settimana con possibile rialzo dei tassi",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNZXVDd2dEeUdKdzZkTFduSnE1cGp0S2YtaGwyNTRxekczRW5TdGdtM3JGTFFtYlNiSzNsTVFmTzlYZ0ttZmtJdGtjU3g4U0FPUnFPenFkaWp3ZENtbzFGVFdtUk11TzRSbzg3dmZvWVFqRHZDR3FBZEpxR2dSZEUwU0w3d0pRUkVHd3dWZXg3Yk95SjdMbUZxdDEyTDlaRHdFN3JXLQ?oc=5",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "lly-goldman-sachs-note",
+      "ticker": "LLY",
+      "titolo": "Goldman Sachs avverte sui limiti del rimbalzo di Eli Lilly: il titolo è già a 1.196 dollari dopo la forte ripresa del 2026",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=1dd3cf08ec35aeda44ee0a4ccf7716da4158c17427dfba9ff88325edbfbf3649",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "samsung-us-job-cuts",
+      "ticker": "SSNLF",
+      "titolo": "Samsung taglia dipendenti negli USA nella guerra dei dazi: segnale di pressione sui costi",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=27557f7abf6fce0573f24d367f64cec89c8c27a77f3ce3281a64efdbe6a0434b",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "ibm-ceo-ai-strategy-apology",
+      "ticker": "IBM",
+      "titolo": "Il CEO di IBM chiede scusa agli azionisti dopo il crollo del 25% e annuncia un cambio di rotta sull'AI enterprise",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=a44ca25e169b839bc4e447751e1e2d49c3ad3f543a3497ec18241040beb1a923",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "nflx-52week-low-buybacks",
+      "ticker": "NFLX",
+      "titolo": "Netflix ai minimi di 52 settimane (-40% nell'anno) ma con buyback record e margini in crescita: un trade-off da valutare",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5a6087b54c3cfafa2c7d7d14b81f17db0f96d697b725b7ad143aead04da50a21",
+      "data_invio": "2026-07-27"
+    },
+    {
+      "id": "jpm-kinexys-kookmin",
+      "ticker": "JPM",
+      "titolo": "La principale banca sudcoreana adotta la blockchain Kinexys di JPMorgan per i pagamenti commerciali internazionali",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=33479dc16492ca54e04eab7ef0889aa90e4c98d053f6a91a7baea582f389769a",
+      "data_invio": "2026-07-27"
     }
   ]
 }
