@@ -83,20 +83,26 @@ def _build() -> dict:
     serie = {k: [] for k in _FETCHES}     # per base: liste di serie già in EUR
     flat = {k: 0.0 for k in _FETCHES}     # valore costante dei titoli senza storia
 
-    for p in posizioni:
+    # Le tre serie di ogni titolo sono richieste indipendenti: in fila erano
+    # ~111 attese di rete una dopo l'altra (il pezzo più lento dell'avvio).
+    lavori = [(p, key, rng, itv) for p in posizioni
+              for key, (rng, itv) in _FETCHES.items()]
+
+    def scarica(job):
+        p, key, rng, itv = job
+        return (p, key, market.history_series(market._yahoo_symbol(p.ticker), rng, itv))
+
+    for p, key, s in market._in_parallelo(scarica, lavori):
         q = qmap.get((p.ticker or "").upper())
-        fx = 1.0
-        if q and q.ok and q.price and q.price_eur:
-            fx = q.price_eur / q.price
-        sym = market._yahoo_symbol(p.ticker)
-        val_oggi = (q.price_eur * p.quantita) if (q and q.ok and q.price_eur) \
-            else (p.valore_posseduto or 0.0)
-        for key, (rng, itv) in _FETCHES.items():
-            s = market.history_series(sym, rng, itv)
-            if s:
-                serie[key].append([(t, c * p.quantita * fx) for t, c in s])
-            else:
-                flat[key] += val_oggi or 0.0
+        fx = (q.price_eur / q.price) if (q and q.ok and q.price and q.price_eur) else 1.0
+        if s:
+            serie[key].append([(t, c * p.quantita * fx) for t, c in s])
+        else:
+            # senza storia il titolo entra come valore costante: è una stima
+            # dichiarata, non un buco silenzioso
+            val_oggi = (q.price_eur * p.quantita) if (q and q.ok and q.price_eur) \
+                else (p.valore_posseduto or 0.0)
+            flat[key] += val_oggi or 0.0
 
     griglie = {}
     for key in _FETCHES:

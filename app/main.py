@@ -23,7 +23,7 @@ from portfolio import market          # noqa: F401  -> tabella portfolio_quotes
 import finance.models                 # noqa: F401  -> tabelle finance_*
 import shared.sync                    # noqa: F401  -> hook diario sync (Fase 4)
 
-from portfolio import seed, analytics, wealth
+from portfolio import seed, analytics, wealth, versamenti
 from portfolio import service as pf_service
 from portfolio.routes import router as portfolio_router
 from finance import service as fin_service
@@ -103,22 +103,30 @@ def _dashboard_ctx() -> dict:
     liq = sal["liquido"]
     snapshot = market.get_perf_snapshot()
 
-    # perf ~12 mesi degli investimenti: media pesata sui titoli con storia nota
+    # --- IL TUO RISULTATO: quanto vale oggi contro quanto ci hai messo ---------
+    # Questo è il numero che riguarda i soldi dell'utente, e per questo apre.
+    # Prima qui c'era la performance a 12 mesi dei titoli, per giunta convertita
+    # in euro: leggeva «+53 € negli ultimi 12 mesi» mentre il risultato vero era
+    # −0,71 €. Non era un'imprecisione, era un'altra cosa — la storia del
+    # MERCATO, successa prima che comprasse — spacciata per il suo guadagno.
+    versato = round(sum((r["p"].versato_totale or 0.0) for r in vista["righe"]), 2)
+    risultato_eur = risultato_pct = None
+    if vista["ha_totale"] and versato > 0:
+        risultato_eur = round(inv_tot - versato, 2)
+        risultato_pct = round((inv_tot / versato - 1) * 100, 2)
+
+    # --- la storia di MERCATO, tenuta separata e dichiarata --------------------
+    # Pesata sul VALORE soltanto: mescolare euro e % target nello stesso
+    # denominatore (com'era prima) somma mele e pere.
     num = den = 0.0
     for r in vista["righe"]:
-        p = r["p"]
-        pf = snapshot.get((p.ticker or "").upper())
-        if pf is None:
+        pf = snapshot.get((r["p"].ticker or "").upper())
+        if pf is None or not r["valore"]:
             continue
-        w = r["valore"] or (p.pct_target if not p.is_fisso else 0)
-        if not w:
-            continue
-        num += w * pf
-        den += w
+        num += r["valore"] * pf
+        den += r["valore"]
     inv_perf = round(num / den, 2) if den else None
-    gain12m = None
-    if inv_perf is not None and inv_tot:
-        gain12m = round(inv_tot * (inv_perf / 100) / (1 + inv_perf / 100), 2)
+    perf_cop = round(den / inv_tot * 100) if (den and inv_tot) else None
 
     # migliori e peggiori del portafoglio (2 + 2, click → dettaglio)
     movers = []
@@ -129,10 +137,14 @@ def _dashboard_ctx() -> dict:
         sel = rows[:2] + [x for x in rows[-2:] if x not in rows[:2]]
         movers = [{"id": p.id, "tk": p.ticker, "name": p.nome_vista, "pl": pf} for p, pf in sel]
 
-    # dividendi: reddito stimato dai rendimenti reali (solo coi valori inseriti)
+    # dividendi: reddito stimato dai rendimenti reali (solo coi valori inseriti).
+    # La «resa» va calcolata sulla STESSA base del reddito — i soli titoli che
+    # pagano — e quella base va dichiarata. Prima qui usciva 0,32% (diluito su
+    # tutto) mentre l'Analisi mostrava 1,08% (sui paganti): due numeri diversi
+    # per la stessa cosa in due pagine, nessuno dei due con la sua base scritta.
     dividendi = None
     if vista["ha_totale"]:
-        div_rows, div_tot = [], 0.0
+        div_rows, div_tot, val_paganti = [], 0.0, 0.0
         for r in vista["righe"]:
             p = r["p"]
             if not r["valore"] or not (p.ticker or "").strip():
@@ -141,13 +153,15 @@ def _dashboard_ctx() -> dict:
             if f and f.get("div_yield"):
                 annuo = r["valore"] * f["div_yield"]
                 div_tot += annuo
+                val_paganti += r["valore"]
                 div_rows.append({"id": p.id, "tk": p.ticker, "annuo": round(annuo, 2)})
         if div_tot > 0:
             div_rows.sort(key=lambda x: -x["annuo"])
             dividendi = {
                 "annuo": round(div_tot, 2),
                 "mese": round(div_tot / 12, 2),
-                "resa": round(div_tot / inv_tot * 100, 2) if inv_tot else None,
+                "resa": round(div_tot / val_paganti * 100, 2) if val_paganti else None,
+                "coperto": round(val_paganti / inv_tot * 100) if inv_tot else None,
                 "top": div_rows[:3],
                 "top_max": div_rows[0]["annuo"] if div_rows else 1.0,
             }
@@ -178,13 +192,18 @@ def _dashboard_ctx() -> dict:
 
     return {
         "patrimonio": round(inv_tot + liq, 2),
-        "perf12m": inv_perf, "gain12m": gain12m, "updated": vista["ultimo_agg"],
+        "investito": inv_tot, "liquido": liq,
+        "versato": versato,
+        "risultato_eur": risultato_eur, "risultato_pct": risultato_pct,
+        "perf12m": inv_perf, "perf12m_cop": perf_cop,
+        "updated": vista["ultimo_agg"], "prezzi": vista["prezzi"], "tr": vista["tr"],
         "spesa_media": round(riep["uscite"] / 30, 2),
         "saldo_mese": riep["saldo"], "entrate": riep["entrate"], "uscite": riep["uscite"],
         "movers": movers, "dividendi": dividendi, "settori": settori,
         "wealth": (w or {}).get("ranges") or {},
         "ai": ai_read, "news": news,
         "ai_on": ai.is_configured(),
+        "pac_promemoria": versamenti.promemoria(),
     }
 
 

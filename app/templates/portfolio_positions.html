@@ -26,6 +26,18 @@
     <div class="note ok"><span style="display:inline-flex;align-items:center;gap:6px;">{{ icon('check', 16) }} Versamento eliminato, quantità ripristinate.</span></div>
   {% endif %}
 
+  {% if promemoria %}
+  <div class="note info" style="margin-bottom:14px;">
+    {{ t('dash.pac_ritardo', g=promemoria.giorno, n=promemoria.giorni_da_ultimo) if promemoria.in_ritardo else t('dash.pac_atteso', g=promemoria.giorno) }}
+    <a href="/portafoglio/versamento">{{ t('dash.pac_registra') }}</a>
+  </div>
+  {% endif %}
+  {% if vista.tr and vista.tr.assurdo %}
+  <div class="note warn" style="margin-bottom:14px;">{{ t('pf.tr_assurdo', tr=(vista.tr.totale | eur), stima=(vista.tr.stimato | eur)) }}</div>
+  {% elif vista.tr and vista.tr.attivo and vista.tr.vecchio %}
+  <div class="note warn" style="margin-bottom:14px;">{{ t('pf.tr_vecchio', n=vista.tr.giorni) }}</div>
+  {% endif %}
+
   <div class="grid" style="margin-bottom:16px;">
     <div class="stat ok hero">
       <div class="k">{{ t('pf.total_value') }}</div>
@@ -33,6 +45,9 @@
       <div class="muted" style="font-size:13px;margin-top:4px;">
         {% if pl_tot %}<span class="{{ 'pos' if pl_tot.pct >= 0 else 'neg' }}">{{ '+' if pl_tot.pct >= 0 else '' }}{{ pl_tot.pct | pct }}</span> · versato {{ tot_versato | eur }} · {% endif %}{{ riepilogo.n_posizioni }} {{ t('dash.posizioni') }}
       </div>
+      {% if vista.tr and vista.tr.attivo and not vista.tr.assurdo %}
+      <div class="faint" style="font-size:12px;margin-top:4px;">{{ t('pf.tr_badge', d=vista.tr.data.strftime('%d/%m')) }}</div>
+      {% endif %}
     </div>
     <div class="stat">
       <div class="k">{{ t('pf.composizione') }}</div>
@@ -49,10 +64,37 @@
   <div class="actions">
     <a href="/portafoglio/versamento" class="btn primary">{{ icon('plus', 16) }} Registra PAC</a>
     <button type="button" class="btn ghost" data-toggle="#pf-add" data-alt="{{ t('pf.btn_close') }}">{{ icon('plus', 16) }} {{ t('pf.btn_add') }}</button>
+    <button type="button" class="btn ghost" data-toggle="#pf-tr" data-alt="{{ t('pf.btn_close') }}">{{ icon('check', 16) }} {{ t('pf.tr_h') }}</button>
     <form method="post" action="/portafoglio/aggiorna" style="margin:0;">
       <button type="submit" class="btn ghost">{{ icon('refresh', 16) }} {{ t('pf.btn_refresh') }}</button>
     </form>
   </div>
+
+  {# ---------- Allinea al broker: un numero solo, e il totale diventa vero ---------- #}
+  <form id="pf-tr" class="form" method="post" action="/portafoglio/allinea" style="margin-bottom:16px;{% if not flash_tr %}display:none;{% endif %}">
+    <p class="muted" style="margin:0 0 12px;font-size:13px;line-height:var(--lh-relaxed);">{{ t('pf.tr_spiega') }}</p>
+    {% if vista.tr %}
+    <div class="note info" style="margin-bottom:12px;">{{ t('pf.tr_stato', stima=(vista.tr.stimato | eur), tr=(vista.tr.totale | eur), scarto=(vista.tr.scarto_eur | eur), pct=((('+' if vista.tr.scarto_pct >= 0 else '') ~ (vista.tr.scarto_pct | pct)))) }}</div>
+    {% endif %}
+    <div class="row3">
+      <div class="field">
+        <label>{{ t('pf.tr_totale') }}</label>
+        <input type="text" name="totale" inputmode="decimal" placeholder="99,29" value="{{ vista.tr.totale if vista.tr else '' }}">
+      </div>
+      <div class="field">
+        <label>{{ t('pf.tr_data') }}</label>
+        <input type="date" name="data" value="{{ (vista.tr.data if vista.tr else None) or '' }}">
+      </div>
+      <div class="field" style="align-self:end;">
+        <button type="submit" class="btn primary">{{ t('pf.tr_salva') }}</button>
+      </div>
+    </div>
+    {% if vista.tr %}
+    <div class="actions" style="margin-bottom:0;">
+      <button type="submit" name="togli" value="1" class="btn ghost">{{ t('pf.tr_togli') }}</button>
+    </div>
+    {% endif %}
+  </form>
 
   {# ---------- form inline (freeze): nome · tipo/ticker/target · categoria ---------- #}
   <form id="pf-add" class="form" method="post" action="/portafoglio/salva" style="margin-bottom:16px;{% if not open_form %}display:none;{% endif %}">
@@ -94,6 +136,7 @@
           <th class="sortable" data-type="text">{{ t('th.category') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.pct_target') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.qty') }}</th>
+          <th class="num sortable" data-type="num" title="{{ t('pf.pmc_full') }}">{{ t('pf.pmc') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.value') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.pl') }}</th>
           <th style="width:1%;"></th>
@@ -119,6 +162,11 @@
             {% else %}{{ p.pct_target | pct }}{% endif %}
           </td>
           <td class="num" data-s="{{ p.quantita if p.quantita is not none else '' }}">{{ p.quantita | qty }}</td>
+          {# prezzo medio di carico: dai versamenti già registrati, non stimato #}
+          {% set pm = pmc_map.get(p.id) %}
+          <td class="num" data-s="{{ pm.pmc if pm and pm.pmc else '' }}" title="{% if pm and pm.pmc %}{{ t('pf.pmc_sub', euro=(pm.euro | eur), qta=(pm.qta | qty)) }}{% else %}{{ t('pf.pmc_none') }}{% endif %}">
+            {% if pm and pm.pmc %}<span class="muted">{{ pm.pmc | eur }}</span>{% else %}—{% endif %}
+          </td>
           <td class="num" data-s="{{ r.valore if r.valore is not none else '' }}">{{ r.valore | eur if r.valore is not none else '—' }}</td>
           <td class="num" data-s="{{ plr.pct if plr else '' }}" title="{% if plr %}{{ plr.eur | eur }} · versato {{ p.versato_totale | eur }}{% endif %}">
             {% if plr %}<span class="{{ 'pos' if plr.pct >= 0 else 'neg' }}" style="font-weight:600;">{{ '+' if plr.pct >= 0 else '' }}{{ plr.pct | pct }}</span>{% else %}—{% endif %}
@@ -140,6 +188,7 @@
           <td><b>{{ t('pf.total_alloc') }}</b></td>
           <td></td>
           <td class="num"><b style="color:{{ 'var(--pos)' if riepilogo.target_ok else 'var(--neg)' }};">{{ riepilogo.somma_target | pct }}</b></td>
+          <td></td>
           <td></td>
           <td class="num"><b>{{ vista.totale | eur if vista.ha_totale else '' }}</b></td>
           <td class="num">{% if pl_tot %}<b class="{{ 'pos' if pl_tot.pct >= 0 else 'neg' }}">{{ '+' if pl_tot.pct >= 0 else '' }}{{ pl_tot.pct | pct }}</b>{% endif %}</td><td></td>

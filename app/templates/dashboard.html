@@ -12,7 +12,7 @@
   <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
     <div>
       <div class="page-title" style="margin-bottom:2px;">{{ t('nav.dashboard') }}</div>
-      <p class="page-sub" style="margin:0;">{{ t('dash.subtitle') }}{% if d.updated %} · <span class="muted">{{ t('dash.updated', when=d.updated) }}</span>{% endif %}</p>
+      <p class="page-sub" style="margin:0;">{{ t('dash.subtitle') }}{% if d.updated %} · <span class="muted">{{ t('dash.updated', when=d.updated) }}</span>{% endif %}{% if d.tr and d.tr.attivo and not d.tr.assurdo %} · <span class="pill green" style="text-transform:none;">{{ t('pf.tr_badge', d=d.tr.data.strftime('%d/%m')) }}</span>{% endif %}</p>
     </div>
     <div class="actions" style="margin:0;flex-wrap:nowrap;">
       <a href="/finanze" class="btn primary">{{ icon('wallet', 16) }} {{ t('dash.registra_mov') }}</a>
@@ -20,14 +20,39 @@
     </div>
   </div>
 
+  {# ---------- avvisi: prezzi vecchi, PAC da registrare ---------- #}
+  {% if d.prezzi and d.prezzi.vecchi %}
+  <div class="note warn" style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="flex:1;min-width:200px;">{{ t('dash.prezzi_vecchi', q=(t('dash.da_giorni', n=d.prezzi.giorni) if d.prezzi.giorni else t('dash.da_ore', n=d.prezzi.ore))) }}</span>
+    <form method="post" action="/portafoglio/aggiorna" style="margin:0;"><input type="hidden" name="next" value="/"><button type="submit" class="btn sm">{{ t('pf.btn_refresh') }}</button></form>
+  </div>
+  {% endif %}
+  {% if d.pac_promemoria %}
+  <div class="note info" style="margin-bottom:14px;">
+    {{ t('dash.pac_ritardo', g=d.pac_promemoria.giorno, n=d.pac_promemoria.giorni_da_ultimo) if d.pac_promemoria.in_ritardo else t('dash.pac_atteso', g=d.pac_promemoria.giorno) }}
+    <a href="/portafoglio/versamento">{{ t('dash.pac_registra') }}</a>
+  </div>
+  {% endif %}
+
   {# ---------- riga hero ---------- #}
   <div class="grid mm-stats4">
+    {# Il patrimonio, e sotto IL RISULTATO DELL'UTENTE (valore vs versato).
+       Qui prima stava la performance a 12 mesi dei titoli, convertita in euro:
+       leggeva come un guadagno incassato, ed era la storia del mercato prima
+       dell'acquisto. Ora quel numero c'è ancora, ma più in basso e con scritto
+       cos'è. #}
     <div class="stat hero">
       <div class="k">{{ t('dash.patrimonio') }}</div>
       <div class="v num" data-countup="{{ d.patrimonio }}">{{ d.patrimonio | eur }}</div>
-      {% if d.perf12m is not none %}
+      {% if d.risultato_pct is not none %}
       <div class="muted" style="font-size:13px;margin-top:4px;">
-        {{ t('dash.perf') }} <span class="{{ 'pos' if d.perf12m >= 0 else 'neg' }}">{{ '+' if d.perf12m >= 0 else '' }}{{ d.perf12m | pct }}</span>{% if d.gain12m is not none %} · {{ ('+' if d.gain12m >= 0 else '−') ~ (d.gain12m | abs | eur) }}{% endif %} {{ t('dash.in12m') }}
+        {{ t('dash.risultato') }} <span class="{{ 'pos' if d.risultato_pct >= 0 else 'neg' }}">{{ '+' if d.risultato_pct >= 0 else '−' }}{{ d.risultato_eur | abs | eur }} ({{ '+' if d.risultato_pct >= 0 else '' }}{{ d.risultato_pct | pct }})</span>
+      </div>
+      <div class="faint" style="font-size:12px;margin-top:2px;">{{ t('dash.risultato_sub', v=(d.versato | eur)) }}</div>
+      {% endif %}
+      {% if d.perf12m is not none %}
+      <div class="faint" style="font-size:12px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">
+        {{ t('dash.perf') }} {{ '+' if d.perf12m >= 0 else '' }}{{ d.perf12m | pct }} — {{ t('dash.mkt12m_sub', cop=((d.perf12m_cop | default(0, true)) ~ '%')) }}
       </div>
       {% endif %}
     </div>
@@ -120,6 +145,11 @@
           </div>
           {% endif %}
         </div>
+        {# la base della resa, scritta: senza questa riga 1,08% e 0,32% sono due
+           numeri diversi per la stessa cosa in due pagine dell'app #}
+        {% if d.dividendi.coperto is not none %}
+        <div class="faint" style="font-size:12px;margin-top:6px;">{{ t('dash.div_cov', cop=(d.dividendi.coperto ~ '%')) }}</div>
+        {% endif %}
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
           <div class="muted" style="font-size:12px;margin-bottom:4px;">{{ t('dash.div_top') }}</div>
           {% for r in d.dividendi.top %}
