@@ -37,6 +37,11 @@
   <div>
     <div class="muted" style="font-size:12px;">{{ t('detail.position') }}</div>
     <div class="num" style="font-size:var(--text-lg);font-weight:700;">{% if p.quantita and q and q.ok and q.price_eur %}{{ (q.price_eur * p.quantita) | eur }}{% elif p.valore_posseduto %}{{ p.valore_posseduto | eur }}{% else %}—{% endif %}</div>
+    {# prezzo medio di carico: dai versamenti registrati, quindi esatto — e
+       accanto al prezzo di oggi si legge subito se sei sopra o sotto #}
+    {% if pmc and pmc.pmc %}
+    <div class="faint" style="font-size:11px;">{{ t('pf.pmc') }} {{ pmc.pmc | eur }}{% if q and q.ok and q.price_eur %} · <span class="{{ 'pos' if q.price_eur >= pmc.pmc else 'neg' }}">{{ '+' if q.price_eur >= pmc.pmc else '' }}{{ ((q.price_eur / pmc.pmc - 1) * 100) | round(2) | pct }}</span>{% endif %}</div>
+    {% endif %}
   </div>
 </div>
 

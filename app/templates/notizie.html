@@ -6,8 +6,13 @@
 {% extends "base.html" %}
 {% block title %}{{ t('nav.news') }} — {{ t('app.name') }}{% endblock %}
 {% block content %}
-  <div class="page-title">{{ t('nav.news') }}</div>
-  <p class="page-sub">{{ t('news.subtitle') }}{% if aggiornato %} · <span class="muted">{{ t('news.updated') }} {{ aggiornato }}</span>{% endif %}</p>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+    <div>
+      <div class="page-title">{{ t('nav.news') }}</div>
+      <p class="page-sub">{{ t('news.subtitle') }}{% if aggiornato %} · <span class="muted">{{ t('news.updated') }} {{ aggiornato }}</span>{% endif %}</p>
+    </div>
+    <a href="/stime" class="btn ghost">{{ t('stime.title') }} →</a>
+  </div>
 
   {% if cards %}
   {% for c in cards %}

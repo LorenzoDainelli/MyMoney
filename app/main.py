@@ -22,6 +22,7 @@ import portfolio.models               # noqa: F401  -> tabella portfolio_positio
 from portfolio import market          # noqa: F401  -> tabella portfolio_quotes
 import finance.models                 # noqa: F401  -> tabelle finance_*
 import shared.sync                    # noqa: F401  -> hook diario sync (Fase 4)
+from shared import storico            # tabella storico_giornaliero
 
 from portfolio import seed, analytics, wealth, versamenti
 from portfolio import service as pf_service
@@ -66,6 +67,10 @@ def _refresh_dati_bg():
     try:
         from finance.service import compatta_tombstone
         compatta_tombstone(365)
+    except Exception:
+        pass
+    try:
+        storico.registra()      # la fotografia di oggi, dopo i prezzi freschi
     except Exception:
         pass
 
@@ -209,15 +214,27 @@ def _dashboard_ctx() -> dict:
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+    # la fotografia di oggi (idempotente: una riga per giorno, si sovrascrive)
+    storico.registra()
+    # in modalità Proattiva la lettura si aggiorna da sola quando è vecchia,
+    # senza far aspettare la pagina (vedi ai.forse_rigenera)
+    ai.forse_rigenera("dash_ai", _genera_punto_settimana)
     return templates.TemplateResponse(request, "dashboard.html", {
         "active": "home",
         "d": _dashboard_ctx(),
+        "ai_proattivo": ai.proattivo_attivo(),
     })
 
 
 @app.post("/dashboard/ai")
 def dashboard_ai():
     """Genera 'il punto della settimana' (dati aggregati e anonimi) e lo salva."""
+    _genera_punto_settimana()
+    return RedirectResponse("/", status_code=303)
+
+
+def _genera_punto_settimana() -> None:
+    """Costruisce il contesto della dashboard, chiede la lettura e la salva."""
     contesto = _contesto_finanze()
     # più materiale = lettura più ricca; ogni pezzo è opzionale e non blocca
     try:
@@ -255,4 +272,3 @@ def dashboard_ai():
         settings_store.set_setting("dash_ai", json.dumps({
             "text": res["text"], "conf": res["conf"],
             "when": datetime.now().isoformat(timespec="minutes")}))
-    return RedirectResponse("/", status_code=303)

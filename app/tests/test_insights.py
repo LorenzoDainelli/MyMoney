@@ -326,3 +326,57 @@ def test_niente_mesi_in_cui_l_app_non_esisteva(monkeypatch):
     testo = fr._contesto_finanze()
     assert "2026-05" not in testo and "2026-06" not in testo
     assert "2026-07" in testo
+
+
+# --------------------------- l'archivio giornaliero ---------------------------
+# Fino a ieri l'unico passato disponibile erano i mesi civili completi, che
+# all'inizio della vita dell'app non esistono: ecco perché l'agente aveva così
+# poco da dire. Con l'archivio (shared/storico.py) si può finalmente confrontare
+# l'utente con sé stesso dopo pochi giorni — ma solo dove i dati ci sono davvero.
+
+def _finto_confronto(monkeypatch, dati):
+    from shared import storico
+    monkeypatch.setattr(storico, "confronto", lambda giorni=7: dati)
+
+
+def test_il_mercato_e_i_tuoi_versamenti_restano_due_cose(monkeypatch):
+    """«Il portafoglio è salito di 110 €» non dice niente se 100 li hai messi tu."""
+    _finto_confronto(monkeypatch, {
+        "giorni": 8, "da": date(2026, 7, 19), "a": date(2026, 7, 27),
+        "patrimonio": 120.0, "investito": 110.0, "liquido": 0.0,
+        "versato": 100.0, "mercato": 10.0, "risultato_eur": 10.0})
+    fatti = insights.fatti_storico()
+    testo = " ".join(f.testo for f in fatti)
+    assert "10,00 €" in testo and "100,00 €" in testo
+    assert "8 giorni" in testo
+    assert any(f.chiave == "storico:mercato" for f in fatti)
+
+
+def test_sotto_un_euro_non_c_e_niente_da_spiegare(monkeypatch):
+    """Un PAC appena partito muove centesimi: non sono fatti, sono rumore."""
+    _finto_confronto(monkeypatch, {
+        "giorni": 7, "da": date(2026, 7, 20), "a": date(2026, 7, 27),
+        "patrimonio": 0.4, "investito": 0.4, "liquido": 0.0,
+        "versato": 0.0, "mercato": 0.4, "risultato_eur": 0.4})
+    assert insights.fatti_storico() == []
+
+
+def test_due_giorni_non_sono_un_confronto(monkeypatch):
+    _finto_confronto(monkeypatch, {
+        "giorni": 1, "da": date(2026, 7, 26), "a": date(2026, 7, 27),
+        "patrimonio": 50.0, "investito": 50.0, "liquido": 0.0,
+        "versato": 0.0, "mercato": 50.0, "risultato_eur": 50.0})
+    assert insights.fatti_storico() == []
+
+
+def test_archivio_vuoto_nessun_fatto(monkeypatch):
+    _finto_confronto(monkeypatch, None)
+    assert insights.fatti_storico() == []
+
+
+def test_l_orizzonte_dichiara_quante_giornate_ha_in_archivio(monkeypatch):
+    """L'agente deve sapere entro quanti giorni può spingersi a confrontare."""
+    testo = insights.come_testo_orizzonte({
+        "inizio": datetime(2026, 7, 4), "giorni": 23, "mesi_completi": 0,
+        "giorni_pac": 11, "giorni_archivio": 9})
+    assert "giornate registrate in archivio: 9" in testo

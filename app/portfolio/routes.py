@@ -29,13 +29,23 @@ def analisi(request: Request):
     se i dati avevano più di 24 ore partivano 37 richieste HTTP in linea, con
     la pagina ferma ad aspettarle. Ora l'aggiornamento gira dietro le quinte e
     si vede al giro dopo."""
+    from shared import storico
+
     market.refresh_fondamentali_async()
     lt = analytics.look_through(cached_only=True)
     an = analytics.analisi_completa(cached_only=True)
     risk = analytics.get_cached_risk()
+    # l'archivio giornaliero: il TUO risultato nel tempo, non il prezzo dei titoli
+    serie = storico.serie(180)
+    valori = [g["risultato_eur"] for g in serie if g["risultato_eur"] is not None]
+    punti, sale = chart_points(valori, w=560, h=110) if len(valori) >= 2 else ("", True)
     return templates.TemplateResponse(request, "analisi.html", {
         "active": "analisi",
         "lt": lt, "an": an, "risk": risk,
+        "storico": {"serie": serie, "punti": punti, "sale": sale,
+                    "n": len(valori), "min": min(valori) if valori else None,
+                    "max": max(valori) if valori else None,
+                    "dal": serie[0]["data"] if serie else None},
         "risk_scaduto": analytics.risk_scaduto(),
         # le schede vanno IN PAGINA, non solo all'agente: sono calcolate in
         # Python e restano vere anche a chiave AI spenta
@@ -502,6 +512,7 @@ def dettaglio(request: Request, pos_id: int):
         "active": "portafoglio", "p": p, "q": q, "fund": fund, "perf": perf,
         "chart_points": punti, "chart_up": sale, "ai_on": ai.is_configured(),
         "domicilio": _ISIN_PAESE.get((p.isin or "")[:2].upper()),
+        "pmc": service.pmc_map().get(p.id),
     })
 
 

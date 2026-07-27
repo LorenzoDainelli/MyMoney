@@ -107,14 +107,23 @@ def orizzonte(oggi: datetime = None) -> dict:
     giorni_pac = None
     try:
         from portfolio import versamenti
-        storico = versamenti.lista()
-        if storico:
-            giorni_pac = (now.date() - min(v["data"] for v in storico)).days
+        elenco = versamenti.lista()
+        if elenco:
+            giorni_pac = (now.date() - min(v["data"] for v in elenco)).days
+    except Exception:
+        pass
+
+    # quante giornate esistono davvero in archivio: è il vero limite dei
+    # confronti giorno-per-giorno (diverso dai mesi civili completi)
+    giorni_archivio = 0
+    try:
+        from shared import storico as _st
+        giorni_archivio = _st.giorni_disponibili()
     except Exception:
         pass
 
     return {"inizio": inizio, "giorni": giorni, "mesi_completi": mesi_completi,
-            "giorni_pac": giorni_pac}
+            "giorni_pac": giorni_pac, "giorni_archivio": giorni_archivio}
 
 
 def come_testo_orizzonte(oz: dict = None) -> str:
@@ -135,6 +144,10 @@ def come_testo_orizzonte(oz: dict = None) -> str:
                      "Confronta solo con questi.")
     if oz["giorni_pac"] is not None:
         righe.append(f"- il PAC esiste da {oz['giorni_pac']} giorni.")
+    if oz.get("giorni_archivio"):
+        righe.append(f"- giornate registrate in archivio: {oz['giorni_archivio']}. "
+                     "Su questo archivio i confronti giorno-per-giorno sono "
+                     "leciti, entro questo numero di giorni e non oltre.")
     righe += [
         "- ATTENZIONE alla differenza fra la storia DI MERCATO di un titolo (che "
         "può essere lunga anni) e da quanto tempo la possiede l'utente. Un "
@@ -405,6 +418,56 @@ def fatti_pac(oggi: datetime = None) -> list:
 
 
 # ===========================================================================
+#  STORICO: il confronto col proprio passato, finalmente possibile
+#  Tutto questo modulo è costruito sul confrontare l'utente con sé stesso, ma
+#  fino a ieri l'unico passato disponibile erano i mesi civili completi — che
+#  all'inizio della vita dell'app non esistono. Ora c'è un archivio giornaliero
+#  (shared/storico.py) e si può dire «rispetto a otto giorni fa» dopo otto
+#  giorni, non dopo due mesi.
+# ===========================================================================
+MIN_EURO_MERCATO = 1.0        # sotto un euro non c'è niente da spiegare
+MIN_GIORNI_CONFRONTO = 3      # con meno di così è la stessa giornata due volte
+
+
+def fatti_storico(giorni: int = 7) -> list:
+    """Com'è cambiato il patrimonio da qualche giorno fa, e per quale motivo:
+    i soldi che hai messo tu contano a parte da quelli che ha mosso il mercato."""
+    from shared import storico
+
+    fatti = []
+    try:
+        c = storico.confronto(giorni)
+    except Exception:
+        return fatti
+    if not c or c["giorni"] < MIN_GIORNI_CONFRONTO:
+        return fatti
+
+    quando = f"in {c['giorni']} giorni (dal {c['da'].strftime('%d/%m')})"
+    if abs(c["mercato"]) >= MIN_EURO_MERCATO:
+        verso = "guadagnato" if c["mercato"] > 0 else "perso"
+        pezzi = [f"Il portafoglio ha {verso} {_eur(c['mercato'])} {quando} "
+                 f"per effetto del mercato"]
+        if abs(c["versato"]) >= 0.01:
+            pezzi.append(f", oltre a {_eur(c['versato'])} che ci hai messo tu")
+        fatti.append(Fatto(
+            chiave="storico:mercato",
+            testo="".join(pezzi) + ".",
+            forza=min(30 + abs(c["mercato"]) * 3, 75), area="portafoglio",
+            dati={"mercato": c["mercato"], "versato": c["versato"],
+                  "giorni": c["giorni"]}))
+
+    if abs(c["liquido"]) >= MIN_EURO_CATEGORIA:
+        verso = "salita" if c["liquido"] > 0 else "scesa"
+        fatti.append(Fatto(
+            chiave="storico:liquidita",
+            testo=f"La liquidità sui conti è {verso} di {_eur(c['liquido'])} {quando}.",
+            forza=_forza(0, c["liquido"]) * 0.8, area="finanze",
+            dati={"liquido": c["liquido"], "giorni": c["giorni"]}))
+
+    return fatti
+
+
+# ===========================================================================
 #  IL QUADRO DI OGGI
 #  I "fatti" qui sopra rispondono a "cosa è cambiato?", e all'inizio della vita
 #  dell'app la risposta onesta è spesso "poco": non c'è passato con cui
@@ -506,7 +569,7 @@ def come_testo_quadro(righe: list = None) -> str:
 # ===========================================================================
 #  Raccolta
 # ===========================================================================
-AREE = ("finanze", "portafoglio", "pac")
+AREE = ("finanze", "portafoglio", "pac", "storico")
 
 
 def raccogli(aree=AREE, limite: int = 8, oggi: datetime = None) -> list:
@@ -523,6 +586,8 @@ def raccogli(aree=AREE, limite: int = 8, oggi: datetime = None) -> list:
         fatti += fatti_portafoglio()
     if "pac" in aree:
         fatti += fatti_pac(oggi=oggi)
+    if "storico" in aree:
+        fatti += fatti_storico()
     fatti.sort(key=lambda f: f.forza, reverse=True)
     return fatti[:limite]
 

@@ -59,6 +59,25 @@
     {% if an.esclusi %}<p class="faint" style="font-size:12px;margin-top:10px;">{{ t('an.esclusi_note', tk=(an.esclusi | join(', '))) }}</p>{% endif %}
   </div>
 
+  {# ---------- Il tuo risultato nel tempo (archivio giornaliero) ----------
+     Non è il prezzo dei titoli: è valore posseduto meno versato, giorno per
+     giorno. Prima non esisteva perché nessuno salvava lo storico. #}
+  <div class="card" style="margin-top:16px;">
+    {{ sechead(t('an.storico_h'), t('an.storico_t')) }}
+    {% if storico.punti %}
+      <svg viewBox="0 0 560 110" preserveAspectRatio="none" style="width:100%;height:110px;display:block;overflow:visible;">
+        <polyline points="{{ storico.punti }}" fill="none" stroke="{{ 'var(--pos)' if storico.sale else 'var(--neg)' }}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;gap:8px;margin-top:6px;">
+        <span class="faint" style="font-size:12px;">{{ storico.dal.strftime('%d/%m') }}</span>
+        <span class="faint" style="font-size:12px;">{{ t('an.storico_range', min=(storico.min | eur), max=(storico.max | eur)) }}</span>
+      </div>
+      <p class="faint" style="font-size:12px;margin:8px 0 0;">{{ t('an.storico_note', n=storico.n) }}</p>
+    {% else %}
+      <div class="note info" style="margin:0;">{{ t('an.storico_vuoto', n=storico.n) }}</div>
+    {% endif %}
+  </div>
+
   {# ---------- Rischio ---------- #}
   <div class="card" style="margin-top:16px;">
     {{ sechead(t('an.rischio_h'), t('an.rischio_t')) }}
@@ -128,7 +147,9 @@
         </div>
         {% endfor %}
       </div>
-      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=lt.coperto_pct) }}{% if lt.senza_settore %} {{ t('an.senza_settore', tk=(lt.senza_settore | join(', '))) }}{% endif %}{% if not lt.usa_valori %} {{ t('an.base_target') }}{% endif %}</div>
+      {# il numero passa dal filtro: senza, esce «96.0%» col punto inglese in
+         mezzo a una pagina tutta all'italiana #}
+      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=(lt.coperto_pct | string | replace('.', ','))) }}{% if lt.senza_settore %} {{ t('an.senza_settore', tk=(lt.senza_settore | join(', '))) }}{% endif %}{% if not lt.usa_valori %} {{ t('an.base_target') }}{% endif %}</div>
       {% else %}<div class="faint">{{ t('pf.unavailable') }}</div>{% endif %}
     </div>
     <div class="card" style="margin:0;">
