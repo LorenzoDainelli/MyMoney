@@ -7,7 +7,9 @@ senza google-auth installato).
 """
 import json
 import sys
+import threading
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -240,3 +242,59 @@ def test_esito_test_mappa_vertexlibs(monkeypatch):
     ok, detail = ai.test_connection()
     assert ok is False
     assert detail == "vertex_libs_mancanti"
+
+
+# ── modalità PROATTIVA: l'interruttore che non faceva niente ─────────────────
+# Le Impostazioni promettono «commenta all'apertura» e la modalità si poteva
+# selezionare, ma `get_mode()` veniva letto solo per ridisegnare la tendina:
+# chi la accendeva non otteneva nulla. Qui si difende che la promessa valga.
+
+def _lettura_di(ore_fa):
+    from datetime import timedelta
+    return json.dumps({"text": "x", "conf": "media",
+                       "when": (datetime.now() - timedelta(hours=ore_fa)).isoformat()})
+
+
+def test_a_domanda_non_rigenera_mai_da_sola(monkeypatch):
+    ai.set_mode(ai.MODE_ON_DEMAND)
+    monkeypatch.setattr(ai, "is_configured", lambda: True)
+    store_mod.set_setting("prova_ai", _lettura_di(999))
+    chiamate = []
+    assert ai.forse_rigenera("prova_ai", lambda: chiamate.append(1)) is False
+    assert chiamate == []
+
+
+def test_proattivo_rigenera_una_lettura_vecchia(monkeypatch):
+    ai.set_mode(ai.MODE_PROACTIVE)
+    monkeypatch.setattr(ai, "is_configured", lambda: True)
+    store_mod.set_setting("prova_ai", _lettura_di(ai.ORE_PROATTIVO + 1))
+    fatto = threading.Event()
+    assert ai.forse_rigenera("prova_ai", fatto.set) is True
+    assert fatto.wait(5), "la rigenerazione non è partita"
+
+
+def test_proattivo_non_rigenera_una_lettura_fresca(monkeypatch):
+    """Aprire dieci volte la dashboard non deve costare dieci chiamate."""
+    ai.set_mode(ai.MODE_PROACTIVE)
+    monkeypatch.setattr(ai, "is_configured", lambda: True)
+    store_mod.set_setting("prova_ai", _lettura_di(1))
+    chiamate = []
+    assert ai.forse_rigenera("prova_ai", lambda: chiamate.append(1)) is False
+    assert chiamate == []
+
+
+def test_proattivo_senza_chiave_resta_fermo(monkeypatch):
+    ai.set_mode(ai.MODE_PROACTIVE)
+    monkeypatch.setattr(ai, "is_configured", lambda: False)
+    store_mod.set_setting("prova_ai", "")
+    assert ai.forse_rigenera("prova_ai", lambda: None) is False
+
+
+def test_una_lettura_mai_scritta_e_da_rigenerare(monkeypatch):
+    ai.set_mode(ai.MODE_PROACTIVE)
+    monkeypatch.setattr(ai, "is_configured", lambda: True)
+    store_mod.set_setting("prova_ai", "")
+    assert ai.eta_lettura("prova_ai") is None
+    fatto = threading.Event()
+    assert ai.forse_rigenera("prova_ai", fatto.set) is True
+    assert fatto.wait(5)

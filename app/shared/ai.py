@@ -19,6 +19,7 @@ credenziali stanno solo in locale (database), mai nei log né nell'URL (via head
 """
 import json
 import re
+import threading
 import urllib.error
 import urllib.request
 from datetime import datetime
@@ -162,6 +163,62 @@ def get_mode() -> str:
 def set_mode(value: str) -> None:
     if value in MODES:
         store.set_setting("ai_mode", value)
+
+
+# ---------------------------------------------------------------------------
+#  MODALITÀ PROATTIVA
+#  Le Impostazioni promettono «commenta all'apertura» e l'interruttore esisteva
+#  davvero — ma `get_mode()` veniva letto SOLO per ridisegnare la tendina: chi lo
+#  accendeva non otteneva niente. Qui la promessa viene mantenuta: la lettura si
+#  rigenera da sola quando è vecchia, in un thread, così la pagina non aspetta
+#  mai il modello (al massimo la trovi aggiornata al giro dopo).
+#  Il tetto orario esiste perché ogni generazione è una chiamata a pagamento:
+#  aprire dieci volte la dashboard non deve costare dieci letture.
+# ---------------------------------------------------------------------------
+ORE_PROATTIVO = 12
+_proattivo_lock = threading.Lock()
+
+
+def proattivo_attivo() -> bool:
+    return get_mode() == MODE_PROACTIVE and is_configured()
+
+
+def eta_lettura(chiave: str):
+    """Da quante ore esiste la lettura salvata sotto `chiave` (None se non c'è)."""
+    raw = store.get_setting(chiave, "")
+    if not raw:
+        return None
+    try:
+        quando = datetime.fromisoformat(json.loads(raw).get("when", ""))
+    except (json.JSONDecodeError, TypeError, ValueError):
+        return None
+    return (datetime.now() - quando).total_seconds() / 3600.0
+
+
+def forse_rigenera(chiave: str, genera) -> bool:
+    """Se la modalità è Proattiva e la lettura è vecchia (o manca), la rigenera
+    in background. Ritorna True se ha davvero avviato un aggiornamento.
+
+    `genera` è una funzione senza argomenti che produce e SALVA la lettura: qui
+    non sappiamo (né vogliamo sapere) come si costruisce il contesto di ogni
+    pagina."""
+    if not proattivo_attivo():
+        return False
+    eta = eta_lettura(chiave)
+    if eta is not None and eta < ORE_PROATTIVO:
+        return False
+    if _proattivo_lock.locked():
+        return False               # una lettura alla volta: non è una gara
+
+    def lavora():
+        with _proattivo_lock:
+            try:
+                genera()
+            except Exception:
+                pass               # una lettura mancata non deve rompere una pagina
+
+    threading.Thread(target=lavora, daemon=True).start()
+    return True
 
 
 def get_provider() -> str:

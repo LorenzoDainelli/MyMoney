@@ -177,6 +177,93 @@ def test_posizione_senza_prezzo_esclusa_e_dichiarata(monkeypatch):
     assert an["versato_totale"] == 100.0  # ...ma il suo versato sì: è denaro reale
 
 
+# ---------------------- rischio: in euro, e pesato sul valore ----------------------
+def _serie_da_rendimenti(rendimenti, base=100.0):
+    """Chiusure che producono esattamente quei rendimenti settimanali."""
+    closes, x = [base], base
+    for r in rendimenti:
+        x *= (1 + r)
+        closes.append(x)
+    return closes
+
+
+def _patch_risk(monkeypatch, pos, quotes, storie):
+    monkeypatch.setattr(A, "lista_posizioni", lambda: pos)
+    monkeypatch.setattr(A.market, "quotes_map", lambda: quotes)
+    monkeypatch.setattr(A.market, "_yahoo_symbol", lambda s: s)
+    monkeypatch.setattr(A.market, "history_closes",
+                        lambda sym, rng="1y", interval="1wk": storie.get(sym, []))
+    salvati = {}
+    monkeypatch.setattr(A.settings_store, "set_setting",
+                        lambda k, v: salvati.__setitem__(k, v))
+    return salvati
+
+
+def test_il_rischio_e_calcolato_in_euro_non_in_valuta_di_quotazione(monkeypatch):
+    """Un titolo in dollari che sale del 2% mentre il dollaro perde il 3% per un
+    portafoglio in euro è SCESO. Prima i rendimenti restavano in valuta di
+    quotazione e venivano confrontati con un benchmark in euro: i due lati della
+    misura erano in monete diverse."""
+    piatto = [0.0] * 40
+    su = [0.02] * 40                       # il titolo sale ogni settimana
+    cambio = [0.03] * 40                   # ...ma l'euro si rafforza di più
+    pos = [_Pos(1, "USA", "Azione", 100, qta=1, versato=100)]
+    quotes = {"USA": _Q(10.0, currency="USD")}
+    storie = {"USA": _serie_da_rendimenti(su),
+              "EURUSD=X": _serie_da_rendimenti(cambio),
+              "IWDA": _serie_da_rendimenti(piatto)}
+    _patch_risk(monkeypatch, pos, quotes, storie)
+    snap = A.compute_risk()
+    # in euro il rendimento è (1,02/1,03 - 1) ≈ -0,97% a settimana: negativo
+    assert snap is not None
+    assert snap["ann"] < 0, "il cambio non è entrato nel calcolo"
+    assert snap["in_euro"] is True
+
+
+def test_senza_lo_storico_del_cambio_il_titolo_resta_fuori(monkeypatch):
+    """Meglio un titolo escluso e dichiarato che uno convertito a occhio."""
+    pos = [_Pos(1, "USA", "Azione", 50, qta=1, versato=50),
+           _Pos(2, "EUR", "Azione", 50, qta=1, versato=50)]
+    quotes = {"USA": _Q(10.0, currency="USD"), "EUR": _Q(10.0, currency="EUR")}
+    storie = {"USA": _serie_da_rendimenti([0.01] * 40),
+              "EUR": _serie_da_rendimenti([0.01] * 40),
+              "IWDA": _serie_da_rendimenti([0.01] * 40)}   # EURUSD=X assente
+    _patch_risk(monkeypatch, pos, quotes, storie)
+    snap = A.compute_risk()
+    assert snap["n"] == 1
+    assert "USA" in snap["esclusi"]
+
+
+def test_il_rischio_pesa_sul_valore_reale_e_lo_dichiara(monkeypatch):
+    pos = [_Pos(1, "A", "Azione", 50, qta=9, versato=50),
+           _Pos(2, "B", "Azione", 50, qta=1, versato=50)]
+    quotes = {"A": _Q(10.0, currency="EUR"), "B": _Q(10.0, currency="EUR")}
+    storie = {"A": _serie_da_rendimenti([0.05, -0.05] * 20),
+              "B": _serie_da_rendimenti([0.0] * 40),
+              "IWDA": _serie_da_rendimenti([0.0] * 40)}
+    _patch_risk(monkeypatch, pos, quotes, storie)
+    snap = A.compute_risk()
+    assert snap["base"] == "valore"
+    # A pesa 90 su 100 (non 50/50 come col peso target): la volatilità del
+    # portafoglio è quasi tutta la sua
+    assert snap["vol"] > 20, "col peso sul valore A domina, e A oscilla molto"
+
+
+def test_uno_snapshot_di_un_metodo_vecchio_non_viene_mostrato(monkeypatch):
+    """Mostrarne metà (senza VaR e R², con pesi target) si legge come se quelle
+    metriche non esistessero: peggio che non mostrarlo."""
+    import json
+    vecchio = json.dumps({"vol": 12.9, "beta": 1.18})       # niente 'versione'
+    monkeypatch.setattr(A.settings_store, "get_setting", lambda k, d="": vecchio)
+    assert A.get_cached_risk() is None
+    assert A.risk_scaduto() is True
+
+    nuovo = json.dumps({"vol": 13.7, "versione": A.RISK_VERSIONE})
+    monkeypatch.setattr(A.settings_store, "get_setting", lambda k, d="": nuovo)
+    assert A.get_cached_risk()["vol"] == 13.7
+    assert A.risk_scaduto() is False
+
+
 def test_ter_solo_sugli_etf_che_lo_pubblicano(monkeypatch):
     etf1 = _Pos(1, "AAA", "ETF", 50, qta=1, versato=50)
     etf2 = _Pos(2, "BBB", "ETF", 50, qta=1, versato=50)

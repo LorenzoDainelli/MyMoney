@@ -66,13 +66,14 @@ def look_through(cached_only: bool = False) -> dict:
     base = sum(peso(p) for p in posizioni)          # peso analizzabile in totale
     sett: dict[str, float] = {}
     coperto = 0.0                                   # peso che contribuisce un settore
-    div_acc = div_w = 0.0
+    senza_settore = []                              # chi non pubblica la scomposizione
     for p in posizioni:
         w = peso(p)
         if not w:
             continue                                # in modalità valore: niente prezzo → fuori
         f = fetch(p.ticker) if cached_only else fetch(p.ticker, tipo=p.tipo)
         if not f:
+            senza_settore.append(p.ticker)
             continue
         porta_settore = False
         if p.tipo == "ETF" and f.get("sectors"):
@@ -89,9 +90,8 @@ def look_through(cached_only: bool = False) -> dict:
             porta_settore = True
         if porta_settore:
             coperto += w
-        if f.get("div_yield"):
-            div_acc += w * f["div_yield"]
-            div_w += w
+        else:
+            senza_settore.append(p.ticker)
     settori = []
     if coperto > 0:
         for k, v in sorted(sett.items(), key=lambda x: -x[1]):
@@ -106,13 +106,15 @@ def look_through(cached_only: bool = False) -> dict:
         "tech_alert": tech > 50,
         "usa_valori": usa_valori,
         "coperto_pct": round(coperto / base * 100, 1) if base else 0.0,
-        "div_yield": round(div_acc / div_w * 100, 2) if div_w else None,
+        # chi lascia il buco, per nome: «copertura 89,9%» non dice quali titoli
+        # mancano, e senza il nome l'utente non può nemmeno verificare
+        "senza_settore": sorted({t for t in senza_settore if t}),
         "eff_holdings": round(1 / hhi, 1) if hhi else 0,
         "n_titoli": len(weights),
     }
 
 
-def analisi_completa() -> dict:
+def analisi_completa(cached_only: bool = False) -> dict:
     """Sintesi, diversificazione, stile e look-through per titolo (design MyMoney).
 
     Pesi: il VALORE reale se inserito (quantità/valori), altrimenti la % target.
@@ -124,7 +126,11 @@ def analisi_completa() -> dict:
       che lo riguarda davvero; la performance a 12 mesi del titolo è storia di
       MERCATO, avvenuta prima che comprasse, e va tenuta separata e dichiarata;
     - ogni media parziale (dividendi, TER, performance) porta con sé la sua
-      COPERTURA: su quanta parte del portafoglio è calcolata."""
+      COPERTURA: su quanta parte del portafoglio è calcolata.
+
+    Con `cached_only=True` non parte NESSUNA chiamata di rete: si legge solo la
+    cache locale dei fondamentali. Serve alle pagine che devono aprirsi subito
+    (l'aggiornamento gira in background)."""
     vista = vista_portafoglio()
     snapshot = market.get_perf_snapshot()
     usa_valori = vista["ha_totale"]
@@ -142,7 +148,10 @@ def analisi_completa() -> dict:
             if usa_valori and (p.ticker or "").strip() and p.quantita:
                 esclusi.append(p.ticker)      # ha quantità ma il prezzo è mancato
             continue
-        f = market.get_fundamentals(p.ticker, tipo=p.tipo) if (p.ticker or "").strip() else None
+        f = None
+        if (p.ticker or "").strip():
+            f = (market.get_fundamentals_cached(p.ticker) if cached_only
+                 else market.get_fundamentals(p.ticker, tipo=p.tipo))
         pesi.append((p, float(w), f, r.get("q")))
     somma = sum(w for _, w, _, _ in pesi) or 1.0
 
@@ -248,17 +257,70 @@ def _weekly_returns(closes: list) -> list:
     return [closes[i] / closes[i - 1] - 1 for i in range(1, len(closes)) if closes[i - 1]]
 
 
+# Versione del calcolo del rischio. Serve a riconoscere uno snapshot vecchio:
+# quando cambiano le metriche o il METODO, un numero salvato mesi fa non è
+# «un po' datato», è calcolato in un altro modo — e va rifatto, non mostrato.
+RISK_VERSIONE = 2
+
+
+def _rendimenti_in_euro(ticker: str, valuta: str, cache_fx: dict) -> list:
+    """Rendimenti settimanali di un titolo VISTI DA UN PORTAFOGLIO IN EURO.
+
+    Un titolo quotato in dollari che sale del 2% mentre il dollaro perde il 3%
+    per te è sceso. Prima confrontavamo rendimenti in valuta di quotazione con
+    un benchmark in euro: i due lati della misura erano in monete diverse, e il
+    beta che ne usciva rispondeva a una domanda che nessuno aveva fatto.
+
+    Il cambio storico entra come serie a sé (EUR/valuta, stesse settimane):
+    r_eur = (1 + r_titolo) / (1 + r_cambio) − 1.
+    """
+    closes = market.history_closes(market._yahoo_symbol(ticker), "1y", "1wk")
+    r = _weekly_returns(closes)
+    cur = (valuta or "EUR").upper()
+    if not r or cur == "EUR":
+        return r
+    if cur not in cache_fx:
+        cache_fx[cur] = _weekly_returns(
+            market.history_closes(f"EUR{cur}=X", "1y", "1wk"))
+    fx = cache_fx[cur]
+    if not fx:
+        return []          # senza il cambio non fingiamo: il titolo resta fuori
+    n = min(len(r), len(fx))
+    r, fx = r[-n:], fx[-n:]
+    return [(1 + r[i]) / (1 + fx[i]) - 1 for i in range(n) if fx[i] != -1]
+
+
 def compute_risk() -> dict | None:
-    """Metriche di rischio del portafoglio (pesate sulla % target), su ~1 anno
-    di dati settimanali. Calcolo pesante: lo lanciamo a richiesta e lo salviamo."""
+    """Metriche di rischio del portafoglio su ~1 anno di dati settimanali.
+
+    Due scelte che cambiano il significato dei numeri:
+    - i pesi sono quelli VERI (valore posseduto) quando ci sono, non le % target:
+      la stessa base del resto della pagina;
+    - tutto è riportato in EURO, cambio storico incluso, così il rischio è quello
+      che corre l'utente e il confronto col mercato globale è fra pari.
+
+    Calcolo pesante: lo lanciamo a richiesta e lo salviamo."""
     posizioni = [p for p in lista_posizioni() if not p.is_fisso and (p.ticker or "").strip()]
-    rets, tot_w = [], 0.0
+    qmap = market.quotes_map()
+    valori = {p.id: _valore_posizione(p, qmap) for p in posizioni}
+    usa_valori = sum(v for v in valori.values() if v) > 0
+
+    cache_fx: dict[str, list] = {}
+    rets, tot_w, esclusi = [], 0.0, []
     for p in posizioni:
-        r = _weekly_returns(market.history_closes(market._yahoo_symbol(p.ticker), "1y", "1wk"))
+        w = (valori[p.id] if usa_valori else p.pct_target) or 0.0
+        if not w:
+            esclusi.append(p.ticker)
+            continue
+        q = qmap.get((p.ticker or "").upper())
+        r = _rendimenti_in_euro(p.ticker, (q.currency if q else ""), cache_fx)
         if len(r) >= 30:
-            rets.append((p.pct_target, r))
-            tot_w += p.pct_target
-    bench = _weekly_returns(market.history_closes(market._yahoo_symbol("IWDA"), "1y", "1wk"))
+            rets.append((w, r))
+            tot_w += w
+        else:
+            esclusi.append(p.ticker)
+    # il benchmark passa dalla stessa strada: MSCI World, quotato in euro
+    bench = _rendimenti_in_euro("IWDA", "EUR", cache_fx)
     if not rets or not bench or tot_w <= 0:
         return None
     L = min(min(len(r) for _, r in rets), len(bench))
@@ -292,12 +354,45 @@ def compute_risk() -> dict | None:
         "ann": round(ann * 100, 1),
         "n": len(rets),
         "weeks": L,
-        "when": market.fmt_ts(datetime.utcnow()),
+        "when": market.fmt_ts(market.utc_now()),
+        "versione": RISK_VERSIONE,
+        # la base dei pesi e chi è rimasto fuori: senza queste due righe il
+        # numero non è verificabile, e un numero non verificabile è un'opinione
+        "base": "valore" if usa_valori else "target",
+        "esclusi": sorted({t for t in esclusi if t}),
+        "in_euro": True,
     }
     settings_store.set_setting("risk_snapshot", json.dumps(snap))
     return snap
 
 
 def get_cached_risk() -> dict | None:
+    """Lo snapshot salvato, SOLO se è ancora confrontabile con quello di oggi.
+
+    Uno snapshot di una versione precedente non è «un po' vecchio»: gli mancano
+    metriche (VaR, R²) ed è calcolato con un altro metodo (pesi target, valute
+    miste). Mostrarne metà in silenzio è peggio che non mostrarlo: si legge come
+    se quelle metriche non esistessero. Qui torna None e la pagina chiede di
+    rifare il conto."""
     raw = settings_store.get_setting("risk_snapshot", "")
-    return json.loads(raw) if raw else None
+    if not raw:
+        return None
+    try:
+        snap = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+    if snap.get("versione") != RISK_VERSIONE:
+        return None
+    return snap
+
+
+def risk_scaduto() -> bool:
+    """True se esiste uno snapshot ma è di un metodo vecchio: serve a spiegare
+    all'utente PERCHÉ il riquadro è vuoto invece di lasciarlo a indovinare."""
+    raw = settings_store.get_setting("risk_snapshot", "")
+    if not raw:
+        return False
+    try:
+        return json.loads(raw).get("versione") != RISK_VERSIONE
+    except json.JSONDecodeError:
+        return True

@@ -285,6 +285,39 @@ def dettaglio(vid: int) -> dict | None:
                 "conto": v.conto, "inclusi_ids": set(ids)}
 
 
+GIORNI_PREAVVISO = 2      # quanti giorni prima del solito iniziare a ricordarlo
+
+
+def promemoria(oggi: date = None) -> dict | None:
+    """«Il PAC di questo mese non l'hai ancora registrato», ma solo se è vero.
+
+    Il giorno non è scritto nel codice: si ricava dalla MEDIANA dei versamenti
+    già fatti. Se il PAC lo sposti, il promemoria si sposta con te — e se non
+    hai mai versato niente, non c'è nessuna abitudine da ricordare e questa
+    funzione tace (regola: mai inventare un'abitudine che non esiste)."""
+    from statistics import median
+
+    storico = lista()
+    if not storico:
+        return None
+    oggi = oggi or date.today()
+    if any(v["data"].year == oggi.year and v["data"].month == oggi.month
+           for v in storico):
+        return None                       # questo mese è già registrato
+    giorno_tipico = int(median([v["data"].day for v in storico]))
+    if oggi.day < giorno_tipico - GIORNI_PREAVVISO:
+        return None                       # è ancora presto: non è un promemoria, è rumore
+    ultimo = max(v["data"] for v in storico)
+    return {
+        "giorno": giorno_tipico,
+        "ultimo": ultimo,
+        "giorni_da_ultimo": (oggi - ultimo).days,
+        "importo_tipico": round(median([v["importo"] for v in storico]), 2),
+        "in_ritardo": oggi.day > giorno_tipico,
+        "n_versamenti": len(storico),
+    }
+
+
 def lista() -> list:
     """Storico dei versamenti (più recenti in cima), con numero di titoli."""
     with SessionLocal() as db:

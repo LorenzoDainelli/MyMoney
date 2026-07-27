@@ -53,7 +53,11 @@ def _ctx_panoramica() -> dict:
 # ------------------------------ panoramica ------------------------------
 @router.get("/finanze", response_class=HTMLResponse)
 def panoramica(request: Request):
-    return templates.TemplateResponse(request, "finance_overview.html", _ctx_panoramica())
+    # modalità Proattiva: la lettura si rinfresca da sola in background
+    ai.forse_rigenera("fin_ai", _genera_lettura_finanze)
+    ctx = _ctx_panoramica()
+    ctx["ai_proattivo"] = ai.proattivo_attivo()
+    return templates.TemplateResponse(request, "finance_overview.html", ctx)
 
 
 def _aggiorna_grafico_patrimonio():
@@ -308,13 +312,17 @@ def _contesto_finanze() -> str:
     return "\n".join(righe)
 
 
-@router.post("/finanze/ai/analisi")
-def ai_analisi():
-    """Analisi descrittiva del mese (dati aggregati e anonimi): la genera,
-    la SALVA (resta visibile come 'Lettura AI') e torna in panoramica."""
+def _genera_lettura_finanze() -> None:
     res = ai.analizza_finanze(_contesto_finanze())
     if res.get("ok"):
         settings_store.set_setting("fin_ai", json.dumps({
             "text": res["text"], "conf": res.get("conf", "media"),
             "when": datetime.now().isoformat(timespec="minutes")}))
+
+
+@router.post("/finanze/ai/analisi")
+def ai_analisi():
+    """Analisi descrittiva del mese (dati aggregati e anonimi): la genera,
+    la SALVA (resta visibile come 'Lettura AI') e torna in panoramica."""
+    _genera_lettura_finanze()
     return RedirectResponse("/finanze", status_code=303)

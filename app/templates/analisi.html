@@ -6,8 +6,11 @@
 {% extends "base.html" %}
 {% block title %}{{ t('analisi.title') }} — {{ t('app.name') }}{% endblock %}
 
+{# Il bottone c'è SEMPRE: la scheda della metrica (cosa misura, su quali dati,
+   che limite) è calcolata in Python e non ha bisogno dell'AI per esistere.
+   Con la chiave configurata il popup aggiunge anche la spiegazione a parole. #}
 {% macro aibtn(label, value, key='') -%}
-  {%- if ai_on %}<button type="button" class="mm-aibtn" data-label="{{ label }}" data-value="{{ value }}" data-metric="{{ key }}" aria-label="{{ t('an.ai_title') }}" title="{{ t('an.ai_title') }}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;cursor:pointer;border:1px solid var(--ai-bd);background:var(--ai-bg);color:var(--ai);border-radius:999px;flex:none;padding:0;font-size:12px;">✨</button>{% endif -%}
+  {%- if key %}<button type="button" class="mm-aibtn" data-label="{{ label }}" data-value="{{ value }}" data-metric="{{ key }}" aria-label="{{ t('an.ai_title') if ai_on else t('an.scheda_title') }}" title="{{ t('an.ai_title') if ai_on else t('an.scheda_title') }}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;cursor:pointer;border:1px solid var(--ai-bd);background:var(--ai-bg);color:var(--ai);border-radius:999px;flex:none;padding:0;font-size:12px;">{{ '✨' if ai_on else 'i' }}</button>{% endif -%}
 {%- endmacro %}
 
 {% macro metric(label, value, sub='', tone='', key='') -%}
@@ -56,6 +59,25 @@
     {% if an.esclusi %}<p class="faint" style="font-size:12px;margin-top:10px;">{{ t('an.esclusi_note', tk=(an.esclusi | join(', '))) }}</p>{% endif %}
   </div>
 
+  {# ---------- Il tuo risultato nel tempo (archivio giornaliero) ----------
+     Non è il prezzo dei titoli: è valore posseduto meno versato, giorno per
+     giorno. Prima non esisteva perché nessuno salvava lo storico. #}
+  <div class="card" style="margin-top:16px;">
+    {{ sechead(t('an.storico_h'), t('an.storico_t')) }}
+    {% if storico.punti %}
+      <svg viewBox="0 0 560 110" preserveAspectRatio="none" style="width:100%;height:110px;display:block;overflow:visible;">
+        <polyline points="{{ storico.punti }}" fill="none" stroke="{{ 'var(--pos)' if storico.sale else 'var(--neg)' }}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;gap:8px;margin-top:6px;">
+        <span class="faint" style="font-size:12px;">{{ storico.dal.strftime('%d/%m') }}</span>
+        <span class="faint" style="font-size:12px;">{{ t('an.storico_range', min=(storico.min | eur), max=(storico.max | eur)) }}</span>
+      </div>
+      <p class="faint" style="font-size:12px;margin:8px 0 0;">{{ t('an.storico_note', n=storico.n) }}</p>
+    {% else %}
+      <div class="note info" style="margin:0;">{{ t('an.storico_vuoto', n=storico.n) }}</div>
+    {% endif %}
+  </div>
+
   {# ---------- Rischio ---------- #}
   <div class="card" style="margin-top:16px;">
     {{ sechead(t('an.rischio_h'), t('an.rischio_t')) }}
@@ -68,7 +90,11 @@
         {% if risk.var95m is defined and risk.var95m is not none %}{{ metric(t('an.var'), '−' ~ (risk.var95m | pct), t('an.var_sub'), 'warn', 'var') }}{% endif %}
         {% if risk.r2 is defined and risk.r2 is not none %}{{ metric(t('an.r2'), risk.r2 | pct, t('an.r2_sub'), '', 'r2') }}{% endif %}
       </div>
-      <p class="faint" style="font-size:12px;margin-top:10px;">{{ t('analisi.risk_meta', n=risk.n, weeks=risk.weeks, when=risk.when) }}</p>
+      <p class="faint" style="font-size:12px;margin-top:10px;">{{ t('analisi.risk_meta', n=risk.n, weeks=risk.weeks, when=risk.when) }} {{ t('an.risk_base_valore') if risk.base == 'valore' else t('an.risk_base_target') }} {{ t('an.risk_euro') }}{% if risk.esclusi %} {{ t('an.risk_esclusi', tk=(risk.esclusi | join(', '))) }}{% endif %}</p>
+    {% elif risk_scaduto %}
+      {# Uno snapshot di un metodo precedente non va mostrato a metà: gli mancano
+         metriche e i pesi erano calcolati in un altro modo. Meglio dirlo. #}
+      <div class="note warn">{{ t('an.risk_scaduto') }}</div>
     {% else %}
       <div class="note info">{{ t('analisi.risk_none') }} {{ t('analisi.risk_note') }}</div>
     {% endif %}
@@ -121,7 +147,9 @@
         </div>
         {% endfor %}
       </div>
-      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=lt.coperto_pct) }}{% if not lt.usa_valori %} {{ t('an.base_target') }}{% endif %}</div>
+      {# il numero passa dal filtro: senza, esce «96.0%» col punto inglese in
+         mezzo a una pagina tutta all'italiana #}
+      <div class="muted" style="font-size:12px;margin-top:10px;">{{ t('analisi.sector_note', cop=(lt.coperto_pct | string | replace('.', ','))) }}{% if lt.senza_settore %} {{ t('an.senza_settore', tk=(lt.senza_settore | join(', '))) }}{% endif %}{% if not lt.usa_valori %} {{ t('an.base_target') }}{% endif %}</div>
       {% else %}<div class="faint">{{ t('pf.unavailable') }}</div>{% endif %}
     </div>
     <div class="card" style="margin:0;">
@@ -134,7 +162,7 @@
         <span class="num muted" style="flex:0 0 44px;text-align:right;font-size:11px;">{{ r.w | pct }}</span>
       </div>
       {% endfor %}
-      <p class="faint" style="font-size:12px;margin-top:8px;">{{ t('an.look_note') }}</p>
+      <p class="faint" style="font-size:12px;margin-top:8px;">{{ t('an.look_note') }} {{ t('an.look_cov', pct=(an.look_coverage | pct)) }}</p>
       {% else %}<div class="faint">{{ t('pf.unavailable') }}</div>{% endif %}
     </div>
   </div>
@@ -181,48 +209,81 @@
 
   <p class="faint" style="font-size:12px;margin-top:16px;">{{ t('an.footer') }}</p>
 
-  {# ---------- modal ✨ (vanilla JS) ---------- #}
-  {% if ai_on %}
+  {# ---------- popup della metrica (vanilla JS) ----------
+     Due strati, e il primo non dipende da niente: la SCHEDA (cosa misura, su
+     quali dati, che limite) è già calcolata in Python e viene mostrata subito.
+     Solo se la chiave AI c'è, sotto arriva anche la spiegazione a parole. #}
+  <script type="application/json" id="mm-schede">{{ schede | tojson }}</script>
   <div id="ai-modal" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;z-index:70;padding:20px;">
     <div id="ai-modal-bg" style="position:absolute;inset:0;background:rgba(20,26,12,.4);backdrop-filter:blur(2px);"></div>
-    <div style="position:relative;width:min(460px,96vw);margin:10vh auto 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:20px;">
+    <div style="position:relative;width:min(460px,96vw);margin:10vh auto 0;max-height:80vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:20px;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <span class="ai-label">✨ {{ t('an.ai_title') }}</span>
+        <span class="ai-label">{{ ('✨ ' ~ t('an.ai_title')) if ai_on else t('an.scheda_title') }}</span>
         <button type="button" id="ai-modal-x" aria-label="×" style="display:grid;place-items:center;width:30px;height:30px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;">×</button>
       </div>
       <div class="muted" id="ai-modal-label" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;margin-top:14px;"></div>
       <div class="num" id="ai-modal-value" style="font-size:var(--text-2xl);font-weight:800;letter-spacing:var(--ls-tight);color:var(--ink);line-height:1.1;"></div>
-      <p id="ai-modal-text" class="muted" style="margin:12px 0 0;line-height:var(--lh-relaxed);"></p>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+      <dl id="ai-modal-scheda" style="margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px;"></dl>
+      {% if ai_on %}
+      <p id="ai-modal-text" class="muted" style="margin:14px 0 0;padding-top:12px;border-top:1px solid var(--border);line-height:var(--lh-relaxed);"></p>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
         <span class="pill gray" id="ai-modal-conf" style="text-transform:none;"></span>
         <span class="faint" style="font-size:12px;">{{ t('an.ai_disc') }}</span>
       </div>
+      {% endif %}
     </div>
   </div>
-  {% endif %}
 {% endblock %}
 
 {% block scripts %}
-{% if ai_on %}
 <script>
 (function () {
   var modal = document.getElementById('ai-modal');
   if (!modal) return;
+  var AI = {{ 'true' if ai_on else 'false' }};
+  var SCHEDE = {}, node = document.getElementById('mm-schede');
+  try { SCHEDE = JSON.parse(node.textContent) || {}; } catch (e) { SCHEDE = {}; }
+  var ETICHETTE = {
+    cosa: {{ t('an.scheda_cosa') | tojson }},
+    dati: {{ t('an.scheda_dati') | tojson }},
+    limite: {{ t('an.scheda_limite') | tojson }}
+  };
   var lbl = document.getElementById('ai-modal-label'), val = document.getElementById('ai-modal-value'),
+      sch = document.getElementById('ai-modal-scheda'),
       txt = document.getElementById('ai-modal-text'), conf = document.getElementById('ai-modal-conf');
   function close() { modal.style.display = 'none'; }
   document.getElementById('ai-modal-x').addEventListener('click', close);
   document.getElementById('ai-modal-bg').addEventListener('click', close);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  function mostraScheda(s) {
+    sch.textContent = '';
+    if (!s) return;
+    ['cosa', 'dati', 'limite'].forEach(function (k) {
+      if (!s[k]) return;
+      var dt = document.createElement('dt');
+      dt.className = 'muted';
+      dt.style.cssText = 'font-size:11px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:700;white-space:nowrap;';
+      dt.textContent = ETICHETTE[k];
+      var dd = document.createElement('dd');
+      dd.style.cssText = 'margin:0;color:var(--ink);line-height:var(--lh-snug);';
+      dd.textContent = s[k];
+      sch.appendChild(dt); sch.appendChild(dd);
+    });
+  }
+
   document.addEventListener('click', function (e) {
     var b = e.target.closest('.mm-aibtn');
     if (!b) return;
+    var key = b.dataset.metric || '';
     lbl.textContent = b.dataset.label; val.textContent = b.dataset.value;
-    txt.textContent = {{ t('an.ai_wait') | tojson }}; conf.textContent = '…';
+    mostraScheda(SCHEDE[key]);
     modal.style.display = 'block';
+    if (!AI) return;
+    txt.textContent = {{ t('an.ai_wait') | tojson }}; conf.textContent = '…';
     var fd = new FormData();
     fd.append('label', b.dataset.label); fd.append('valore', b.dataset.value);
-    fd.append('metric', b.dataset.metric || '');
+    fd.append('metric', key);
     fetch('/analisi/ai', { method: 'POST', body: fd })
       .then(function (r) { return r.json(); })
       .then(function (j) {
@@ -233,5 +294,4 @@
   });
 })();
 </script>
-{% endif %}
 {% endblock %}

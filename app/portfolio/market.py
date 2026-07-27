@@ -16,7 +16,8 @@ import json
 import threading
 import urllib.parse
 import urllib.request
-from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import String, Float, Boolean, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column
@@ -26,7 +27,53 @@ from portfolio.models import Position
 
 UA = {"User-Agent": "Mozilla/5.0 (finanza-app personale)"}
 TIMEOUT = 8
-ROME_OFFSET = timedelta(hours=2)  # ~Europe/Rome (CEST), come il news-monitor
+
+def _ultima_domenica(anno: int, mese: int) -> datetime:
+    """L'ultima domenica del mese, alle 01:00 UTC: è l'istante in cui l'Unione
+    Europea cambia l'ora (uguale in tutti i suoi fusi)."""
+    d = datetime(anno + (1 if mese == 12 else 0), 1 if mese == 12 else mese + 1, 1, 1)
+    d -= timedelta(days=1)
+    return d - timedelta(days=(d.weekday() + 1) % 7)
+
+
+def offset_roma(utc: datetime) -> timedelta:
+    """Quante ore aggiungere all'UTC per avere l'ora di Roma in quel momento.
+
+    Prima era un +2 fisso (l'ora legale) scritto nel codice: da fine ottobre a
+    fine marzo ogni «aggiornato alle...» sarebbe stato un'ora avanti, per mezzo
+    anno, senza che nulla lo segnalasse. La regola europea sta in cinque righe e
+    non ha bisogno del database dei fusi (che su Windows spesso non c'è)."""
+    inizio = _ultima_domenica(utc.year, 3)      # ultima domenica di marzo, 01:00 UTC
+    fine = _ultima_domenica(utc.year, 10)       # ultima domenica di ottobre, 01:00 UTC
+    return timedelta(hours=2 if inizio <= utc < fine else 1)
+
+# Quante richieste in parallelo verso Yahoo. Il collo di bottiglia è l'attesa di
+# rete, non il PC: in serie l'avvio costava minuti (37 titoli × più chiamate
+# ciascuno). Sei è un compromesso: veloce, ma non un martello sul loro server.
+PARALLELE = 6
+
+
+def utc_now() -> datetime:
+    """Adesso in UTC, senza fuso attaccato: è il formato con cui il database
+    conserva `fetched_at` (utcnow() è deprecato da Python 3.12)."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def _in_parallelo(funzione, elementi: list) -> list:
+    """Esegue `funzione` su ogni elemento in parallelo e ritorna i risultati
+    riusciti. Un elemento che fallisce NON ferma gli altri (regola di robustezza):
+    torna semplicemente None e viene scartato."""
+    if not elementi:
+        return []
+
+    def protetta(x):
+        try:
+            return funzione(x)
+        except Exception:
+            return None
+
+    with ThreadPoolExecutor(max_workers=PARALLELE) as pool:
+        return [r for r in pool.map(protetta, elementi) if r is not None]
 
 # Simboli Yahoo verificati per gli ETF europei: il ticker "semplice" non basta,
 # serve il suffisso di borsa. Le azioni USA usano invece il ticker così com'è.
@@ -113,18 +160,24 @@ def _stooq_quote(ticker: str):
 
 
 _FX_CACHE: dict[str, float] = {}
+_fx_lock = threading.Lock()
 
 
 def _fx_to_eur_rate(currency: str) -> float:
-    """Quante unità di 'currency' valgono 1 EUR (per dividere e ottenere gli euro)."""
+    """Quante unità di 'currency' valgono 1 EUR (per dividere e ottenere gli euro).
+    Con l'aggiornamento in parallelo più titoli chiedono lo stesso cambio insieme:
+    il lucchetto evita di scaricarlo N volte."""
     cur = (currency or "EUR").upper()
     if cur == "EUR":
         return 1.0
     if cur in _FX_CACHE:
         return _FX_CACHE[cur]
-    rate, _ = _yahoo_quote(f"EUR{cur}=X")
-    _FX_CACHE[cur] = rate
-    return rate
+    with _fx_lock:
+        if cur in _FX_CACHE:
+            return _FX_CACHE[cur]
+        rate, _ = _yahoo_quote(f"EUR{cur}=X")
+        _FX_CACHE[cur] = rate
+        return rate
 
 
 # ----------------------------- aggiornamento ------------------------------
@@ -137,8 +190,14 @@ def _store(ticker, **kw):
         db.commit()
 
 
-def _refresh_one(ticker: str) -> None:
-    now = datetime.utcnow()
+def _scarica_uno(ticker: str) -> dict:
+    """SOLO rete: prezzo, valuta e performance a ~12 mesi di un ticker.
+
+    Non scrive niente. La scrittura la fa il chiamante, tutta insieme: SQLite
+    regge male molte transazioni in parallelo, e comunque salvare 37 righe è
+    istantaneo — il tempo se ne va tutto nell'attesa della rete."""
+    now = utc_now()
+    out = {"ticker": ticker, "fetched_at": now}
     try:
         price, cur = _yahoo_quote(_yahoo_symbol(ticker))
         source = "Yahoo"
@@ -147,15 +206,32 @@ def _refresh_one(ticker: str) -> None:
             price, cur = _stooq_quote(ticker)
             source = "Stooq"
         except Exception:
-            _store(ticker, ok=False, error=type(e1).__name__, fetched_at=now)
-            return
+            out.update(ok=False, error=type(e1).__name__, price=None,
+                       currency="", price_eur=None, source="")
+            return out
     try:
         rate = _fx_to_eur_rate(cur)
         price_eur = round(price / rate, 4) if rate else None
     except Exception:
         price_eur = None
-    _store(ticker, price=round(price, 4), currency=cur, price_eur=price_eur,
-           source=source, ok=True, error="", fetched_at=now)
+    out.update(price=round(price, 4), currency=cur, price_eur=price_eur,
+               source=source, ok=True, error="")
+    closes = history_closes(_yahoo_symbol(ticker), "1y", "1wk")
+    if len(closes) >= 2 and closes[0]:
+        out["perf12m"] = round((closes[-1] / closes[0] - 1) * 100, 2)
+    return out
+
+
+def _tickers_unici() -> list[str]:
+    with SessionLocal() as db:
+        tickers = [(p.ticker or "").strip() for p in db.query(Position).all()
+                   if (p.ticker or "").strip()]
+    visti, fuori = set(), []
+    for tk in tickers:
+        if tk.upper() not in visti:
+            visti.add(tk.upper())
+            fuori.append(tk)
+    return fuori
 
 
 def refresh_all() -> int:
@@ -165,22 +241,22 @@ def refresh_all() -> int:
     (chiusure settimanali) e la salva come snapshot: la dashboard la legge dalla
     cache senza fare chiamate di rete a ogni apertura."""
     _FX_CACHE.clear()
-    with SessionLocal() as db:
-        tickers = [(p.ticker or "").strip() for p in db.query(Position).all()
-                   if (p.ticker or "").strip()]
-    visti = set()
+    risultati = _in_parallelo(_scarica_uno, _tickers_unici())
     perf = {}
-    for tk in tickers:
-        if tk.upper() in visti:
-            continue
-        visti.add(tk.upper())
-        _refresh_one(tk)
-        closes = history_closes(_yahoo_symbol(tk), "1y", "1wk")
-        if len(closes) >= 2 and closes[0]:
-            perf[tk.upper()] = round((closes[-1] / closes[0] - 1) * 100, 2)
-    _save_perf_snapshot(perf)
     with SessionLocal() as db:
+        for r in risultati:
+            tk = r["ticker"]
+            q = db.get(Quote, tk) or Quote(ticker=tk)
+            for k in ("price", "currency", "price_eur", "source", "ok",
+                      "error", "fetched_at"):
+                if k in r:
+                    setattr(q, k, r[k])
+            db.add(q)
+            if r.get("perf12m") is not None:
+                perf[tk.upper()] = r["perf12m"]
+        db.commit()
         ok = db.query(Quote).filter(Quote.ok.is_(True)).count()
+    _save_perf_snapshot(perf)
     return ok
 
 
@@ -188,7 +264,7 @@ def _save_perf_snapshot(perf: dict) -> None:
     from shared import settings_store
     try:
         settings_store.set_setting("perf12m_snapshot", json.dumps(
-            {"when": datetime.utcnow().isoformat(), "perf": perf}))
+            {"when": utc_now().isoformat(), "perf": perf}))
     except Exception:
         pass  # lo snapshot è un extra: mai far fallire l'aggiornamento prezzi
 
@@ -221,13 +297,31 @@ def is_stale(max_age_min: int = 360) -> bool:
     lu = last_update()
     if lu is None:
         return True
-    return (datetime.utcnow() - lu).total_seconds() / 60.0 > max_age_min
+    return (utc_now() - lu).total_seconds() / 60.0 > max_age_min
+
+
+def stato_prezzi(max_age_min: int = 360) -> dict:
+    """Quanto sono vecchi i prezzi, in una forma che la pagina può dire a parole.
+
+    Serviva: `is_stale` esisteva, era documentata e non la chiamava nessuno —
+    l'app poteva restare aperta giorni mostrando prezzi di giorni prima con la
+    sola data in piccolo a difenderla."""
+    lu = last_update()
+    if lu is None:
+        return {"mai": True, "vecchi": True, "minuti": None, "quando": None}
+    minuti = int((utc_now() - lu).total_seconds() / 60)
+    return {"mai": False, "vecchi": minuti > max_age_min,
+            "minuti": minuti, "ore": round(minuti / 60, 1),
+            "giorni": minuti // 1440, "quando": fmt_ts(lu)}
 
 
 def fmt_ts(dt) -> str | None:
+    """Un istante UTC del database scritto nell'ora di Roma (legale inclusa)."""
     if not dt:
         return None
-    return (dt + ROME_OFFSET).strftime("%d/%m · %H:%M")
+    if dt.tzinfo is not None:
+        dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
+    return (dt + offset_roma(dt)).strftime("%d/%m · %H:%M")
 
 
 # =========================================================================
@@ -336,15 +430,24 @@ def _store_fund(ticker, **kw):
 MODULES = "topHoldings,fundProfile,summaryDetail,assetProfile,price,quoteType"
 
 
-def fetch_fundamentals(ticker: str, tipo: str = "") -> None:
-    now = datetime.utcnow()
+def _scarica_fondamentali(coppia: tuple) -> dict:
+    """SOLO rete: i fondamentali di un ticker. Come per i prezzi, la scrittura
+    resta al chiamante così il parallelo non litiga con SQLite."""
+    ticker, tipo = coppia
+    now = utc_now()
     try:
-        r = _quote_summary(_yahoo_symbol(ticker), MODULES)
-        data = _normalize(r)
+        data = _normalize(_quote_summary(_yahoo_symbol(ticker), MODULES))
         kind = "etf" if (data.get("holdings") or tipo == "ETF") else "stock"
-        _store_fund(ticker, kind=kind, data=json.dumps(data), ok=True, error="", fetched_at=now)
+        return {"ticker": ticker, "kind": kind, "data": json.dumps(data),
+                "ok": True, "error": "", "fetched_at": now}
     except Exception as e:
-        _store_fund(ticker, ok=False, error=type(e).__name__, fetched_at=now)
+        return {"ticker": ticker, "ok": False, "error": type(e).__name__,
+                "fetched_at": now}
+
+
+def fetch_fundamentals(ticker: str, tipo: str = "") -> None:
+    r = _scarica_fondamentali((ticker, tipo))
+    _store_fund(**r)
 
 
 def get_fundamentals(ticker: str, max_age_h: int = 24, tipo: str = "") -> dict | None:
@@ -356,7 +459,7 @@ def get_fundamentals(ticker: str, max_age_h: int = 24, tipo: str = "") -> dict |
     with SessionLocal() as db:
         f = db.get(Fundamentals, key)
     stale = (f is None) or (f.fetched_at is None) or \
-            ((datetime.utcnow() - f.fetched_at).total_seconds() / 3600.0 > max_age_h)
+            ((utc_now() - f.fetched_at).total_seconds() / 3600.0 > max_age_h)
     if stale:
         fetch_fundamentals(ticker, tipo)
         with SessionLocal() as db:
@@ -384,19 +487,46 @@ def get_fundamentals_cached(ticker: str) -> dict | None:
 
 
 def refresh_all_fundamentals(max_age_h: int = 24) -> None:
-    """Scarica/aggiorna i fondamentali di tutti i ticker (per look-through e rischio)."""
+    """Scarica/aggiorna i fondamentali di tutti i ticker (per look-through e
+    rischio). Scarica solo quelli davvero scaduti, e in parallelo."""
     with SessionLocal() as db:
         positions = [(p.ticker.strip(), p.tipo) for p in db.query(Position).all()
                      if (p.ticker or "").strip()]
-    seen = set()
+        cache = {f.ticker: f.fetched_at for f in db.query(Fundamentals).all()}
+    ora = utc_now()
+    seen, da_fare = set(), []
     for tk, tipo in positions:
         if tk.upper() in seen:
             continue
         seen.add(tk.upper())
+        quando = cache.get(tk.upper())
+        if quando is None or (ora - quando).total_seconds() / 3600.0 > max_age_h:
+            da_fare.append((tk, tipo))
+    risultati = _in_parallelo(_scarica_fondamentali, da_fare)
+    for r in risultati:
         try:
-            get_fundamentals(tk, max_age_h=max_age_h, tipo=tipo)
+            _store_fund(**r)
         except Exception:
             pass
+
+
+_fond_lock = threading.Lock()
+
+
+def refresh_fondamentali_async(max_age_h: int = 24) -> None:
+    """Aggiorna i fondamentali in un thread, senza far aspettare la pagina.
+    Se un aggiornamento è già in corso non ne parte un secondo."""
+    if _fond_lock.locked():
+        return
+
+    def lavora():
+        with _fond_lock:
+            try:
+                refresh_all_fundamentals(max_age_h=max_age_h)
+            except Exception:
+                pass          # i dati vecchi restano visibili: mai una pagina rotta
+
+    threading.Thread(target=lavora, daemon=True).start()
 
 
 def history_closes(symbol: str, rng: str = "1y", interval: str = "1wk") -> list:

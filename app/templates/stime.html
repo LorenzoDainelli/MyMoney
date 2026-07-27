@@ -1,0 +1,110 @@
+{# ============================================================================
+   «Come sono andate le stime»: il monitor dichiara un impatto atteso per ogni
+   notizia, e finora nessuno lo verificava. Qui il conto viene fatto — con tutte
+   le riserve del caso in evidenza, non in fondo in piccolo.
+   ============================================================================ #}
+{% extends "base.html" %}
+{% block title %}{{ t('stime.title') }} — {{ t('app.name') }}{% endblock %}
+{% block content %}
+  <div class="page-title">{{ t('stime.title') }}</div>
+  <p class="page-sub">{{ t('stime.subtitle') }}{% if v %} · <span class="muted">{{ t('stime.calcolato', when=v.quando[:16].replace('T', ' ')) }}</span>{% endif %}</p>
+
+  {% if not v %}
+    <div class="card">
+      <p class="muted" style="margin-top:0;line-height:var(--lh-relaxed);">{{ t('stime.mai') }}</p>
+      <form method="post" action="/stime/calcola" style="margin:0;">
+        <button type="submit" class="btn primary">{{ t('stime.btn_calcola') }}</button>
+      </form>
+    </div>
+  {% else %}
+
+  {# ---------- il numero, e subito accanto il suo metro di paragone ---------- #}
+  <div class="grid" style="margin-bottom:16px;">
+    <div class="stat hero {{ 'ok' if (v.pct is not none and v.baseline is not none and v.pct > v.baseline) else '' }}">
+      <div class="k">{{ t('stime.azzeccate') }}</div>
+      <div class="v num">{{ (v.pct | pct) if v.pct is not none else '—' }}</div>
+      <div class="muted" style="font-size:13px;margin-top:4px;">{{ t('stime.su_tot', ok=v.azzeccate, tot=v.totale) }}</div>
+    </div>
+    <div class="stat">
+      <div class="k">{{ t('stime.baseline') }}</div>
+      <div class="v small num">{{ (v.baseline | pct) if v.baseline is not none else '—' }}</div>
+      <div class="muted" style="font-size:13px;margin-top:4px;">{{ t('stime.baseline_sub', esito=t('impact.' ~ v.baseline_esito)) if v.baseline_esito else '' }}</div>
+    </div>
+    <div class="stat">
+      <div class="k">{{ t('stime.non_verificabili') }}</div>
+      <div class="v small num">{{ v.in_attesa + v.senza_dati }}</div>
+      <div class="muted" style="font-size:13px;margin-top:4px;">{{ t('stime.non_verif_sub', attesa=v.in_attesa, dati=v.senza_dati) }}</div>
+    </div>
+  </div>
+
+  {# ---------- il verdetto onesto, in cima e non in fondo ---------- #}
+  {% if v.pct is not none and v.baseline is not none %}
+    {% set margine = (v.pct - v.baseline) | round(1) %}
+    <div class="note {{ 'ok' if margine > 5 else 'warn' if margine < -5 else 'info' }}" style="margin-bottom:16px;">
+      {% if margine > 5 %}{{ t('stime.verdetto_sopra', m=(margine | pct)) }}
+      {% elif margine < -5 %}{{ t('stime.verdetto_sotto', m=((margine | abs) | pct)) }}
+      {% else %}{{ t('stime.verdetto_pari') }}{% endif %}
+      {{ t('stime.verdetto_cautela') }}
+    </div>
+  {% endif %}
+
+  {# ---------- per confidenza: la domanda che conta davvero ---------- #}
+  <div class="card">
+    <div class="card-h">{{ t('stime.conf_h') }}</div>
+    <div class="card-title" style="margin:2px 0 4px;">{{ t('stime.conf_t') }}</div>
+    <p class="muted" style="font-size:13px;margin:0 0 12px;line-height:var(--lh-snug);">{{ t('stime.conf_spiega') }}</p>
+    {% for c in ['alta', 'media', 'bassa'] %}
+      {% set r = v.per_confidenza[c] %}
+      <div style="display:flex;align-items:center;gap:10px;padding:6px 0;">
+        <span class="muted" style="width:70px;font-size:13px;">{{ t('conf.' ~ c) }}</span>
+        <div style="flex:1;height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;">
+          {% if r.pct is not none %}<div style="height:100%;width:{{ r.pct }}%;background:var(--accent);border-radius:999px;"></div>{% endif %}
+        </div>
+        <span class="num" style="flex:0 0 120px;text-align:right;font-size:12px;color:var(--ink);">
+          {% if r.pct is not none %}{{ r.pct | pct }} <span class="faint">({{ r.ok }}/{{ r.tot }})</span>{% else %}<span class="faint">{{ t('stime.nessuna') }}</span>{% endif %}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+
+  {# ---------- il metodo, dichiarato ---------- #}
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">{{ t('stime.metodo_h') }}</div>
+    <p class="muted" style="margin:6px 0 0;line-height:var(--lh-relaxed);font-size:13px;">{{ t('stime.metodo', soglia=(v.soglia | pct), giorni=v.giorni) }}</p>
+    <p class="faint" style="margin:8px 0 0;line-height:var(--lh-relaxed);font-size:12px;">{{ t('stime.metodo_limiti') }}</p>
+  </div>
+
+  {# ---------- una per una, così puoi controllare tu ---------- #}
+  <div class="table-wrap" style="margin-top:16px;">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable" data-type="text">{{ t('stime.th_data') }}</th>
+          <th class="sortable" data-type="text">{{ t('th.title') }}</th>
+          <th class="sortable" data-type="text">{{ t('stime.th_atteso') }}</th>
+          <th class="num sortable" data-type="num">{{ t('stime.th_reale') }}</th>
+          <th class="sortable" data-type="text">{{ t('stime.th_esito') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in v.righe %}
+        <tr>
+          <td class="muted" style="white-space:nowrap;">{{ r.data }}</td>
+          <td>
+            <span class="t-ticker">{{ r.ticker }}</span>
+            <div class="muted" style="font-size:12px;line-height:var(--lh-snug);">{% if r.url %}<a href="{{ r.url }}" target="_blank" rel="noopener noreferrer" style="color:inherit;">{{ r.titolo }}</a>{% else %}{{ r.titolo }}{% endif %}</div>
+          </td>
+          <td><span class="pill {{ 'green' if r.atteso == 'positivo' else 'red' if r.atteso == 'negativo' else 'gray' }}">{{ t('impact.' ~ r.atteso) }}</span> <span class="faint" style="font-size:11px;">{{ t('conf.' ~ r.confidenza) }}</span></td>
+          <td class="num" data-s="{{ r.var_pct }}"><span class="{{ 'pos' if r.var_pct > 0 else 'neg' if r.var_pct < 0 else 'muted' }}">{{ '+' if r.var_pct > 0 else '' }}{{ r.var_pct | pct }}</span></td>
+          <td>{% if r.azzeccata %}<span class="pill green">{{ t('stime.ok') }}</span>{% else %}<span class="pill red">{{ t('stime.ko') }}</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <form method="post" action="/stime/calcola" style="margin:16px 0 0;">
+    <button type="submit" class="btn">{{ t('stime.btn_ricalcola') }}</button>
+  </form>
+  {% endif %}
+{% endblock %}

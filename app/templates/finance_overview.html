@@ -183,8 +183,9 @@
       <p class="muted" style="margin:10px 0 0;font-size:14px;">{{ t('fin.ai_box_off') }} <a href="/impostazioni">{{ t('fin.ai_box_off_link') }}</a></p>
       {% endif %}
       {% if ai_on %}
-      <form method="post" action="/finanze/ai/analisi" style="margin:10px 0 0;">
+      <form method="post" action="/finanze/ai/analisi" style="margin:10px 0 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <button type="submit" class="mm-aibtn" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;border:1px solid var(--ai-bd);background:var(--ai-bg);color:var(--ai);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:600;">{{ t('dash.ai_regen') if lettura_ai else t('fin.ai_analysis_btn') }}</button>
+        {% if ai_proattivo %}<span class="faint" style="font-size:11px;">{{ t('dash.ai_proattivo') }}</span>{% endif %}
       </form>
       {% endif %}
     </div>

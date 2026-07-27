@@ -4,7 +4,7 @@ Una 'posizione' = un titolo che vuoi seguire (ETF o azione) con la sua quota
 target. I campi di mercato (prezzo, ecc.) NON stanno qui: vivono in market.py
 in tabelle separate, così i tuoi dati restano puliti e mai 'inventati'.
 """
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from sqlalchemy import String, Float, Integer, Date, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column
@@ -75,7 +75,8 @@ class Versamento(Base):
     # al portafoglio "PAC investimenti". Uno solo per versamento (viene
     # aggiornato/eliminato insieme al PAC, mai duplicato).
     tx_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    creato_il: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    creato_il: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 
 
 class VersamentoRiga(Base):
