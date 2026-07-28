@@ -2303,6 +2303,158 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=33479dc16492ca54e04eab7ef0889aa90e4c98d053f6a91a7baea582f389769a",
       "data_invio": "2026-07-27"
+    },
+    {
+      "id": "asml-china-duv-2026-07-27",
+      "ticker": "ASML",
+      "titolo": "Una società cinese sostenuta dallo Stato sviluppa macchine DUV: ASML e i titoli del settore affondano",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=142a2f32b94f8f0daefc762a1c944c226b3bd7a20199485bae24497fbd89d204",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "sndk-cxmt-ipo-2026-07-27",
+      "ticker": "SNDK",
+      "titolo": "L'IPO cinese di CXMT scatena il panico sulla memoria: SanDisk perde il 12%, Micron -5%, SK Hynix -8%",
+      "tipo_evento": "macro tematica",
+      "url": "https://finnhub.io/api/news?id=afe0c051d8a811c4b2d5ad9579a1a752a1849827c52b335925f9ba2a0ec46682",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "aapl-ath-earnings-2026-07-27",
+      "ticker": "AAPL",
+      "titolo": "Apple tocca il massimo storico a tre giorni dalla trimestrale del 30 luglio",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2d364f8d3b169e55e4672bffc6890355112ab35557db5322669b08a03afbbb4b",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "spcx-record-low-lockup-2026-07-27",
+      "ticker": "SPCX",
+      "titolo": "SpaceX ai minimi assoluti: i timori sulla scadenza del lock-up pesano sul titolo",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=fe32be2df0c2c6504c006e0ec22582ea3428478838bc0736470df71d54735186",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "orcl-52w-low-2026-07-27",
+      "ticker": "ORCL",
+      "titolo": "Oracle scivola ai minimi di 52 settimane: debito elevato e un cliente chiave in difficoltà preoccupano il mercato",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=4cbfca438e8c6565f22d3fde937d8b68a9bb2d1ae289fd03e78d8c77587ea04a",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-guidance-2026-07-27",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson alza la guidance con momentum solido e pivot strategico sull'oncologia",
+      "tipo_evento": "revisione guidance",
+      "url": "https://finnhub.io/api/news?id=c9cdc9b27f60fb3ee8e170927c5226a3a2b0d43646e685a4c0755d0565d70fa0",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "pltr-q2-preview-2026-07-27",
+      "ticker": "PLTR",
+      "titolo": "Oppenheimer prevede un Q2 solido per Palantir e una guidance annuale rialzata (report il 3 agosto)",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c848f4c12a73a71ab47f0abcbd0370e19df3e2ba4b732fadbe30371c769a5ea7",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "ko-fairlife-ransomware-2026-07-27",
+      "ticker": "KO",
+      "titolo": "Coca-Cola: Fairlife riprende la produzione dopo l'attacco ransomware che aveva bloccato diversi impianti",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=d51370737d296194c1e84239511eedbc4a1f1a79c3fa39d1c143aac1af1b455f",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "ibm-blockchain-patents-circle-2026-07-27",
+      "ticker": "IBM",
+      "titolo": "IBM cede quasi 1.000 brevetti blockchain a Circle: segnale di uscita strategica dal settore",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=befc94e56cce9679aa9ab578c74494d666abfcb7134999e3ff6d4392ec8d13db",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-kuiper-expansion-2026-07-27",
+      "ticker": "AMZN",
+      "titolo": "Amazon accelera su Kuiper: nuovi satelliti e connettività diretta al telefono per sfidare Starlink",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=63abcb597874c82b07da6c1a26df54544a6d43a9095ea2682ff35836d5d3f4c9",
+      "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-talco-55b-2026-07-28",
+      "ticker": "JNJ",
+      "titolo": "J&J propone 5,5 miliardi per chiudere tutte le cause sul talco ovarico",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=9371cebf2367828f15bdd6a88602fea7fbbb4f663de9acbb55086640ffb65443",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-target-200-2026-07-28",
+      "ticker": "PLTR",
+      "titolo": "Analista fissa il target di Palantir a 200 dollari in attesa di un forte trimestrale",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=988efb3d79f0003cf0341f065dec470cbf898a55c3d0b9f8ea81ade8abd2ec43",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "intc-foundry-fortinet-2026-07-28",
+      "ticker": "INTC",
+      "titolo": "Intel Foundry conquista Fortinet come nuovo cliente: il piano di rilancio avanza",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=bdd5d8decc8cb2fc3255f2579eb568dc132517a61467c3883fb3ca5281c467bf",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "intc-capex-20b-2026-07-28",
+      "ticker": "INTC",
+      "titolo": "Intel alza il budget investimenti a oltre 20 miliardi nel 2026, ancora di più nel 2027",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f0473ced61f0048f2852ffc7b6bc7653e4bac53b32b21458a2aca8d0c7edfd87",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "meta-bond-blackrock-123b-2026-07-28",
+      "ticker": "META",
+      "titolo": "Il bond da 12,3 miliardi di BlackRock per il datacenter Meta in Texas trova forte domanda",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5264ebbc6dd6fbbbcf92e7292a4421778b83ba55f680590fafe137e1219a8884",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "asml-seoul-plunge-2026-07-28",
+      "ticker": "ASML",
+      "titolo": "Seoul crolla del 10% e trascina i chip: ASML, SanDisk e WDC estendono il sell-off",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=649b9a2cb1919671132288b8d1d882c08c013f3d0650edeec9f170721cc409e7",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "nukl-uranio-massimi-14y-2026-07-28",
+      "ticker": "NUKL",
+      "titolo": "L'uranio raggiunge i prezzi di contratto più alti da 14 anni: AI e datacenter accelerano la domanda nucleare",
+      "tipo_evento": "macro tematica",
+      "url": "https://247wallst.com/investing/2026/07/23/3-uranium-stocks-to-buy-as-nuclear-heats-before-the-end-of-july/",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "ibm-pltr-open-secure-ai-alliance-2026-07-28",
+      "ticker": "IBM",
+      "titolo": "IBM, Nvidia, Microsoft e Palantir fondano la Open Secure AI Alliance",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=dadc105db50a440e57e3c11a5ebf59f8e1a97eb0c788e4d2c473b4bf89fce698",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "shel-q2-preview-2026-07-28",
+      "ticker": "SHEL",
+      "titolo": "Shell attesa con i risultati Q2: valutazione attraente ma il calo del petrolio pesa",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=405b199e6d28286af92d5dadacfcfc0f03595f3a2c059359f67cac26e79a3369",
+      "data_invio": "2026-07-28T05:10:00+00:00"
     }
   ]
 }
