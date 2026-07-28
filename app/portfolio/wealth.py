@@ -13,6 +13,7 @@ patrimonio(t) = Σ quantità_attuali × chiusura(t) × cambio_attuale + liquidit
   oltre a questo, e l'etichetta in pagina dichiara che è una stima.
 """
 import json
+import logging
 import threading
 from datetime import datetime, timedelta
 
@@ -24,6 +25,7 @@ from portfolio.service import lista_posizioni
 CACHE_KEY = "wealth_cache"
 MAX_POINTS = 90          # punti massimi per serie inviata alla pagina
 
+log = logging.getLogger(__name__)
 _building = threading.Lock()
 
 # base dati per i range: intraday (oggi), giornaliero (1 anno), settimanale (tutto)
@@ -54,11 +56,13 @@ def _grid_totale(serie_titoli: list, extra_flat: float) -> list:
     return list(zip(all_ts, tot))
 
 
-def _griglia_sola_liquidita(key: str, now: datetime) -> list:
-    """Senza titoli valorizzati il patrimonio è la sola liquidità: griglia di
-    date equidistanti (40 punti) dall'inizio del tracking (o dalla finestra del
-    range, se più recente) fino a ora. Così anche con pochi giorni di storia i
-    range non restano senza punti."""
+def _griglia_piatta(key: str, now: datetime, base: float) -> list:
+    """Nessun titolo ha storia: il patrimonio è la liquidità più il valore di
+    oggi dei titoli (`base`), costante. Griglia di date equidistanti (40 punti)
+    dall'inizio del tracking (o dalla finestra del range, se più recente) fino
+    a ora, così anche con pochi giorni di storia i range non restano senza
+    punti. Senza `base` il grafico mostrerebbe la sola liquidità mentre l'hero
+    sopra mostra il patrimonio intero: due numeri diversi per la stessa cosa."""
     inizio = fin_service.data_inizio()
     if key == "D0":
         start = now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -70,7 +74,7 @@ def _griglia_sola_liquidita(key: str, now: datetime) -> list:
         return []
     n = 40
     step = (now - start) / (n - 1)
-    return [((start + step * i).timestamp(), 0.0) for i in range(n)]
+    return [((start + step * i).timestamp(), base) for i in range(n)]
 
 
 def _build() -> dict:
@@ -108,7 +112,13 @@ def _build() -> dict:
     for key in _FETCHES:
         g = _grid_totale(serie[key], flat[key])
         if not g:
-            g = _griglia_sola_liquidita(key, now)
+            g = _griglia_piatta(key, now, flat[key])
+        # Il taglio all'inizio del tracking va fatto QUI, non solo dopo in
+        # `fetta`: la storia "max" di un titolo può partire dal 1962 (IBM) e su
+        # Windows datetime.fromtimestamp() di un timestamp negativo alza
+        # OSError. L'eccezione veniva inghiottita da _rebuild_safe e il grafico
+        # restava congelato all'ultima ricostruzione riuscita.
+        g = [x for x in g if x[0] >= floor_ts]
         if g:
             date = [datetime.fromtimestamp(ts) for ts, _ in g]
             liq = fin_service.liquidita_alle_date(date)
@@ -116,7 +126,7 @@ def _build() -> dict:
         griglie[key] = g
 
     def fetta(base: str, days: int | None = None, ytd: bool = False) -> list:
-        g = [x for x in (griglie.get(base) or []) if x[0] >= floor_ts]
+        g = list(griglie.get(base) or [])      # già tagliata a floor_ts sopra
         if days is not None:
             lim = (now - timedelta(days=days)).timestamp()
             g = [x for x in g if x[0] >= lim]
@@ -163,7 +173,10 @@ def _rebuild_safe() -> None:
     try:
         settings_store.set_setting(CACHE_KEY, json.dumps(_build()))
     except Exception:
-        pass                        # mai far cadere l'app per il grafico
+        # mai far cadere l'app per il grafico — ma nemmeno fallire in silenzio:
+        # senza questa riga il grafico resta fermo all'ultima cache buona e
+        # niente lo dice.
+        log.warning("patrimonio: ricostruzione del grafico fallita", exc_info=True)
     finally:
         _building.release()
 
