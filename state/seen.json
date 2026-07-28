@@ -2383,6 +2383,78 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=63abcb597874c82b07da6c1a26df54544a6d43a9095ea2682ff35836d5d3f4c9",
       "data_invio": "2026-07-27T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-talco-55b-2026-07-28",
+      "ticker": "JNJ",
+      "titolo": "J&J propone 5,5 miliardi per chiudere tutte le cause sul talco ovarico",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=9371cebf2367828f15bdd6a88602fea7fbbb4f663de9acbb55086640ffb65443",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-target-200-2026-07-28",
+      "ticker": "PLTR",
+      "titolo": "Analista fissa il target di Palantir a 200 dollari in attesa di un forte trimestrale",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=988efb3d79f0003cf0341f065dec470cbf898a55c3d0b9f8ea81ade8abd2ec43",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "intc-foundry-fortinet-2026-07-28",
+      "ticker": "INTC",
+      "titolo": "Intel Foundry conquista Fortinet come nuovo cliente: il piano di rilancio avanza",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=bdd5d8decc8cb2fc3255f2579eb568dc132517a61467c3883fb3ca5281c467bf",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "intc-capex-20b-2026-07-28",
+      "ticker": "INTC",
+      "titolo": "Intel alza il budget investimenti a oltre 20 miliardi nel 2026, ancora di più nel 2027",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f0473ced61f0048f2852ffc7b6bc7653e4bac53b32b21458a2aca8d0c7edfd87",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "meta-bond-blackrock-123b-2026-07-28",
+      "ticker": "META",
+      "titolo": "Il bond da 12,3 miliardi di BlackRock per il datacenter Meta in Texas trova forte domanda",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5264ebbc6dd6fbbbcf92e7292a4421778b83ba55f680590fafe137e1219a8884",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "asml-seoul-plunge-2026-07-28",
+      "ticker": "ASML",
+      "titolo": "Seoul crolla del 10% e trascina i chip: ASML, SanDisk e WDC estendono il sell-off",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=649b9a2cb1919671132288b8d1d882c08c013f3d0650edeec9f170721cc409e7",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "nukl-uranio-massimi-14y-2026-07-28",
+      "ticker": "NUKL",
+      "titolo": "L'uranio raggiunge i prezzi di contratto più alti da 14 anni: AI e datacenter accelerano la domanda nucleare",
+      "tipo_evento": "macro tematica",
+      "url": "https://247wallst.com/investing/2026/07/23/3-uranium-stocks-to-buy-as-nuclear-heats-before-the-end-of-july/",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "ibm-pltr-open-secure-ai-alliance-2026-07-28",
+      "ticker": "IBM",
+      "titolo": "IBM, Nvidia, Microsoft e Palantir fondano la Open Secure AI Alliance",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=dadc105db50a440e57e3c11a5ebf59f8e1a97eb0c788e4d2c473b4bf89fce698",
+      "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "shel-q2-preview-2026-07-28",
+      "ticker": "SHEL",
+      "titolo": "Shell attesa con i risultati Q2: valutazione attraente ma il calo del petrolio pesa",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=405b199e6d28286af92d5dadacfcfc0f03595f3a2c059359f67cac26e79a3369",
+      "data_invio": "2026-07-28T05:10:00+00:00"
     }
   ]
 }
