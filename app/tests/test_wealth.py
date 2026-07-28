@@ -65,3 +65,28 @@ def test_il_campionamento_tiene_i_capi_della_serie():
 def test_una_serie_corta_non_viene_toccata():
     punti = [(1, 1.0), (2, 2.0)]
     assert W._downsample(punti) == punti
+
+
+def test_le_date_prima_del_tracking_non_arrivano_a_fromtimestamp():
+    """IBM ha storia dal 1962: timestamp negativo, e su Windows
+    datetime.fromtimestamp() di un negativo alza OSError. L'eccezione finiva
+    inghiottita e il grafico restava congelato all'ultima cache riuscita.
+    Il taglio all'inizio del tracking deve avvenire PRIMA di toccare le date."""
+    from datetime import datetime
+
+    ibm = [(-252442800, 5.0), (1_700_000_000, 50.0)]
+    floor_ts = 1_600_000_000.0
+    g = [x for x in W._grid_totale([ibm], extra_flat=0.0) if x[0] >= floor_ts]
+    assert [t for t, _ in g] == [1_700_000_000]
+    [datetime.fromtimestamp(ts) for ts, _ in g]      # non deve alzare
+
+
+def test_senza_storia_il_grafico_non_perde_i_titoli():
+    """Se nessun titolo ha una serie, la griglia piatta deve comunque valere il
+    loro valore di oggi: altrimenti il grafico mostra la sola liquidità mentre
+    l'hero sopra mostra il patrimonio intero."""
+    from datetime import datetime, timedelta
+
+    now = datetime.now()
+    g = W._griglia_piatta("D0", now + timedelta(hours=1), base=120.0)
+    assert g and all(v == 120.0 for _, v in g)
