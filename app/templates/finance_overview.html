@@ -193,13 +193,19 @@
     <div class="card" style="margin:0;">
       <div class="card-h">{{ t('fin.month_numbers') }}</div>
       {% set rate = (riep.saldo / riep.entrate * 100) if riep.entrate else 0 %}
-      <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <span class="muted" style="font-size:13px;">{{ t('fin.savings_rate') }}</span>
-          <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:800;font-size:var(--text-lg);">{{ rate | round(0) | pct(0) }}</span>
-        </div>
-        <div style="height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;">
-          <div style="height:100%;width:{{ [0, [100, rate] | min] | max | round(1) }}%;background:var(--pos);border-radius:999px;"></div>
+      {# Lo spazio che avanza è distribuito FRA le voci (space-between), non
+         scaricato tutto in un punto: ammucchiarlo in fondo lasciava un buco
+         solo, e i due blocchi sembravano scollegati. #}
+      <div style="display:flex;flex-direction:column;justify-content:space-between;gap:12px;height:100%;">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span class="muted" style="font-size:13px;">{{ t('fin.savings_rate') }}</span>
+            <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:800;font-size:var(--text-lg);">{{ rate | round(0) | pct(0) }}</span>
+          </div>
+          {# la barra appartiene alla percentuale sopra: restano attaccate #}
+          <div style="height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;margin-top:8px;">
+            <div style="height:100%;width:{{ [0, [100, rate] | min] | max | round(1) }}%;background:var(--pos);border-radius:999px;"></div>
+          </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;border-top:1px solid var(--border);">
           <span class="muted" style="font-size:13px;">{{ t('fin.avg_daily') }}</span>
@@ -215,9 +221,7 @@
                è già dentro «uscite»: nessun doppio conteggio. ---- #}
         {% if destinazioni %}
         {% set colori = {'speso': 'var(--neg)', 'investito': 'var(--accent-2)', 'rimasto': 'var(--accent)'} %}
-        {# ancorato in basso: lo spazio che avanza sta fra i due blocchi, non
-           tutto sotto — una card che finisce a metà si legge come un errore #}
-        <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="padding-top:14px;border-top:1px solid var(--border);">
           <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;">{{ t('fin.dest_title') }}</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
             <span class="muted" style="font-size:13px;">{{ t('fin.month_income') }}</span>
