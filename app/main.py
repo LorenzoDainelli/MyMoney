@@ -204,6 +204,13 @@ def _dashboard_ctx() -> dict:
         "updated": vista["ultimo_agg"], "prezzi": vista["prezzi"], "tr": vista["tr"],
         "spesa_media": round(riep["uscite"] / 30, 2),
         "saldo_mese": riep["saldo"], "entrate": riep["entrate"], "uscite": riep["uscite"],
+        # due fatti secchi sotto i numeri, al posto di due card mezze vuote: la
+        # spesa più grossa (che una media nasconde) e per quanti giorni la
+        # liquidità regge a quella media. Il secondo è una divisione, non una
+        # previsione — e la base è la liquidità, non il saldo del mese.
+        "spesa_top": fin_service.spesa_top(now.year, now.month),
+        "giorni_coperti": (round(liq / (riep["uscite"] / 30))
+                           if (riep["uscite"] > 0 and liq > 0) else None),
         "movers": movers, "dividendi": dividendi, "settori": settori,
         "wealth": (w or {}).get("ranges") or {},
         "ai": ai_read, "news": news,

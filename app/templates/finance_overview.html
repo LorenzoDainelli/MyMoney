@@ -129,8 +129,25 @@
 
   {# ---------- aggiungi un movimento (AI "scrivi a parole" + form) ---------- #}
   <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.add_movement') }}</div>
-  {% include "finance_ai_box.html" %}
-  {% include "finance_movement_form.html" %}
+  {# Il modulo e, accanto, la CONSEGUENZA: prima si compilava alla cieca e si
+     scopriva il portafoglio sbagliato giorni dopo. Vedi movement-preview.js. #}
+  <div class="mm-add">
+    <div class="mm-add-main">
+      {% include "finance_ai_box.html" %}
+      {% include "finance_movement_form.html" %}
+    </div>
+    <aside class="card mm-add-side" style="margin:0;">
+      <div class="card-h">{{ t('fin.eff_title') }}</div>
+      <div id="mov-effetto"><p class="faint" style="margin:0;font-size:13px;line-height:var(--lh-relaxed);">{{ t('fin.eff_empty') }}</p></div>
+    </aside>
+  </div>
+  <script type="application/json" id="mov-effetto-dati">{{ effetto | tojson }}</script>
+  <script type="application/json" id="mov-effetto-testi">{{ {
+      'empty': t('fin.eff_empty'), 'out': t('fin.eff_month_out'), 'in': t('fin.eff_month_in'),
+      'neg': t('fin.eff_neg'), 'derived': t('fin.eff_derived'), 'giro': t('fin.eff_giro'),
+      'transfer': t('fin.eff_transfer'), 'cat': t('fin.eff_cat'),
+      'cat1': t('fin.eff_cat_one'), 'catnew': t('fin.eff_cat_new')
+  } | tojson }}</script>
 
   {# ---------- spese · il mese in numeri · lettura AI ---------- #}
   <div class="mm-grid-3" style="margin-top:18px;align-items:stretch;">
@@ -192,17 +209,50 @@
           <span class="muted" style="font-size:13px;">{{ t('fin.month_balance') }}</span>
           <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:700;">{{ ('+' if riep.saldo >= 0 else '−') ~ (riep.saldo | abs | eur) }}</span>
         </div>
+
+        {# ---- dove è finito il mese: l'unico posto dell'app in cui il PAC sta
+               accanto alle spese. Il versamento è un trasferimento, quindi non
+               è già dentro «uscite»: nessun doppio conteggio. ---- #}
+        {% if destinazioni %}
+        {% set colori = {'speso': 'var(--neg)', 'investito': 'var(--accent-2)', 'rimasto': 'var(--accent)'} %}
+        {# ancorato in basso: lo spazio che avanza sta fra i due blocchi, non
+           tutto sotto — una card che finisce a metà si legge come un errore #}
+        <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border);">
+          <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;">{{ t('fin.dest_title') }}</div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
+            <span class="muted" style="font-size:13px;">{{ t('fin.month_income') }}</span>
+            <span class="num" style="font-weight:800;font-size:var(--text-lg);color:var(--ink);">{{ destinazioni.entrate | eur }}</span>
+          </div>
+          <div style="display:flex;height:10px;border-radius:999px;overflow:hidden;gap:2px;margin:8px 0 4px;background:var(--surface-alt);">
+            {% for v in destinazioni.voci %}{% if v.pct > 0 %}<div style="width:{{ v.pct }}%;background:{{ colori[v.key] }};"></div>{% endif %}{% endfor %}
+          </div>
+          {% for v in destinazioni.voci %}
+          <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--border);">
+            <span style="width:9px;height:9px;border-radius:2px;background:{{ colori[v.key] }};flex:none;"></span>
+            <span style="flex:1;font-size:13px;color:var(--ink);">{{ t('fin.dest_' ~ v.key) }}</span>
+            <span class="faint" style="font-size:11px;">{{ v.pct | pct(0) }}</span>
+            <span class="num" style="font-size:13px;font-weight:600;color:{{ 'var(--neg)' if v.val < 0 else 'var(--ink)' }};">{{ v.val | eur }}</span>
+          </div>
+          {% endfor %}
+          {% if destinazioni.in_rosso %}
+          <div class="faint" style="font-size:11px;margin-top:8px;line-height:var(--lh-relaxed);">{{ t('fin.dest_over') }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
       </div>
     </div>
 
-    <div style="position:relative;overflow:hidden;background:var(--ai-bg);border:1px solid var(--ai-bd);border-left:3px solid var(--ai);border-radius:var(--r-lg);padding:16px;box-shadow:0 12px 40px -14px color-mix(in oklab, var(--ai) 60%, transparent), var(--sheen-top);">
+    <div style="position:relative;overflow:hidden;background:var(--ai-bg);border:1px solid var(--ai-bd);border-left:3px solid var(--ai);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;box-shadow:0 12px 40px -14px color-mix(in oklab, var(--ai) 60%, transparent), var(--sheen-top);">
       <div style="position:absolute;inset:0 0 auto 0;height:2px;background-image:linear-gradient(90deg, transparent, var(--ai), var(--accent), transparent);background-size:200% 100%;animation:mm-sheen 4s var(--ease-in-out) infinite;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <span class="ai-label">{{ icon('sparkles', 13) }} {{ t('fin.ai_read') }}</span>
         {% if lettura_ai %}<span class="pill gray" style="text-transform:none;">{{ t('dash.conf') }}: {{ t('conf.' ~ lettura_ai.conf) }}</span>{% endif %}
       </div>
       {% if lettura_ai %}
-      <div class="ai-prosa" lang="it">{{ lettura_ai.text | ai_text }}</div>
+      {# come nella dashboard: il testo prende lo spazio che resta e scorre lì
+         dentro. Prima bastava una lettura AI lunga per stirare la riga e
+         lasciare mezze vuote le due card accanto. #}
+      <div class="ai-prosa ai-scroll" lang="it" style="flex:1 1 0;min-height:0;">{{ lettura_ai.text | ai_text }}</div>
       <p class="faint" style="font-size:12px;margin:8px 0 0;">{{ t('fin.ai_disc') }}</p>
       {% elif ai_on %}
       <p class="muted" style="margin:10px 0 0;font-size:14px;">{{ t('fin.ai_analysis_intro') }}</p>
@@ -222,3 +272,4 @@
   <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.all_movements') }}</div>
   {% include "finance_movements_table.html" %}
 {% endblock %}
+{% block scripts %}<script src="/static/movement-preview.js?v={{ V }}"></script>{% endblock %}
