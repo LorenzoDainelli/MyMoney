@@ -38,6 +38,7 @@ def _ctx_panoramica() -> dict:
         "active": "finanze",
         "saldi": service.saldi(),
         "riep": service.riepilogo_mese(now.year, now.month),
+        "calendario": service.calendario_spese(now.year, now.month),
         "movimenti": service.lista_movimenti(),      # TUTTI, data desc
         "wallets": service.wallets(),
         "categorie": service.categorie(),

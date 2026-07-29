@@ -144,6 +144,33 @@
       {% else %}
       <div class="faint">{{ t('fin.no_movements') }}</div>
       {% endfor %}
+
+      {# ---- il mese giorno per giorno: un quadratino per giorno, più acceso
+             dove hai speso di più. L'intensità è per RANGO, non lineare sul
+             massimo: con un regalo da 75 € una scala lineare spegnerebbe tutto
+             il resto del mese. I giorni non ancora arrivati restano vuoti:
+             non sono giorni «senza spese». ---- #}
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+        <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;margin-bottom:10px;">{{ t('fin.cal_title') }}</div>
+        <div class="mm-cal">
+          {% for d in t('fin.cal_dows').split(',') %}
+          <div class="mm-cal-dow">{{ d }}</div>
+          {% endfor %}
+          {% for _ in range(calendario.vuote_prima) %}<div></div>{% endfor %}
+          {% for g in calendario.giorni %}
+          <div class="mm-cal-d l{{ g.liv }}{{ ' oggi' if g.oggi else '' }}{{ ' futuro' if g.futuro else '' }}"
+               title="{{ '%02d' % g.g }}/{{ '%02d' % riep.mese }} · {{ g.tot | eur if g.tot else t('fin.cal_nothing') }}">{{ g.g }}</div>
+          {% endfor %}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+          <span class="faint" style="font-size:11px;">{{ t('fin.cal_days', n=calendario.con_spesa) }}</span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:4px;">
+            <span class="faint" style="font-size:11px;">{{ t('fin.cal_less') }}</span>
+            {% for l in range(5) %}<span class="mm-cal-key l{{ l }}"></span>{% endfor %}
+            <span class="faint" style="font-size:11px;">{{ t('fin.cal_more') }}</span>
+          </span>
+        </div>
+      </div>
     </div>
 
     <div class="card" style="margin:0;">

@@ -11,6 +11,7 @@ Tutto DESCRITTIVO: qui l'inserimento e' manuale e strutturato (l'inserimento in
 linguaggio naturale passa dall'agente AI, che però compila solo il modulo).
 """
 import uuid
+from bisect import bisect_left
 from datetime import datetime, timedelta
 
 from sqlalchemy import func, select, text
@@ -816,6 +817,65 @@ def riepilogo_mese(anno, mese):
 #  il canale di scrittura/fusione arriva con la Fase 4. I riferimenti tra record
 #  usano lo `uid` (stabile tra dispositivi), MAI l'id interno (che varia).
 # ============================================================================
+def calendario_spese(anno, mese):
+    """Le uscite giorno per giorno del mese: il calendario in pagina.
+
+    Stessa definizione di «uscita» del riepilogo (una partita di giro chiusa
+    conta per il netto, alla data dell'ultima gamba), altrimenti due riquadri
+    della stessa pagina racconterebbero due mesi diversi.
+
+    L'intensità non è proporzionale al massimo ma al RANGO del giorno fra i
+    giorni con spesa: con un regalo da 75 € e il resto sotto i 20, una scala
+    lineare dipingerebbe un quadrato acceso e trenta spenti — vero ma illeggibile.
+    """
+    start, end = _range_mese(anno, mese)
+    T = Transaction
+    with SessionLocal() as db:
+        righe = db.query(T.data, T.importo).filter(
+            T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
+            T.deleted.is_(False)).all()
+        gruppi = _gruppi_giro(db)
+
+    per_giorno = {}
+    for data, importo in righe:
+        per_giorno[data.day] = per_giorno.get(data.day, 0.0) + float(importo or 0.0)
+    for rows in gruppi.values():
+        rec = _riassumi_giro(rows)
+        if rec["aperta"] or rec["netto"] >= 0:
+            continue
+        quando = rec["ultima_spesa"]
+        if quando and start <= quando < end:
+            per_giorno[quando.day] = per_giorno.get(quando.day, 0.0) + (-rec["netto"])
+
+    scala = sorted(v for v in per_giorno.values() if v > 0)
+
+    def livello(v):
+        if v <= 0:
+            return 0
+        return min(4, int(bisect_left(scala, v) / len(scala) * 4) + 1)
+
+    now = datetime.now()
+    ultimo = (end - timedelta(days=1)).day
+    oggi = now.day if (now.year, now.month) == (anno, mese) else None
+    giorni = []
+    for g in range(1, ultimo + 1):
+        tot = round(per_giorno.get(g, 0.0), 2)
+        giorni.append({
+            "g": g,
+            "tot": tot,
+            "liv": livello(tot),
+            # i giorni non ancora arrivati non sono giorni «senza spese»
+            "futuro": oggi is not None and g > oggi,
+            "oggi": g == oggi,
+        })
+    return {
+        "giorni": giorni,
+        "vuote_prima": start.weekday(),      # 0 = lunedì
+        "con_spesa": len(scala),
+        "max": round(scala[-1], 2) if scala else 0.0,
+    }
+
+
 def _iso(dt):
     return dt.isoformat() if dt else None
 

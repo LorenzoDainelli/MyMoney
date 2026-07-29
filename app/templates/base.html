@@ -34,6 +34,30 @@
     .mm-wallet { position: relative; overflow: hidden; transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out); }
     .mm-wallet:hover { border-color: var(--border-strong); box-shadow: var(--shadow-md); }
     .mm-wallet .mm-reveal { max-height: 44px; opacity: 1; margin-top: 10px; overflow: hidden; }
+    /* Calendario delle spese (Finanze): un quadratino per giorno del mese.
+       Cinque livelli discreti — una rampa continua non si legge a colpo d'occhio. */
+    .mm-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .mm-cal-dow { font-size: 10px; font-weight: 600; color: var(--faint); text-align: center;
+                  letter-spacing: var(--ls-caps); padding-bottom: 2px; }
+    .mm-cal-d { aspect-ratio: 1; border-radius: var(--r-sm); display: grid; place-items: center;
+                font-size: 11px; font-variant-numeric: tabular-nums; color: var(--muted);
+                background: var(--surface-alt); cursor: default;
+                transition: transform var(--dur-fast) var(--ease-out); }
+    .mm-cal-d:hover { transform: scale(1.12); }
+    .mm-cal-d.l1, .mm-cal-key.l1 { background: color-mix(in oklab, var(--neg) 22%, var(--surface-alt)); }
+    .mm-cal-d.l2, .mm-cal-key.l2 { background: color-mix(in oklab, var(--neg) 45%, var(--surface-alt)); }
+    .mm-cal-d.l3, .mm-cal-key.l3 { background: color-mix(in oklab, var(--neg) 70%, var(--surface-alt)); }
+    .mm-cal-d.l4, .mm-cal-key.l4 { background: var(--neg); }
+    /* Leggibilità del numero sul rosso: --muted regge solo sui giorni spenti,
+       sui livelli intermedi serve --ink, e sui due accesi serve un inchiostro
+       scuro fisso — il rosso è chiaro nel tema scuro e medio in quello chiaro,
+       il bianco reggerebbe solo in un caso su due. */
+    .mm-cal-d.l1, .mm-cal-d.l2 { color: var(--ink); }
+    .mm-cal-d.l3, .mm-cal-d.l4 { color: #1B0F0E; font-weight: 700; }
+    /* i giorni non ancora arrivati non sono giorni «senza spese»: si vedono, vuoti */
+    .mm-cal-d.futuro { background: transparent; border: 1px dashed var(--border); color: var(--faint); }
+    .mm-cal-d.oggi { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .mm-cal-key { width: 11px; height: 11px; border-radius: 3px; background: var(--surface-alt); display: inline-block; }
     /* Sortable table headers: click = asc/desc (app.js); freccia di stato */
     th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
     th.sortable:hover { color: var(--ink); }
