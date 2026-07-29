@@ -5995,6 +5995,176 @@
       "inviata": true,
       "titolo": "I deal nel settore spazio volano nella prima metà del 2026: SpaceX al centro del boom",
       "url": "https://finnhub.io/api/news?id=2d635a0b755078ff30021b7183d089184b20da3e048e5630cf1c8e2727889d24"
+    },
+    {
+      "id": "jpm-dividend-buyback-50b-2026-07-29",
+      "ticker": "JPM",
+      "data": "2026-07-29",
+      "tipo_evento": "dividendi/buyback",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 82,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "JPMorgan alza il dividendo del 10% e lancia un riacquisto azionario da 50 miliardi di dollari",
+      "url": "https://finnhub.io/api/news?id=1ac1d47d7fe7ed76286938697fd7a1194bb22eedc0bf45720c25c8291f4be8d2"
+    },
+    {
+      "id": "intc-q2-beat-seventh-2026-07-29",
+      "ticker": "INTC",
+      "data": "2026-07-29",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Intel batte la guidance per il settimo trimestre di fila ma il titolo cede ugualmente",
+      "url": "https://finnhub.io/api/news?id=4750faac47f6984cb533395e3fb7b5daae33411ee1fc6def687e22ae4422b67f"
+    },
+    {
+      "id": "nflx-q2-ricavi-miss-2026-07-29",
+      "ticker": "NFLX",
+      "data": "2026-07-29",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Netflix: i ricavi del Q2 sono sotto le attese, il ciclo di crescita rapida sembra chiudersi",
+      "url": "https://finnhub.io/api/news?id=8f7373a4480f31b723d3a95039a4c26ca7bdadb5c4831deb3fee8f1e284c5476"
+    },
+    {
+      "id": "amgn-glp1-monthly-phase3-2026-07-29",
+      "ticker": "AMGN",
+      "data": "2026-07-29",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amgen lancia la sfida con un farmaco mensile contro l'obesità: 6 trial di Fase 3 nel mirino di Eli Lilly e Novo Nordisk",
+      "url": "https://finnhub.io/api/news?id=5228ae4d4225c173b04a8e7d24353c1eeb99f5d47b558e1568b0c067521ab80e"
+    },
+    {
+      "id": "goog-alphafold-disbanded-2026-07-29",
+      "ticker": "GOOG",
+      "data": "2026-07-29",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google DeepMind scioglie il team di AlphaFold e concentra l'AI su Gemini",
+      "url": "https://finnhub.io/api/news?id=aaa1a853e0b594c2b23cc610f4aeb2b64b3b3b4d7fe615095a69a42629bdd01b"
+    },
+    {
+      "id": "amzn-anthropic-ipo-240b-2026-07-29",
+      "ticker": "AMZN",
+      "data": "2026-07-29",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "L'attesa IPO di Anthropic a valutazione da 240 miliardi potrebbe sbloccare un guadagno enorme per Amazon",
+      "url": "https://finnhub.io/api/news?id=5ad97bd664fd86e41841471bec891016a555df2a95954d9a3b3ebeacce98aac1"
+    },
+    {
+      "id": "macro-dow800-fed-iran-2026-07-29",
+      "ticker": "MSFT",
+      "data": "2026-07-29",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 57,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Dow Jones perde 800 punti: doppia pressione dalla risposta militare USA all'Iran e dall'incertezza sulla Fed",
+      "url": "https://finnhub.io/api/news?id=938972e54de1c10ed2e1cbb41b4419b09b2f76a6ff27fd311a70a7f9369dec56"
+    },
+    {
+      "id": "ttwo-gta6-preordini-record-2026-07-29",
+      "ticker": "TTWO",
+      "data": "2026-07-29",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "GTA 6 accumula preordini record: gli analisti ritengono che il mercato stia sottovalutando il potenziale del lancio",
+      "url": "https://finnhub.io/api/news?id=8db8d42f267da59f202a9d18f25922418dab9f5647684544deeb61202a215abb"
+    },
+    {
+      "id": "aapl-uk-appstore-regulation-2026-07-29",
+      "ticker": "AAPL",
+      "data": "2026-07-29",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple accusa il regolatore UK di voler imporre una regolamentazione dei prezzi sull'App Store",
+      "url": "https://finnhub.io/api/news?id=84f73ba0f445a57ecb30d6073f11b0b7bcfbc2356635012100fea04bdf92629e"
+    },
+    {
+      "id": "lly-earnings-preview-2026-07-29",
+      "ticker": "LLY",
+      "data": "2026-07-29",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly verso la trimestrale: attese di crescita degli utili ma presupposti non del tutto favorevoli per una sorpresa",
+      "url": "https://finnhub.io/api/news?id=f79e98f0818c7403de7fa168099f007da064e195d777670372f0cf8b6b2cdef0"
     }
   ]
 }

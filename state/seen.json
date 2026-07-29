@@ -1,70 +1,6 @@
 {
   "items": [
     {
-      "id": "coreweave-99b-backlog-msft-meta-2026-06-28",
-      "ticker": "MSFT",
-      "titolo": "CoreWeave rivela un portafoglio ordini AI da 99 miliardi di dollari, con contratti da Microsoft, Meta e OpenAI",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=5bb47a09fa569c2926ec5034220f33aaed7c69266c6e7d7de4ee796dfac0fa2e",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "samsung-sk-1300b-investment-2026-06-28",
-      "ticker": "SSNLF",
-      "titolo": "Samsung e SK Group si preparano ad annunciare investimenti per 1.300 miliardi di dollari nei prossimi 10 anni",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=21e2f5b6dab7790561105f81feb55c374f7c29c25a7ded779b6f11c83e2f194e",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "jnj-talc-lawsuit-win-2026-06-28",
-      "ticker": "JNJ",
-      "titolo": "Johnson & Johnson vince in tribunale la causa in cui il talco era accusato di aver causato il cancro a tre donne",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=bd163b4a06fd5ab355e08204cbc2b3f7a680557a215eccc5e7eb464486871b24",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "meta-child-harm-california-lobbying-2026-06-28",
-      "ticker": "META",
-      "titolo": "Meta fa lobbying in California per bloccare una legge che potrebbe multarla per danni ai minori sulle sue piattaforme",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=25912f5d252c07e7ea39ef17ed28ad86c6def4fb2815634ebd3c180bc1fba42d",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "pltr-zeta-global-partnership-2026-06-28",
-      "ticker": "PLTR",
-      "titolo": "Palantir Technologies annuncia una partnership strategica con Zeta Global per soluzioni di marketing AI",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=f532faec8048c167ae0ea82769184aa9135f1ff4be43e1538634a0dc6e4222ed",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "orcl-jefferies-buy-2026-06-27",
-      "ticker": "ORCL",
-      "titolo": "Jefferies conferma il rating Buy su Oracle: la crescita cloud e AI giustifica le valutazioni nonostante il debito elevato",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=dc6a2294752456236e331fb276bccb94107c6398a7e70fe39a6b25828dc31333",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "wmt-constellation-nuclear-ppa-2026-06-28",
-      "ticker": "WMT",
-      "titolo": "Walmart firma un accordo pluriennale per acquistare energia nucleare da Constellation Energy",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=3d37bbb7c970796aa2f88e241dd99937b0c73413c0b7a997909fb2e56e9af42e",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
-      "id": "aapl-bofa-ai-upgrade-cycle-2026-06-28",
-      "ticker": "AAPL",
-      "titolo": "BofA mantiene la visione positiva su Apple: la nuova strategia AI potrebbe innescare un ciclo di aggiornamenti degli iPhone",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=d0cde8e491d83b7eea7f1cfad4c944fd32d596aac82c2d015fc37595bc64eb20",
-      "data_invio": "2026-06-29T05:10:00+00:00"
-    },
-    {
       "id": "goog-dow-jones-2026-06-29",
       "ticker": "GOOG",
       "titolo": "Alphabet entra nel Dow Jones: il principale indice USA punta sul tech",
@@ -2607,6 +2543,86 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=2d635a0b755078ff30021b7183d089184b20da3e048e5630cf1c8e2727889d24",
       "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "jpm-dividend-buyback-50b-2026-07-29",
+      "ticker": "JPM",
+      "titolo": "JPMorgan alza il dividendo del 10% e lancia un riacquisto azionario da 50 miliardi di dollari",
+      "tipo_evento": "dividendi/buyback",
+      "url": "https://finnhub.io/api/news?id=1ac1d47d7fe7ed76286938697fd7a1194bb22eedc0bf45720c25c8291f4be8d2",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "intc-q2-beat-seventh-2026-07-29",
+      "ticker": "INTC",
+      "titolo": "Intel batte la guidance per il settimo trimestre di fila ma il titolo cede ugualmente",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=4750faac47f6984cb533395e3fb7b5daae33411ee1fc6def687e22ae4422b67f",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "nflx-q2-ricavi-miss-2026-07-29",
+      "ticker": "NFLX",
+      "titolo": "Netflix: i ricavi del Q2 sono sotto le attese, il ciclo di crescita rapida sembra chiudersi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=8f7373a4480f31b723d3a95039a4c26ca7bdadb5c4831deb3fee8f1e284c5476",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "amgn-glp1-monthly-phase3-2026-07-29",
+      "ticker": "AMGN",
+      "titolo": "Amgen lancia la sfida con un farmaco mensile contro l'obesità: 6 trial di Fase 3 nel mirino di Eli Lilly e Novo Nordisk",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=5228ae4d4225c173b04a8e7d24353c1eeb99f5d47b558e1568b0c067521ab80e",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "goog-alphafold-disbanded-2026-07-29",
+      "ticker": "GOOG",
+      "titolo": "Google DeepMind scioglie il team di AlphaFold e concentra l'AI su Gemini",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=aaa1a853e0b594c2b23cc610f4aeb2b64b3b3b4d7fe615095a69a42629bdd01b",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "amzn-anthropic-ipo-240b-2026-07-29",
+      "ticker": "AMZN",
+      "titolo": "L'attesa IPO di Anthropic a valutazione da 240 miliardi potrebbe sbloccare un guadagno enorme per Amazon",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=5ad97bd664fd86e41841471bec891016a555df2a95954d9a3b3ebeacce98aac1",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "macro-dow800-fed-iran-2026-07-29",
+      "ticker": "MSFT",
+      "titolo": "Dow Jones perde 800 punti: doppia pressione dalla risposta militare USA all'Iran e dall'incertezza sulla Fed",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=938972e54de1c10ed2e1cbb41b4419b09b2f76a6ff27fd311a70a7f9369dec56",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "ttwo-gta6-preordini-record-2026-07-29",
+      "ticker": "TTWO",
+      "titolo": "GTA 6 accumula preordini record: gli analisti ritengono che il mercato stia sottovalutando il potenziale del lancio",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=8db8d42f267da59f202a9d18f25922418dab9f5647684544deeb61202a215abb",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "aapl-uk-appstore-regulation-2026-07-29",
+      "ticker": "AAPL",
+      "titolo": "Apple accusa il regolatore UK di voler imporre una regolamentazione dei prezzi sull'App Store",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=84f73ba0f445a57ecb30d6073f11b0b7bcfbc2356635012100fea04bdf92629e",
+      "data_invio": "2026-07-29T17:30:00+00:00"
+    },
+    {
+      "id": "lly-earnings-preview-2026-07-29",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly verso la trimestrale: attese di crescita degli utili ma presupposti non del tutto favorevoli per una sorpresa",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=f79e98f0818c7403de7fa168099f007da064e195d777670372f0cf8b6b2cdef0",
+      "data_invio": "2026-07-29T17:30:00+00:00"
     }
   ]
 }
