@@ -2455,6 +2455,158 @@
       "tipo_evento": "earnings",
       "url": "https://finnhub.io/api/news?id=405b199e6d28286af92d5dadacfcfc0f03595f3a2c059359f67cac26e79a3369",
       "data_invio": "2026-07-28T05:10:00+00:00"
+    },
+    {
+      "id": "ko-earnings-q2-2026-0728",
+      "ticker": "KO",
+      "titolo": "Coca-Cola batte le stime del Q2 e alza le previsioni annuali: miglior giornata in Borsa dal 2009",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=21e57832b9598ed51d212d51e64dfe6e41da8399e9b9cfbf087b4a0aa7f1c937",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "tsm-kumamoto-earthquake-0728",
+      "ticker": "TSM",
+      "titolo": "Terremoto colpisce lo stabilimento TSMC di Kumamoto (Giappone): personale al sicuro, operazioni riprendono gradualmente",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=dc89aa4588f760efb83def0cc1f69959ddf33167ddae5ba151c9ddda4d574eea",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "amzn-nova-ai-cancellation-0728",
+      "ticker": "AMZN",
+      "titolo": "Amazon cancella la maggior parte dei modelli AI Nova e taglia l'AGI team: dubbi sul piano da 200 miliardi di dollari",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=ecf93dbfa76428abf248b02c72f0ac3a82fda5f0069867f0081a401e2b261a9c",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "jpm-dimon-market-risk-0728",
+      "ticker": "JPM",
+      "titolo": "Jamie Dimon (JPMorgan): i rischi di mercato sono più grandi di quanto il mercato percepisca, e non sta comprando azioni",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=92d86aee47a1586d1861fa2a41c9b8688b09fefbebfdfc3f0c336b08974c8c7c",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "nato-summit-ankara-defence-spending-0728",
+      "ticker": "NATO",
+      "titolo": "Summit NATO ad Ankara: oltre €50 miliardi in nuovi appalti difesa e €70 miliardi di aiuti militari all'Ucraina",
+      "tipo_evento": "macro tematica",
+      "url": "https://congress.net/defense-etfs-surge-as-nato-allies-commit-over-57-billion-in-new-military-spending/",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "bigtech-ai-capex-debt-goldman-0728",
+      "ticker": "GOOG",
+      "titolo": "Goldman Sachs: le Big Tech finanzieranno oltre un terzo degli investimenti AI con debito nel 2027",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=df6664fbeb261e0a5d8fe53e4a32f8f13f93542bbef53cf814d758f5e4b1d9e5",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "spcx-analyst-110pct-upside-0728",
+      "ticker": "SPCX",
+      "titolo": "Un analista vede il 110% di potenziale rialzo su SpaceX dopo il crollo dai massimi post-IPO",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=f27137e378d28e07a084bf44e5add53066bf0d7b6f7292c336295879d7ad2456",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "nvda-druckenmiller-vende-0728",
+      "ticker": "NVDA",
+      "titolo": "Il miliardario Stanley Druckenmiller continua a ridurre la sua posizione in Nvidia",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=1f6741634c570a0a20006e26c5c0744e0155c035d6ab6e66017e612bbfb04639",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "amgn-q2-earnings-preview-0728",
+      "ticker": "AMGN",
+      "titolo": "Amgen Q2: il consensus prevede un calo degli utili, senza i presupposti per una sorpresa positiva",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=88ecfdab40d0b5c0373abc336e0519e53aa6a7fad4cff322e51f6268fcd619ef",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "intc-avgo-chip-selloff-narrows-nvda-0728",
+      "ticker": "INTC",
+      "titolo": "Intel -6%, AMD -8%, Marvell -7%: il mercato AI chip si concentra su Nvidia e penalizza tutti gli altri",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=37fae0e763c35d3d7a71eaa6f4bb2ba0eb9cca015c0fd4ed8b877b31c261b485",
+      "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "wdc-china-barriere-sandisk-2026-07-29",
+      "ticker": "WDC",
+      "titolo": "La Cina impone nuove barriere operative a Western Digital: rischio concreto per SanDisk",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=b5777f0c1810166d3a85ceeca35a21774d74a67e447a78ced33e46add0a46718",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "asml-bofa-overreaction-2026-07-29",
+      "ticker": "ASML",
+      "titolo": "BofA difende ASML: il sell-off sui DUV cinesi è una reazione eccessiva, upside oltre il 70%",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=38d7306efddc542034b648ed694c068df83505d08efa771c07bf0ead9c83df8d",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "sndk-skhynix-q2-miss-2026-07-29",
+      "ticker": "SNDK",
+      "titolo": "SK Hynix manca le stime del Q2 e trascina le memorie: SanDisk cede il 5% nell'overnight",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=e537399cd17a8682fada1166e55f2cab88b3571e1db494f26e720069f10c4647",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "nvda-ssi-5b-investimento-2026-07-29",
+      "ticker": "NVDA",
+      "titolo": "Nvidia investe 5 miliardi di dollari in Safe Superintelligence, la startup AI di Ilya Sutskever",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=c3efe06e73f9be462a7d612dff8c81561a203ed11ade765e48721a45286f7432",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "meta-q2-earnings-fed-2026-07-29",
+      "ticker": "META",
+      "titolo": "Oggi i risultati Q2 di Meta Platforms e la decisione della Fed: doppio evento market-moving",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=a6441277dabe968df1e63f8808c4e4bd88c784e3ae56c7d65fc4d5d466cc79a9",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-calo-6-pre-q2-2026-07-29",
+      "ticker": "PLTR",
+      "titolo": "Palantir perde il 6% in attesa del Q2 (3 agosto): il mercato vende nonostante le stime degli analisti",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=602a57f2c2dacac87d8fac31f9fc17d590217b1507bdd3fe8082e756b0575284",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "goog-kimi-k3-ai-costi-2026-07-29",
+      "ticker": "GOOG",
+      "titolo": "Kimi K3 riaccende i timori sui costi AI, con effetti simili allo shock DeepSeek di gennaio",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=e0e7a2f50c4fc97340626c0926d8668d8fb9d507559975d7591cf762e5338625",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-ellison-warnerbros-9b-2026-07-29",
+      "ticker": "ORCL",
+      "titolo": "Il fallimento dell'accordo Warner Bros. costerebbe agli Ellison 9,8 miliardi: rischio indiretto per Oracle",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=244873901890d8d36c1a387580a741278a9b1265e7641b684cb159cf56ddec27",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "spcx-space-deals-soar-2026-07-29",
+      "ticker": "SPCX",
+      "titolo": "I deal nel settore spazio volano nella prima metà del 2026: SpaceX al centro del boom",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2d635a0b755078ff30021b7183d089184b20da3e048e5630cf1c8e2727889d24",
+      "data_invio": "2026-07-29T05:10:00+00:00"
     }
   ]
 }
