@@ -876,6 +876,86 @@ def calendario_spese(anno, mese):
     }
 
 
+def destinazioni_mese(anno, mese):
+    """Dove è finito il mese: le entrate divise in speso, investito e rimasto
+    liquido. È l'unico punto dell'app in cui il PAC compare accanto alle spese.
+
+    Nessun doppio conteggio: il versamento PAC è un TRASFERIMENTO (conto →
+    conto PAC), quindi non compare né in entrate né in uscite del riepilogo.
+    Rimasto liquido = entrate − speso − investito.
+
+    Senza entrate nel mese non c'è niente da dividere e la funzione torna None:
+    meglio un riquadro assente che una torta con una fetta sola.
+    """
+    riep = riepilogo_mese(anno, mese)
+    entrate = riep["entrate"]
+    if entrate <= 0:
+        return None
+
+    start, end = _range_mese(anno, mese)
+    investito = 0.0
+    try:
+        from portfolio import versamenti
+        investito = round(sum(
+            (v["importo"] or 0.0) for v in versamenti.lista()
+            if v["data"] and start.date() <= v["data"] < end.date()), 2)
+    except Exception:
+        investito = 0.0      # il PAC è un extra: senza, restano speso e rimasto
+
+    speso = riep["uscite"]
+    rimasto = round(entrate - speso - investito, 2)
+    # se hai speso e investito più di quanto è entrato, le percentuali non
+    # possono stare sulle entrate: la base diventa il totale uscito.
+    base = max(entrate, speso + investito)
+
+    def pct(v):
+        return round(v / base * 100, 1) if base else 0.0
+
+    return {
+        "entrate": entrate,
+        "voci": [
+            {"key": "speso", "val": speso, "pct": pct(speso)},
+            {"key": "investito", "val": investito, "pct": pct(investito)},
+            {"key": "rimasto", "val": rimasto, "pct": pct(max(rimasto, 0.0))},
+        ],
+        "in_rosso": rimasto < 0,
+    }
+
+
+def uscite_per_categoria_mese(anno, mese) -> dict:
+    """{categoria minuscola: {'n': quante volte, 'tot': quanto}} per il mese.
+    Serve al riquadro «che cosa cambia» accanto al modulo: sapere che è la
+    terza volta che compare una categoria è il contesto che manca quando
+    registri un movimento."""
+    start, end = _range_mese(anno, mese)
+    T = Transaction
+    with SessionLocal() as db:
+        rows = db.query(Category.nome, func.count(T.id), func.sum(T.importo)).join(
+            Category, Category.id == T.category_id).filter(
+            T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
+            T.deleted.is_(False)).group_by(Category.id).all()
+    return {(n or "").strip().lower(): {"n": int(c or 0), "tot": round(float(s or 0.0), 2)}
+            for n, c, s in rows}
+
+
+def spesa_top(anno, mese):
+    """La singola uscita più grossa del mese (None se non ce ne sono).
+    Un numero secco che una media non racconta: 17,83 al giorno non dice che
+    un giorno solo ne sono usciti 75."""
+    start, end = _range_mese(anno, mese)
+    T = Transaction
+    with SessionLocal() as db:
+        row = db.query(T).filter(
+            T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
+            T.deleted.is_(False)).order_by(T.importo.desc()).first()
+        if row is None:
+            return None
+        cat = db.query(Category.nome).filter(
+            Category.id == row.category_id).scalar() if row.category_id else None
+    return {"importo": round(float(row.importo or 0.0), 2), "data": row.data,
+            "descrizione": (row.descrizione or "").strip(), "categoria": cat}
+
+
 def _iso(dt):
     return dt.isoformat() if dt else None
 

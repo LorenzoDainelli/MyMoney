@@ -64,8 +64,19 @@
     th.sortable::after { content: "↕"; margin-left: 5px; font-size: 10px; opacity: .38; }
     th.sortable.asc::after { content: "↑"; opacity: .9; }
     th.sortable.desc::after { content: "↓"; opacity: .9; }
+    /* Modulo + conseguenza: il pannello «che cosa cambia» prende lo spazio che
+       il modulo lasciava morto a destra. Sotto i 1000px torna una colonna sola
+       e il pannello scende sotto il modulo, dove serve ancora. */
+    .mm-add { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 330px); gap: 16px; align-items: start; }
+    .mm-add-main .form { max-width: none; }
+    .mm-add-side { position: sticky; top: 84px; }
+    @media (max-width: 1000px) { .mm-add { grid-template-columns: 1fr; } .mm-add-side { position: static; } }
+    .mm-eff-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+    .mm-eff-prima { color: var(--faint); text-decoration: line-through; }
     /* Even hero-stat row (hero + 3 supporting): no lonely wrap, consistent heights */
-    .mm-stats4 { grid-template-columns: 1.7fr 1fr 1fr; }
+    /* allineata alla BASE: le card di supporto sono più corte della hero, e
+       stirarle produceva 116px di vuoto ciascuna */
+    .mm-stats4 { grid-template-columns: 1.7fr 1fr 1fr; align-items: end; }
     .mm-stats4 > .stat.hero { grid-column: auto; }
     @media (max-width: 900px){ .mm-stats4 { grid-template-columns: repeat(2, 1fr); } .mm-stats4 > .stat.hero { grid-column: 1 / -1; } }
     @media (max-width: 560px){ .mm-stats4 { grid-template-columns: 1fr; } .mm-stats4 > .stat.hero { grid-column: auto; } }

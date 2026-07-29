@@ -34,11 +34,23 @@ def _lettura_ai_salvata():
 
 def _ctx_panoramica() -> dict:
     now = datetime.now()
+    saldi = service.saldi()
+    riep = service.riepilogo_mese(now.year, now.month)
     return {
         "active": "finanze",
-        "saldi": service.saldi(),
-        "riep": service.riepilogo_mese(now.year, now.month),
+        "saldi": saldi,
+        "riep": riep,
         "calendario": service.calendario_spese(now.year, now.month),
+        "destinazioni": service.destinazioni_mese(now.year, now.month),
+        # materiale per il riquadro «che cosa cambia» accanto al modulo: saldi
+        # dei conti e uscite già registrate per categoria, letti dal JS.
+        "effetto": {
+            "wallets": {str(r["w"].id): {"nome": r["w"].nome, "saldo": r["saldo"],
+                                         "derivato": bool(r.get("derivato"))}
+                        for r in saldi["righe"]},
+            "mese": {"entrate": riep["entrate"], "uscite": riep["uscite"]},
+            "cat": service.uscite_per_categoria_mese(now.year, now.month),
+        },
         "movimenti": service.lista_movimenti(),      # TUTTI, data desc
         "wallets": service.wallets(),
         "categorie": service.categorie(),

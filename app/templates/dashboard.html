@@ -56,15 +56,26 @@
       </div>
       {% endif %}
     </div>
+    {# Le due card di supporto restano più basse della hero: la riga è allineata
+       alla BASE (.mm-stats4), così i tre numeri si leggono come una sequenza e
+       non come tre scatole mezze vuote. Sotto, un fatto secco per ciascuna. #}
     <div class="stat">
       <div class="k">{{ t('dash.spesa_media') }}</div>
       <div class="v small num">{{ d.spesa_media | eur }}</div>
       <div class="muted" style="font-size:13px;margin-top:4px;">{{ t('dash.spesa_media_sub', tot=(d.uscite | eur)) }}</div>
+      {% if d.spesa_top %}
+      {# una media non dice che un giorno solo ne sono usciti 75 #}
+      <div class="faint" style="font-size:12px;margin-top:2px;">{{ t('dash.spesa_top', imp=(d.spesa_top.importo | eur), d=d.spesa_top.data.strftime('%d/%m')) }}{% if d.spesa_top.categoria %} · {{ d.spesa_top.categoria }}{% endif %}</div>
+      {% endif %}
     </div>
     <div class="stat {{ 'ok' if d.saldo_mese >= 0 else 'warn' }}">
       <div class="k">{{ t('dash.saldo_mese') }}</div>
       <div class="v small num">{{ ('+' if d.saldo_mese >= 0 else '−') ~ (d.saldo_mese | abs | eur) }}</div>
       <div class="muted" style="font-size:13px;margin-top:4px;">{{ t('dash.saldo_hint', inc=(d.entrate | eur), out=(d.uscite | eur)) }}</div>
+      {% if d.giorni_coperti %}
+      {# una divisione, non una previsione: liquidità ÷ spesa media #}
+      <div class="faint" style="font-size:12px;margin-top:2px;">{{ t('dash.copre', n=d.giorni_coperti) }}</div>
+      {% endif %}
     </div>
   </div>
 
