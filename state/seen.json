@@ -2535,6 +2535,78 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=37fae0e763c35d3d7a71eaa6f4bb2ba0eb9cca015c0fd4ed8b877b31c261b485",
       "data_invio": "2026-07-28T17:05:00+00:00"
+    },
+    {
+      "id": "wdc-china-barriere-sandisk-2026-07-29",
+      "ticker": "WDC",
+      "titolo": "La Cina impone nuove barriere operative a Western Digital: rischio concreto per SanDisk",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=b5777f0c1810166d3a85ceeca35a21774d74a67e447a78ced33e46add0a46718",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "asml-bofa-overreaction-2026-07-29",
+      "ticker": "ASML",
+      "titolo": "BofA difende ASML: il sell-off sui DUV cinesi è una reazione eccessiva, upside oltre il 70%",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=38d7306efddc542034b648ed694c068df83505d08efa771c07bf0ead9c83df8d",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "sndk-skhynix-q2-miss-2026-07-29",
+      "ticker": "SNDK",
+      "titolo": "SK Hynix manca le stime del Q2 e trascina le memorie: SanDisk cede il 5% nell'overnight",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=e537399cd17a8682fada1166e55f2cab88b3571e1db494f26e720069f10c4647",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "nvda-ssi-5b-investimento-2026-07-29",
+      "ticker": "NVDA",
+      "titolo": "Nvidia investe 5 miliardi di dollari in Safe Superintelligence, la startup AI di Ilya Sutskever",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=c3efe06e73f9be462a7d612dff8c81561a203ed11ade765e48721a45286f7432",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "meta-q2-earnings-fed-2026-07-29",
+      "ticker": "META",
+      "titolo": "Oggi i risultati Q2 di Meta Platforms e la decisione della Fed: doppio evento market-moving",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=a6441277dabe968df1e63f8808c4e4bd88c784e3ae56c7d65fc4d5d466cc79a9",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-calo-6-pre-q2-2026-07-29",
+      "ticker": "PLTR",
+      "titolo": "Palantir perde il 6% in attesa del Q2 (3 agosto): il mercato vende nonostante le stime degli analisti",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=602a57f2c2dacac87d8fac31f9fc17d590217b1507bdd3fe8082e756b0575284",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "goog-kimi-k3-ai-costi-2026-07-29",
+      "ticker": "GOOG",
+      "titolo": "Kimi K3 riaccende i timori sui costi AI, con effetti simili allo shock DeepSeek di gennaio",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=e0e7a2f50c4fc97340626c0926d8668d8fb9d507559975d7591cf762e5338625",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-ellison-warnerbros-9b-2026-07-29",
+      "ticker": "ORCL",
+      "titolo": "Il fallimento dell'accordo Warner Bros. costerebbe agli Ellison 9,8 miliardi: rischio indiretto per Oracle",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=244873901890d8d36c1a387580a741278a9b1265e7641b684cb159cf56ddec27",
+      "data_invio": "2026-07-29T05:10:00+00:00"
+    },
+    {
+      "id": "spcx-space-deals-soar-2026-07-29",
+      "ticker": "SPCX",
+      "titolo": "I deal nel settore spazio volano nella prima metà del 2026: SpaceX al centro del boom",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2d635a0b755078ff30021b7183d089184b20da3e048e5630cf1c8e2727889d24",
+      "data_invio": "2026-07-29T05:10:00+00:00"
     }
   ]
 }
