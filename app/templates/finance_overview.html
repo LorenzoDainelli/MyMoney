@@ -193,19 +193,15 @@
     <div class="card" style="margin:0;">
       <div class="card-h">{{ t('fin.month_numbers') }}</div>
       {% set rate = (riep.saldo / riep.entrate * 100) if riep.entrate else 0 %}
-      {# Lo spazio che avanza è distribuito FRA le voci (space-between), non
-         scaricato tutto in un punto: ammucchiarlo in fondo lasciava un buco
-         solo, e i due blocchi sembravano scollegati. #}
-      <div style="display:flex;flex-direction:column;justify-content:space-between;gap:12px;height:100%;">
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline;">
-            <span class="muted" style="font-size:13px;">{{ t('fin.savings_rate') }}</span>
-            <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:800;font-size:var(--text-lg);">{{ rate | round(0) | pct(0) }}</span>
-          </div>
-          {# la barra appartiene alla percentuale sopra: restano attaccate #}
-          <div style="height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;margin-top:8px;">
-            <div style="height:100%;width:{{ [0, [100, rate] | min] | max | round(1) }}%;background:var(--pos);border-radius:999px;"></div>
-          </div>
+      {# I tre numeri restano compatti in cima, come sono sempre stati: a
+         prendersi lo spazio che avanza è il blocco delle destinazioni in fondo. #}
+      <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span class="muted" style="font-size:13px;">{{ t('fin.savings_rate') }}</span>
+          <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:800;font-size:var(--text-lg);">{{ rate | round(0) | pct(0) }}</span>
+        </div>
+        <div style="height:8px;background:var(--surface-alt);border-radius:999px;overflow:hidden;">
+          <div style="height:100%;width:{{ [0, [100, rate] | min] | max | round(1) }}%;background:var(--pos);border-radius:999px;"></div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;border-top:1px solid var(--border);">
           <span class="muted" style="font-size:13px;">{{ t('fin.avg_daily') }}</span>
@@ -221,7 +217,9 @@
                è già dentro «uscite»: nessun doppio conteggio. ---- #}
         {% if destinazioni %}
         {% set colori = {'speso': 'var(--neg)', 'investito': 'var(--accent-2)', 'rimasto': 'var(--accent)'} %}
-        <div style="padding-top:14px;border-top:1px solid var(--border);">
+        {# Il blocco si prende tutto lo spazio che avanza (flex:1): le tre righe
+           si allargano invece di restare schiacciate in fondo alla card. #}
+        <div style="padding-top:14px;border-top:1px solid var(--border);flex:1 1 auto;display:flex;flex-direction:column;min-height:0;">
           <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;">{{ t('fin.dest_title') }}</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;">
             <span class="muted" style="font-size:13px;">{{ t('fin.month_income') }}</span>
@@ -230,14 +228,16 @@
           <div style="display:flex;height:10px;border-radius:999px;overflow:hidden;gap:2px;margin:8px 0 4px;background:var(--surface-alt);">
             {% for v in destinazioni.voci %}{% if v.pct > 0 %}<div style="width:{{ v.pct }}%;background:{{ colori[v.key] }};"></div>{% endif %}{% endfor %}
           </div>
-          {% for v in destinazioni.voci %}
-          <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--border);">
-            <span style="width:9px;height:9px;border-radius:2px;background:{{ colori[v.key] }};flex:none;"></span>
-            <span style="flex:1;font-size:13px;color:var(--ink);">{{ t('fin.dest_' ~ v.key) }}</span>
-            <span class="faint" style="font-size:11px;">{{ v.pct | pct(0) }}</span>
-            <span class="num" style="font-size:13px;font-weight:600;color:{{ 'var(--neg)' if v.val < 0 else 'var(--ink)' }};">{{ v.val | eur }}</span>
+          <div style="display:flex;flex-direction:column;flex:1 1 auto;min-height:0;">
+            {% for v in destinazioni.voci %}
+            <div style="display:flex;align-items:center;gap:8px;flex:1 1 0;min-height:34px;border-top:1px solid var(--border);">
+              <span style="width:9px;height:9px;border-radius:2px;background:{{ colori[v.key] }};flex:none;"></span>
+              <span style="flex:1;font-size:13px;color:var(--ink);">{{ t('fin.dest_' ~ v.key) }}</span>
+              <span class="faint" style="font-size:11px;">{{ v.pct | pct(0) }}</span>
+              <span class="num" style="font-size:13px;font-weight:600;color:{{ 'var(--neg)' if v.val < 0 else 'var(--ink)' }};">{{ v.val | eur }}</span>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
           {% if destinazioni.in_rosso %}
           <div class="faint" style="font-size:11px;margin-top:8px;line-height:var(--lh-relaxed);">{{ t('fin.dest_over') }}</div>
           {% endif %}
