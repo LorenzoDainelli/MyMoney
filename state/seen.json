@@ -1,110 +1,6 @@
 {
   "items": [
     {
-      "id": "ssnlf-dram-price-fixing-lawsuit",
-      "ticker": "SSNLF",
-      "titolo": "Samsung, SK Hynix e Micron accusati di aver manipolato i prezzi dei chip DRAM",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=ffa93ea5e244d17e19f800f8a9eff931503bd503be4f7911a758e75dd82f5741",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "avgo-openai-jalapeno-accelerator",
-      "ticker": "AVGO",
-      "titolo": "Broadcom e OpenAI lanciano Jalapeño, il primo acceleratore AI custom di OpenAI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=582dfbd10d3f655e03e40dbf0d9de39f15356b5906e66b25078f951dd6b8aebc",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "meta-us-online-safety-bill-minori",
-      "ticker": "META",
-      "titolo": "La Camera USA approva una legge sulla sicurezza online dei minori: il Senato potrebbe essere ancora più duro",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=40385b726a519bb84831d8a8f4de0b9075122012703d100dbf4e2aa02f335839",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "wdc-sndk-analisti-55pct-upside",
-      "ticker": "WDC",
-      "titolo": "Analisti alzano i target su Western Digital e SanDisk: potenziale di rialzo del 55% grazie alla domanda AI",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=5ed2a5bdae398f01206a1d3d9fcd081151f4960adfb15650b9830a111b80d662",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "aapl-prezzi-ipad-macbook-chip-shortage",
-      "ticker": "AAPL",
-      "titolo": "Apple alza i prezzi di iPad e MacBook per la crisi globale dei chip di memoria",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=707ddeb1f86d7ea8c3bb020425d83d265281e6e77fab72d1d04da303e2457dd2",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "goog-strong-buy-drawdown-90b-equity",
-      "ticker": "GOOG",
-      "titolo": "Alphabet promossa a 'Strong Buy': la correzione del 15% è un'opportunità, il CapEx coperto da raccolta da 90 miliardi",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=0fe4865f5a7e3b19ccaec415f195df5ca6099b8da1e67b24cb2ae3bc18618315",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "tsm-corea-sud-520b-ai-plan-nuove-fab",
-      "ticker": "TSM",
-      "titolo": "La Corea del Sud annuncia un piano AI da 520 miliardi di dollari: Samsung e SK Hynix costruiranno quattro nuove fabbriche di chip",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=29f308af332235dcc41a72ffd62ef42873cc33e807e9709f5ff028e89b83bac7",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "amzn-prime-day-strong-adobe-data",
-      "ticker": "AMZN",
-      "titolo": "Prime Day Amazon più forte del previsto: il titolo sale del 4% sui dati Adobe",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=3f9cf9ed6966faaf33dfeea5c414d894d6d5f9fe4e382f07e9a6ce766bcbba66",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "spcx-starlink-telecom-pressure-vz-t",
-      "ticker": "SPCX",
-      "titolo": "Starlink mette sotto pressione Verizon e AT&T: i titoli telecom cedono per la minaccia del satellite SpaceX",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=3c3f0ec54c1064a808bfdfe8b6f8bc6ee46735d677d132f6d9d3a2993b9d4668",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "nflx-charter-spectrum-app-store",
-      "ticker": "NFLX",
-      "titolo": "Netflix sbarca nell'App Store di Charter Spectrum: nuova intesa per allargare la distribuzione USA",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=426d6b190722f508f50866808175457391a3f8dcae8fcd0e2b1e0fd6b8cd5597",
-      "data_invio": "2026-06-30T05:12:50Z"
-    },
-    {
-      "id": "goog-copyright-2026-06-30",
-      "ticker": "GOOG",
-      "titolo": "Google per leggi AI più permissive",
-      "tipo_evento": "regulatory",
-      "url": "https://finnhub.io/api/news?id=3ed661c98d0bf640c2a860ad365a5c0a25d5713908ea37e5325241019d8dec07",
-      "data_invio": "2026-06-30T09:10:00Z"
-    },
-    {
-      "id": "aapl-china-chip-2026-06-30",
-      "ticker": "AAPL",
-      "titolo": "Apple chiede approvazione chip cinese vietato",
-      "tipo_evento": "supply-chain",
-      "url": "https://finnhub.io/api/news?id=f59b1217bf629ed16628e27626d161b2b54b3bd844af2ba250ff68c8717b4c51",
-      "data_invio": "2026-06-30T09:10:00Z"
-    },
-    {
-      "id": "avgo-insider-2026-06-30",
-      "ticker": "AVGO",
-      "titolo": "Broadcom co-founder vende 720 milioni di dollari di titoli",
-      "tipo_evento": "insider-selling",
-      "url": "https://finnhub.io/api/news?id=33dab215b632be18343ab9ff83a9bb4a584099970ca3c964ce9477b4922c3a53",
-      "data_invio": "2026-06-30T09:10:00Z"
-    },
-    {
       "id": "ibm-nanostack-07nm",
       "ticker": "IBM",
       "titolo": "IBM annuncia il primo chip sub-nanometrico al mondo: tecnologia «nanostack» a 0,7 nm, azioni su del 10,2%",
@@ -2559,6 +2455,86 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=4ca9e49c897e084f4977600aacb9bae1e88dfa392638e39b19e1e3ea28c98915",
       "data_invio": "2026-07-30T05:10:00+00:00"
+    },
+    {
+      "id": "sndk-wdc-memoria-rally-doppia-cifra",
+      "ticker": "SNDK",
+      "titolo": "Le azioni memoria volano a doppia cifra: SanDisk e Western Digital tra i migliori del giorno",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=50508ab289f642600879fd58f6d18e73ccc00e2ed742d652b2f282756375faa4",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "spcx-contratto-militare-1-6-miliardi",
+      "ticker": "SPCX",
+      "titolo": "SpaceX ottiene un contratto militare da 1,6 miliardi di dollari: il titolo cerca il rimbalzo",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=e852854cf6bd91cf8462b58456baa5842ac61e5df858b4db479827bea301d58a",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "orcl-gemini-google-cloud-alliance",
+      "ticker": "ORCL",
+      "titolo": "Oracle integra Gemini di Google nella piattaforma cloud AI: il titolo sale del 3,3%",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=a6946dc0174e75d8f542c64b4d38064910dac83f6277ab2695be8b152a6bd1e9",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "shel-q2-miglior-trimestre-2022",
+      "ticker": "SHEL",
+      "titolo": "Shell: miglior trimestre dal 2022 grazie alla volatilità energetica legata al conflitto Iran",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c04af2edbff3cc63a7467db7b3291bc6c5ee9aef9025d0b761d96b2d16ac7e93",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-rybrevant-fda-priority-review-testa-collo",
+      "ticker": "JNJ",
+      "titolo": "J&J ottiene la Priority Review della FDA per RYBREVANT nel tumore testa-collo: prima potenziale terapia nella categoria",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=491fd035b2a2d1ef68d99a79f603351a3fbe73ef12e0cb9db374b4c488d67af6",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "intc-tsmc-emib-like-chip-nvidia",
+      "ticker": "INTC",
+      "titolo": "TSMC sviluppa una tecnologia chip simile all'EMIB di Intel su richiesta di Nvidia",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=cd663be227d191a3330c0b6a5d6f06fd77f78a2e814391c2834c6561026d71f4",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "nflx-walking-dead-500m-deal",
+      "ticker": "NFLX",
+      "titolo": "Netflix acquisisce i diritti globali di The Walking Dead Universe per 500 milioni di dollari",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=1e630a18053ff51f43304fe7ab8b6ae8b0e779d1be233f03f9eb89b159ca77c0",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "aapl-apple-upgrade-program-launch",
+      "ticker": "AAPL",
+      "titolo": "Apple lancia il programma 'Apple Upgrade' negli USA prima della trimestrale di oggi",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=6ff3f9ff6c7d39d3c36dcab1a40841856109f797241c6f84a3e1e2ee3b83d114",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "lly-resilience-750m-us-manufacturing",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly e Resilience investono 750 milioni di dollari per espandere la produzione farmaceutica negli USA",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5fd8207c106f5b85a4831d162f1660904ceff3468e2a6862f90fe9c40b4d860c",
+      "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "ibm-bluequbit-riken-quantum-advantage",
+      "ticker": "IBM",
+      "titolo": "IBM, BlueQubit e RIKEN ottengono un risultato storico nel quantum computing: vantaggio su computer classici dimostrato",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=b6413f9b32ce04483eb59613f4634710df326f4aaf1d8eb0156923e6f3fa0ef0",
+      "data_invio": "2026-07-30T17:10:00+00:00"
     }
   ]
 }

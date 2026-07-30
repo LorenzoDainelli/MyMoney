@@ -6199,6 +6199,176 @@
       "inviata": false,
       "titolo": "Take-Two propone una modifica statutaria per schermare i dirigenti da responsabilità personale in assemblea di settembre",
       "url": "https://finnhub.io/api/news?id=7fc7910835161f91053a527a674faf96f1726370c2e7148d18cf31c365ed0699"
+    },
+    {
+      "id": "sndk-wdc-memoria-rally-doppia-cifra",
+      "ticker": "SNDK",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 85,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Le azioni memoria volano a doppia cifra: SanDisk e Western Digital tra i migliori del giorno",
+      "url": "https://finnhub.io/api/news?id=50508ab289f642600879fd58f6d18e73ccc00e2ed742d652b2f282756375faa4"
+    },
+    {
+      "id": "spcx-contratto-militare-1-6-miliardi",
+      "ticker": "SPCX",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 78,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX ottiene un contratto militare da 1,6 miliardi di dollari: il titolo cerca il rimbalzo",
+      "url": "https://finnhub.io/api/news?id=e852854cf6bd91cf8462b58456baa5842ac61e5df858b4db479827bea301d58a"
+    },
+    {
+      "id": "orcl-gemini-google-cloud-alliance",
+      "ticker": "ORCL",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Oracle integra Gemini di Google nella piattaforma cloud AI: il titolo sale del 3,3%",
+      "url": "https://finnhub.io/api/news?id=a6946dc0174e75d8f542c64b4d38064910dac83f6277ab2695be8b152a6bd1e9"
+    },
+    {
+      "id": "shel-q2-miglior-trimestre-2022",
+      "ticker": "SHEL",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Shell: miglior trimestre dal 2022 grazie alla volatilità energetica legata al conflitto Iran",
+      "url": "https://finnhub.io/api/news?id=c04af2edbff3cc63a7467db7b3291bc6c5ee9aef9025d0b761d96b2d16ac7e93"
+    },
+    {
+      "id": "jnj-rybrevant-fda-priority-review-testa-collo",
+      "ticker": "JNJ",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "J&J ottiene la Priority Review della FDA per RYBREVANT nel tumore testa-collo: prima potenziale terapia nella categoria",
+      "url": "https://finnhub.io/api/news?id=491fd035b2a2d1ef68d99a79f603351a3fbe73ef12e0cb9db374b4c488d67af6"
+    },
+    {
+      "id": "intc-tsmc-emib-like-chip-nvidia",
+      "ticker": "INTC",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "TSMC sviluppa una tecnologia chip simile all'EMIB di Intel su richiesta di Nvidia",
+      "url": "https://finnhub.io/api/news?id=cd663be227d191a3330c0b6a5d6f06fd77f78a2e814391c2834c6561026d71f4"
+    },
+    {
+      "id": "nflx-walking-dead-500m-deal",
+      "ticker": "NFLX",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Netflix acquisisce i diritti globali di The Walking Dead Universe per 500 milioni di dollari",
+      "url": "https://finnhub.io/api/news?id=1e630a18053ff51f43304fe7ab8b6ae8b0e779d1be233f03f9eb89b159ca77c0"
+    },
+    {
+      "id": "aapl-apple-upgrade-program-launch",
+      "ticker": "AAPL",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple lancia il programma 'Apple Upgrade' negli USA prima della trimestrale di oggi",
+      "url": "https://finnhub.io/api/news?id=6ff3f9ff6c7d39d3c36dcab1a40841856109f797241c6f84a3e1e2ee3b83d114"
+    },
+    {
+      "id": "lly-resilience-750m-us-manufacturing",
+      "ticker": "LLY",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly e Resilience investono 750 milioni di dollari per espandere la produzione farmaceutica negli USA",
+      "url": "https://finnhub.io/api/news?id=5fd8207c106f5b85a4831d162f1660904ceff3468e2a6862f90fe9c40b4d860c"
+    },
+    {
+      "id": "ibm-bluequbit-riken-quantum-advantage",
+      "ticker": "IBM",
+      "data": "2026-07-30T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "IBM, BlueQubit e RIKEN ottengono un risultato storico nel quantum computing: vantaggio su computer classici dimostrato",
+      "url": "https://finnhub.io/api/news?id=b6413f9b32ce04483eb59613f4634710df326f4aaf1d8eb0156923e6f3fa0ef0"
     }
   ]
 }
