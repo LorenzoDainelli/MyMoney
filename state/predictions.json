@@ -5995,6 +5995,210 @@
       "inviata": true,
       "titolo": "I deal nel settore spazio volano nella prima metà del 2026: SpaceX al centro del boom",
       "url": "https://finnhub.io/api/news?id=2d635a0b755078ff30021b7183d089184b20da3e048e5630cf1c8e2727889d24"
+    },
+    {
+      "id": "msft-azure-100b-q4fy2026",
+      "ticker": "MSFT",
+      "data": "2026-07-30",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 80,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Microsoft chiude l'anno fiscale con risultati record: Azure cresce del 43% e il cloud supera i 100 miliardi",
+      "url": "https://finnhub.io/api/news?id=658dcf1143a16e594224bc12dc188bec280907eb47681af8cdacc315668f31d1"
+    },
+    {
+      "id": "meta-q2-delude-2026",
+      "ticker": "META",
+      "data": "2026-07-30",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Meta delude le aspettative nel Q2: il titolo crolla in after-hours, Zuckerberg perde 15 miliardi di dollari",
+      "url": "https://finnhub.io/api/news?id=567139dc8a3a5e2aa1a3fa2d6191bb56297fcf6ee07561358387a4d246f63c7a"
+    },
+    {
+      "id": "nato-patriot-iran-redsea",
+      "ticker": "NATO",
+      "data": "2026-07-30",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "USA firma forniture Patriot da 58 miliardi, attacca l'Iran e coordina la difesa del Mar Rosso",
+      "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNb2Yxa3h6SzNCUGZjOFBOTXBHY2tLc0x4WVhQTks1UF9BWkt3ZlcwSHRYVG9IV0NneDJrdVhtcm54ODVkc3cxcFdVMUZCek5EdHpER0J3d3RMWUNyeXc5LUp0Vl9HRlYzSGlhemNXOHZkc3dLNzRaQlM4QVBrUHktSDhHd1RoOE5pVWxwLXFNVzZEbjRJV2xQRnJKS0lpcTBRYkZqYm1MNGszZlU0eDF2NVI0RVRIOHZ5UmxIQ2JDa21aZlZGNA?oc=5"
+    },
+    {
+      "id": "ssnlf-q2-record-ai-chip",
+      "ticker": "SSNLF",
+      "data": "2026-07-30",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Samsung segna un record storico nel Q2: il chip AI vola di 250 volte, il titolo rimbalza del 6% a Seul",
+      "url": "https://finnhub.io/api/news?id=0572f6d534317a5ca66c5074f1cad969c30fbd7ebc3d4ac8f379d78c4c816f57"
+    },
+    {
+      "id": "spcx-nasa-moon-base",
+      "ticker": "SPCX",
+      "data": "2026-07-30",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX ottiene il sostegno ufficiale della NASA per la base lunare e i piani di AI orbitale",
+      "url": "https://finnhub.io/api/news?id=64ca41584af848bb8bb36533ab7f4ad5189901a53302be81197ea3c0066f3526"
+    },
+    {
+      "id": "aapl-bofa-ahead-earnings",
+      "ticker": "AAPL",
+      "data": "2026-07-30",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bank of America raddoppia su Apple prima della trimestrale attesa oggi",
+      "url": "https://finnhub.io/api/news?id=963a8d218b7f2cd4c6574c7365edf46e6204a67e4c3bb85ca8eed4a216a0a314"
+    },
+    {
+      "id": "nflx-womens-worldcup-200m",
+      "ticker": "NFLX",
+      "data": "2026-07-30",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Netflix acquista i diritti della Coppa del Mondo femminile USA 2027 per 200 milioni di dollari",
+      "url": "https://finnhub.io/api/news?id=70d5488d7bef8786160e7c6d70135e02d74cd31c15f8e4a32f8be31141611ab7"
+    },
+    {
+      "id": "pltr-france-exit-hedgefunds",
+      "ticker": "PLTR",
+      "data": "2026-07-30",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La Francia esce dal contratto con Palantir mentre gli hedge fund aumentano le posizioni sul titolo",
+      "url": "https://finnhub.io/api/news?id=75f4f21262919339dacf0d3217098cd0ba2a6e0e50982ad92ba6c0f19608c748"
+    },
+    {
+      "id": "jnj-firefly-bio-acquisition",
+      "ticker": "JNJ",
+      "data": "2026-07-30",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Johnson & Johnson completa l'acquisizione di Firefly Bio per rafforzare l'oncologia di nuova generazione",
+      "url": "https://finnhub.io/api/news?id=f21fb2df4b7d868f8560135e748cb907da05981f7a2f9d3a5ae849a543973724"
+    },
+    {
+      "id": "goog-alphafold-disbanded",
+      "ticker": "GOOG",
+      "data": "2026-07-30",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google DeepMind scioglie il team AlphaFold e sposta tutte le risorse su Gemini",
+      "url": "https://finnhub.io/api/news?id=4ca9e49c897e084f4977600aacb9bae1e88dfa392638e39b19e1e3ea28c98915"
+    },
+    {
+      "id": "shel-explorer-pipeline-sale",
+      "ticker": "SHEL",
+      "data": "2026-07-30",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Shell e Phillips 66 valutano la vendita delle loro quote nell'Explorer Pipeline (valore stimato 3,5 miliardi)",
+      "url": "https://finnhub.io/api/news?id=00aee91236fb54214fadefcb2fbe9cce040356f6a4d76c30ddd52d99d0073ffa"
+    },
+    {
+      "id": "ttwo-officer-exculpation",
+      "ticker": "TTWO",
+      "data": "2026-07-30",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Take-Two propone una modifica statutaria per schermare i dirigenti da responsabilità personale in assemblea di settembre",
+      "url": "https://finnhub.io/api/news?id=7fc7910835161f91053a527a674faf96f1726370c2e7148d18cf31c365ed0699"
     }
   ]
 }
