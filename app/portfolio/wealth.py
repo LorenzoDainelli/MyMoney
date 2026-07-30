@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 
 from shared import settings_store
 from finance import service as fin_service
-from portfolio import market
+from portfolio import market, versamenti
 from portfolio.service import lista_posizioni
 
 CACHE_KEY = "wealth_cache"
@@ -56,6 +56,16 @@ def _grid_totale(serie_titoli: list, extra_flat: float) -> list:
     return list(zip(all_ts, tot))
 
 
+def _qta_a(base: float, gradini: list, ts: float) -> float:
+    """Quante quote possedevi all'istante `ts` (gradini in ordine di data)."""
+    q = base
+    for t, cum in gradini:
+        if t > ts:
+            break
+        q = cum
+    return q
+
+
 def _griglia_piatta(key: str, now: datetime, base: float) -> list:
     """Nessun titolo ha storia: il patrimonio è la liquidità più il valore di
     oggi dei titoli (`base`), costante. Griglia di date equidistanti (40 punti)
@@ -83,6 +93,9 @@ def _build() -> dict:
     posizioni = [p for p in lista_posizioni()
                  if (p.ticker or "").strip() and (p.quantita or 0) > 0]
     qmap = market.quotes_map()
+    # quando ogni quota è entrata davvero in portafoglio: prima di quel giorno
+    # quei soldi erano ancora sul conto, e li conta già la liquidità
+    qstoria = versamenti.storico_quantita()
 
     serie = {k: [] for k in _FETCHES}     # per base: liste di serie già in EUR
     flat = {k: 0.0 for k in _FETCHES}     # valore costante dei titoli senza storia
@@ -99,13 +112,21 @@ def _build() -> dict:
     for p, key, s in market._in_parallelo(scarica, lavori):
         q = qmap.get((p.ticker or "").upper())
         fx = (q.price_eur / q.price) if (q and q.ok and q.price and q.price_eur) else 1.0
+        base_q, gradini = qstoria.get(p.id, (p.quantita or 0.0, []))
+        val_oggi = (q.price_eur * p.quantita) if (q and q.ok and q.price_eur) \
+            else (p.valore_posseduto or 0.0)
         if s:
-            serie[key].append([(t, c * p.quantita * fx) for t, c in s])
+            serie[key].append([(t, c * _qta_a(base_q, gradini, t) * fx) for t, c in s])
+        elif gradini:
+            # niente chiusure storiche, ma la data d'acquisto sì: il titolo vale
+            # zero finché non l'hai comprato, poi il suo valore di oggi. Meglio un
+            # gradino vero che una linea piatta che lo dà tuo da sempre.
+            unit = (val_oggi / p.quantita) if p.quantita else 0.0
+            serie[key].append([(floor_ts, unit * base_q)]
+                              + [(ts, unit * cum) for ts, cum in gradini])
         else:
-            # senza storia il titolo entra come valore costante: è una stima
-            # dichiarata, non un buco silenzioso
-            val_oggi = (q.price_eur * p.quantita) if (q and q.ok and q.price_eur) \
-                else (p.valore_posseduto or 0.0)
+            # senza storia e senza data d'acquisto il titolo entra come valore
+            # costante: è una stima dichiarata, non un buco silenzioso
             flat[key] += val_oggi or 0.0
 
     griglie = {}

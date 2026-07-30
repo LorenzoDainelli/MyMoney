@@ -37,6 +37,14 @@
         <td class="num {{ 'pos' if tt=='entrata' else 'neg' if tt=='uscita' else '' }}" style="font-weight:600;"
             data-s="{{ m.t.importo if tt=='entrata' else (0 - m.t.importo) if tt=='uscita' else m.t.importo }}">
           {{ '+' if tt=='entrata' else ('−' if tt=='uscita' else '') }}{{ m.t.importo | eur }}
+          {# Con la carta che arrotonda dal conto esce di più della spesa: il numero
+             grande resta la spesa (così la colonna torna con «uscite del mese»),
+             l'addebito vero sta qui accanto per spuntare l'estratto della banca. #}
+          {% if m.figlie %}
+          <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer
+             class="faint" style="display:block;font-size:11px;font-weight:400;text-decoration:none;margin-top:1px;"
+             title="{{ t('fin.carta_dettaglio') }}">{{ t('fin.carta_addebito', tot=(m.addebito | eur)) }} ›</a>
+          {% endif %}
         </td>
         {% endif %}
         <td>{{ m.wallet }}{% if m.wallet_to and tt != 'giro' %} → {{ m.wallet_to }}{% endif %}</td>

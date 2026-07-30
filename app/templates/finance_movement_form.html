@@ -116,6 +116,36 @@
         <input type="datetime-local" name="data" value="{{ ed.data_local if ed_gen else (p.data_local if (p and not p_giro) else oggi) }}">
       </div>
     </div>
+
+    {# --- carta che arrotonda (Trade Republic): due interruttori, già attivi ---
+       Compaiono SOLO su una spesa fatta con una carta che ha queste regole; il
+       JS li mostra e propone gli importi. I numeri restano tuoi: puoi correggerli
+       o spegnere l'interruttore, perché la banca non è tenuta a fare i nostri
+       conti (cifre tonde, tetto mensile, rimborsi). #}
+    <div id="mov-carta" style="display:none;border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--surface-alt);margin-top:4px;">
+      <div class="muted" style="font-size:12px;margin-bottom:8px;" id="mov-carta-tit"></div>
+      <div class="row2" style="margin:0;">
+        <div class="field" style="margin:0;">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;">
+            <input type="checkbox" id="mov-arr-on" checked style="width:auto;">
+            <span>{{ t('fin.carta_arr') }}</span>
+          </label>
+          <input type="text" name="extra_arr" id="mov-arr" inputmode="decimal" placeholder="0,00"
+                 value="{{ ed.extra_arr if ed_gen else '' }}"
+                 data-mio="{{ '1' if (ed_gen and ed.extra_arr_mio) else '' }}">
+        </div>
+        <div class="field" style="margin:0;">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;">
+            <input type="checkbox" id="mov-sav-on" checked style="width:auto;">
+            <span id="mov-sav-lbl">{{ t('fin.carta_sav') }}</span>
+          </label>
+          <input type="text" name="extra_sav" id="mov-sav" inputmode="decimal" placeholder="0,00"
+                 value="{{ ed.extra_sav if ed_gen else '' }}"
+                 data-mio="{{ '1' if (ed_gen and ed.extra_sav_mio) else '' }}">
+        </div>
+      </div>
+      <div class="hint" style="margin:8px 0 0;" id="mov-carta-nota"></div>
+    </div>
   </div>
 
   {# =========================== partita di giro =========================== #}

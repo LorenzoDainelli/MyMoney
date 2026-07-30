@@ -158,3 +158,38 @@ def test_prezzo_usa_la_candela_dell_ora(monkeypatch):
     p = Position(nome="Alpha", ticker="A", pct_target=100.0)
     prezzo, fonte = _PREZZO_REALE(p, ieri, {}, date.today(), "10:30")
     assert (prezzo, fonte) == (20.0, "orario")     # candela delle 10, non delle 11
+
+
+# ------------------- il titolo a target 0 (l'ETC oro) -------------------
+def test_un_titolo_a_target_zero_non_prende_niente_dal_pac(test_db):
+    """L'oro riceve solo gli arrotondamenti della carta, mai il PAC mensile.
+    Se un giorno entrasse nella ripartizione, i 100 € del PAC si spalmerebbero
+    su 38 titoli invece di 37 e ogni percentuale target sarebbe falsa."""
+    Session = test_db
+    ids = _seed(Session)
+    with Session() as db:
+        db.add(Position(nome="Oro", ticker="EGLN", isin="IE00B4ND3602",
+                        pct_target=0.0, ordine=3))
+        db.commit()
+
+    versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    with Session() as db:
+        oro = db.execute(select(Position).where(
+            Position.isin == "IE00B4ND3602")).scalars().one()
+        assert (oro.quantita, oro.versato_totale) == (None, 0.0)
+        # e i 100 € sono finiti tutti sugli altri tre
+        altri = sum((db.get(Position, pid).versato_totale or 0.0)
+                    for pid in ids.values())
+        assert round(altri, 2) == 100.0
+
+
+def test_l_oro_non_entra_nemmeno_nell_anteprima(test_db):
+    Session = test_db
+    _seed(Session)
+    with Session() as db:
+        db.add(Position(nome="Oro", ticker="EGLN", isin="IE00B4ND3602",
+                        pct_target=0.0, ordine=3))
+        db.commit()
+    a = versamenti.anteprima(100.0, date.today(), esclusi=set())
+    assert a["n_inclusi"] == 3
+    assert "EGLN" not in [r["ticker"] for r in a["righe"]]

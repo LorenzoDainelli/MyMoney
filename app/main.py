@@ -40,9 +40,11 @@ Base.metadata.create_all(bind=engine)
 fin_service.migra_schema()             # colonne nuove su DB esistenti (es. colore)
 seed.migra_schema()                    # idem per il portafoglio (es. nome_breve)
 seed.seed_if_empty()
+seed.assicura_posizioni_mancanti()     # titoli nuovi in lista anche su DB già popolati
 seed.applica_nomi_brevi()              # nomi corti degli ETF anche su DB già popolati
 fin_service.seed_wallets_if_empty()
 fin_service.assicura_wallet_brand()    # conti/carte reali (AIB, Hype, Revolut, TR, PayPal), mai generici
+fin_service.assicura_salvadanaio()     # «Nascosti» + arrotondamento/saveback sulla carta TR
 fin_service.applica_saldi_iniziali()   # saldi di apertura al 4/7/2026 (solo dove ancora a zero)
 
 
@@ -106,6 +108,11 @@ def _dashboard_ctx() -> dict:
     # solo la liquidità: il conto PAC porta già il valore del Portafoglio (inv_tot),
     # sommarlo qui lo conterebbe due volte
     liq = sal["liquido"]
+    # ...ma il salvadanaio della carta va aggiunto: quei soldi non sono spendibili
+    # (per questo stanno fuori da 'liquido') e non sono ancora titoli — se non li
+    # sommassimo qui, il patrimonio calerebbe a ogni arrotondamento e risalirebbe
+    # di scatto il giorno in cui la banca compra.
+    bloc = sal.get("bloccato", 0.0)
     snapshot = market.get_perf_snapshot()
 
     # --- IL TUO RISULTATO: quanto vale oggi contro quanto ci hai messo ---------
@@ -196,8 +203,8 @@ def _dashboard_ctx() -> dict:
     w = wealth.get_cached()
 
     return {
-        "patrimonio": round(inv_tot + liq, 2),
-        "investito": inv_tot, "liquido": liq,
+        "patrimonio": round(inv_tot + liq + bloc, 2),
+        "investito": inv_tot, "liquido": liq, "bloccato": bloc,
         "versato": versato,
         "risultato_eur": risultato_eur, "risultato_pct": risultato_pct,
         "perf12m": inv_perf, "perf12m_cop": perf_cop,

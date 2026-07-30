@@ -1,4 +1,8 @@
-"""Precarico del portafoglio iniziale (37 asset, somma target = 100%).
+"""Precarico del portafoglio iniziale (38 asset, somma target = 100%).
+
+Trentasette hanno una percentuale target e si dividono il PAC; il trentottesimo
+(l'ETC oro) ha target 0 perché non riceve versamenti programmati ma solo gli
+arrotondamenti della carta: sta in lista per esistere, non per essere comprato.
 
 Fonte delle percentuali: l'allocazione target indicata dall'utente
 (aggiornata il 10/07/2026: niente più importi fissi, solo percentuali).
@@ -27,6 +31,7 @@ NOMI_BREVI = {
     "GIFL": "Infrastructure",
     "UKRN": "Ukraine Reconstruction",
     "HEAL": "MedTech",
+    "EGLN": "Oro",
 }
 
 
@@ -94,6 +99,16 @@ SEED = [
     ("Shell", TIPO_AZIONE, "Energia", "SHEL", "GB00BP6MXD84", 1.0, None, ""),
     ("Johnson & Johnson", TIPO_AZIONE, "Farmaceutica / Salute", "JNJ", "US4781601046", 1.0, None, ""),
     ("Take-Two Interactive", TIPO_AZIONE, "Gaming / Media", "TTWO", "US8740541094", 1.0, None, ""),
+
+    # ===================== FUORI ALLOCAZIONE (target 0%) =====================
+    # Non fa parte del PAC da 100 €: ci arrivano SOLO gli arrotondamenti e il
+    # saveback della carta Trade Republic, che comprano qui a inizio mese. Il
+    # target a 0 lo tiene fuori dalla ripartizione (versamenti._riparti scarta
+    # chi ha pct_target 0), così la somma degli altri resta 100%.
+    ("iShares Physical Gold ETC", TIPO_ETF, "Oro", "EGLN", "IE00B4ND3602", 0.0, None,
+     "Destinazione degli arrotondamenti e del saveback della carta Trade Republic. "
+     "Tecnicamente un ETC (oro fisico), non un ETF: qui sta fra gli ETF perché il "
+     "sistema ha due soli tipi."),
 ]
 
 
@@ -107,6 +122,32 @@ def applica_nomi_brevi() -> int:
             if breve and not (p.nome_breve or "").strip():
                 p.nome_breve = breve
                 n += 1
+        if n:
+            db.commit()
+        return n
+
+
+def assicura_posizioni_mancanti() -> int:
+    """Aggiunge le posizioni del SEED che il DB non ha ancora (confronto per ISIN).
+
+    Serve ai database già popolati, dove `seed_if_empty` non fa nulla: un titolo
+    nuovo in lista deve comparire anche a chi usa l'app da mesi. Solo AGGIUNTE —
+    a differenza di `allinea_al_seed` non aggiorna e non cancella niente, quindi
+    non può toccare i dati personali (quantità, note, ordine scelto da te)."""
+    with SessionLocal() as db:
+        if db.query(Position).first() is None:
+            return 0                      # DB vuoto: ci pensa seed_if_empty
+        gia = {(p.isin or "").strip().upper() for p in db.query(Position).all()}
+        prossimo = max((p.ordine or 0) for p in db.query(Position).all()) + 1
+        n = 0
+        for nome, tipo, cat, ticker, isin, pct, fisso, note in SEED:
+            if isin.upper() in gia:
+                continue
+            db.add(Position(nome=nome, nome_breve=NOMI_BREVI.get(ticker, ""),
+                            tipo=tipo, categoria=cat, ticker=ticker, isin=isin,
+                            pct_target=pct, importo_fisso=fisso, note=note,
+                            ordine=prossimo + n))
+            n += 1
         if n:
             db.commit()
         return n

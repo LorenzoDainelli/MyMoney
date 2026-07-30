@@ -10,6 +10,7 @@ rientri: sono più righe con lo stesso `giro_id` (vedi finance/models.py).
 Tutto DESCRITTIVO: qui l'inserimento e' manuale e strutturato (l'inserimento in
 linguaggio naturale passa dall'agente AI, che però compila solo il modulo).
 """
+import math
 import uuid
 from bisect import bisect_left
 from datetime import datetime, timedelta
@@ -59,6 +60,13 @@ SALDI_INIZIALI = {
 # arriva dal Portafoglio, non dalla somma dei movimenti). Vedi valore_pac_live().
 NOME_WALLET_PAC = "PAC investimenti"
 
+# Il salvadanaio della carta: ci si accumulano gli arrotondamenti e il saveback
+# fino a quando la banca non li investe (inizio del mese dopo). Sono soldi TUOI e
+# contano nel patrimonio, ma non li puoi spendere: restano fuori dai 'liquidi'.
+# Grigio perché si veda a occhio che è una tasca chiusa.
+NOME_WALLET_NASCOSTI = "Nascosti"
+NASCOSTI_COLORE = "#6E7681"
+
 # Portafogli precaricati la prima volta (li puoi rinominare/eliminare).
 SEED_WALLETS = [
     ("Contanti", "contanti", ""),
@@ -67,8 +75,15 @@ SEED_WALLETS = [
     ("Trade Republic", "carta", WALLET_BRAND["Trade Republic"][1]),
     ("PayPal", "carta", PAYPAL_COLORE),
     ("AIB", "conto", AIB_COLORE),
+    (NOME_WALLET_NASCOSTI, "altro", NASCOSTI_COLORE),
     ("PAC investimenti", "investimento", ""),
 ]
+
+# Regole della carta Trade Republic, VERIFICATE dall'utente il 30/07/2026 (non
+# dedotte): arrotondamento sempre al prossimo euro, saveback 1% troncato ai
+# centesimi con un tetto di 15 € al mese. Sono valori di partenza: restano
+# modificabili sul portafoglio e correggibili su ogni singolo movimento.
+CARTA_ARROTONDA = {"Trade Republic": {"saveback_pct": 1.0, "saveback_tetto": 15.0}}
 
 
 def migra_schema():
@@ -79,13 +94,23 @@ def migra_schema():
         if cols and "colore" not in cols:
             c.execute(text("ALTER TABLE finance_wallets ADD COLUMN colore VARCHAR(20) DEFAULT ''"))
             c.commit()
+        # carta con arrotondamento e saveback (Trade Republic)
+        for nome, ddl in (("arrotonda", "BOOLEAN DEFAULT 0"),
+                          ("saveback_pct", "FLOAT DEFAULT 0.0"),
+                          ("saveback_tetto", "FLOAT DEFAULT 0.0")):
+            if cols and nome not in cols:
+                c.execute(text(f"ALTER TABLE finance_wallets ADD COLUMN {nome} {ddl}"))
+                c.commit()
         # partite di giro: gambe (spesa/rientro) e raggruppamento in una partita
+        # + righe generate (arrotondamento/saveback) legate al movimento padre
         cols = [r[1] for r in c.execute(text("PRAGMA table_info(finance_transactions)"))]
         for nome, ddl in (("importo_ricevuto", "FLOAT"),
                           ("data_ricevuto", "DATETIME"),
                           ("controparte", "VARCHAR(80) DEFAULT ''"),
                           ("giro_id", "VARCHAR(32) DEFAULT ''"),
-                          ("giro_aperta", "BOOLEAN DEFAULT 0")):
+                          ("giro_aperta", "BOOLEAN DEFAULT 0"),
+                          ("parent_tx_id", "INTEGER"),
+                          ("origine", "VARCHAR(20) DEFAULT ''")):
             if cols and nome not in cols:
                 c.execute(text(f"ALTER TABLE finance_transactions ADD COLUMN {nome} {ddl}"))
                 c.commit()
@@ -212,6 +237,34 @@ def assicura_wallet_brand() -> None:
         db.commit()
 
 
+def assicura_salvadanaio() -> None:
+    """Crea il portafoglio «Nascosti» se manca e accende arrotondamento e saveback
+    sulle carte che li hanno (oggi solo Trade Republic), anche su un DB già
+    popolato.
+
+    Le regole si scrivono una volta sola, alla creazione: se poi le spegni o le
+    correggi dalla scheda del portafoglio, questa funzione non te le rimette —
+    altrimenti a ogni avvio l'app disfarebbe la tua scelta. Il segno di 'già
+    configurato' è avere una delle due impostate."""
+    with SessionLocal() as db:
+        per_nome = {(w.nome or "").strip().lower(): w for w in db.query(Wallet).all()}
+        if NOME_WALLET_NASCOSTI.lower() not in per_nome:
+            ultimo = db.query(Wallet).order_by(Wallet.ordine.desc()).first()
+            db.add(Wallet(nome=NOME_WALLET_NASCOSTI, tipo="altro", saldo_iniziale=0.0,
+                          ordine=(ultimo.ordine + 1) if ultimo else 0,
+                          colore=NASCOSTI_COLORE,
+                          note="Arrotondamenti e saveback della carta, in attesa "
+                               "che la banca li investa."))
+        for nome, regole in CARTA_ARROTONDA.items():
+            w = per_nome.get(nome.lower())
+            if w is None or w.arrotonda or (w.saveback_pct or 0.0):
+                continue                       # assente o già configurato: non tocco
+            w.arrotonda = True
+            w.saveback_pct = regole["saveback_pct"]
+            w.saveback_tetto = regole["saveback_tetto"]
+        db.commit()
+
+
 # ------------------------------ wallet ------------------------------
 def wallets(include_archived: bool = False):
     with SessionLocal() as db:
@@ -292,19 +345,27 @@ def saldi():
         ).scalars().all())
     righe = [{"w": w, "saldo": round(smap.get(w.id, 0.0), 2)} for w in ws]
     pac = valore_pac_live()
-    if pac:
-        for r in righe:
-            if (r["w"].nome or "").strip().lower() == NOME_WALLET_PAC.lower():
-                r["saldo"] = pac["valore"]
-                r["versato"] = pac["versato"]
-                r["rivalutazione"] = pac["rivalutazione"]
-                r["derivato"] = True
+    for r in righe:
+        nome = (r["w"].nome or "").strip().lower()
+        if pac and nome == NOME_WALLET_PAC.lower():
+            r["saldo"] = pac["valore"]
+            r["versato"] = pac["versato"]
+            r["rivalutazione"] = pac["rivalutazione"]
+            r["derivato"] = True
+        elif nome == NOME_WALLET_NASCOSTI.lower():
+            r["bloccato"] = True
     righe.sort(key=lambda r: (r["w"].tipo == "investimento", -r["saldo"]))
     totale = round(sum(r["saldo"] for r in righe), 2)
-    # 'liquido' = i soldi davvero disponibili, SENZA i conti a saldo derivato
-    # (il PAC è già il valore del Portafoglio: sommarlo altrove lo conterebbe due volte)
-    liquido = round(sum(r["saldo"] for r in righe if not r.get("derivato")), 2)
-    return {"righe": righe, "totale": totale, "liquido": liquido}
+    # Due esclusioni diverse, e confonderle è già costato un bug:
+    # - 'derivato' (il PAC) è FUORI dal patrimonio calcolato qui, perché quei soldi
+    #   tornano dal Portafoglio come valore dei titoli: contarli sarebbe doppio;
+    # - 'bloccato' (i Nascosti) è DENTRO il patrimonio — sono soldi tuoi — ma fuori
+    #   dai liquidi, perché finché la banca non compra non li puoi spendere.
+    liquido = round(sum(r["saldo"] for r in righe
+                        if not r.get("derivato") and not r.get("bloccato")), 2)
+    bloccato = round(sum(r["saldo"] for r in righe if r.get("bloccato")), 2)
+    return {"righe": righe, "totale": totale, "liquido": liquido,
+            "bloccato": bloccato}
 
 
 # ------------------------------ categorie ------------------------------
@@ -334,7 +395,7 @@ def _get_or_create_categoria(db, nome, kind=""):
 
 # ------------------------------ movimenti ------------------------------
 def crea_movimento(tipo, data, importo, wallet_id, wallet_to_id=None,
-                   categoria_nome="", descrizione=""):
+                   categoria_nome="", descrizione="", parent_tx_id=None, origine=""):
     """Crea un movimento. Ritorna l'id del record creato."""
     with SessionLocal() as db:
         cat_id = None
@@ -346,7 +407,8 @@ def crea_movimento(tipo, data, importo, wallet_id, wallet_to_id=None,
             wallet_id=wallet_id,
             wallet_to_id=wallet_to_id if tipo == TIPO_TRASFERIMENTO else None,
             category_id=cat_id if tipo != TIPO_TRASFERIMENTO else None,
-            descrizione=descrizione.strip())
+            descrizione=descrizione.strip(),
+            parent_tx_id=parent_tx_id, origine=origine)
         db.add(t)
         db.commit()
         return t.id
@@ -354,7 +416,9 @@ def crea_movimento(tipo, data, importo, wallet_id, wallet_to_id=None,
 
 def elimina_movimento(tid):
     """Soft-delete di un movimento (Fase 4: il tombstone viaggia nel sync).
-    Se è la gamba di una partita di giro, marca tutta la partita come deleted."""
+    Se è la gamba di una partita di giro, marca tutta la partita come deleted.
+    Se ha righe generate (arrotondamento, saveback) se ne vanno con lui: da sole
+    non vorrebbero dire niente, e resterebbero invisibili nel registro."""
     with SessionLocal() as db:
         t = db.get(Transaction, tid)
         if not t or t.deleted:
@@ -364,6 +428,8 @@ def elimina_movimento(tid):
                 r.deleted = True
         else:
             t.deleted = True
+            for f in db.query(Transaction).filter(Transaction.parent_tx_id == t.id).all():
+                f.deleted = True
         db.commit()
 
 
@@ -389,6 +455,241 @@ def aggiorna_movimento(tid, tipo, data, importo, wallet_id, wallet_to_id=None,
         t.descrizione = (descrizione or "").strip()
         db.commit()
         return True
+
+
+# ------------------- carta con arrotondamento e saveback -------------------
+# Una spesa con la carta Trade Republic è UN gesto ma TRE fatti diversi, e
+# tenerli distinti è tutto il punto:
+#   7,60 € alla Coop      -> USCITA          (consumo: non sono più tuoi)
+#   0,40 € di arrotondamento -> TRASFERIMENTO (tuoi, cambiano tasca)
+#   0,07 € di saveback    -> ENTRATA         (della banca, prima non c'erano)
+# Segnare 8,00 € di spesa falserebbe i consumi; segnarne 7,60 lascerebbe il conto
+# scoperto di 40 centesimi. Le tre righe fanno tornare tutte e due le cose.
+NOME_CATEGORIA_SAVEBACK = "Saveback"
+ORIGINE_ARROTONDAMENTO = "arrotondamento"
+ORIGINE_SAVEBACK = "saveback"
+
+
+def arrotondamento(importo: float) -> float:
+    """Quanto manca al PROSSIMO euro. Verificato sulla carta il 30/07/2026: anche
+    una cifra tonda sale (8,00 € -> 9,00 €), quindi NON è math.ceil, che su 8,00
+    non farebbe niente."""
+    if not importo or importo <= 0:
+        return 0.0
+    return round(math.floor(importo) + 1 - importo, 2)
+
+
+def saveback_dovuto(importo: float, pct: float, tetto: float = 0.0,
+                    gia_maturato: float = 0.0) -> float:
+    """L'1% della spesa TRONCATO ai centesimi, entro quel che resta del tetto.
+
+    Troncato e non arrotondato: su 7,60 € l'1% fa 0,076 e la banca ne accredita
+    0,07, non 0,08 (unica prova che abbiamo, ed esclude l'arrotondamento normale).
+    Se il tetto del mese è pieno torna 0: meglio zero che un centesimo che la
+    banca non darà. Resta un valore PROPOSTO, sempre correggibile."""
+    if not importo or importo <= 0 or not pct or pct <= 0:
+        return 0.0
+    # importo(€) × pct(%) = centesimi: 7,60 × 1 = 7,6 -> 7 centesimi
+    cent = math.floor(round(importo * pct, 6))
+    val = round(cent / 100.0, 2)
+    if tetto and tetto > 0:
+        val = min(val, max(0.0, round(tetto - (gia_maturato or 0.0), 2)))
+    return max(0.0, val)
+
+
+def saveback_maturato(anno: int, mese: int) -> float:
+    """Quanto saveback è già maturato nel mese (per fermarsi al tetto)."""
+    start, end = _range_mese(anno, mese)
+    with SessionLocal() as db:
+        return round(db.query(func.coalesce(func.sum(Transaction.importo), 0.0)).filter(
+            Transaction.origine == ORIGINE_SAVEBACK,
+            Transaction.deleted.is_(False),
+            Transaction.data >= start, Transaction.data < end).scalar() or 0.0, 2)
+
+
+def regole_carta(wallet_id) -> dict | None:
+    """Le regole della carta, se quel portafoglio ne ha. None altrimenti."""
+    if not wallet_id:
+        return None
+    with SessionLocal() as db:
+        w = db.get(Wallet, int(wallet_id))
+        if w is None or not (w.arrotonda or (w.saveback_pct or 0.0)):
+            return None
+        return {"arrotonda": bool(w.arrotonda),
+                "saveback_pct": w.saveback_pct or 0.0,
+                "saveback_tetto": w.saveback_tetto or 0.0}
+
+
+def extra_carta(wallet_id, importo: float, data=None, escludi_tx=None) -> dict:
+    """Arrotondamento e saveback PROPOSTI per una spesa. Sempre un dict, così chi
+    chiama non deve distinguere i casi: a zero quando non c'è niente da fare."""
+    vuoto = {"arrotondamento": 0.0, "saveback": 0.0, "tetto_pieno": False}
+    r = regole_carta(wallet_id)
+    if not r or not importo or importo <= 0:
+        return vuoto
+    quando = data or datetime.now()
+    gia = saveback_maturato(quando.year, quando.month)
+    if escludi_tx:                      # in modifica: il vecchio saveward non conta
+        gia = round(gia - _importo_figlia(escludi_tx, ORIGINE_SAVEBACK), 2)
+    sb = saveback_dovuto(importo, r["saveback_pct"], r["saveback_tetto"], gia)
+    return {
+        "arrotondamento": arrotondamento(importo) if r["arrotonda"] else 0.0,
+        "saveback": sb,
+        "tetto_pieno": bool(r["saveback_tetto"] and sb <= 0 and r["saveback_pct"]),
+    }
+
+
+def importo_movimento(tid: int) -> float:
+    """L'importo attuale di un movimento (per confrontarlo con quello nuovo)."""
+    with SessionLocal() as db:
+        t = db.get(Transaction, tid)
+        return round(t.importo or 0.0, 2) if t else 0.0
+
+
+def _importo_figlia(parent_id: int, origine: str) -> float:
+    with SessionLocal() as db:
+        t = db.query(Transaction).filter(
+            Transaction.parent_tx_id == parent_id, Transaction.origine == origine,
+            Transaction.deleted.is_(False)).first()
+        return round(t.importo or 0.0, 2) if t else 0.0
+
+
+def movimento(tid: int) -> dict | None:
+    """Un movimento con i nomi già risolti e le sue righe generate, nella stessa
+    forma delle righe di `lista_movimenti` (così il template è uno solo)."""
+    with SessionLocal() as db:
+        t = db.get(Transaction, tid)
+        if t is None or t.deleted:
+            return None
+        wn = {w.id: w.nome for w in db.query(Wallet).all()}
+        cn = {c.id: c.nome for c in db.query(Category).all()}
+        gen = [{"t": f, "wallet": wn.get(f.wallet_id, "—"),
+                "wallet_to": wn.get(f.wallet_to_id) if f.wallet_to_id else None}
+               for f in db.query(Transaction).filter(
+                   Transaction.parent_tx_id == tid,
+                   Transaction.deleted.is_(False)).order_by(Transaction.id).all()]
+        return {
+            "t": t,
+            "wallet": wn.get(t.wallet_id, "—"),
+            "wallet_to": wn.get(t.wallet_to_id) if t.wallet_to_id else None,
+            "categoria": cn.get(t.category_id) if t.category_id else None,
+            "figlie": gen,
+            "addebito": round((t.importo or 0.0) + sum(
+                f["t"].importo for f in gen
+                if f["t"].origine == ORIGINE_ARROTONDAMENTO), 2),
+        }
+
+
+def figlie(parent_id: int) -> list:
+    """Le righe generate da un movimento (arrotondamento, saveback)."""
+    with SessionLocal() as db:
+        return list(db.query(Transaction).filter(
+            Transaction.parent_tx_id == parent_id,
+            Transaction.deleted.is_(False)).order_by(Transaction.id).all())
+
+
+def _crea_figlie(db, parent: Transaction, arr: float, sav: float) -> None:
+    """Le due righe che accompagnano la spesa. Il salvadanaio deve esistere: se
+    l'hai cancellato non si inventa un portafoglio, semplicemente non si scrive
+    niente — meglio nessuna riga che una riga in un posto sbagliato."""
+    dest = db.query(Wallet).filter(Wallet.deleted.is_(False)).filter(
+        func.lower(func.trim(Wallet.nome)) == NOME_WALLET_NASCOSTI.lower()).first()
+    if dest is None:
+        return
+    if arr and arr > 0:
+        db.add(Transaction(
+            tipo=TIPO_TRASFERIMENTO, data=parent.data, importo=round(arr, 2),
+            wallet_id=parent.wallet_id, wallet_to_id=dest.id,
+            descrizione=NOME_WALLET_NASCOSTI, parent_tx_id=parent.id,
+            origine=ORIGINE_ARROTONDAMENTO))
+    if sav and sav > 0:
+        db.add(Transaction(
+            tipo=TIPO_ENTRATA, data=parent.data, importo=round(sav, 2),
+            wallet_id=dest.id,
+            category_id=_get_or_create_categoria(db, NOME_CATEGORIA_SAVEBACK, "entrata"),
+            descrizione=NOME_CATEGORIA_SAVEBACK, parent_tx_id=parent.id,
+            origine=ORIGINE_SAVEBACK))
+
+
+def crea_uscita_carta(data, importo, wallet_id, categoria_nome="", descrizione="",
+                      arr=None, sav=None) -> int:
+    """Una spesa con la carta e le sue due righe. `arr`/`sav` a None = li calcola
+    l'app; un numero (anche 0) = l'hai deciso tu e vince sul calcolo."""
+    quando = data or datetime.now()
+    prop = extra_carta(wallet_id, importo, quando)
+    arr = prop["arrotondamento"] if arr is None else max(0.0, round(arr, 2))
+    sav = prop["saveback"] if sav is None else max(0.0, round(sav, 2))
+    with SessionLocal() as db:
+        t = Transaction(
+            tipo=TIPO_USCITA, data=quando, importo=abs(importo or 0.0),
+            wallet_id=wallet_id,
+            category_id=_get_or_create_categoria(db, categoria_nome, "uscita"),
+            descrizione=(descrizione or "").strip())
+        db.add(t)
+        db.flush()                                  # serve l'id per le figlie
+        _crea_figlie(db, t, arr, sav)
+        db.commit()
+        return t.id
+
+
+def imposta_figlie(tid: int, arr: float, sav: float) -> None:
+    """Porta le righe generate ESATTAMENTE a questi importi: le crea se mancano,
+    le aggiorna se ci sono, le toglie se metti zero.
+
+    È la strada della modifica: lì i due numeri li hai davanti nel modulo, quindi
+    quello che vedi è quello che vale — nessuna euristica, nessuna sorpresa."""
+    with SessionLocal() as db:
+        t = db.get(Transaction, tid)
+        if t is None or t.deleted or t.tipo != TIPO_USCITA:
+            return
+        vive = {f.origine: f for f in db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
+        mancanti_arr = mancanti_sav = 0.0
+        for origine, valore in ((ORIGINE_ARROTONDAMENTO, round(max(0.0, arr or 0.0), 2)),
+                                (ORIGINE_SAVEBACK, round(max(0.0, sav or 0.0), 2))):
+            f = vive.get(origine)
+            if f is None:
+                if origine == ORIGINE_ARROTONDAMENTO:
+                    mancanti_arr = valore
+                else:
+                    mancanti_sav = valore
+                continue
+            if valore <= 0:
+                f.deleted = True
+            else:
+                f.importo, f.data = valore, t.data
+        if mancanti_arr or mancanti_sav:
+            _crea_figlie(db, t, mancanti_arr, mancanti_sav)
+        db.commit()
+
+
+def risincronizza_figlie(tid: int, importo_prima: float) -> None:
+    """Dopo la modifica di una spesa, rifà i conti delle sue due righe — ma solo
+    se erano quelle calcolate dall'app. Un importo che hai corretto a mano resta
+    tuo: riscriverlo sarebbe disfare una decisione che hai già preso."""
+    with SessionLocal() as db:
+        t = db.get(Transaction, tid)
+        if t is None or t.deleted or t.tipo != TIPO_USCITA:
+            return
+        vecchie = {f.origine: f for f in db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
+        if not vecchie and not regole_carta(t.wallet_id):
+            return
+        prima = extra_carta(t.wallet_id, importo_prima, t.data, escludi_tx=tid)
+        dopo = extra_carta(t.wallet_id, t.importo, t.data, escludi_tx=tid)
+        for origine, chiave in ((ORIGINE_ARROTONDAMENTO, "arrotondamento"),
+                                (ORIGINE_SAVEBACK, "saveback")):
+            f = vecchie.get(origine)
+            if f is not None and round(f.importo or 0.0, 2) != prima[chiave]:
+                continue                    # corretta a mano: non la tocco
+            if f is None:
+                continue                    # non c'era: non la creo dal nulla
+            f.data = t.data
+            if dopo[chiave] > 0:
+                f.importo = dopo[chiave]
+            else:
+                f.deleted = True            # l'importo nuovo non la giustifica più
+        db.commit()
 
 
 # ------------------------------ partite di giro ------------------------------
@@ -581,18 +882,31 @@ def dati_modifica(tid):
                 "spese": spese,
                 "rientri": rientri,
             }
-        return {
-            "kind": "generic",
-            "id": t.id,
-            "action": f"/finanze/movimenti/{t.id}/aggiorna",
-            "tipo": t.tipo,
-            "importo": _fmt_importo_form(t.importo),
-            "wallet_id": t.wallet_id,
-            "wallet_to_id": t.wallet_to_id,
-            "categoria": cn.get(t.category_id, "") or "",
-            "descrizione": t.descrizione or "",
-            "data_local": _fmt_dt_form(t.data),
-        }
+        gen = {f.origine: round(f.importo or 0.0, 2) for f in db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
+    # gli importi delle righe generate tornano nel modulo COSÌ COME SONO: se ne
+    # avevi corretto uno, riaprire la modifica non deve fartelo perdere. Il flag
+    # dice al JS quali erano tuoi, così non li ricalcola addosso mentre scrivi.
+    auto = extra_carta(t.wallet_id, t.importo, t.data, escludi_tx=tid) \
+        if t.tipo == TIPO_USCITA else None
+    return {
+        "kind": "generic",
+        "id": t.id,
+        "action": f"/finanze/movimenti/{t.id}/aggiorna",
+        "tipo": t.tipo,
+        "importo": _fmt_importo_form(t.importo),
+        "wallet_id": t.wallet_id,
+        "wallet_to_id": t.wallet_to_id,
+        "categoria": cn.get(t.category_id, "") or "",
+        "descrizione": t.descrizione or "",
+        "data_local": _fmt_dt_form(t.data),
+        "extra_arr": _fmt_importo_form(gen.get(ORIGINE_ARROTONDAMENTO, 0.0)) if gen else "",
+        "extra_sav": _fmt_importo_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
+        "extra_arr_mio": bool(auto and gen and
+                              gen.get(ORIGINE_ARROTONDAMENTO, 0.0) != auto["arrotondamento"]),
+        "extra_sav_mio": bool(auto and gen and
+                              gen.get(ORIGINE_SAVEBACK, 0.0) != auto["saveback"]),
+    }
 
 
 def _riassumi_giro(rows) -> dict:
@@ -664,22 +978,47 @@ def controparti() -> list[str]:
 
 def lista_movimenti(limit=None, mese=None, anno=None):
     """Movimenti ordinati per data e ora decrescenti; senza `limit` li
-    restituisce TUTTI (la tabella in pagina mostra l'intero registro)."""
+    restituisce TUTTI (la tabella in pagina mostra l'intero registro).
+
+    Le righe generate (arrotondamento, saveback) NON sono elencate a parte: si
+    vedono aprendo il movimento che le ha prodotte, dentro `figlie`. Elencarle
+    anche fuori le farebbe comparire due volte, e trasformerebbe una spesa al bar
+    in tre righe da leggere. Nei totali però pesano come tutte le altre."""
     with SessionLocal() as db:
         wn = {w.id: w.nome for w in db.query(Wallet).all()}
         cn = {c.id: c.nome for c in db.query(Category).all()}
-        q = select(Transaction).where(Transaction.deleted.is_(False)).order_by(Transaction.data.desc(), Transaction.id.desc())
+        q = select(Transaction).where(
+            Transaction.deleted.is_(False),
+            Transaction.parent_tx_id.is_(None),
+        ).order_by(Transaction.data.desc(), Transaction.id.desc())
         if anno and mese:
             start, end = _range_mese(anno, mese)
             q = q.where(Transaction.data >= start, Transaction.data < end)
         if limit:
             q = q.limit(limit)
         rows = list(db.execute(q).scalars().all())
+        # le figlie dei movimenti mostrati, per il dettaglio a scomparsa
+        ids = [t.id for t in rows]
+        gen = {}
+        if ids:
+            for f in db.query(Transaction).filter(
+                    Transaction.parent_tx_id.in_(ids),
+                    Transaction.deleted.is_(False)).order_by(Transaction.id).all():
+                gen.setdefault(f.parent_tx_id, []).append({
+                    "t": f,
+                    "wallet": wn.get(f.wallet_id, "—"),
+                    "wallet_to": wn.get(f.wallet_to_id) if f.wallet_to_id else None,
+                })
     return [{
         "t": t,
         "wallet": wn.get(t.wallet_id, "—"),
         "wallet_to": wn.get(t.wallet_to_id) if t.wallet_to_id else None,
         "categoria": cn.get(t.category_id) if t.category_id else None,
+        "figlie": gen.get(t.id, []),
+        # quanto è uscito DAVVERO dal conto: la spesa più l'arrotondamento
+        "addebito": round((t.importo or 0.0) + sum(
+            f["t"].importo for f in gen.get(t.id, [])
+            if f["t"].origine == ORIGINE_ARROTONDAMENTO), 2),
     } for t in rows]
 
 
@@ -689,14 +1028,34 @@ def _range_mese(anno, mese):
     return start, end
 
 
+def _ids_saldo_derivato(db) -> set:
+    """Wallet il cui saldo NON nasce dai movimenti ma da fuori: oggi solo il PAC,
+    il cui valore arriva dal Portafoglio (vedi valore_pac_live).
+
+    Vanno tenuti fuori da ogni somma di liquidità. Il trasferimento del PAC toglie
+    i soldi dal conto e li mette qui: se questo wallet li rimettesse nel conteggio,
+    il totale non si accorgerebbe di niente — e chi somma la liquidità al valore
+    dei titoli (il grafico del patrimonio) conterebbe gli stessi euro due volte,
+    insieme fermi sul conto e già trasformati in titoli."""
+    return {w.id for w in db.query(Wallet).filter(Wallet.deleted.is_(False)).all()
+            if (w.nome or "").strip().lower() == NOME_WALLET_PAC.lower()}
+
+
 def _liquidita_walk():
     """Base (saldi di apertura dei wallet attivi) + effetti ordinati per data
     dei movimenti reali sulla liquidità. Nessuna stima: solo il registro.
     Una partita di giro produce DUE effetti a due date: la spesa quando esce,
-    il rimborso quando (e se) entra."""
+    il rimborso quando (e se) entra.
+    I conti a saldo derivato restano fuori (vedi _ids_saldo_derivato)."""
+    # ...ma solo se il valore vivo c'è davvero. Senza prezzi il Portafoglio vale
+    # zero: allora il saldo dei movimenti è l'unica cosa vera che abbiamo di quei
+    # soldi, e toglierlo li farebbe sparire dal grafico invece di spostarli.
+    # È la stessa condizione con cui saldi() marca il conto come 'derivato'.
+    ha_valore_vivo = valore_pac_live() is not None
     with SessionLocal() as db:
+        derivati = _ids_saldo_derivato(db) if ha_valore_vivo else set()
         attivi = {w.id for w in db.query(Wallet).filter(
-            Wallet.archiviato.is_(False), Wallet.deleted.is_(False)).all()}
+            Wallet.archiviato.is_(False), Wallet.deleted.is_(False)).all()} - derivati
         base = sum(w.saldo_iniziale or 0.0 for w in db.query(Wallet).filter(
             Wallet.deleted.is_(False)).all() if w.id in attivi)
         effetti = []
@@ -876,13 +1235,39 @@ def calendario_spese(anno, mese):
     }
 
 
+def accantonato_mese(anno, mese) -> float:
+    """Quanto è finito nel salvadanaio durante il mese, al netto di quello che ne
+    è uscito (quando la banca compra). Sono gli arrotondamenti più il saveback.
+
+    Serve a «Dove è finito il mese»: senza questa voce quei soldi finirebbero in
+    «rimasto liquido», cioè l'app direbbe che puoi spenderli — e non puoi."""
+    start, end = _range_mese(anno, mese)
+    T = Transaction
+    with SessionLocal() as db:
+        w = db.query(Wallet).filter(Wallet.deleted.is_(False)).filter(
+            func.lower(func.trim(Wallet.nome)) == NOME_WALLET_NASCOSTI.lower()).first()
+        if w is None:
+            return 0.0
+        periodo = (T.deleted.is_(False), T.data >= start, T.data < end)
+        dentro = db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
+            *periodo, T.wallet_to_id == w.id, T.tipo == TIPO_TRASFERIMENTO).scalar() or 0.0
+        dentro += db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
+            *periodo, T.wallet_id == w.id, T.tipo == TIPO_ENTRATA).scalar() or 0.0
+        fuori = db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
+            *periodo, T.wallet_id == w.id, T.tipo.in_((TIPO_TRASFERIMENTO, TIPO_USCITA))).scalar() or 0.0
+    return round(dentro - fuori, 2)
+
+
 def destinazioni_mese(anno, mese):
-    """Dove è finito il mese: le entrate divise in speso, investito e rimasto
-    liquido. È l'unico punto dell'app in cui il PAC compare accanto alle spese.
+    """Dove è finito il mese: le entrate divise in speso, investito, accantonato
+    e rimasto liquido. È l'unico punto dell'app in cui il PAC compare accanto
+    alle spese.
 
     Nessun doppio conteggio: il versamento PAC è un TRASFERIMENTO (conto →
     conto PAC), quindi non compare né in entrate né in uscite del riepilogo.
-    Rimasto liquido = entrate − speso − investito.
+    Rimasto liquido = entrate − speso − investito − accantonato, e il conto torna
+    esatto anche col saveback: quello entra nelle entrate ma non passa mai dal
+    conto, e infatti riesce subito dalla parte dell'accantonato.
 
     Senza entrate nel mese non c'è niente da dividere e la funzione torna None:
     meglio un riquadro assente che una torta con una fetta sola.
@@ -903,21 +1288,29 @@ def destinazioni_mese(anno, mese):
         investito = 0.0      # il PAC è un extra: senza, restano speso e rimasto
 
     speso = riep["uscite"]
-    rimasto = round(entrate - speso - investito, 2)
+    accantonato = accantonato_mese(anno, mese)
+    rimasto = round(entrate - speso - investito - accantonato, 2)
     # se hai speso e investito più di quanto è entrato, le percentuali non
     # possono stare sulle entrate: la base diventa il totale uscito.
-    base = max(entrate, speso + investito)
+    base = max(entrate, speso + investito + max(accantonato, 0.0))
 
     def pct(v):
         return round(v / base * 100, 1) if base else 0.0
 
+    voci = [
+        {"key": "speso", "val": speso, "pct": pct(speso)},
+        {"key": "investito", "val": investito, "pct": pct(investito)},
+    ]
+    # la voce compare solo se c'è: un «accantonato 0,00 €» fisso sarebbe rumore
+    # per chi non usa una carta che arrotonda
+    if accantonato:
+        voci.append({"key": "accantonato", "val": accantonato,
+                     "pct": pct(max(accantonato, 0.0))})
+    voci.append({"key": "rimasto", "val": rimasto, "pct": pct(max(rimasto, 0.0))})
+
     return {
         "entrate": entrate,
-        "voci": [
-            {"key": "speso", "val": speso, "pct": pct(speso)},
-            {"key": "investito", "val": investito, "pct": pct(investito)},
-            {"key": "rimasto", "val": rimasto, "pct": pct(max(rimasto, 0.0))},
-        ],
+        "voci": voci,
         "in_rosso": rimasto < 0,
     }
 
