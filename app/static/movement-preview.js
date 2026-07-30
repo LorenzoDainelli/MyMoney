@@ -42,6 +42,64 @@
 
   function val(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? el.value : ''; }
 
+  // --- carta che arrotonda ------------------------------------------------
+  // Stesse regole del server (finance/service.py: arrotondamento, saveback_dovuto),
+  // verificate sulla carta il 30/07/2026. Qui è solo l'anteprima: al salvataggio
+  // il server rifà i conti, e se scrivi un importo a mano vince il tuo.
+  var boxCarta = document.getElementById('mov-carta');
+  var inArr = document.getElementById('mov-arr'), onArr = document.getElementById('mov-arr-on');
+  var inSav = document.getElementById('mov-sav'), onSav = document.getElementById('mov-sav-on');
+  // «manuale» = quell'importo l'hai scritto tu, quindi il calcolo non lo tocca.
+  // In modifica arriva già segnato dal server (data-mio), così riaprire un
+  // movimento corretto a mano non te lo fa perdere alla prima lettera digitata.
+  var manuale = {
+    arr: !!(inArr && inArr.dataset.mio),
+    sav: !!(inSav && inSav.dataset.mio)
+  };
+  // In modifica il saveback di QUESTO movimento è già dentro il totale del mese:
+  // se non lo togliessi, il tetto risulterebbe più pieno di quanto è e la
+  // proposta scenderebbe a ogni riapertura della stessa spesa.
+  var savGia = Math.max(0, ((D.sav_gia || 0) - (inSav && inSav.value ? num(inSav.value) : 0)));
+
+  function alProssimoEuro(imp) {
+    if (!imp || imp <= 0) return 0;
+    return Math.round((Math.floor(imp) + 1 - imp) * 100) / 100;   // 8,00 -> 1,00
+  }
+  function saveback(imp, pct, tetto, gia) {
+    if (!imp || imp <= 0 || !pct) return 0;
+    var v = Math.floor(Number((imp * pct).toFixed(6))) / 100;     // troncato, non arrotondato
+    if (tetto > 0) v = Math.min(v, Math.max(0, Math.round((tetto - gia) * 100) / 100));
+    return Math.max(0, Math.round(v * 100) / 100);
+  }
+  function carta() {
+    var tipo = (form.querySelector('#mov-tipo') || {}).value || 'uscita';
+    var w = D.wallets[String(val('wallet_id'))];
+    // solo le USCITE: un trasferimento (il PAC parte da questa carta) non è un pagamento
+    if (!boxCarta || tipo !== 'uscita' || !w || !w.carta) return null;
+    return { w: w, r: w.carta };
+  }
+  function aggiornaCarta() {
+    if (!boxCarta) return null;
+    var c = carta();
+    if (!c) { boxCarta.style.display = 'none'; if (inArr) inArr.value = ''; if (inSav) inSav.value = ''; return null; }
+    var imp = num(val('importo'));
+    var arr = c.r.arr && onArr.checked ? alProssimoEuro(imp) : 0;
+    var sav = onSav.checked ? saveback(imp, c.r.pct, c.r.tetto, savGia) : 0;
+    if (!manuale.arr || !onArr.checked) inArr.value = imp ? eur(arr).replace('€ ', '') : '';
+    if (!manuale.sav || !onSav.checked) inSav.value = imp ? eur(sav).replace('€ ', '') : '';
+    inArr.disabled = !onArr.checked;
+    inSav.disabled = !onSav.checked;
+    var a = onArr.checked ? num(inArr.value) : 0, s = onSav.checked ? num(inSav.value) : 0;
+    boxCarta.style.display = '';
+    document.getElementById('mov-carta-tit').textContent =
+      imp ? fill(T.ctit, { w: c.w.nome, tot: eur(imp + a) }) : '';
+    document.getElementById('mov-sav-lbl').textContent = fill(T.csav, { pct: c.r.pct });
+    var pieno = c.r.tetto > 0 && savGia >= c.r.tetto;
+    document.getElementById('mov-carta-nota').textContent =
+      pieno ? T.ctetto : fill(T.cnota, { w: D.salvadanaio });
+    return { arr: a, sav: s, nome: D.salvadanaio, conto: c.w };
+  }
+
   function nota(testo, tono) {
     var col = tono === 'neg' ? 'var(--neg)' : 'var(--muted)';
     var bg = tono === 'neg' ? 'var(--neg-bg)' : 'var(--surface-alt)';
@@ -89,11 +147,29 @@
 
   function render() {
     var tipo = (form.querySelector('#mov-tipo') || {}).value || 'uscita';
-    if (tipo === 'giro') { host.innerHTML = nota(T.giro).replace('margin-top:10px;', ''); return; }
+    if (tipo === 'giro') { aggiornaCarta(); host.innerHTML = nota(T.giro).replace('margin-top:10px;', ''); return; }
 
+    var extra = aggiornaCarta();
     var imp = num(val('importo'));
     var w = D.wallets[String(val('wallet_id'))];
     if (!imp || !w) { vuoto(); return; }
+
+    // con la carta che arrotonda dal conto esce la spesa PIÙ l'arrotondamento,
+    // ma di spesa ne hai fatta solo la prima: due numeri diversi, tutti e due veri
+    if (extra && (extra.arr || extra.sav)) {
+      var s2 = conto(w, w.saldo, w.saldo - imp - extra.arr);
+      s2 += mese(T.out, D.mese.uscite, D.mese.uscite + imp, 'var(--neg)');
+      if (extra.sav) s2 += mese(T['in'], D.mese.entrate, D.mese.entrate + extra.sav, 'var(--pos)');
+      s2 += '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">' +
+        '<div class="muted" style="font-size:12px;">' + esc(extra.nome) + '</div>' +
+        '<div class="mm-eff-row num" style="margin-top:2px;">' +
+        '<span style="font-size:15px;font-weight:700;color:var(--ink);">+ ' +
+        eur(extra.arr + extra.sav) + '</span></div></div>';
+      s2 += contesto();
+      if (!w.derivato && w.saldo - imp - extra.arr < 0) s2 += nota(T.neg, 'neg');
+      host.innerHTML = s2;
+      return;
+    }
 
     var s = '';
     if (tipo === 'entrata') {
@@ -116,6 +192,14 @@
     if (!w.derivato && tipo !== 'entrata' && w.saldo - imp < 0) s += nota(T.neg, 'neg');
     host.innerHTML = s;
   }
+
+  // Un importo scritto a mano non va più riscritto dal calcolo: è una decisione
+  // tua, e disfarla mentre continui a digitare sarebbe peggio che non proporre
+  // niente. Torna automatico se spegni e riaccendi l'interruttore.
+  if (inArr) inArr.addEventListener('input', function () { manuale.arr = true; });
+  if (inSav) inSav.addEventListener('input', function () { manuale.sav = true; });
+  if (onArr) onArr.addEventListener('change', function () { manuale.arr = false; });
+  if (onSav) onSav.addEventListener('change', function () { manuale.sav = false; });
 
   form.addEventListener('input', render);
   form.addEventListener('change', render);

@@ -318,6 +318,41 @@ def promemoria(oggi: date = None) -> dict | None:
     }
 
 
+def storico_quantita() -> dict:
+    """Quando è arrivata, quota per quota, la quantità che oggi possiedi.
+    Ritorna {position_id: (base, [(timestamp, quantità_da_lì_in_poi), ...])}.
+
+    `base` = la parte di quantità che i versamenti NON spiegano (inserita a mano):
+    si considera posseduta da sempre, perché inventarle una data di acquisto
+    sarebbe peggio che ammettere di non conoscerla.
+
+    Serve al grafico del patrimonio, che altrimenti userebbe la quantità di OGGI
+    anche per i giorni in cui il titolo non l'avevi ancora — disegnando insieme i
+    titoli comprati e i soldi che allora erano ancora sul conto."""
+    with SessionLocal() as db:
+        righe = db.execute(
+            select(VersamentoRiga.position_id, VersamentoRiga.qta, Versamento.data)
+            .join(Versamento, Versamento.id == VersamentoRiga.versamento_id)
+            .order_by(Versamento.data, Versamento.id)).all()
+        quantita = {p.id: (p.quantita or 0.0)
+                    for p in db.execute(select(Position)).scalars().all()}
+    passi = {}
+    for pid, qta, data in righe:
+        if qta:
+            passi.setdefault(pid, []).append(
+                (datetime.combine(data, datetime.min.time()).timestamp(), qta))
+    out = {}
+    for pid, q_oggi in quantita.items():
+        mie = passi.get(pid, [])
+        base = max(0.0, round(q_oggi - sum(d for _, d in mie), 8))
+        cum, gradini = base, []
+        for ts, d in mie:
+            cum = round(cum + d, 8)
+            gradini.append((ts, cum))
+        out[pid] = (base, gradini)
+    return out
+
+
 def lista() -> list:
     """Storico dei versamenti (più recenti in cima), con numero di titoli."""
     with SessionLocal() as db:

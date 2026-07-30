@@ -126,6 +126,73 @@ def test_senza_prezzi_il_saldo_resta_quello_dei_movimenti(test_db, monkeypatch):
     assert pac["saldo"] == 100.0 and "derivato" not in pac   # niente valori inventati
 
 
+def _finta_vista(Session, totale=100.42):
+    def vista():
+        with Session() as db:
+            righe = [{"p": p} for p in db.execute(select(Position)).scalars().all()]
+        return {"righe": righe, "totale": totale, "ha_totale": True}
+    return vista
+
+
+def test_il_grafico_e_l_hero_partono_dalla_stessa_liquidita(test_db, monkeypatch):
+    """Il numero grande della dashboard usa saldi()['liquido']; il grafico usa
+    liquidita_alle_date(). Se le due non escludono le stesse cose, gli stessi
+    euro risultano insieme fermi sul conto e già trasformati in titoli — ed è
+    esattamente quello che succedeva: il grafico stava 100 € sopra l'hero."""
+    from datetime import datetime, timedelta
+
+    Session = test_db
+    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    monkeypatch.setattr(pf_service, "vista_portafoglio", _finta_vista(Session))
+
+    domani = datetime.now() + timedelta(days=1)
+    assert fin_service.liquidita_alle_date([domani])[0] == fin_service.saldi()["liquido"]
+
+
+def test_senza_prezzi_i_soldi_del_pac_non_spariscono_dal_grafico(test_db, monkeypatch):
+    """Escludere il conto PAC è giusto solo se il suo valore vivo c'è. Senza
+    prezzi il Portafoglio vale zero: il saldo dei movimenti è l'unica cosa vera
+    che resta di quei soldi, toglierlo li farebbe sparire invece di spostarli."""
+    from datetime import datetime, timedelta
+
+    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    monkeypatch.setattr(pf_service, "vista_portafoglio",
+                        lambda: {"righe": [], "totale": 0.0, "ha_totale": False})
+    domani = datetime.now() + timedelta(days=1)
+    assert fin_service.liquidita_alle_date([domani])[0] == 0.0   # -100 da TR, +100 sul PAC
+
+
+def test_le_quote_valgono_solo_da_quando_le_hai(test_db):
+    """L'altra metà del doppio conteggio: il grafico moltiplicava i prezzi di
+    ieri per la quantità di OGGI, quindi mostrava i titoli come già tuoi nei
+    giorni in cui quei soldi erano ancora sul conto."""
+    from portfolio.wealth import _qta_a
+
+    versamenti.salva(100.0, date(2026, 7, 16), "Trade Republic", esclusi=set())
+    with test_db() as db:
+        pid = db.execute(select(Position)).scalars().first().id
+
+    base, gradini = versamenti.storico_quantita()[pid]
+    assert base == 0.0                       # tutto spiegato dal versamento
+    assert len(gradini) == 1
+    quando, quante = gradini[0]
+    assert quante > 0
+    assert _qta_a(base, gradini, quando - 1) == 0.0
+    assert _qta_a(base, gradini, quando + 1) == quante
+
+
+def test_la_quantita_messa_a_mano_si_considera_di_sempre(test_db):
+    """Se una quantità non viene da nessun versamento non ne conosciamo la data:
+    inventargliene una sarebbe peggio che dichiararla posseduta da sempre."""
+    with test_db() as db:
+        p = db.execute(select(Position)).scalars().first()
+        p.quantita = 7.0
+        pid = p.id
+        db.commit()
+    base, gradini = versamenti.storico_quantita()[pid]
+    assert (base, gradini) == (7.0, [])
+
+
 def test_niente_doppio_conteggio_nel_patrimonio(test_db, monkeypatch):
     """Il conto PAC vale quanto il Portafoglio: nel patrimonio va contato UNA volta.
     'liquido' è la liquidità vera (senza i conti derivati)."""

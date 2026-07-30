@@ -92,6 +92,10 @@ SYMBOL_MAP = {
     "GIFL": "IE000CK5G8J7.SG",   # Stuttgart, EUR (era GGRP.L: fondo sbagliato). Dati sottili su Yahoo.
     "UKRN": "UKRN.DE",           # XETRA, EUR (era UKRN.L in USD)
     "HEAL": "2B78.DE",           # XETRA, EUR (era HEAL.L in USD)
+    # Su Yahoo l'ETC oro non ha una linea tedesca raggiungibile (provate .DE/.SG/.F,
+    # tutte 404): si usa la linea di Londra in EURO, così niente conversione.
+    # Stesso strumento di IGLN.L (USD) e SGLN.L (pence), ISIN IE00B4ND3602.
+    "EGLN": "EGLN.L",            # LSE, EUR
 }
 
 

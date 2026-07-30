@@ -45,11 +45,22 @@ def _ctx_panoramica() -> dict:
         # materiale per il riquadro «che cosa cambia» accanto al modulo: saldi
         # dei conti e uscite già registrate per categoria, letti dal JS.
         "effetto": {
-            "wallets": {str(r["w"].id): {"nome": r["w"].nome, "saldo": r["saldo"],
-                                         "derivato": bool(r.get("derivato"))}
-                        for r in saldi["righe"]},
+            "wallets": {str(r["w"].id): {
+                "nome": r["w"].nome, "saldo": r["saldo"],
+                "derivato": bool(r.get("derivato")),
+                "bloccato": bool(r.get("bloccato")),
+                # regole della carta: servono al JS per proporre arrotondamento e
+                # saveback mentre scrivi. Il calcolo è lo stesso del server, e il
+                # server lo rifà comunque al salvataggio: qui è solo anteprima.
+                "carta": ({"arr": bool(r["w"].arrotonda),
+                           "pct": r["w"].saveback_pct or 0.0,
+                           "tetto": r["w"].saveback_tetto or 0.0}
+                          if (r["w"].arrotonda or (r["w"].saveback_pct or 0.0)) else None),
+            } for r in saldi["righe"]},
             "mese": {"entrate": riep["entrate"], "uscite": riep["uscite"]},
             "cat": service.uscite_per_categoria_mese(now.year, now.month),
+            "salvadanaio": service.NOME_WALLET_NASCOSTI,
+            "sav_gia": service.saveback_maturato(now.year, now.month),
         },
         "movimenti": service.lista_movimenti(),      # TUTTI, data desc
         "wallets": service.wallets(),
@@ -130,14 +141,25 @@ def salva_movimento(
     rientro_wallet: list[str] = Form([]),
     rientro_chi: list[str] = Form([]),
     rientro_data: list[str] = Form([]),
+    # carta con arrotondamento: vuoti = li calcola l'app, scritti = valgono i tuoi
+    extra_arr: str = Form(""),
+    extra_sav: str = Form(""),
     next: str = Form("/finanze"),
 ):
     if tipo in (TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO):
         wid = int(wallet_id) if (wallet_id or "").strip().isdigit() else None
         wto = int(wallet_to_id) if (wallet_to_id or "").strip().isdigit() else None
-        if wid:
+        imp = to_float(importo, 0.0) or 0.0
+        if wid and tipo == TIPO_USCITA and service.regole_carta(wid):
+            # solo le USCITE: un trasferimento (il PAC parte proprio da questa
+            # carta) non è un pagamento e non deve arrotondare niente
+            service.crea_uscita_carta(
+                data=to_datetime(data), importo=imp, wallet_id=wid,
+                categoria_nome=categoria, descrizione=descrizione,
+                arr=to_float(extra_arr, None), sav=to_float(extra_sav, None))
+        elif wid:
             service.crea_movimento(
-                tipo=tipo, data=to_datetime(data), importo=to_float(importo, 0.0) or 0.0,
+                tipo=tipo, data=to_datetime(data), importo=imp,
                 wallet_id=wid, wallet_to_id=wto, categoria_nome=categoria,
                 descrizione=descrizione)
     elif tipo == TIPO_GIRO:
@@ -157,6 +179,20 @@ def elimina_movimento(tid: int, next: str = Form("/finanze")):
     _aggiorna_grafico_patrimonio()
     dest = next if next.startswith("/finanze") else "/finanze"
     return RedirectResponse(dest, status_code=303)
+
+
+@router.get("/finanze/movimenti/{tid}/dettaglio", response_class=HTMLResponse)
+def dettaglio_movimento(request: Request, tid: int):
+    """Cosa c'è dentro un movimento: il pannello che scivola da destra, lo stesso
+    dei titoli. Serve alle spese con la carta che arrotonda, dove la riga del
+    registro (7,60 €) e l'addebito sul conto (8,00 €) sono due numeri diversi e
+    tutti e due veri. Senza JS si atterra qui e si vede lo stesso frammento."""
+    m = service.movimento(tid)
+    if not m:
+        return RedirectResponse("/finanze", status_code=303)
+    return templates.TemplateResponse(
+        request, "finance_movement_detail_panel.html",
+        {"m": m, "salvadanaio": service.NOME_WALLET_NASCOSTI})
 
 
 @router.get("/finanze/movimenti/{tid}/modifica", response_class=HTMLResponse)
@@ -182,6 +218,8 @@ def aggiorna_movimento(
     wallet_to_id: str = Form(""),
     categoria: str = Form(""),
     descrizione: str = Form(""),
+    extra_arr: str = Form(""),
+    extra_sav: str = Form(""),
     next: str = Form("/finanze"),
 ):
     """Salva le modifiche a un movimento normale (in-place, stesso record)."""
@@ -189,10 +227,18 @@ def aggiorna_movimento(
         wid = int(wallet_id) if (wallet_id or "").strip().isdigit() else None
         wto = int(wallet_to_id) if (wallet_to_id or "").strip().isdigit() else None
         if wid:
+            prima = service.importo_movimento(tid)      # serve dopo, per le figlie
             service.aggiorna_movimento(
                 tid, tipo=tipo, data=to_datetime(data),
                 importo=to_float(importo, 0.0) or 0.0, wallet_id=wid,
                 wallet_to_id=wto, categoria_nome=categoria, descrizione=descrizione)
+            arr, sav = to_float(extra_arr, None), to_float(extra_sav, None)
+            if tipo == TIPO_USCITA and service.regole_carta(wid) \
+                    and (arr is not None or sav is not None):
+                # i due numeri erano nel modulo sotto i tuoi occhi: valgono quelli
+                service.imposta_figlie(tid, arr or 0.0, sav or 0.0)
+            else:
+                service.risincronizza_figlie(tid, prima)
     _aggiorna_grafico_patrimonio()
     dest = next if next.startswith("/finanze") else "/finanze"
     return RedirectResponse(dest, status_code=303)

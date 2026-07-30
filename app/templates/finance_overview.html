@@ -53,6 +53,13 @@
         <span class="{{ 'pos' if r.rivalutazione >= 0 else 'neg' }}" style="font-weight:600;">{{ '+' if r.rivalutazione >= 0 else '' }}{{ r.rivalutazione | eur }}</span>
       </div>
       {% endif %}
+      {# salvadanaio della carta: soldi TUOI (contano nel patrimonio) ma chiusi
+         finché la banca non compra — per questo restano fuori dai liquidi. #}
+      {% if r.bloccato %}
+      <div style="font-size:12px;margin-top:3px;" title="{{ r.w.note }}">
+        <span class="pill gray" style="text-transform:none;">{{ t('fin.bloccato') }}</span>
+      </div>
+      {% endif %}
       <div style="margin-top:auto;padding-top:12px;">
         <div style="height:6px;background:var(--surface-alt);border-radius:999px;overflow:hidden;"><div style="height:100%;width:{{ [0, [100, share] | min] | max | round(1) }}%;background:{{ acc or 'var(--accent)' }};border-radius:999px;"></div></div>
         <div class="muted" style="font-size:12px;margin-top:5px;">{{ t('fin.share_liq', pct=(share | round(1) | pct(1))) }}</div>
@@ -146,7 +153,9 @@
       'empty': t('fin.eff_empty'), 'out': t('fin.eff_month_out'), 'in': t('fin.eff_month_in'),
       'neg': t('fin.eff_neg'), 'derived': t('fin.eff_derived'), 'giro': t('fin.eff_giro'),
       'transfer': t('fin.eff_transfer'), 'cat': t('fin.eff_cat'),
-      'cat1': t('fin.eff_cat_one'), 'catnew': t('fin.eff_cat_new')
+      'cat1': t('fin.eff_cat_one'), 'catnew': t('fin.eff_cat_new'),
+      'ctit': t('fin.carta_tit'), 'csav': t('fin.carta_sav_pct'),
+      'cnota': t('fin.carta_nota'), 'ctetto': t('fin.carta_tetto')
   } | tojson }}</script>
 
   {# ---------- spese · il mese in numeri · lettura AI ---------- #}
@@ -216,7 +225,7 @@
                accanto alle spese. Il versamento è un trasferimento, quindi non
                è già dentro «uscite»: nessun doppio conteggio. ---- #}
         {% if destinazioni %}
-        {% set colori = {'speso': 'var(--neg)', 'investito': 'var(--accent-2)', 'rimasto': 'var(--accent)'} %}
+        {% set colori = {'speso': 'var(--neg)', 'investito': 'var(--accent-2)', 'accantonato': 'var(--muted)', 'rimasto': 'var(--accent)'} %}
         {# Il blocco si prende tutto lo spazio che avanza (flex:1): le tre righe
            si allargano invece di restare schiacciate in fondo alla card. #}
         <div style="padding-top:14px;border-top:1px solid var(--border);flex:1 1 auto;display:flex;flex-direction:column;min-height:0;">

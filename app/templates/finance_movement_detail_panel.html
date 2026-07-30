@@ -1,0 +1,60 @@
+{# ============================================================================
+   Dentro un movimento — contenuto del DRAWER, come per i titoli.
+   Serve alle spese fatte con la carta che arrotonda: nel registro si vede UNA
+   riga (7,60 €), ma dal conto sono usciti 8,00 € e 47 centesimi sono finiti nel
+   salvadanaio. Le due righe generate stanno qui, non nell'elenco: elencarle
+   trasformerebbe una spesa al bar in tre righe da leggere.
+   Restituito da GET /finanze/movimenti/{id}/dettaglio?panel=1.
+   NIENTE base.html: è un frammento.
+   ============================================================================ #}
+{% from "_icons.html" import icon %}
+<div style="position:sticky;top:0;z-index:2;background:var(--glass-bg-strong,var(--surface));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:16px 20px;">
+  <div style="display:flex;align-items:flex-start;gap:12px;">
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="pill {{ 'green' if m.t.tipo=='entrata' else 'red' if m.t.tipo=='uscita' else 'gray' }}">{{ t('fin.' ~ m.t.tipo) }}</span>
+        <span class="muted" style="font-size:13px;">{{ m.t.data.strftime('%d/%m/%Y') }} · {{ m.t.data.strftime('%H:%M') }}</span>
+      </div>
+      <div class="num" style="font-size:var(--text-2xl);font-weight:700;margin-top:6px;">{{ m.t.importo | eur }}</div>
+      <div style="color:var(--muted);margin-top:2px;">{{ m.t.descrizione or m.categoria or m.wallet }}</div>
+    </div>
+    <a href="/finanze/movimenti/{{ m.t.id }}/modifica#mov-form" class="btn ghost icon-only" aria-label="{{ t('btn.edit') }}" title="{{ t('btn.edit') }}">{{ icon('edit', 16) }}</a>
+    <button type="button" class="btn ghost icon-only" data-drawer-close aria-label="{{ t('pf.btn_close') }}">{{ icon('x', 18) }}</button>
+  </div>
+</div>
+<div style="padding:18px 20px 28px;">
+  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+    <span class="muted" style="font-size:13px;">{{ t('fin.wallet') }}</span>
+    <span>{{ m.wallet }}{% if m.wallet_to %} → {{ m.wallet_to }}{% endif %}</span>
+  </div>
+  {% if m.categoria %}
+  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+    <span class="muted" style="font-size:13px;">{{ t('fin.category') }}</span>
+    <span>{{ m.categoria }}</span>
+  </div>
+  {% endif %}
+
+  {% if m.figlie %}
+  <div class="card-title" style="margin:18px 0 6px;font-size:14px;">{{ t('fin.carta_dettaglio') }}</div>
+  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+    <span>{{ t('fin.' ~ m.t.tipo) }}</span>
+    <span class="num neg">−{{ m.t.importo | eur }}</span>
+  </div>
+  {% for f in m.figlie %}
+  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
+    <span>
+      {{ t('fin.orig_' ~ f.t.origine) }}
+      <span class="faint" style="font-size:12px;">
+        {% if f.t.origine == 'arrotondamento' %}→ {{ f.wallet_to }}{% else %}→ {{ f.wallet }}{% endif %}
+      </span>
+    </span>
+    <span class="num {{ 'neg' if f.t.tipo == 'trasferimento' else 'pos' }}">{{ '−' if f.t.tipo == 'trasferimento' else '+' }}{{ f.t.importo | eur }}</span>
+  </div>
+  {% endfor %}
+  <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0 0;font-weight:700;">
+    <span>{{ t('fin.carta_uscito') }}</span>
+    <span class="num">{{ m.addebito | eur }}</span>
+  </div>
+  <div class="hint" style="margin-top:10px;">{{ t('fin.carta_nota', w=salvadanaio) }}</div>
+  {% endif %}
+</div>

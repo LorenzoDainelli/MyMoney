@@ -56,6 +56,15 @@ class Wallet(Base):
     # accento brand della card (design: strisciolina in alto + chip + barra);
     # vuoto = card neutra con i colori standard del tema
     colore: Mapped[str] = mapped_column(String(20), default="")
+    # --- carta con arrotondamento (Trade Republic) ---
+    # Ogni pagamento con la carta arrotonda al PROSSIMO euro (anche sulle cifre
+    # tonde: 8,00 -> 9,00) e matura l'1% di saveback. Sono due cose diverse: la
+    # differenza è denaro TUO che cambia tasca, il saveback è denaro della banca
+    # che entra. Qui si conserva solo la regola; gli importi restano correggibili
+    # movimento per movimento, perché la banca non è tenuta a fare i nostri conti.
+    arrotonda: Mapped[bool] = mapped_column(Boolean, default=False)
+    saveback_pct: Mapped[float] = mapped_column(Float, default=0.0)   # % (1.0 = 1%)
+    saveback_tetto: Mapped[float] = mapped_column(Float, default=0.0)  # €/mese, 0 = nessuno
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # sync v2
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)  # sync v2
     rev: Mapped[int] = mapped_column(Integer, default=1)                          # sync v2
@@ -93,6 +102,16 @@ class Transaction(Base):
     importo_ricevuto: Mapped[float | None] = mapped_column(Float, nullable=True)   # gamba RIENTRO
     data_ricevuto: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     controparte: Mapped[str] = mapped_column(String(80), default="")  # da chi (babbo, mamma, ...)
+    # --- righe generate da un altro movimento (arrotondamento e saveback) ---
+    # Una spesa con la carta TR produce TRE righe: la spesa vera, il trasferimento
+    # dell'arrotondamento, l'entrata del saveback. Le ultime due puntano qui alla
+    # prima. Nel registro si vede solo il genitore (le figlie stanno nel dettaglio),
+    # ma nei conti pesano tutte: nascoste dalla lista non vuol dire fuori dai totali.
+    # Cancellare il genitore cancella le figlie: da sole non vorrebbero dire niente.
+    parent_tx_id: Mapped[int | None] = mapped_column(
+        ForeignKey("finance_transactions.id"), nullable=True, index=True)
+    # come è nata la riga figlia: "arrotondamento" | "saveback" ("" per le altre)
+    origine: Mapped[str] = mapped_column(String(20), default="")
     # --- metadati di sincronizzazione multi-dispositivo (v2, vedi PIANO-V2.md) ---
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # identità stabile tra dispositivi
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)  # ultima modifica (per la fusione)
