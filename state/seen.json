@@ -1,158 +1,6 @@
 {
   "items": [
     {
-      "id": "goog-gemini-capacity-limits-20260701",
-      "ticker": "GOOG",
-      "titolo": "Google raziona l'accesso a Gemini AI per i clienti cloud: capacità di calcolo al limite",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=4114a0172c018d5df8405c4b168a22dddea4d0d1fa1969ed5aea6252baa31aaa",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "amgn-ema-revoca-tavneos-20260701",
-      "ticker": "AMGN",
-      "titolo": "L'EMA europea raccomanda la revoca dell'approvazione di Tavneos (avacopan) per Amgen",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=6732d90f14b871e755b5c2cb0f55c931a095b07864a64a0872cef0a7ebe9824d",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "meta-addiction-lawsuit-states-20260701",
-      "ticker": "META",
-      "titolo": "Un giudice federale permette a 29 procuratori statali USA di procedere con la causa sull'addiction da social di Meta",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=20891d56b15cd60f9bd31641e3f6918f742319761cc9a3070509405a21a73e96",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "spcx-nasdaq100-entry-july7-20260701",
-      "ticker": "SPCX",
-      "titolo": "SpaceX entra nel Nasdaq-100 il 7 luglio: acquisti automatici dagli ETF e fondi indicizzati in arrivo",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=7d4a12cc207c8043b4441f2d8cb29aa0990136b5c3a1717d1f3b009c123a2dba",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "ukrn-saab-gripen-ukraine-20260701",
-      "ticker": "UKRN",
-      "titolo": "Saab firma un contratto da 2,54 miliardi con l'Ucraina per i caccia Gripen: uno dei più grandi deal di armamenti in Europa",
-      "tipo_evento": "macro tematica",
-      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPVXJlbHk5dlJaTjNCbzVhX3RDS1R2SFh0ajQ4UVJDRkJXa3ZTTm1HVWFBNzE5OXhPY2RwV3VZRHJweXA3aF85TjktQzlhZGh3NFZyc0pEM1NxSTlHQzZYZUdTMkUyZzZ1TjBwaU5QTWo4SmNPZzBUT09pU1FuZ2djZ1VtcF9rN2c1d3F1NFVrRXRhWklwb2NMU3dyclg4NmMxOUdvcW55OWJtUVJhWVBPaW5HZTY5TGF0cTNnZG9BSQ?oc=5",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "goog-korea-antitrust-android-20260701",
-      "ticker": "GOOG",
-      "titolo": "L'antitrust sudcoreano accusa Google di abuso di posizione dominante nel Play Store Android",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=b24e2add5b4878f69bcdae76a3283aa079a9df8947061993cf1463692a08438d",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "shel-deepwater-talos-20260701",
-      "ticker": "SHEL",
-      "titolo": "Shell cede asset petroliferi in acque profonde nel Golfo del Messico a Talos Energy per 850 milioni di dollari",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=a9301f4ea7ed7ca1182b14638b4d0f157e745260524e0e0f142909fb68b4450a",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "intc-7pct-rally-sentiment-20260701",
-      "ticker": "INTC",
-      "titolo": "Intel rimbalza del 7,2% trainata dall'ottimismo sul settore semiconduttori",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=43b1e6754b8979dbac5bee8587da3a10f7c46246c10712b0eca09f41734d2213",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "asml-tsm-cowos-mizuho-20260701",
-      "ticker": "ASML",
-      "titolo": "Mizuho alza le previsioni di capacità CoWoS di TSMC a 140.000 unità/mese: la domanda AI supera le attese",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=18ec5e7aa553c65291b40a0f96c96690976bc0d59a76822cc67266edbf07996d",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "avgo-broadcom-dip-analysts-20260701",
-      "ticker": "AVGO",
-      "titolo": "Dopo un calo del 20% dai massimi, gli analisti indicano Broadcom come opportunità di acquisto",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=b6e84a941e70a136a2835c5408402e412b8d38dea6f3584b1d1b50b9fdb2860d",
-      "data_invio": "2026-07-01T05:10:00+00:00"
-    },
-    {
-      "id": "asml-guidance-rialzo-2026-07-01",
-      "ticker": "ASML",
-      "titolo": "ASML alza le previsioni di ricavi: la domanda AI supera le aspettative",
-      "tipo_evento": "revisione guidance",
-      "url": "https://finnhub.io/api/news?id=a3b96be8a4430027dd73734fa71f324732ad938924a969cc83cf280e21a80fbe",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "meta-cloud-ai-compute-2026-07-01",
-      "ticker": "META",
-      "titolo": "Meta lancia un'unità cloud per vendere capacità AI in eccesso a clienti esterni",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=5bdf103e3edd5cf5196983e506eb978bd1ee5f6845039bbff96094779d58c2fb",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "lly-china-probe-2026-07-01",
-      "ticker": "LLY",
-      "titolo": "Il Congresso USA apre un'indagine di sicurezza sui trial clinici di Eli Lilly in Cina",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=523b2956383e6b450ea7788c809b0fecf4cdb1c62186fa4f1ed46aa648ec5426",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "goog-svezia-antitrust-klarna-2026-07-01",
-      "ticker": "GOOG",
-      "titolo": "Tribunale svedese condanna Google a pagare quasi 2 miliardi di dollari a PriceRunner (Klarna)",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=89a4d60721c5ffaaa4fcdf2dde32af7ac19f206e93ee8ad973a1296755ed82da",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "jpm-dimon-tsunami-2026-07-01",
-      "ticker": "JPM",
-      "titolo": "Dimon: il mercato rialzista è un «piccolo tsunami» che mi sorprende, ma non durerà",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=74a3033d1c6076402cb076d568fce1667e57ea6019e0d3002c5325f48342537c",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "sndk-wdc-pullback-2026-07-01",
-      "ticker": "SNDK",
-      "titolo": "I titoli della memoria cedono forte: SanDisk -10%, Western Digital -7%, Micron -8%",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=5602af116afd1b4f9931300c26ecf75ddcd8fc168415dd23402f6a7e842ef7f7",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "ko-marriott-partnership-2026-07-01",
-      "ticker": "KO",
-      "titolo": "Coca-Cola diventa il fornitore globale di bevande per tutte le strutture Marriott",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=698bb10a92e16730738407e9394725bd8508e04b70b884a511ec7ede173c9425",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "nato-uk-spesa-difesa-2026-07-01",
-      "ticker": "NATO",
-      "titolo": "Il Regno Unito potenzia la spesa militare di quasi 20 miliardi di dollari: rialzo per i titoli difesa europei",
-      "tipo_evento": "macro tematica",
-      "url": "https://www.cnbc.com/2026/07/01/defense-stocks-uk-investment-plan-gilts-bae-systems.html",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
-      "id": "spcx-dan-ives-ai-play-2026-07-01",
-      "ticker": "SPCX",
-      "titolo": "Wedbush (Dan Ives): SpaceX sembra cara ma potrebbe diventare «uno dei migliori titoli AI»",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=345678e88b2b9b41a7097737020e9c1c3e269321fcce29dd66520883e42be6f3",
-      "data_invio": "2026-07-01T17:05:00+00:00"
-    },
-    {
       "id": "intel-downgrade-boa-20260701",
       "ticker": "INTC",
       "titolo": "Intel e semiconduttori sotto pressione: BoA segnala rischio bolla",
@@ -2535,6 +2383,78 @@
       "tipo_evento": "dividendi/buyback",
       "url": "https://finnhub.io/api/news?id=ed469cd6c1b1812df642acb5509920351b88263ab780862631ac196088d99057",
       "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "aapl-ceo-tim-cook-exit-2026-07-31",
+      "ticker": "AAPL",
+      "titolo": "Tim Cook lascia la carica di CEO di Apple dopo la trimestrale Q2 2026",
+      "tipo_evento": "cambio CEO/management",
+      "url": "https://finnhub.io/api/news?id=a38800c885af8c5e8ab2d6a9c76592ff84fe2f01fd1a168cac95ae449a2b97d2",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "intc-operating-margin-positive-q2-2026-07-31",
+      "ticker": "INTC",
+      "titolo": "Intel torna al margine operativo positivo nel Q2, ma la fonderia è ancora in perdita",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=7e6cfad79a4575319eca70a67e672978d1261ae307c865b5a6f81edf43ef1a6a",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "ssnlf-kospi-record-rally-2026-07-31",
+      "ticker": "SSNLF",
+      "titolo": "La borsa di Seul segna il miglior giorno della sua storia (+18%): Samsung e SK Hynix trascinano",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=ac3df9ca8afe4c9e79de15d2eb95605f0d7e5fb012dd9d80cf56e0bf14436169",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "spcx-first-earnings-coming-2026-07-31",
+      "ticker": "SPCX",
+      "titolo": "Arrivano i primissimi risultati finanziari pubblici di SpaceX: cosa monitorare",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=76fc20a4ba03c8548268ec4fcfa8d93944555d5cc4938a044820b4f60b204888",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "lly-weight-loss-drugs-slump-2026-07-31",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly e Novo Nordisk scendono sotto livelli tecnici chiave",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=3a88c32217c41f78b86568c3164bb1f2efb81aceac0b1fda230efa63850e3102",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "jpm-fed-hawkish-pause-2026-07-31",
+      "ticker": "JPM",
+      "titolo": "La Fed mantiene una postura hawkish: JPMorgan potrebbe beneficiarne",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=01b7b3dc6a3104ea78f9096a7bf014f167a93eb27c83d9ef6db088b299fc469f",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-car-t-in-vivo-sail-2026-07-31",
+      "ticker": "JNJ",
+      "titolo": "J&J rafforza l'oncologia con una partnership nel CAR-T in vivo, possibile acquisizione",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=29b85e753ccb50bdf55dc09e87c13e90f80bd77d7cdaafe62d93e0ec38cb60d5",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-supply-chain-restructuring-2026-07-31",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson ristruttura la supply chain farmaceutica e chiude alcune strutture",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=362a936bf0077aa67e143228a54fabe102f156c0180344305efc8e76e8e53b89",
+      "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "ibm-quantum-2028-bitcoin-2026-07-31",
+      "ticker": "IBM",
+      "titolo": "IBM punta ai ricavi dal quantum computing entro il 2028: a rischio $437 miliardi in Bitcoin?",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=9cb0b9494adad896862121d2c1df989d83091c6b73110936296734d1b35d6c4b",
+      "data_invio": "2026-07-31T17:10:00+00:00"
     }
   ]
 }
