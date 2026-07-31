@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "ibm-nanostack-07nm",
-      "ticker": "IBM",
-      "titolo": "IBM annuncia il primo chip sub-nanometrico al mondo: tecnologia «nanostack» a 0,7 nm, azioni su del 10,2%",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=4a2132d17c8db72d55ad2bbfe26efad9bf84d6aee311d8010fc75f969621ece4",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "mag7-selloff-giugno-2026",
-      "ticker": "MSFT",
-      "titolo": "I Magnificent Seven perdono 2.300 miliardi in giugno; Microsoft verso il peggior mese dal 2008 per il timore sui ritorni dell'AI",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=1bc5b4ddf2fd8a8b2b7434fc66ad8cacb9cc352b81a0e02ca63c1d2d84ae2f5d",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "tsm-target-496-ai",
-      "ticker": "TSM",
-      "titolo": "TSMC: analisti alzano il target del 14% a $496 grazie alla domanda massiccia di chip AI",
-      "tipo_evento": "upgrade analisti",
-      "url": "https://finnhub.io/api/news?id=814ed8921ccf99bbd2f9fa4d3f34ae1e58107263fc2d187cce2ca1623523b91f",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "lly-fda-precheck-pilot",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly selezionata dalla FDA per il programma PreCheck: possibili approvazioni farmaceutiche più rapide",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=de3f318bb1515c1dee051c15eb7470cc6fbc1f3e800340946c3b41a4d183288d",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "shel-sudafrica-adnoc-1b",
-      "ticker": "SHEL",
-      "titolo": "Shell vicina alla cessione delle stazioni di servizio sudafricane per circa 1 miliardo di dollari a una controllata ADNOC",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=b5bb44d6ea9f6d51acb38822299f9b7111d984427b274d9f70de1d588417a645",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "amzn-aws-fde-1b",
-      "ticker": "AMZN",
-      "titolo": "Amazon AWS lancia una nuova divisione da 1 miliardo di dollari di ingegneri AI «sul campo» per le imprese clienti",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=7b8176dae2062480a95d64bb0fed9c06faed1ffb91058f77d6b31daf51be938d",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "lly-verzenios-cina-innovent",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly cede a Innovent Biologics i diritti cinesi di Verzenios con la crescita della concorrenza generica",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=34aec002b32bc63d5f61589ce33fa8bdb4921464c5babb6a2030838a8821994e",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "orcl-fusion-agentic-apps",
-      "ticker": "ORCL",
-      "titolo": "Oracle lancia le Fusion Agentic Applications per automatizzare la supply chain con agenti AI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=ca44da7abb06201dd3ceab9011a4f7c4a986a6027f38c819636d0cb6ded8373b",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "goog-9gw-compute-2028-ms",
-      "ticker": "GOOG",
-      "titolo": "Morgan Stanley: Alphabet potrebbe aggiungere 9 GW di capacità di calcolo nel 2028 e venderne 4 GW a terzi",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=47be44e0e99aa0f812658898d96992210ab0d733ffa7ff95efd3e6ec7d7e5944",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
-      "id": "nato-etf-iran-war-budget-1500b",
-      "ticker": "NATO",
-      "titolo": "Guerra USA-Iran: ceasefire mancato e tensione prolungata sostengono la tesi difesa; Trump valuta un budget militare da 1.500 miliardi",
-      "tipo_evento": "macro tematica",
-      "url": "https://www.tradingview.com/news/zacks:9c34a012d094b:0-defense-etfs-to-gain-as-the-us-iran-war-stokes-global-tension/",
-      "data_invio": "2026-06-30T18:20:00+00:00"
-    },
-    {
       "id": "goog-gemini-capacity-limits-20260701",
       "ticker": "GOOG",
       "titolo": "Google raziona l'accesso a Gemini AI per i clienti cloud: capacità di calcolo al limite",
@@ -2535,6 +2455,86 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=b6413f9b32ce04483eb59613f4634710df326f4aaf1d8eb0156923e6f3fa0ef0",
       "data_invio": "2026-07-30T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-q2-2026-earnings-beat",
+      "ticker": "AMZN",
+      "titolo": "Amazon batte le stime del Q2: AWS vola ai massimi da 18 trimestri, titolo +9,5% after-hours",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c153333c213bd0bbf822b05670157e1c6f6a327cb75bf4feb6f57a07e998acaf",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "aapl-q3-2026-guidance-miss",
+      "ticker": "AAPL",
+      "titolo": "Apple: trimestrale sopra le stime ma la guidance delude, il titolo cede il 6%",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=419ef1025a468273139f9834d13cd79dd470821668f2625df78f3abc02a5a5e0",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "spcx-tesla-china-spinoff-merger",
+      "ticker": "SPCX",
+      "titolo": "Tesla valuta la cessione del business cinese per aprire la strada alla fusione con SpaceX",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=c2617b04b68c60aab17cebbfd00927cc527f926b8d2999458c7b4d458b7ed875",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "avgo-samsung-200b-ai-chip-mou",
+      "ticker": "AVGO",
+      "titolo": "Samsung e Broadcom firmano un accordo AI da 200 miliardi di dollari",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=20c8d3fb8817132f6c9cb0f05c6ecfc27afd73da3e14edb272b18f9a046349a6",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "sndk-wdc-memory-surge-aapl-amzn-catalyst",
+      "ticker": "SNDK",
+      "titolo": "Apple e Amazon segnalano una crisi globale dei chip di memoria: SanDisk e Western Digital volano in after-hours",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=e37f71abb0c1632b6bb0754803b5224b22955b8359b5579cfadd4282f085099e",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "asml-rebound-china-threat-reassessed",
+      "ticker": "ASML",
+      "titolo": "ASML rimbalza del 6,8%: la minaccia cinese sui DUV appare meno immediata",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=a6ebc75a06875306b6a54f757bfee497357be140acec1e7c2452596f5154a823",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "jnj-fda-surgical-robot-dividend64",
+      "ticker": "JNJ",
+      "titolo": "J&J ottiene il via libera FDA al robot chirurgico e alza il dividendo per la 64ª volta consecutiva",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=b041484e866075d65e42e696876fce75ea4787638210e0360f545c8154e8ff86",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "nato-etf-saudi-maritime-coalition",
+      "ticker": "NATO",
+      "titolo": "L'Arabia Saudita annuncia una coalizione marittima multinazionale di difesa",
+      "tipo_evento": "macro tematica",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQVVV1X2lpNHZQWlFIclZsaER1azctU1NVTk5FcjhEYTVULU9NU1JibElRWUYzWllrZFRKY3NiYVRKdnVhS0hoWkRMeWczMnZXX2Y0UnNrMlVPQzN5QWRnMVFacTBPQkNEZ29BTzh0M2dRSU9BZ1ZZNmN0RHoxaE5GbW5aR3NETW5fREF6UklGUHo5ZkM3NTVDdHpkUXNFY0hWZmxUZHB0aEk1NDBtUEd2VTJqV2RwazVoY0lPYnhR",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "intc-14a-eda-tools-certified",
+      "ticker": "INTC",
+      "titolo": "Intel certifica i tool EDA di Synopsys e Keysight per il processo avanzato 14A",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=4a26fbd5c40295fceb6ae5e3347d62aa6a878907df7b68d39ad2a165f1743380",
+      "data_invio": "2026-07-31T05:15:00+00:00"
+    },
+    {
+      "id": "wmt-buyback-program-2026",
+      "ticker": "WMT",
+      "titolo": "Walmart annuncia un imponente programma di riacquisto azionario",
+      "tipo_evento": "dividendi/buyback",
+      "url": "https://finnhub.io/api/news?id=ed469cd6c1b1812df642acb5509920351b88263ab780862631ac196088d99057",
+      "data_invio": "2026-07-31T05:15:00+00:00"
     }
   ]
 }
