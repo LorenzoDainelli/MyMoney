@@ -140,6 +140,43 @@
     return nota(fill(r.n === 1 ? T.cat1 : T.cat, { cat: c, n: r.n, tot: eur(r.tot) }));
   }
 
+  // --- le stesse due righe sulle SPESE di una partita di giro ---------------
+  // Una spesa da farsi rimborsare resta una spesa fatta con la carta: la banca
+  // arrotonda lo stesso, e quei soldi restano nel salvadanaio anche quando il
+  // rimborso arriva. Il rimborso riguarda la spesa, non l'arrotondamento.
+  function giroCarte() {
+    var righe = form.querySelectorAll('.giro-spesa-row');
+    var consumato = 0;          // il tetto del saveback si consuma fra le gambe
+    for (var i = 0; i < righe.length; i++) {
+      var row = righe[i];
+      var box = row.querySelector('.giro-carta');
+      if (!box) continue;
+      var w = D.wallets[String((row.querySelector('[name="spesa_wallet"]') || {}).value)];
+      var inA = row.querySelector('.giro-arr'), inS = row.querySelector('.giro-sav');
+      var onA = row.querySelector('.giro-arr-on'), onS = row.querySelector('.giro-sav-on');
+      if (!w || !w.carta) {
+        // niente regole: campi vuoti, ma NON rimossi — le liste del modulo sono
+        // parallele e un campo mancante sfaserebbe tutte le righe
+        box.style.display = 'none';
+        inA.value = ''; inS.value = '';
+        continue;
+      }
+      var imp = num((row.querySelector('[name="spesa_importo"]') || {}).value);
+      var arr = w.carta.arr && onA.checked ? alProssimoEuro(imp) : 0;
+      var sav = onS.checked ? saveback(imp, w.carta.pct, w.carta.tetto,
+                                       (D.sav_gia || 0) + consumato) : 0;
+      if (!inA.dataset.mio || !onA.checked) inA.value = imp ? eur(arr).replace('€ ', '') : '';
+      if (!inS.dataset.mio || !onS.checked) inS.value = imp ? eur(sav).replace('€ ', '') : '';
+      inA.disabled = !onA.checked;
+      inS.disabled = !onS.checked;
+      consumato += onS.checked ? num(inS.value) : 0;
+      box.style.display = '';
+      row.querySelector('.giro-sav-lbl').textContent = fill(T.csav, { pct: w.carta.pct });
+      row.querySelector('.giro-carta-tit').textContent =
+        imp ? fill(T.ctit, { w: w.nome, tot: eur(imp + (onA.checked ? num(inA.value) : 0)) }) : '';
+    }
+  }
+
   function vuoto() {
     host.innerHTML = '<p class="faint" style="margin:0;font-size:13px;line-height:var(--lh-relaxed);">' +
       esc(T.empty) + '</p>';
@@ -147,7 +184,11 @@
 
   function render() {
     var tipo = (form.querySelector('#mov-tipo') || {}).value || 'uscita';
-    if (tipo === 'giro') { aggiornaCarta(); host.innerHTML = nota(T.giro).replace('margin-top:10px;', ''); return; }
+    if (tipo === 'giro') {
+      aggiornaCarta(); giroCarte();
+      host.innerHTML = nota(T.giro).replace('margin-top:10px;', '');
+      return;
+    }
 
     var extra = aggiornaCarta();
     var imp = num(val('importo'));
@@ -200,6 +241,24 @@
   if (inSav) inSav.addEventListener('input', function () { manuale.sav = true; });
   if (onArr) onArr.addEventListener('change', function () { manuale.arr = false; });
   if (onSav) onSav.addEventListener('change', function () { manuale.sav = false; });
+  // Stessa cosa sulle righe della partita di giro, ma in delega: quelle righe
+  // nascono e spariscono mentre compili, quindi non si possono agganciare una
+  // per una all'avvio.
+  form.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.classList && (t.classList.contains('giro-arr') || t.classList.contains('giro-sav'))) {
+      t.dataset.mio = '1';
+    }
+  });
+  form.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t.classList) return;
+    if (t.classList.contains('giro-arr-on')) {
+      var a = t.closest('.giro-spesa-row').querySelector('.giro-arr'); a.dataset.mio = '';
+    } else if (t.classList.contains('giro-sav-on')) {
+      var s = t.closest('.giro-spesa-row').querySelector('.giro-sav'); s.dataset.mio = '';
+    }
+  });
 
   form.addEventListener('input', render);
   form.addEventListener('change', render);

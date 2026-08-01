@@ -321,3 +321,123 @@ def test_il_saveback_del_movimento_non_riempie_il_tetto_a_se_stesso(test_db):
     tid = _spesa(7.60)                                    # matura 0,07
     e = fin.extra_carta(1, 7.60, QUANDO, escludi_tx=tid)
     assert e["saveback"] == 0.07                          # non 0,03
+
+
+# ==================== partite di giro ====================
+# Una spesa da farsi rimborsare resta una spesa fatta con la carta: la banca
+# arrotonda lo stesso. Il rimborso riguarda la spesa, non l'arrotondamento —
+# quei soldi restano nel salvadanaio anche quando i soldi tornano indietro.
+def _giro(importo=7.60, **kw):
+    s = {"importo": importo, "wallet_id": 1, "categoria": "Regali",
+         "descrizione": "pagato io", "data": QUANDO}
+    s.update(kw)
+    return fin.crea_giro(spese=[s], aperta=True)
+
+
+def test_anche_una_spesa_da_rimborsare_arrotonda(test_db):
+    gid = _giro(7.60)
+    with test_db() as db:
+        gamba = db.query(Transaction).filter(Transaction.giro_id == gid).one()
+        figlie = db.query(Transaction).filter(
+            Transaction.parent_tx_id == gamba.id).order_by(Transaction.id).all()
+    assert [(f.tipo, f.importo, f.origine) for f in figlie] == [
+        (TIPO_TRASFERIMENTO, 0.40, fin.ORIGINE_ARROTONDAMENTO),
+        (TIPO_ENTRATA, 0.07, fin.ORIGINE_SAVEBACK)]
+    saldi = {r["w"].nome: r["saldo"] for r in fin.saldi()["righe"]}
+    assert saldi["Trade Republic"] == 92.00        # 100 − 7,60 − 0,40
+    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.47
+
+
+def test_il_rimborso_non_restituisce_l_arrotondamento(test_db):
+    """Ti ridanno i 7,60 della spesa, non i 40 centesimi finiti nell'oro."""
+    gid = _giro(7.60)
+    fin.chiudi_giro(gid, importo=7.60, wallet_id=1, controparte="babbo", data=QUANDO)
+    saldi = {r["w"].nome: r["saldo"] for r in fin.saldi()["righe"]}
+    assert saldi["Trade Republic"] == 99.60        # rientrati 7,60, non 8,00
+    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.47
+
+
+def test_una_gamba_su_una_carta_senza_regole_non_genera_niente(test_db):
+    gid = fin.crea_giro(aperta=True, spese=[
+        {"importo": 7.60, "wallet_id": 1, "data": QUANDO},     # carta TR
+        {"importo": 5.00, "wallet_id": 3, "data": QUANDO},     # Hype, niente regole
+    ])
+    with test_db() as db:
+        gambe = db.query(Transaction).filter(Transaction.giro_id == gid).all()
+        figlie = db.query(Transaction).filter(Transaction.parent_tx_id.isnot(None)).all()
+    assert len(gambe) == 2 and len(figlie) == 2                # solo quelle della TR
+    assert {f.parent_tx_id for f in figlie} == {
+        next(g.id for g in gambe if g.wallet_id == 1)}
+
+
+def test_il_tetto_si_consuma_anche_fra_le_gambe(test_db):
+    """Due spese nella stessa partita non possono maturare, insieme, più di quel
+    che resta del tetto: nascono nello stesso istante e nessuna delle due vede
+    ancora l'altra scritta."""
+    with test_db() as db:
+        db.get(Wallet, 1).saveback_tetto = 0.10
+        db.commit()
+    fin.crea_giro(aperta=True, spese=[
+        {"importo": 7.60, "wallet_id": 1, "data": QUANDO},     # 0,07
+        {"importo": 7.60, "wallet_id": 1, "data": QUANDO},     # ne restano 0,03
+    ])
+    assert fin.saveback_maturato(ANNO, MESE) == 0.10
+
+
+def test_gli_importi_scritti_a_mano_valgono_anche_nel_giro(test_db):
+    gid = _giro(7.60, arr=0.90, sav=0.0)
+    with test_db() as db:
+        gamba = db.query(Transaction).filter(Transaction.giro_id == gid).one()
+        figlie = db.query(Transaction).filter(Transaction.parent_tx_id == gamba.id).all()
+    assert [(f.importo, f.origine) for f in figlie] == [(0.90, fin.ORIGINE_ARROTONDAMENTO)]
+
+
+def test_il_registro_mostra_la_gamba_una_volta_sola(test_db):
+    _giro(7.60)
+    righe = fin.lista_movimenti()
+    assert len(righe) == 1
+    assert righe[0]["addebito"] == 8.00
+    assert len(righe[0]["figlie"]) == 2
+
+
+def test_cancellare_la_partita_porta_via_anche_le_figlie(test_db):
+    """Il buco che le uscite non avevano più ma i giri sì: elimina_movimento
+    marcava tutte le gambe e si dimenticava delle righe generate, che restavano
+    vive e invisibili — col salvadanaio pieno di soldi senza spiegazione."""
+    gid = _giro(7.60)
+    with test_db() as db:
+        gamba = db.query(Transaction).filter(Transaction.giro_id == gid).one()
+        tid = gamba.id
+    fin.elimina_movimento(tid)
+    assert fin.lista_movimenti() == []
+    with test_db() as db:
+        assert db.query(Transaction).filter(Transaction.deleted.is_(False)).count() == 0
+    assert fin.saldi()["totale"] == 100.0
+
+
+def test_modificare_la_partita_rifa_le_figlie_senza_lasciarne_di_orfane(test_db):
+    """aggiorna_giro rifà le gambe da zero: le vecchie figlie devono morire con
+    loro, altrimenti restano appese a un genitore cancellato."""
+    gid = _giro(7.60)
+    fin.aggiorna_giro(gid, aperta=True, spese=[
+        {"importo": 12.34, "wallet_id": 1, "categoria": "Regali", "data": QUANDO}])
+    with test_db() as db:
+        vive = db.query(Transaction).filter(Transaction.deleted.is_(False)).all()
+        figlie = [t for t in vive if t.parent_tx_id]
+        gambe = [t for t in vive if not t.parent_tx_id]
+    assert len(gambe) == 1 and gambe[0].importo == 12.34
+    assert sorted((f.importo, f.origine) for f in figlie) == [
+        (0.12, fin.ORIGINE_SAVEBACK), (0.66, fin.ORIGINE_ARROTONDAMENTO)]
+    assert all(f.parent_tx_id == gambe[0].id for f in figlie)
+    assert fin.saldi()["righe"] and fin.accantonato_mese(ANNO, MESE) == 0.78
+
+
+def test_il_modulo_di_modifica_ripropone_le_figlie_di_ogni_gamba(test_db):
+    gid = _giro(7.60, arr=0.90)
+    with test_db() as db:
+        tid = db.query(Transaction).filter(Transaction.giro_id == gid).one().id
+    ed = fin.dati_modifica(tid)
+    assert ed["kind"] == "giro"
+    s = ed["spese"][0]
+    assert (s["arr"], s["sav"]) == ("0,90", "0,07")
+    assert s["arr_mio"] is True and s["sav_mio"] is False

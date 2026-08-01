@@ -200,3 +200,76 @@ def test_tombstone_propagata(device_factory, drive_condiviso):
         with dev2.Session() as db:
             t = db.query(Transaction).filter_by(uid=t_uid).first()
             assert t.deleted is True
+
+
+# ---------------- righe generate dalla carta (arrotondamento / saveback) -------
+# Il legame fra la spesa e le sue due righe è un id LOCALE: su un altro
+# dispositivo quell'id è di un altro movimento, o di nessuno. Deve viaggiare per
+# uid, altrimenti sul telefono le due righe arrivano orfane: visibili nel
+# registro come movimenti a sé e non più cancellate insieme alla spesa.
+def _carta_e_salvadanaio(Session):
+    import finance.service as fin
+    with Session() as db:
+        db.add(Wallet(nome="Trade Republic", tipo="carta", saldo_iniziale=100.0,
+                      uid=uuid.uuid4().hex, arrotonda=True, saveback_pct=1.0,
+                      saveback_tetto=15.0))
+        db.add(Wallet(nome=fin.NOME_WALLET_NASCOSTI, tipo="altro",
+                      saldo_iniziale=0.0, uid=uuid.uuid4().hex))
+        db.commit()
+        return db.query(Wallet).filter(Wallet.nome == "Trade Republic").one().id
+
+
+def test_le_righe_generate_restano_legate_sull_altro_dispositivo(device_factory, drive_condiviso):
+    import finance.service as fin
+    dev1, dev2 = device_factory("uno"), device_factory("due")
+
+    with come_device(dev1):
+        wid = _carta_e_salvadanaio(dev1.Session)
+        tid = fin.crea_uscita_carta(data=datetime.now(), importo=7.60,
+                                    wallet_id=wid, categoria_nome="Spesa")
+        assert len(fin.lista_movimenti()) == 1          # una riga, non tre
+        drive_mod.sync_once(client=drive_condiviso)
+
+    with come_device(dev2):
+        drive_mod.sync_once(client=drive_condiviso)
+        # anche qui il registro ne mostra UNA, con le due figlie dentro
+        righe = fin.lista_movimenti()
+        assert len(righe) == 1
+        assert righe[0]["addebito"] == 8.00
+        assert sorted(f["t"].origine for f in righe[0]["figlie"]) == [
+            fin.ORIGINE_ARROTONDAMENTO, fin.ORIGINE_SAVEBACK]
+        # e cancellandola da qui se ne vanno tutte e tre
+        fin.elimina_movimento(righe[0]["t"].id)
+        with dev2.Session() as db:
+            assert db.query(Transaction).filter(Transaction.deleted.is_(False)).count() == 0
+    assert tid                                           # la spesa esisteva davvero
+
+
+def test_la_figlia_che_arriva_prima_del_genitore_si_lega_lo_stesso(device_factory):
+    """Nella lista di operazioni l'ordine non è garantito: se la figlia arriva
+    per prima, il genitore non ha ancora un id da puntare. Il legame si chiude
+    in seconda passata, non si perde."""
+    import finance.service as fin
+    dev = device_factory("solo")
+    with come_device(dev):
+        with dev.Session() as db:
+            db.add(Wallet(nome="Conto", tipo="conto", saldo_iniziale=0.0, uid="w1"))
+            db.commit()
+        padre_uid, figlia_uid = uuid.uuid4().hex, uuid.uuid4().hex
+        base = {"wallet_uid": "w1", "data": datetime.now().isoformat(),
+                "updated_at": datetime.now().isoformat(), "rev": 1, "deleted": False}
+        ops = [
+            {"schema": 1, "uid": figlia_uid, "entity": "transaction", "op": "upsert",
+             "rev": 1, "updated_at": base["updated_at"], "device_id": "altro",
+             "fields": dict(base, tipo="trasferimento", importo=0.40,
+                            origine=fin.ORIGINE_ARROTONDAMENTO, parent_uid=padre_uid)},
+            {"schema": 1, "uid": padre_uid, "entity": "transaction", "op": "upsert",
+             "rev": 1, "updated_at": base["updated_at"], "device_id": "altro",
+             "fields": dict(base, tipo="uscita", importo=7.60)},
+        ]
+        assert sync_mod.import_ops(ops, source_device_id="altro")["applied"] == 2
+        with dev.Session() as db:
+            padre = db.query(Transaction).filter(Transaction.uid == padre_uid).one()
+            figlia = db.query(Transaction).filter(Transaction.uid == figlia_uid).one()
+            assert figlia.parent_tx_id == padre.id
+            assert figlia.origine == fin.ORIGINE_ARROTONDAMENTO
