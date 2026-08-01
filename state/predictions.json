@@ -6369,6 +6369,329 @@
       "inviata": true,
       "titolo": "IBM, BlueQubit e RIKEN ottengono un risultato storico nel quantum computing: vantaggio su computer classici dimostrato",
       "url": "https://finnhub.io/api/news?id=b6413f9b32ce04483eb59613f4634710df326f4aaf1d8eb0156923e6f3fa0ef0"
+    },
+    {
+      "id": "amzn-q2-2026-earnings-beat",
+      "ticker": "AMZN",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 85,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Amazon batte le stime del Q2: AWS vola ai massimi da 18 trimestri, titolo +9,5% after-hours",
+      "url": "https://finnhub.io/api/news?id=c153333c213bd0bbf822b05670157e1c6f6a327cb75bf4feb6f57a07e998acaf"
+    },
+    {
+      "id": "aapl-q3-2026-guidance-miss",
+      "ticker": "AAPL",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 80,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Apple: trimestrale sopra le stime ma la guidance delude, il titolo cede il 6%",
+      "url": "https://finnhub.io/api/news?id=419ef1025a468273139f9834d13cd79dd470821668f2625df78f3abc02a5a5e0"
+    },
+    {
+      "id": "spcx-tesla-china-spinoff-merger",
+      "ticker": "SPCX",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 78,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Tesla valuta la cessione del business cinese per aprire la strada alla fusione con SpaceX",
+      "url": "https://finnhub.io/api/news?id=c2617b04b68c60aab17cebbfd00927cc527f926b8d2999458c7b4d458b7ed875"
+    },
+    {
+      "id": "avgo-samsung-200b-ai-chip-mou",
+      "ticker": "AVGO",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 75,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Samsung e Broadcom firmano un accordo AI da 200 miliardi di dollari",
+      "url": "https://finnhub.io/api/news?id=20c8d3fb8817132f6c9cb0f05c6ecfc27afd73da3e14edb272b18f9a046349a6"
+    },
+    {
+      "id": "sndk-wdc-memory-surge-aapl-amzn-catalyst",
+      "ticker": "SNDK",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Apple e Amazon segnalano una crisi globale dei chip di memoria: SanDisk e Western Digital volano in after-hours",
+      "url": "https://finnhub.io/api/news?id=e37f71abb0c1632b6bb0754803b5224b22955b8359b5579cfadd4282f085099e"
+    },
+    {
+      "id": "asml-rebound-china-threat-reassessed",
+      "ticker": "ASML",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "ASML rimbalza del 6,8%: la minaccia cinese sui DUV appare meno immediata",
+      "url": "https://finnhub.io/api/news?id=a6ebc75a06875306b6a54f757bfee497357be140acec1e7c2452596f5154a823"
+    },
+    {
+      "id": "jnj-fda-surgical-robot-dividend64",
+      "ticker": "JNJ",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "J&J ottiene il via libera FDA al robot chirurgico e alza il dividendo per la 64ª volta consecutiva",
+      "url": "https://finnhub.io/api/news?id=b041484e866075d65e42e696876fce75ea4787638210e0360f545c8154e8ff86"
+    },
+    {
+      "id": "nato-etf-saudi-maritime-coalition",
+      "ticker": "NATO",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "L'Arabia Saudita annuncia una coalizione marittima multinazionale di difesa",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQVVV1X2lpNHZQWlFIclZsaER1azctU1NVTk5FcjhEYTVULU9NU1JibElRWUYzWllrZFRKY3NiYVRKdnVhS0hoWkRMeWczMnZXX2Y0UnNrMlVPQzN5QWRnMVFacTBPQkNEZ29BTzh0M2dRSU9BZ1ZZNmN0RHoxaE5GbW5aR3NETW5fREF6UklGUHo5ZkM3NTVDdHpkUXNFY0hWZmxUZHB0aEk1NDBtUEd2VTJqV2RwazVoY0lPYnhR"
+    },
+    {
+      "id": "intc-14a-eda-tools-certified",
+      "ticker": "INTC",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Intel certifica i tool EDA di Synopsys e Keysight per il processo avanzato 14A",
+      "url": "https://finnhub.io/api/news?id=4a26fbd5c40295fceb6ae5e3347d62aa6a878907df7b68d39ad2a165f1743380"
+    },
+    {
+      "id": "wmt-buyback-program-2026",
+      "ticker": "WMT",
+      "data": "2026-07-31T05:15:00+00:00",
+      "tipo_evento": "dividendi/buyback",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Walmart annuncia un imponente programma di riacquisto azionario",
+      "url": "https://finnhub.io/api/news?id=ed469cd6c1b1812df642acb5509920351b88263ab780862631ac196088d99057"
+    },
+    {
+      "id": "aapl-ceo-tim-cook-exit-2026-07-31",
+      "ticker": "AAPL",
+      "data": "2026-07-31",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 82,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Tim Cook lascia la carica di CEO di Apple dopo la trimestrale Q2 2026",
+      "url": "https://finnhub.io/api/news?id=a38800c885af8c5e8ab2d6a9c76592ff84fe2f01fd1a168cac95ae449a2b97d2"
+    },
+    {
+      "id": "intc-operating-margin-positive-q2-2026-07-31",
+      "ticker": "INTC",
+      "data": "2026-07-31",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Intel torna al margine operativo positivo nel Q2, ma la fonderia è ancora in perdita",
+      "url": "https://finnhub.io/api/news?id=7e6cfad79a4575319eca70a67e672978d1261ae307c865b5a6f81edf43ef1a6a"
+    },
+    {
+      "id": "ssnlf-kospi-record-rally-2026-07-31",
+      "ticker": "SSNLF",
+      "data": "2026-07-31",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "La borsa di Seul segna il miglior giorno della sua storia (+18%): Samsung e SK Hynix trascinano",
+      "url": "https://finnhub.io/api/news?id=ac3df9ca8afe4c9e79de15d2eb95605f0d7e5fb012dd9d80cf56e0bf14436169"
+    },
+    {
+      "id": "spcx-first-earnings-coming-2026-07-31",
+      "ticker": "SPCX",
+      "data": "2026-07-31",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Arrivano i primissimi risultati finanziari pubblici di SpaceX: cosa monitorare",
+      "url": "https://finnhub.io/api/news?id=76fc20a4ba03c8548268ec4fcfa8d93944555d5cc4938a044820b4f60b204888"
+    },
+    {
+      "id": "lly-weight-loss-drugs-slump-2026-07-31",
+      "ticker": "LLY",
+      "data": "2026-07-31",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Eli Lilly e Novo Nordisk scendono sotto livelli tecnici chiave",
+      "url": "https://finnhub.io/api/news?id=3a88c32217c41f78b86568c3164bb1f2efb81aceac0b1fda230efa63850e3102"
+    },
+    {
+      "id": "jpm-fed-hawkish-pause-2026-07-31",
+      "ticker": "JPM",
+      "data": "2026-07-31",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La Fed mantiene una postura hawkish: JPMorgan potrebbe beneficiarne",
+      "url": "https://finnhub.io/api/news?id=01b7b3dc6a3104ea78f9096a7bf014f167a93eb27c83d9ef6db088b299fc469f"
+    },
+    {
+      "id": "jnj-car-t-in-vivo-sail-2026-07-31",
+      "ticker": "JNJ",
+      "data": "2026-07-31",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "J&J rafforza l'oncologia con una partnership nel CAR-T in vivo, possibile acquisizione",
+      "url": "https://finnhub.io/api/news?id=29b85e753ccb50bdf55dc09e87c13e90f80bd77d7cdaafe62d93e0ec38cb60d5"
+    },
+    {
+      "id": "jnj-supply-chain-restructuring-2026-07-31",
+      "ticker": "JNJ",
+      "data": "2026-07-31",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Johnson & Johnson ristruttura la supply chain farmaceutica e chiude alcune strutture",
+      "url": "https://finnhub.io/api/news?id=362a936bf0077aa67e143228a54fabe102f156c0180344305efc8e76e8e53b89"
+    },
+    {
+      "id": "ibm-quantum-2028-bitcoin-2026-07-31",
+      "ticker": "IBM",
+      "data": "2026-07-31",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "IBM punta ai ricavi dal quantum computing entro il 2028: a rischio $437 miliardi in Bitcoin?",
+      "url": "https://finnhub.io/api/news?id=9cb0b9494adad896862121d2c1df989d83091c6b73110936296734d1b35d6c4b"
     }
   ]
 }
