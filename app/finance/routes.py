@@ -94,7 +94,11 @@ def _aggiorna_grafico_patrimonio():
         pass  # il grafico è un extra: mai far fallire il salvataggio
 
 
-def _zip_spese(importi, wallets, categorie, descrizioni, date):
+def _zip_spese(importi, wallets, categorie, descrizioni, date, arr=None, sav=None):
+    """Le liste del form, riga per riga. `arr`/`sav` sono gli importi generati
+    dalla carta: vuoti = li calcola l'app, scritti = valgono quelli. Il modulo li
+    manda per OGNI riga (anche vuoti) così gli indici restano allineati."""
+    arr, sav = arr or [], sav or []
     out = []
     for i, imp in enumerate(importi):
         amount = to_float(imp, 0.0) or 0.0
@@ -104,7 +108,9 @@ def _zip_spese(importi, wallets, categorie, descrizioni, date):
                 "importo": amount, "wallet_id": int(w),
                 "categoria": categorie[i] if i < len(categorie) else "",
                 "descrizione": descrizioni[i] if i < len(descrizioni) else "",
-                "data": to_datetime(date[i]) if i < len(date) and date[i] else None})
+                "data": to_datetime(date[i]) if i < len(date) and date[i] else None,
+                "arr": to_float(arr[i], None) if i < len(arr) else None,
+                "sav": to_float(sav[i], None) if i < len(sav) else None})
     return out
 
 
@@ -137,6 +143,8 @@ def salva_movimento(
     spesa_categoria: list[str] = Form([]),
     spesa_descrizione: list[str] = Form([]),
     spesa_data: list[str] = Form([]),
+    spesa_arr: list[str] = Form([]),
+    spesa_sav: list[str] = Form([]),
     rientro_importo: list[str] = Form([]),
     rientro_wallet: list[str] = Form([]),
     rientro_chi: list[str] = Form([]),
@@ -165,7 +173,7 @@ def salva_movimento(
     elif tipo == TIPO_GIRO:
         service.crea_giro(
             spese=_zip_spese(spesa_importo, spesa_wallet, spesa_categoria,
-                             spesa_descrizione, spesa_data),
+                             spesa_descrizione, spesa_data, spesa_arr, spesa_sav),
             rientri=_zip_rientri(rientro_importo, rientro_wallet, rientro_chi, rientro_data),
             aperta=bool(giro_dopo))
     _aggiorna_grafico_patrimonio()
@@ -305,6 +313,8 @@ def giro_aggiorna(
     spesa_categoria: list[str] = Form([]),
     spesa_descrizione: list[str] = Form([]),
     spesa_data: list[str] = Form([]),
+    spesa_arr: list[str] = Form([]),
+    spesa_sav: list[str] = Form([]),
     rientro_importo: list[str] = Form([]),
     rientro_wallet: list[str] = Form([]),
     rientro_chi: list[str] = Form([]),
@@ -315,7 +325,7 @@ def giro_aggiorna(
     service.aggiorna_giro(
         gid,
         spese=_zip_spese(spesa_importo, spesa_wallet, spesa_categoria,
-                         spesa_descrizione, spesa_data),
+                         spesa_descrizione, spesa_data, spesa_arr, spesa_sav),
         rientri=_zip_rientri(rientro_importo, rientro_wallet, rientro_chi, rientro_data),
         aperta=bool(giro_dopo))
     _aggiorna_grafico_patrimonio()

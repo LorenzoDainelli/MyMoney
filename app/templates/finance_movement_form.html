@@ -28,7 +28,7 @@
 {% macro wallet_opts(sel) %}{% for w in wallets %}<option value="{{ w.id }}" {{ 'selected' if sel is not none and sel==w.id else '' }}>{{ w.nome }}</option>{% endfor %}{% endmacro %}
 
 {# --- una riga SPESA della partita di giro (usata sia iniziale sia come modello da clonare) --- #}
-{% macro spesa_row(imp='', wid=None, cat='', desc='', dt=None) %}
+{% macro spesa_row(imp='', wid=None, cat='', desc='', dt=None, arr='', sav='', arr_mio=False, sav_mio=False) %}
 <div class="giro-row giro-spesa-row" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--surface);position:relative;margin-top:8px;">
   <div class="row3">
     <div class="field"><label>{{ t('fin.amount') }}</label><input type="text" name="spesa_importo" placeholder="0,00" value="{{ imp }}"></div>
@@ -38,6 +38,29 @@
   <div class="row2">
     <div class="field"><label>{{ t('fin.description') }}</label><input type="text" name="spesa_descrizione" value="{{ desc }}"></div>
     <div class="field"><label>{{ t('fin.date') }}</label><input type="datetime-local" name="spesa_data" value="{{ dt or oggi }}"></div>
+  </div>
+  {# Carta che arrotonda anche qui: una spesa da farsi rimborsare resta una spesa
+     fatta con la carta, e la banca arrotonda lo stesso. I campi ci sono in OGNI
+     riga (nascosti dove non servono) perché il modulo manda liste parallele: un
+     campo che non parte sfaserebbe tutti gli indici. #}
+  <div class="giro-carta" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+    <div class="muted giro-carta-tit" style="font-size:12px;margin-bottom:6px;"></div>
+    <div class="row2" style="margin:0;">
+      <div class="field" style="margin:0;">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;">
+          <input type="checkbox" class="giro-arr-on" checked style="width:auto;">
+          <span>{{ t('fin.carta_arr') }}</span>
+        </label>
+        <input type="text" name="spesa_arr" class="giro-arr" inputmode="decimal" placeholder="0,00" value="{{ arr }}" data-mio="{{ '1' if arr_mio else '' }}">
+      </div>
+      <div class="field" style="margin:0;">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;">
+          <input type="checkbox" class="giro-sav-on" checked style="width:auto;">
+          <span class="giro-sav-lbl">{{ t('fin.carta_sav') }}</span>
+        </label>
+        <input type="text" name="spesa_sav" class="giro-sav" inputmode="decimal" placeholder="0,00" value="{{ sav }}" data-mio="{{ '1' if sav_mio else '' }}">
+      </div>
+    </div>
   </div>
   <button type="button" class="btn sm ghost giro-rm" aria-label="{{ t('fin.giro_remove') }}" style="position:absolute;top:8px;right:8px;">✕</button>
 </div>
@@ -159,7 +182,7 @@
     <div class="card-title" style="margin:12px 0 0;font-size:14px;">{{ t('fin.giro_spese_title') }}</div>
     <div id="giro-spese">
       {% if ed_giro %}
-        {% for s in ed.spese %}{{ spesa_row(s.importo, s.wallet_id, s.categoria, s.descrizione, s.data_local) }}{% else %}{{ spesa_row() }}{% endfor %}
+        {% for s in ed.spese %}{{ spesa_row(s.importo, s.wallet_id, s.categoria, s.descrizione, s.data_local, s.arr, s.sav, s.arr_mio, s.sav_mio) }}{% else %}{{ spesa_row() }}{% endfor %}
       {% elif p_giro %}
         {{ spesa_row(('%.2f'|format(p.importo))|replace('.', ',') if p.importo else '', p.wallet_id, p.categoria or '', p.descrizione or '', p.data_local) }}
       {% else %}

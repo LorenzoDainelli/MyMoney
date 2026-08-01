@@ -424,12 +424,15 @@ def elimina_movimento(tid):
         if not t or t.deleted:
             return
         if t.tipo == TIPO_GIRO and (t.giro_id or ""):
-            for r in db.query(Transaction).filter(Transaction.giro_id == t.giro_id).all():
+            gambe = db.query(Transaction).filter(Transaction.giro_id == t.giro_id).all()
+            padri = [r.id for r in gambe]
+            for r in gambe:
                 r.deleted = True
         else:
             t.deleted = True
-            for f in db.query(Transaction).filter(Transaction.parent_tx_id == t.id).all():
-                f.deleted = True
+            padri = [t.id]
+        for f in db.query(Transaction).filter(Transaction.parent_tx_id.in_(padri)).all():
+            f.deleted = True
         db.commit()
 
 
@@ -520,16 +523,21 @@ def regole_carta(wallet_id) -> dict | None:
                 "saveback_tetto": w.saveback_tetto or 0.0}
 
 
-def extra_carta(wallet_id, importo: float, data=None, escludi_tx=None) -> dict:
+def extra_carta(wallet_id, importo: float, data=None, escludi_tx=None,
+                gia_extra: float = 0.0) -> dict:
     """Arrotondamento e saveback PROPOSTI per una spesa. Sempre un dict, così chi
-    chiama non deve distinguere i casi: a zero quando non c'è niente da fare."""
+    chiama non deve distinguere i casi: a zero quando non c'è niente da fare.
+
+    `gia_extra` = saveback già assegnato in questa stessa operazione ma non
+    ancora scritto: serve alle partite di giro, dove più spese nascono insieme e
+    consumano lo stesso tetto mensile."""
     vuoto = {"arrotondamento": 0.0, "saveback": 0.0, "tetto_pieno": False}
     r = regole_carta(wallet_id)
     if not r or not importo or importo <= 0:
         return vuoto
     quando = data or datetime.now()
-    gia = saveback_maturato(quando.year, quando.month)
-    if escludi_tx:                      # in modifica: il vecchio saveward non conta
+    gia = round(saveback_maturato(quando.year, quando.month) + (gia_extra or 0.0), 2)
+    if escludi_tx:                      # in modifica: il vecchio saveback non conta
         gia = round(gia - _importo_figlia(escludi_tx, ORIGINE_SAVEBACK), 2)
     sb = saveback_dovuto(importo, r["saveback_pct"], r["saveback_tetto"], gia)
     return {
@@ -718,9 +726,30 @@ def _riga_rientro(db, gid, aperta, importo, wallet_id, controparte="", data=None
         controparte=(controparte or "").strip())
 
 
+def _figlie_delle_gambe(db, gambe) -> None:
+    """Arrotondamento e saveback su ogni gamba SPESA pagata con una carta che li
+    ha. Una spesa da rimborsare resta una spesa fatta con la carta: la banca
+    arrotonda lo stesso, e quei soldi finiscono nel salvadanaio anche se poi
+    qualcuno ti restituisce l'importo. Il rimborso riguarda la spesa, non
+    l'arrotondamento.
+
+    `gambe` = lista di (riga già flushata, arr, sav) con arr/sav None = calcolali."""
+    consumato = {}          # (anno, mese) -> saveback assegnato qui dentro
+    for riga, arr, sav in gambe:
+        k = (riga.data.year, riga.data.month)
+        prop = extra_carta(riga.wallet_id, riga.importo, riga.data,
+                           gia_extra=consumato.get(k, 0.0))
+        a = prop["arrotondamento"] if arr is None else max(0.0, round(arr, 2))
+        s = prop["saveback"] if sav is None else max(0.0, round(sav, 2))
+        consumato[k] = round(consumato.get(k, 0.0) + s, 2)
+        if a or s:
+            _crea_figlie(db, riga, a, s)
+
+
 def crea_giro(spese, rientri=None, aperta=False):
     """Registra una partita di giro con PIÙ spese e PIÙ rientri (una sola partita).
-    - spese:   lista di dict {importo, wallet_id, categoria, descrizione, data}
+    - spese:   lista di dict {importo, wallet_id, categoria, descrizione, data,
+               arr, sav}  (arr/sav assenti o None = li calcola l'app)
     - rientri: lista di dict {importo, wallet_id, controparte, data}
     Con `aperta=True` (casella 'il rimborso arriverà dopo') gli eventuali rientri
     passati vengono IGNORATI: la partita resta in attesa. I saldi dei portafogli
@@ -732,12 +761,17 @@ def crea_giro(spese, rientri=None, aperta=False):
         return None
     gid = _nuovo_giro_id()
     with SessionLocal() as db:
+        gambe = []
         for s in spese:
-            db.add(_riga_spesa(db, gid, aperta, s.get("importo"), s["wallet_id"],
-                               s.get("categoria", ""), s.get("descrizione", ""), s.get("data")))
+            riga = _riga_spesa(db, gid, aperta, s.get("importo"), s["wallet_id"],
+                               s.get("categoria", ""), s.get("descrizione", ""), s.get("data"))
+            db.add(riga)
+            gambe.append((riga, s.get("arr"), s.get("sav")))
         for r in rientri:
             db.add(_riga_rientro(db, gid, aperta, r.get("importo"), r["wallet_id"],
                                  r.get("controparte", ""), r.get("data")))
+        db.flush()                       # servono gli id delle gambe
+        _figlie_delle_gambe(db, gambe)
         db.commit()
     return gid
 
@@ -821,12 +855,24 @@ def aggiorna_giro(giro_id, spese, rientri=None, aperta=False):
             return False
         for r in rows:                     # tombstone delle vecchie gambe
             r.deleted = True
+        # ...e delle loro righe generate: le gambe vengono ricreate da zero, quindi
+        # le vecchie figlie resterebbero appese a un genitore cancellato — invisibili
+        # nel registro e con i soldi ancora nel salvadanaio.
+        for f in db.query(Transaction).filter(
+                Transaction.parent_tx_id.in_([r.id for r in rows]),
+                Transaction.deleted.is_(False)).all():
+            f.deleted = True
+        gambe = []
         for s in spese:
-            db.add(_riga_spesa(db, giro_id, aperta, s.get("importo"), s["wallet_id"],
-                               s.get("categoria", ""), s.get("descrizione", ""), s.get("data")))
+            riga = _riga_spesa(db, giro_id, aperta, s.get("importo"), s["wallet_id"],
+                               s.get("categoria", ""), s.get("descrizione", ""), s.get("data"))
+            db.add(riga)
+            gambe.append((riga, s.get("arr"), s.get("sav")))
         for r in rientri:
             db.add(_riga_rientro(db, giro_id, aperta, r.get("importo"), r["wallet_id"],
                                  r.get("controparte", ""), r.get("data")))
+        db.flush()
+        _figlie_delle_gambe(db, gambe)
         db.commit()
         return True
 
@@ -857,15 +903,31 @@ def dati_modifica(tid):
             rows = db.query(Transaction).filter(
                 Transaction.giro_id == t.giro_id, Transaction.deleted.is_(False)
             ).order_by(Transaction.data, Transaction.id).all()
+            figlie_per_gamba = {}
+            for f in db.query(Transaction).filter(
+                    Transaction.parent_tx_id.in_([r.id for r in rows]),
+                    Transaction.deleted.is_(False)).all():
+                figlie_per_gamba.setdefault(f.parent_tx_id, {})[f.origine] = \
+                    round(f.importo or 0.0, 2)
             spese, rientri = [], []
             for r in rows:
                 if (r.importo or 0) > 0:                 # gamba spesa (anche del combo)
+                    # come per le uscite: gli importi generati tornano nel modulo
+                    # com'erano, e il flag dice al JS quali avevi corretto tu
+                    gen = figlie_per_gamba.get(r.id, {})
+                    auto = extra_carta(r.wallet_id, r.importo, r.data, escludi_tx=r.id)
                     spese.append({
                         "importo": _fmt_importo_form(r.importo),
                         "wallet_id": r.wallet_id,
                         "categoria": cn.get(r.category_id, "") or "",
                         "descrizione": r.descrizione or "",
                         "data_local": _fmt_dt_form(r.data),
+                        "arr": _fmt_importo_form(gen.get(ORIGINE_ARROTONDAMENTO, 0.0)) if gen else "",
+                        "sav": _fmt_importo_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
+                        "arr_mio": bool(gen and gen.get(ORIGINE_ARROTONDAMENTO, 0.0)
+                                        != auto["arrotondamento"]),
+                        "sav_mio": bool(gen and gen.get(ORIGINE_SAVEBACK, 0.0)
+                                        != auto["saveback"]),
                     })
                 if r.importo_ricevuto is not None:       # gamba rientro (anche del combo)
                     rientri.append({
@@ -1399,6 +1461,9 @@ def movimenti_sync(since=None, limit=None) -> list[dict]:
     with SessionLocal() as db:
         wuid = {w.id: w.uid for w in db.query(Wallet).all()}
         cuid = {c.id: c.uid for c in db.query(Category).all()}
+        # il genitore di una riga generata viaggia per uid: gli id locali non
+        # sono gli stessi su due dispositivi
+        tuid = {t.id: t.uid for t in db.query(Transaction).all()}
         q = select(Transaction).order_by(Transaction.updated_at.desc(), Transaction.id.desc())
         if since_dt:
             q = q.where(Transaction.updated_at > since_dt)
@@ -1415,5 +1480,6 @@ def movimenti_sync(since=None, limit=None) -> list[dict]:
         "giro_id": t.giro_id, "giro_aperta": bool(t.giro_aperta),
         "importo_ricevuto": (round(t.importo_ricevuto, 2) if t.importo_ricevuto is not None else None),
         "data_ricevuto": _iso(t.data_ricevuto), "controparte": t.controparte,
+        "origine": t.origine or "", "parent_uid": tuid.get(t.parent_tx_id),
         "rev": t.rev, "updated_at": _iso(t.updated_at), "deleted": bool(t.deleted),
     } for t in rows]

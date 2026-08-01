@@ -117,9 +117,24 @@ def _transaction_to_fields(t, session) -> dict:
                              if t.importo_ricevuto is not None else None),
         "data_ricevuto": _iso(t.data_ricevuto),
         "controparte": t.controparte or "",
+        # righe generate (arrotondamento/saveback): il legame col movimento che
+        # le ha prodotte viaggia per UID, non per id locale — gli id non sono gli
+        # stessi su due dispositivi. Senza questo, sull'altro telefono le due
+        # righe arriverebbero orfane: visibili nel registro come movimenti a sé
+        # e non più cancellate insieme alla spesa.
+        "origine": t.origine or "",
+        "parent_uid": _uid_movimento(session, t.parent_tx_id),
         "deleted": bool(t.deleted),
         "rev": t.rev, "updated_at": _iso(t.updated_at),
     }
+
+
+def _uid_movimento(session, tid) -> str | None:
+    from finance.models import Transaction
+    if not tid:
+        return None
+    p = session.get(Transaction, tid)
+    return p.uid if p else None
 
 
 def _obj_to_sync(obj, session) -> dict | None:
@@ -305,6 +320,7 @@ def import_ops(ops: list[dict], source_device_id: str = "") -> dict:
             uid_to_cat_id = {c.uid: c.id for c in db.execute(select(Category)).scalars().all()}
             device_id = get_device_id()
 
+            da_collegare = []       # (riga generata, uid del genitore)
             for entity in ("wallet", "category", "transaction"):
                 for op in by_entity[entity]:
                     if _schema_troppo_nuovo(op.get("schema")):
@@ -312,7 +328,8 @@ def import_ops(ops: list[dict], source_device_id: str = "") -> dict:
                         continue
                     try:
                         result = _apply_one(db, op, entity, device_id,
-                                            uid_to_wallet_id, uid_to_cat_id)
+                                            uid_to_wallet_id, uid_to_cat_id,
+                                            da_collegare)
                         if result == "applied":
                             applied += 1
                         else:
@@ -324,6 +341,7 @@ def import_ops(ops: list[dict], source_device_id: str = "") -> dict:
                         log.warning("sync: op saltata uid=%s entity=%s",
                                     op.get("uid", ""), entity, exc_info=True)
 
+            _collega_genitori(db, da_collegare)
             db.commit()
 
     if future > 0:
@@ -332,7 +350,8 @@ def import_ops(ops: list[dict], source_device_id: str = "") -> dict:
     return {"applied": applied, "skipped": skipped, "errors": errors, "future": future}
 
 
-def _apply_one(db, op, entity, local_device_id, uid_to_wallet_id, uid_to_cat_id) -> str:
+def _apply_one(db, op, entity, local_device_id, uid_to_wallet_id, uid_to_cat_id,
+               da_collegare=None) -> str:
     """Applica UNA operazione con merge LWW. Ritorna 'applied' o 'skipped'."""
     from finance.models import Wallet, Category, Transaction
 
@@ -356,6 +375,7 @@ def _apply_one(db, op, entity, local_device_id, uid_to_wallet_id, uid_to_cat_id)
             return "skipped"
         # Il remoto vince: aggiorna i campi
         _set_fields(local, entity, fields, uid_to_wallet_id, uid_to_cat_id)
+        nuovo = local
     else:
         # Record non esiste: inserisci
         obj = ModelClass()
@@ -368,6 +388,10 @@ def _apply_one(db, op, entity, local_device_id, uid_to_wallet_id, uid_to_cat_id)
             uid_to_wallet_id[uid] = obj.id
         elif entity == "category":
             uid_to_cat_id[uid] = obj.id
+        nuovo = obj
+
+    if entity == "transaction" and da_collegare is not None and fields.get("parent_uid"):
+        da_collegare.append((nuovo, fields["parent_uid"]))
 
     return "applied"
 
@@ -403,6 +427,7 @@ def _set_fields(obj, entity, fields, uid_to_wallet_id, uid_to_cat_id):
         obj.importo_ricevuto = fields.get("importo_ricevuto")
         obj.data_ricevuto = _parse_dt(fields.get("data_ricevuto"))
         obj.controparte = fields.get("controparte", "")
+        obj.origine = fields.get("origine", "")
         # Risolvi FK: uid → id locale
         w_uid = fields.get("wallet_uid")
         obj.wallet_id = uid_to_wallet_id.get(w_uid) if w_uid else None
@@ -410,6 +435,27 @@ def _set_fields(obj, entity, fields, uid_to_wallet_id, uid_to_cat_id):
         obj.wallet_to_id = uid_to_wallet_id.get(wt_uid) if wt_uid else None
         cat_uid = fields.get("categoria_uid")
         obj.category_id = uid_to_cat_id.get(cat_uid) if cat_uid else None
+        # il genitore può ancora non esistere (arriva dopo nella stessa lista):
+        # si collega in seconda passata, vedi _collega_genitori
+        if not fields.get("parent_uid"):
+            obj.parent_tx_id = None
+
+
+def _collega_genitori(db, coppie) -> None:
+    """Seconda passata: lega ogni riga generata al suo movimento padre, cercandolo
+    per uid. Serve perché nella lista di operazioni la figlia può arrivare prima
+    del genitore, e un padre non ancora inserito non ha un id da puntare.
+    Una figlia il cui genitore non arriva resta senza legame: meglio una riga
+    visibile di troppo che una riga invisibile e impossibile da cancellare."""
+    from finance.models import Transaction
+    if not coppie:
+        return
+    db.flush()
+    uids = {p for _, p in coppie if p}
+    mappa = {t.uid: t.id for t in db.execute(
+        select(Transaction).where(Transaction.uid.in_(uids))).scalars().all()}
+    for obj, parent_uid in coppie:
+        obj.parent_tx_id = mappa.get(parent_uid)
 
 
 # ── snapshot ────────────────────────────────────────────────────────────────
@@ -555,13 +601,17 @@ def replace_all_from_snapshot(data: dict) -> dict:
                 uid_to_cat_id[c.uid] = c.id
 
             n = 0
+            da_collegare = []
             for fields in data.get("movimenti", []):
                 t = Transaction()
                 t.uid = fields.get("uid") or uuid.uuid4().hex
                 _set_fields(t, "transaction", fields, uid_to_wallet_id, uid_to_cat_id)
                 db.add(t)
+                if fields.get("parent_uid"):
+                    da_collegare.append((t, fields["parent_uid"]))
                 n += 1
 
+            _collega_genitori(db, da_collegare)
             db.commit()
 
     return {"ok": True, "count": n}
