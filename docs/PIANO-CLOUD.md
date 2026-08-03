@@ -52,10 +52,18 @@ funzionano anche staccati.
 
 ## 2. La decisione grossa: che ne facciamo di PWA e sync?
 
+> **DECISO il 03/08/2026 — opzione A: il cloud è l'unica verità.**
+> Conseguenze operative: il login protegge **tutto** (non c'è più una parte che
+> gira solo in casa); la PWA autonoma e il sync via Drive vanno in pensione alla
+> Fase 5; il diario del sync e i suoi backup (§3.2) **non serve** portarli sul
+> server, il problema si cancella da solo; e l'app senza rete non si apre — è il
+> prezzo accettato.
+
 Va decisa **prima** di scrivere il login, perché cambia cosa proteggere.
 
-**Opzione A — Il cloud è l'unica verità.** Il PC e il telefono diventano due
-finestre sulla stessa app. Si spengono la PWA autonoma e il sync via Drive.
+**Opzione A — Il cloud è l'unica verità.** ← *scelta.* Il PC e il telefono
+diventano due finestre sulla stessa app. Si spengono la PWA autonoma e il sync
+via Drive.
 - ➕ Un solo posto dove i dati sono veri. Sparisce un'intera classe di bug.
   Il telefono guadagna **tutte** le funzioni, non il sottoinsieme della PWA.
 - ➖ Senza rete non c'è app. E il codice del sync (mesi di lavoro) va in soffitta.
@@ -101,9 +109,12 @@ Su Cloud Run il disco viene buttato via a ogni spegnimento. Oggi scriviamo:
 | Cosa | Dove | Che fine fa |
 |---|---|---|
 | Il database | `data/finanza.db` | ✔ già risolto: va su Cloud SQL |
-| Diario del sync | `data/sync/` | sparisce → dipende dalla scelta al §2 |
-| Backup del sync | `data/backups/` | sparisce → su Cloud Storage, o si toglie |
+| Diario del sync | `data/sync/` | sparisce → **non è un problema**: con l'opzione A il sync non gira sul server |
+| Backup del sync | `data/backups/` | idem |
 | Cache notizie | `data/news_remote.json` | sparisce, ma **si può rileggere**: sta su GitHub. Va bene in `/tmp` |
+
+Con la scelta A questo capitolo si riduce a una riga sola: la cache delle
+notizie va in `/tmp`, e tutto il resto smette di esistere sul server.
 
 ### 3.3 Le chiavi segrete
 La chiave Gemini e il file di servizio Vertex oggi stanno nella tabella delle
