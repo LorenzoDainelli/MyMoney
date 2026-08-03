@@ -1,270 +1,6 @@
 {
   "items": [
     {
-      "id": "intel-downgrade-boa-20260701",
-      "ticker": "INTC",
-      "titolo": "Intel e semiconduttori sotto pressione: BoA segnala rischio bolla",
-      "tipo_evento": "downgrade",
-      "url": "https://finnhub.io/api/news?id=7b5279c960501f1a6fa8f13db7da0e99cc5f655a971df5bb4832b9ea07fe3460",
-      "data_invio": "2026-07-01T20:05:00Z"
-    },
-    {
-      "id": "meta-schultz-cdo-20260701",
-      "ticker": "META",
-      "titolo": "Meta nomina il primo chief data officer: Schultz a guida della strategia AI",
-      "tipo_evento": "cambio_leadership",
-      "url": "https://finnhub.io/api/news?id=a8b7dc20656a0199c2ed21ef8f9645b4cc7cb6bf27937f8b09edfe9b24df8114",
-      "data_invio": "2026-07-01T20:05:00Z"
-    },
-    {
-      "id": "msft-chevron-ai-power-20260701",
-      "ticker": "MSFT",
-      "titolo": "Chevron firma accordo 20 anni con Microsoft per l'alimentazione dei data center AI",
-      "tipo_evento": "accordo_strategico",
-      "url": "https://finnhub.io/api/news?id=1f4bdea0838cf878216e6bc59b1915de11fbff1f03628ddf47d7b72f8ba0b004",
-      "data_invio": "2026-07-01T20:05:00Z"
-    },
-    {
-      "id": "goog-eu-android-fine-20260702",
-      "ticker": "GOOG",
-      "titolo": "La Corte di Giustizia UE si pronuncia sulla multa record da 4,1 miliardi per Android",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=e6f4142f6ce4d893ada1c816715f7c6e64993f82bf5e4257ddbcaddebb7bd614",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "pltr-surge-93pct-20260702",
-      "ticker": "PLTR",
-      "titolo": "Palantir sale del 9,3% in seduta: mercato premia la scommessa AI enterprise",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=ef99bb6f994d7fe6a12c6d314ed894f1e84616b1f3bdb66cc73454dd432b6fa6",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "spcx-ai-device-wsj-20260702",
-      "ticker": "SPCX",
-      "titolo": "SpaceX avrebbe mostrato agli investitori un prototipo di dispositivo AI: Musk smentisce il WSJ",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=e2067a7adaa76c7e67aa64d817fe3f4184c810f36ab8b68c70c34fc227f50cfd",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "nflx-52wk-low-rebound-20260702",
-      "ticker": "NFLX",
-      "titolo": "Netflix rimbalza del 3,8% dai minimi annuali: smentita l'acquisizione da NBCUniversal",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=960e9178c978c0840da7016d1bbe7278c3fba2711560ac1591ecfca32e71cf46",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "jnj-tecvayli-eu-20260702",
-      "ticker": "JNJ",
-      "titolo": "J&J ottiene via libera in Europa per Tecvayli contro il mieloma multiplo",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=8d1382cd210a15e47704403828aa99de9dce5b7455ea1992f9139623fa1c0f0e",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "msft-workforce-cut-20260702",
-      "ticker": "MSFT",
-      "titolo": "Microsoft annuncia un nuovo ciclo di tagli al personale legati alla ristrutturazione AI",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=3ab49290e348c30392c9e52db2583bc21b20c3658af74aafaff8cdfa82141b15",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "nato-iran-ceasefire-doha-20260702",
-      "ticker": "NATO",
-      "titolo": "Trattative USA-Iran a Doha avanzano positivamente: tregua in vista, petrolio giù per il terzo giorno",
-      "tipo_evento": "macro tematica",
-      "url": "https://www.cnn.com/2026/07/01/world/live-news/iran-war-trump",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "aapl-2027-roadmap-20260702",
-      "ticker": "AAPL",
-      "titolo": "Apple pianifica una lineup rinnovata per il 2027: nuovo iPad Pro e MacBook Pro entry-level ridisegnato",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=33fabf81a0225fb59c5f88194e39e2176eb39da80420441223dbbe21146513f3",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "amzn-trainium-external-20260702",
-      "ticker": "AMZN",
-      "titolo": "Amazon prepara la vendita dei chip AI Trainium a clienti esterni ad AWS",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=9eea8535de31c1265d94218acfcd7b39677d1ee969ae1e2a1b870a785220455f",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "ssnlf-hbm-capex-oversupply-20260702",
-      "ticker": "SSNLF",
-      "titolo": "Investimenti statali massicci nella memoria HBM: rischio di eccesso di offerta dopo il 2030",
-      "tipo_evento": "macro tematica",
-      "url": "https://finnhub.io/api/news?id=6a3044b06ab9af4115b5fe67b63e5259e38b67d7748df60dbab25b79f4ffd56d",
-      "data_invio": "2026-07-02T05:05:00+00:00"
-    },
-    {
-      "id": "amgn-roche-kras-fase3-luglio2026",
-      "ticker": "AMGN",
-      "titolo": "Farmaco Roche batte Amgen in uno studio di fase 3 sul cancro al polmone",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=876c3db4f0d604dedad75b16adaa36eb7e43046ddc12b8b5a496ca3d3a61c3bb",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "ttwo-gta6-vendite-luglio2026",
-      "ticker": "TTWO",
-      "titolo": "GTA 6 parte bene: vendite forti per Take-Two, analista ribadisce Buy a 293 dollari",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=df3c2a83b672f037750b3163225bd569a0db2fc2ebea66788329db1dd96063c6",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "msft-frontier-company-ai-luglio2026",
-      "ticker": "MSFT",
-      "titolo": "Microsoft crea una nuova divisione AI da 2,5 miliardi per la consulenza enterprise",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=55624a44aff6eb8c6211e811e18f6c95a0be550898a08f731f430fd28386a46c",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "jpm-ai-chief-pensione-luglio2026",
-      "ticker": "JPM",
-      "titolo": "JPMorgan: la responsabile della strategia AI lascia a fine anno, il CTO prende le redini",
-      "tipo_evento": "cambio CEO/management",
-      "url": "https://finnhub.io/api/news?id=f43d07bf4ac386860547d38abc54e61a00480ee4528540ab32e6685fdc4becea",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "spcx-daiwa-initiation-luglio2026",
-      "ticker": "SPCX",
-      "titolo": "Daiwa avvia la copertura di SpaceX con Neutrale e target a 175 dollari",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=da6191deb4485a35264a60622c483eef587f9c6ca1e655348453041cb776d5dd",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "goog-meta-anthropic-global-luglio2026",
-      "ticker": "GOOG",
-      "titolo": "USA tolgono le restrizioni all'export per Anthropic: nuova pressione competitiva su Google e Meta",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=712fd5d981e4ea610f9eb8efc132417eb0626e629a19616f17a57f9a5adb23d7",
-      "data_invio": "2026-07-02T17:10:00+00:00"
-    },
-    {
-      "id": "sndk-wdc-ai-memory-glut-2026-07-03",
-      "ticker": "SNDK",
-      "titolo": "Crollo dei titoli memoria e storage: paura di eccesso di offerta legato all'AI",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=ee795b9a30e133a799e29d1ae360579ebbab833755df015e887c6700ae8922aa",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "wdc-stock-down-992-2026-07-03",
-      "ticker": "WDC",
-      "titolo": "Crollo dei titoli memoria e storage: paura di eccesso di offerta legato all'AI",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=f9f172d966ae65cdf41e1f51b799da1f983602d86d8770f213349d9701ad7de1",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "aapl-ai-memory-strategy-2026-07-03",
-      "ticker": "AAPL",
-      "titolo": "Apple sale del 4,1%: il mercato premia la nuova strategia sulle memorie AI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=050e6da10683050edf69358e856258fcabecfdab4b48dbb6f5cf03d1dc18b3d6",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "nato-5pct-gdp-iran-khamenei-2026-07-03",
-      "ticker": "NATO",
-      "titolo": "NATO al 5% PIL in difesa entro il 2035; Khamenei morto, tensioni in Iran in aumento",
-      "tipo_evento": "macro tematica",
-      "url": "https://247wallst.com/investing/2026/07/02/nato-just-committed-to-5-percent-of-gdp-on-defense-by-2035-and-these-3-etfs-capture-the-multi-year-spending-wave/",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "ssnlf-anthropic-chip-talks-2026-07-03",
-      "ticker": "SSNLF",
-      "titolo": "Samsung in trattativa con Anthropic per produrre chip AI personalizzati",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=879b2ada384861c7d4466f096c16bff8c83ee479ee8fcba9d7de1809eaa75469",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "nflx-up-53pct-2026-07-03",
-      "ticker": "NFLX",
-      "titolo": "Netflix sale del 5,3%: indiscrezioni su scenario competitivo favorevole",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c2df0ae700ac0353d4e4f610e5a5a3888e7c2d0832e8dff3e5c81429c792234b",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "amgn-favorable-ruling-2026-07-03",
-      "ticker": "AMGN",
-      "titolo": "Amgen ottiene una sentenza favorevole: titolo su del 3,1%",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=03dd84a049fa940ed811f34542ecc83d6d561022c912915f3b233b5947039ce0",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "meta-cloud-entry-2026-07-03",
-      "ticker": "META",
-      "titolo": "Meta vuole entrare nel cloud: possibile pressione sui grandi fornitori",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=58b15272319f6ff1bc70492ed59291a23db1185492573db0e5c7a615343ab7c4",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "pltr-davidson-buy-upgrade-2026-07-03",
-      "ticker": "PLTR",
-      "titolo": "Palantir promosso a Buy da D.A. Davidson: titolo +2,7%",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=c174b0bd26fb7c7a1b7a95adb67d47cc01b18591b878f33aba32e5e0261820a9",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "ko-india-ipo-2026-07-03",
-      "ticker": "KO",
-      "titolo": "Coca-Cola punta a valutare 10 miliardi la divisione indiana: IPO nel 2027",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=7053a151d0c8b00efea4cb96051e3133c57a7cfb769c3dfafede056bbaa66561",
-      "data_invio": "2026-07-03T05:10:00+00:00"
-    },
-    {
-      "id": "meta-samsung-chip-ai-6b",
-      "ticker": "META",
-      "titolo": "Meta in trattativa con Samsung per un accordo chip AI da 6,5 miliardi di dollari",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=4eee4b12ce9350535b013fa3f8e7251415c28d680b0b4bddc2c4be40e1f249ad",
-      "data_invio": "2026-07-03T17:07:19+00:00"
-    },
-    {
-      "id": "macro-payroll-giugno-57k",
-      "ticker": "MACRO",
-      "titolo": "Occupazione USA a giugno: 57.000 nuovi posti, metà delle attese — pressione tassi in calo",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=aa77597b141cf2bf2762dc4ae18230dee476a25be96b7856ce9db7c1481d34a5",
-      "data_invio": "2026-07-03T17:07:19+00:00"
-    },
-    {
-      "id": "nflx-omnicom-ai-ad-partnership",
-      "ticker": "NFLX",
-      "titolo": "Netflix balza del 9,5% dopo l'accordo pubblicitario AI con Omnicom",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=129de8ed6e8ac1f98e1af8d6a14180646d28676b23ab7005ad5179b8e838a159",
-      "data_invio": "2026-07-03T17:07:19+00:00"
-    },
-    {
-      "id": "spcx-amazon-leo-390-satelliti",
-      "ticker": "SPCX",
-      "titolo": "Il rivale di Starlink targato Amazon supera 390 satelliti: servizio internet atteso entro fine 2026",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=1235b1231c1a3aec1665cdf62773221915da07469e8ff4b743cf9aa52a7d0446",
-      "data_invio": "2026-07-03T17:07:19+00:00"
-    },
-    {
       "id": "orcl-worst-month-1990",
       "ticker": "ORCL",
       "titolo": "Oracle crolla del 35% a giugno: il mese peggiore dal 1990",
@@ -2455,6 +2191,158 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=9cb0b9494adad896862121d2c1df989d83091c6b73110936296734d1b35d6c4b",
       "data_invio": "2026-07-31T17:10:00+00:00"
+    },
+    {
+      "id": "nato-iran-deescalation-20260803",
+      "ticker": "NATO",
+      "titolo": "Trump annulla l'attacco all'Iran: de-escalation mette pressione sull'ETF difesa",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.aljazeera.com/news/2026/8/2/trump-cancels-iran-strike-says-deal-perimeters-reached",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-q2-earnings-20260803",
+      "ticker": "PLTR",
+      "titolo": "Palantir riporta i risultati Q2 oggi: Wall Street divisa tra crescita AI e valutazione elevata",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=f2aebad449c8b79f1d197554e2766c2fade060f1f13337e566e5fd0101998c60",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "shel-iran-oil-drop-20260803",
+      "ticker": "SHEL",
+      "titolo": "Petrolio crolla dopo la cancellazione dell'attacco USA all'Iran: cambio di contesto per Shell",
+      "tipo_evento": "macro",
+      "url": "https://www.benzinga.com/news/politics/26/08/60862777/trump-calls-off-massive-attack-on-iran-as-talks-resume",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "aapl-memoria-iphone-prezzi-20260803",
+      "ticker": "AAPL",
+      "titolo": "I costi crescenti dei chip di memoria minacciano i margini Apple: iPhone più caro in vista?",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=cb1bb3c5410a42bc0ee6b8bbdc6b7d3ffbac4af327f9186fa0b19d99e0841de8",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "spcx-xai-gas-plant-20260803",
+      "ticker": "SPCX",
+      "titolo": "SpaceX costruisce una centrale a gas da 1,2 GW per alimentare i data center di xAI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=ee4c673d9f7d024c3bd33fbc3e4e18a7ec5cb33281fbff1f8c3ecfd1c0cf6767",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "aapl-morgan-stanley-cauto-20260803",
+      "ticker": "AAPL",
+      "titolo": "Morgan Stanley adotta un tono cauto su Apple dopo la trimestrale: percorso AI ancora incerto",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=f9ed2111be961165e41dc5bcea60108dd2f9616ebf2c1099096cda6edabb8652",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "amzn-zoox-dot-regulatory-20260803",
+      "ticker": "AMZN",
+      "titolo": "Il DOT USA accelera i veicoli autonomi: Amazon ottiene un'esenzione temporanea per Zoox",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=2033e23e2a5338fc2b96d7eeb3540e115f962af085b18904c5d001b87a7fb1ae",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "msft-linkedin-q2-20260803",
+      "ticker": "MSFT",
+      "titolo": "LinkedIn cresce a doppia cifra nel Q2: ulteriore conferma dei risultati solidi di Microsoft",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=cea5cdc909171864cad7be178f48a08782e1b067bdd579aa395900859274f8b4",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "goog-abel-berkshire-20260803",
+      "ticker": "GOOG",
+      "titolo": "Il successore di Buffett, Greg Abel, mostra interesse per Alphabet: possibile investimento di Berkshire",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=0d7526e6b521de0e09892d31f27247af43bc68d7ed2c892c5f44607285717eea",
+      "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-dod-contract-7b-20260803",
+      "ticker": "ORCL",
+      "titolo": "Oracle firma un contratto decennale da 7 miliardi di dollari con il Dipartimento della Difesa USA",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=9b1bda4b84dacdc301589f616977acfa89d3ce60fe3620625aa0a34e0e251ca8",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "lly-fda-breakthrough-olomorasib-20260803",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly ottiene dalla FDA la designazione Breakthrough Therapy per olomorasib nel cancro al pancreas",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=959b6a402444ba827d62cfaffb1971837db6ea44661f7c6cd2a5154b36374c1e",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-3trillion-market-cap-20260803",
+      "ticker": "AMZN",
+      "titolo": "Amazon supera i 3.000 miliardi di dollari di capitalizzazione grazie all'ottimismo sull'AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=7a1de69fe87b1ee907cc790ac500b4de042a5cc0d016a531f9738a33f967117d",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "wdc-pre-earnings-seagate-20260803",
+      "ticker": "WDC",
+      "titolo": "Seagate vola dopo una trimestrale solida: gli investitori ora guardano ai risultati di Western Digital",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=0932fb0bb5b26e0f2a3e3873a77e1e9bfed9712cda4f8526412dd7f1c4b1f110",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "nflx-selloff-post-earnings-20260803",
+      "ticker": "NFLX",
+      "titolo": "Netflix cede il 10% nonostante ricavi record: gli analisti ritengono il sell-off eccessivo",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c2f6fbe67e9e6fe30e74ba92e1073c6f53008b1e57cb7d82a26205cc731c1ae7",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "pltr-mrcy-defense-partnership-20260803",
+      "ticker": "PLTR",
+      "titolo": "Palantir e Mercury Systems annunciano una partnership per automatizzare la produzione militare USA con l'AI",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=02e21c22132f611b48c0035337efba1a64c9084aa03d7a874ddb4cf4021047b4",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "avgo-msft-goldman-conviction-20260803",
+      "ticker": "AVGO",
+      "titolo": "Goldman Sachs rimuove Broadcom dalla sua lista dei preferiti e aggiunge Microsoft nell'aggiornamento di agosto",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=6d5dea5d514acf65b00583fd0a8cc0080a09578686e11220b95315049c260bed",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "shel-totalenergies-renewables-20260803",
+      "ticker": "SHEL",
+      "titolo": "Shell cede il portafoglio rinnovabili europeo a TotalEnergies, che vende il 50% a KKR per 1,8 miliardi",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=4c5d5ae5c7aabe8ddfad4fceac9f41aff7fa8fbcc9e7d2c0305f0ba8e03583cd",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "jpm-housing-750b-20260803",
+      "ticker": "JPM",
+      "titolo": "JPMorgan si impegna a canalizzare 750 miliardi di dollari nel mercato immobiliare USA nel prossimo decennio",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=74fcaac45e20227bcc2f0b368cf2a3502c06a9f1d23ffc5b03bd4b8713a1220c",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "amgn-earnings-q2-20260803",
+      "ticker": "AMGN",
+      "titolo": "Amgen presenta i risultati del secondo trimestre domani: cosa aspettarsi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=9f2de0229b2b4e6e200d2cc5d04a8b90a4958b58cedca556c1f5b1a8b34d5020",
+      "data_invio": "2026-08-03T17:10:00+00:00"
     }
   ]
 }

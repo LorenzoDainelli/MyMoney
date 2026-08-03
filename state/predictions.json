@@ -6692,6 +6692,431 @@
       "inviata": true,
       "titolo": "IBM punta ai ricavi dal quantum computing entro il 2028: a rischio $437 miliardi in Bitcoin?",
       "url": "https://finnhub.io/api/news?id=9cb0b9494adad896862121d2c1df989d83091c6b73110936296734d1b35d6c4b"
+    },
+    {
+      "id": "nato-iran-deescalation-20260803",
+      "ticker": "NATO",
+      "data": "2026-08-03",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Trump annulla l'attacco all'Iran: de-escalation mette pressione sull'ETF difesa",
+      "url": "https://www.aljazeera.com/news/2026/8/2/trump-cancels-iran-strike-says-deal-perimeters-reached"
+    },
+    {
+      "id": "pltr-q2-earnings-20260803",
+      "ticker": "PLTR",
+      "data": "2026-08-03",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Palantir riporta i risultati Q2 oggi: Wall Street divisa tra crescita AI e valutazione elevata",
+      "url": "https://finnhub.io/api/news?id=f2aebad449c8b79f1d197554e2766c2fade060f1f13337e566e5fd0101998c60"
+    },
+    {
+      "id": "shel-iran-oil-drop-20260803",
+      "ticker": "SHEL",
+      "data": "2026-08-03",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Petrolio crolla dopo la cancellazione dell'attacco USA all'Iran: cambio di contesto per Shell",
+      "url": "https://www.benzinga.com/news/politics/26/08/60862777/trump-calls-off-massive-attack-on-iran-as-talks-resume"
+    },
+    {
+      "id": "aapl-memoria-iphone-prezzi-20260803",
+      "ticker": "AAPL",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "I costi crescenti dei chip di memoria minacciano i margini Apple: iPhone più caro in vista?",
+      "url": "https://finnhub.io/api/news?id=cb1bb3c5410a42bc0ee6b8bbdc6b7d3ffbac4af327f9186fa0b19d99e0841de8"
+    },
+    {
+      "id": "spcx-xai-gas-plant-20260803",
+      "ticker": "SPCX",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX costruisce una centrale a gas da 1,2 GW per alimentare i data center di xAI",
+      "url": "https://finnhub.io/api/news?id=ee4c673d9f7d024c3bd33fbc3e4e18a7ec5cb33281fbff1f8c3ecfd1c0cf6767"
+    },
+    {
+      "id": "aapl-morgan-stanley-cauto-20260803",
+      "ticker": "AAPL",
+      "data": "2026-08-03",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Morgan Stanley adotta un tono cauto su Apple dopo la trimestrale: percorso AI ancora incerto",
+      "url": "https://finnhub.io/api/news?id=f9ed2111be961165e41dc5bcea60108dd2f9616ebf2c1099096cda6edabb8652"
+    },
+    {
+      "id": "amzn-zoox-dot-regulatory-20260803",
+      "ticker": "AMZN",
+      "data": "2026-08-03",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il DOT USA accelera i veicoli autonomi: Amazon ottiene un'esenzione temporanea per Zoox",
+      "url": "https://finnhub.io/api/news?id=2033e23e2a5338fc2b96d7eeb3540e115f962af085b18904c5d001b87a7fb1ae"
+    },
+    {
+      "id": "msft-linkedin-q2-20260803",
+      "ticker": "MSFT",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "LinkedIn cresce a doppia cifra nel Q2: ulteriore conferma dei risultati solidi di Microsoft",
+      "url": "https://finnhub.io/api/news?id=cea5cdc909171864cad7be178f48a08782e1b067bdd579aa395900859274f8b4"
+    },
+    {
+      "id": "goog-abel-berkshire-20260803",
+      "ticker": "GOOG",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il successore di Buffett, Greg Abel, mostra interesse per Alphabet: possibile investimento di Berkshire",
+      "url": "https://finnhub.io/api/news?id=0d7526e6b521de0e09892d31f27247af43bc68d7ed2c892c5f44607285717eea"
+    },
+    {
+      "id": "orcl-dod-contract-7b-20260803",
+      "ticker": "ORCL",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 80,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Oracle firma un contratto decennale da 7 miliardi di dollari con il Dipartimento della Difesa USA",
+      "url": "https://finnhub.io/api/news?id=9b1bda4b84dacdc301589f616977acfa89d3ce60fe3620625aa0a34e0e251ca8"
+    },
+    {
+      "id": "lly-fda-breakthrough-olomorasib-20260803",
+      "ticker": "LLY",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly ottiene dalla FDA la designazione Breakthrough Therapy per olomorasib nel cancro al pancreas",
+      "url": "https://finnhub.io/api/news?id=959b6a402444ba827d62cfaffb1971837db6ea44661f7c6cd2a5154b36374c1e"
+    },
+    {
+      "id": "amzn-3trillion-market-cap-20260803",
+      "ticker": "AMZN",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Amazon supera i 3.000 miliardi di dollari di capitalizzazione grazie all'ottimismo sull'AI",
+      "url": "https://finnhub.io/api/news?id=7a1de69fe87b1ee907cc790ac500b4de042a5cc0d016a531f9738a33f967117d"
+    },
+    {
+      "id": "wdc-pre-earnings-seagate-20260803",
+      "ticker": "WDC",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Seagate vola dopo una trimestrale solida: gli investitori ora guardano ai risultati di Western Digital",
+      "url": "https://finnhub.io/api/news?id=0932fb0bb5b26e0f2a3e3873a77e1e9bfed9712cda4f8526412dd7f1c4b1f110"
+    },
+    {
+      "id": "nflx-selloff-post-earnings-20260803",
+      "ticker": "NFLX",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Netflix cede il 10% nonostante ricavi record: gli analisti ritengono il sell-off eccessivo",
+      "url": "https://finnhub.io/api/news?id=c2f6fbe67e9e6fe30e74ba92e1073c6f53008b1e57cb7d82a26205cc731c1ae7"
+    },
+    {
+      "id": "pltr-mrcy-defense-partnership-20260803",
+      "ticker": "PLTR",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Palantir e Mercury Systems annunciano una partnership per automatizzare la produzione militare USA con l'AI",
+      "url": "https://finnhub.io/api/news?id=02e21c22132f611b48c0035337efba1a64c9084aa03d7a874ddb4cf4021047b4"
+    },
+    {
+      "id": "avgo-msft-goldman-conviction-20260803",
+      "ticker": "AVGO",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Goldman Sachs rimuove Broadcom dalla sua lista dei preferiti e aggiunge Microsoft nell'aggiornamento di agosto",
+      "url": "https://finnhub.io/api/news?id=6d5dea5d514acf65b00583fd0a8cc0080a09578686e11220b95315049c260bed"
+    },
+    {
+      "id": "shel-totalenergies-renewables-20260803",
+      "ticker": "SHEL",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Shell cede il portafoglio rinnovabili europeo a TotalEnergies, che vende il 50% a KKR per 1,8 miliardi",
+      "url": "https://finnhub.io/api/news?id=4c5d5ae5c7aabe8ddfad4fceac9f41aff7fa8fbcc9e7d2c0305f0ba8e03583cd"
+    },
+    {
+      "id": "jpm-housing-750b-20260803",
+      "ticker": "JPM",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "JPMorgan si impegna a canalizzare 750 miliardi di dollari nel mercato immobiliare USA nel prossimo decennio",
+      "url": "https://finnhub.io/api/news?id=74fcaac45e20227bcc2f0b368cf2a3502c06a9f1d23ffc5b03bd4b8713a1220c"
+    },
+    {
+      "id": "amgn-earnings-q2-20260803",
+      "ticker": "AMGN",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amgen presenta i risultati del secondo trimestre domani: cosa aspettarsi",
+      "url": "https://finnhub.io/api/news?id=9f2de0229b2b4e6e200d2cc5d04a8b90a4958b58cedca556c1f5b1a8b34d5020"
+    },
+    {
+      "id": "shel-trump-oil-warning-20260803",
+      "ticker": "SHEL",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Trump chiede alle compagnie petrolifere di abbassare immediatamente i prezzi alla pompa",
+      "url": "https://finnhub.io/api/news?id=b0ac426e87b2867f6d6d9ed8a9897facf816c881dd36132077a89ed1c05e3ae7"
+    },
+    {
+      "id": "spcx-first-earnings-20260803",
+      "ticker": "SPCX",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Gli investitori puntano i riflettori sul primo report sugli utili di SpaceX questa settimana",
+      "url": "https://finnhub.io/api/news?id=29d44dce1111f32d44ef75c50f706f725885602a9b957ebf400e082af441e8b0"
+    },
+    {
+      "id": "intc-whitehouse-ai-framework-20260803",
+      "ticker": "INTC",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "La Casa Bianca riunisce le aziende AI martedì per rivedere il framework normativo sull'intelligenza artificiale",
+      "url": "https://finnhub.io/api/news?id=1b7b063e8726eb64b5c62a0dfb35849055db97c649eb4666d757871f19f51c96"
+    },
+    {
+      "id": "ibm-decline-33pct-20260803",
+      "ticker": "IBM",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": false,
+      "titolo": "IBM è scesa del 33% dai massimi storici: il rendimento da dividendo supera il 3%",
+      "url": "https://finnhub.io/api/news?id=0784813e5b01ed8ed39414c7dee56c3862366e786cefe3a979eaf60c1c0822c8"
+    },
+    {
+      "id": "ibm-accenture-unicredit-banking-20260803",
+      "ticker": "IBM",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "IBM collabora con Accenture e UniCredit per sviluppare una piattaforma bancaria di nuova generazione",
+      "url": "https://finnhub.io/api/news?id=3bc34b51d3288296dc467bd608fc03829919440e6cde0d1302bc933b5f575aae"
+    },
+    {
+      "id": "nflx-board-change-sweeney-20260803",
+      "ticker": "NFLX",
+      "data": "2026-08-03T17:10:00+00:00",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Netflix: Anne Sweeney lascia il CDA, nuova nomina e accordi APAC segnalano un possibile cambio strategico",
+      "url": "https://finnhub.io/api/news?id=0be93ea3c0fbcd3ded10db9cc094a6106582e9ab1bb901238ee992efde9fffc5"
     }
   ]
 }
