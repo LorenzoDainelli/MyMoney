@@ -1,0 +1,46 @@
+# Cosa NON viene caricato su Google quando si pubblica l'app.
+#
+# Serve un file a parte oltre a .dockerignore: quello vale per la costruzione
+# dell'immagine, QUESTO vale per il caricamento dei file verso Google. Senza,
+# `gcloud run deploy --source` manderebbe su tutta la cartella.
+#
+# La riga che conta è la prima: app/data/ contiene il database con i movimenti
+# veri, i saldi e le chiavi segrete. Non deve lasciare questo computer.
+# (Sarebbe escluso anche via .gitignore, ma su una cosa del genere non ci si
+# affida a un comportamento implicito: si scrive.)
+
+app/data/
+**/*.db
+**/*.db-journal
+**/*.sqlite
+
+# Segreti e chiavi, in qualunque forma
+*.pem
+*.key
+**/service-account*.json
+.env
+.env.*
+
+# Roba che serve solo sul PC
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+app/tests/
+tools/
+backup-*/
+
+# Storia e attrezzi di sviluppo
+.git/
+.github/
+.claude/
+
+# Il guscio PWA e i riferimenti di design: con il cloud come unica verità non
+# vengono serviti da qui
+pwa/
+design_reference/
+
+# Documentazione: si legge su GitHub
+docs/
+*.md
