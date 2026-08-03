@@ -2263,6 +2263,86 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=0d7526e6b521de0e09892d31f27247af43bc68d7ed2c892c5f44607285717eea",
       "data_invio": "2026-08-03T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-dod-contract-7b-20260803",
+      "ticker": "ORCL",
+      "titolo": "Oracle firma un contratto decennale da 7 miliardi di dollari con il Dipartimento della Difesa USA",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=9b1bda4b84dacdc301589f616977acfa89d3ce60fe3620625aa0a34e0e251ca8",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "lly-fda-breakthrough-olomorasib-20260803",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly ottiene dalla FDA la designazione Breakthrough Therapy per olomorasib nel cancro al pancreas",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=959b6a402444ba827d62cfaffb1971837db6ea44661f7c6cd2a5154b36374c1e",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-3trillion-market-cap-20260803",
+      "ticker": "AMZN",
+      "titolo": "Amazon supera i 3.000 miliardi di dollari di capitalizzazione grazie all'ottimismo sull'AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=7a1de69fe87b1ee907cc790ac500b4de042a5cc0d016a531f9738a33f967117d",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "wdc-pre-earnings-seagate-20260803",
+      "ticker": "WDC",
+      "titolo": "Seagate vola dopo una trimestrale solida: gli investitori ora guardano ai risultati di Western Digital",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=0932fb0bb5b26e0f2a3e3873a77e1e9bfed9712cda4f8526412dd7f1c4b1f110",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "nflx-selloff-post-earnings-20260803",
+      "ticker": "NFLX",
+      "titolo": "Netflix cede il 10% nonostante ricavi record: gli analisti ritengono il sell-off eccessivo",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c2f6fbe67e9e6fe30e74ba92e1073c6f53008b1e57cb7d82a26205cc731c1ae7",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "pltr-mrcy-defense-partnership-20260803",
+      "ticker": "PLTR",
+      "titolo": "Palantir e Mercury Systems annunciano una partnership per automatizzare la produzione militare USA con l'AI",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=02e21c22132f611b48c0035337efba1a64c9084aa03d7a874ddb4cf4021047b4",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "avgo-msft-goldman-conviction-20260803",
+      "ticker": "AVGO",
+      "titolo": "Goldman Sachs rimuove Broadcom dalla sua lista dei preferiti e aggiunge Microsoft nell'aggiornamento di agosto",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=6d5dea5d514acf65b00583fd0a8cc0080a09578686e11220b95315049c260bed",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "shel-totalenergies-renewables-20260803",
+      "ticker": "SHEL",
+      "titolo": "Shell cede il portafoglio rinnovabili europeo a TotalEnergies, che vende il 50% a KKR per 1,8 miliardi",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=4c5d5ae5c7aabe8ddfad4fceac9f41aff7fa8fbcc9e7d2c0305f0ba8e03583cd",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "jpm-housing-750b-20260803",
+      "ticker": "JPM",
+      "titolo": "JPMorgan si impegna a canalizzare 750 miliardi di dollari nel mercato immobiliare USA nel prossimo decennio",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=74fcaac45e20227bcc2f0b368cf2a3502c06a9f1d23ffc5b03bd4b8713a1220c",
+      "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "amgn-earnings-q2-20260803",
+      "ticker": "AMGN",
+      "titolo": "Amgen presenta i risultati del secondo trimestre domani: cosa aspettarsi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=9f2de0229b2b4e6e200d2cc5d04a8b90a4958b58cedca556c1f5b1a8b34d5020",
+      "data_invio": "2026-08-03T17:10:00+00:00"
     }
   ]
 }
