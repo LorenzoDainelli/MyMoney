@@ -9,13 +9,15 @@ import json
 import subprocess
 import urllib.parse
 
-from shared.config import APP_DIR
+from shared.config import APP_DIR, CACHE_DIR
 
 # state/ sta alla radice del repo, un livello sopra app/
 STATE_DIR = APP_DIR.parent / "state"
 PREDICTIONS = STATE_DIR / "predictions.json"
-# copia scaricata da GitHub (origin/main) all'avvio: il robot committa lì
-REMOTE_CACHE = APP_DIR / "data" / "news_remote.json"
+# copia scaricata da GitHub (origin/main) all'avvio: il robot committa lì.
+# Sta in CACHE_DIR e non in data/ perché su un server quel disco è di sola
+# lettura: è una copia di comodo, si riscarica, non è un dato da custodire.
+REMOTE_CACHE = CACHE_DIR / "news_remote.json"
 
 # Impatto -> (freccia, classe .pill del design system). I COLORI vivono nel CSS
 # (light/dark), qui usiamo solo le classi: niente hex fissi -> temi coerenti.
