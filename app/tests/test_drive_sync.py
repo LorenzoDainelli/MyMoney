@@ -29,6 +29,7 @@ from finance.models import Wallet, Transaction
 import shared.sync as sync_mod
 import shared.settings_store as store_mod
 import shared.drive_sync as drive_mod
+from motore import engine_di_prova
 
 
 # ── fixture: DB in memoria + finto device id (come test_sync.py) ─────────────
@@ -36,7 +37,7 @@ import shared.drive_sync as drive_mod
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
     db_url = f"sqlite:///{tmp_path / 'test.db'}"
-    test_engine = create_engine(db_url, connect_args={"check_same_thread": False})
+    test_engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=test_engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(test_engine)
 

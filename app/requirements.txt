@@ -13,3 +13,8 @@ python-multipart>=0.0.9
 # suo trasporto per il refresh. Guida: docs/SETUP-VERTEX.md.
 google-auth>=2.23
 requests>=2.31
+
+# Opzionale: serve SOLO se il database non è il file SQLite locale ma un
+# PostgreSQL (un server, o Cloud SQL). Con il default — il file in data/ — non
+# è necessario. Si attiva impostando MYMONEY_DB_URL: vedi shared/config.py.
+psycopg[binary]>=3.1

@@ -155,12 +155,16 @@ _MODELLI_SYNC = (Wallet, Category, Transaction)
 
 def _sync_is_importing() -> bool:
     """True se sync.py sta importando (flag thread-local): in quel caso NON
-    si devono ri-timbrare rev/updated_at (restano quelli del dispositivo sorgente)."""
-    try:
-        from shared.sync import _is_importing
-        return _is_importing()
-    except ImportError:
-        return False
+    si devono ri-timbrare rev/updated_at (restano quelli del dispositivo sorgente).
+
+    Il flag arriva da shared/sync_ctx.py e NON da shared/sync.py: quest'ultimo,
+    all'import, registra i suoi agganci su SQLAlchemy, e visto che questa
+    funzione gira DENTRO un salvataggio, importarlo qui aggiungerebbe un aggancio
+    mentre SQLAlchemy sta percorrendo la lista degli agganci — che fallisce.
+    Si vedeva solo al primissimo salvataggio su un database nuovo, quindi mai sul
+    PC di casa e sempre su un server appena acceso."""
+    from shared.sync_ctx import _is_importing
+    return _is_importing()
 
 
 @event.listens_for(Session, "before_flush")

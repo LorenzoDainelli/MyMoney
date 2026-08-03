@@ -24,6 +24,7 @@ from finance.models import Wallet, Category, Transaction, TIPO_USCITA, TIPO_ENTR
 import shared.settings_store  # noqa: F401
 import shared.sync            # noqa: F401
 import finance.service as fin
+from motore import engine_di_prova
 
 
 ANNO, MESE = 2026, 7
@@ -31,8 +32,7 @@ ANNO, MESE = 2026, 7
 
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
-    engine = create_engine(f"sqlite:///{tmp_path/'test.db'}",
-                           connect_args={"check_same_thread": False})
+    engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(engine)
     import shared.db as db_mod

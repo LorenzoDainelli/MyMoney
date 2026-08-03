@@ -20,9 +20,7 @@ Privacy: qui non passa nulla verso l'esterno. Il diario sta sul filesystem local
 """
 import json
 import logging
-import threading
 import uuid
-from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
@@ -40,22 +38,11 @@ SYNC_DIR = APP_DIR / "data" / "sync"
 SCHEMA_VERSION = 1
 
 # ── flag thread-local per sopprimere la registrazione durante l'import ──────
-_ctx = threading.local()
-
-
-def _is_importing() -> bool:
-    return getattr(_ctx, "importing", False)
-
-
-@contextmanager
-def importing():
-    """Context manager: dentro questo blocco i before_flush / after_commit NON
-    registrano nel diario e NON ri-timbrano rev/updated_at."""
-    _ctx.importing = True
-    try:
-        yield
-    finally:
-        _ctx.importing = False
+# Vive in shared/sync_ctx.py, che non registra agganci e quindi si può importare
+# in qualunque momento (vedi il commento lì: importare QUESTO modulo durante un
+# salvataggio romperebbe SQLAlchemy). I nomi restano disponibili anche da qui,
+# perché il resto del codice usa `sync.importing()`.
+from shared.sync_ctx import _ctx, _is_importing, importing  # noqa: F401
 
 
 # ── device id ───────────────────────────────────────────────────────────────

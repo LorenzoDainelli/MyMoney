@@ -21,12 +21,13 @@ from shared.db import Base
 from finance.models import Wallet, Transaction, TIPO_USCITA, TIPO_GIRO
 import finance.service as service
 import shared.sync as sync_mod
+from motore import engine_di_prova
 
 
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
     db_path = tmp_path / "test.db"
-    engine = create_engine(f"sqlite:///{db_path}", connect_args={"check_same_thread": False})
+    engine = engine_di_prova(db_path)
     TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(engine)
 
