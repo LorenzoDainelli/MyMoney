@@ -12,9 +12,10 @@ news-monitor (cosi' la lista e' scritta una volta sola).
 I dati di DETTAGLIO (prezzi, AUM, TER, holdings...) NON sono qui e NON vanno mai
 inventati: arrivano dalle fonti dati. Qui c'e' solo l'anagrafica.
 """
-from sqlalchemy import text
+from sqlalchemy import Float, Integer, String
 
 from shared.db import SessionLocal, engine
+from shared.schema import aggiungi_colonne
 from portfolio.models import Position, TIPO_ETF, TIPO_AZIONE
 
 # Nomi CORTI per le tabelle (scelti dall'utente, senza la parola "ETF"):
@@ -37,22 +38,16 @@ NOMI_BREVI = {
 
 def migra_schema():
     """Colonne aggiunte dopo la prima release (create_all non altera le tabelle
-    esistenti): idempotente, SQLite."""
+    esistenti): idempotente, e valido su entrambi i motori (shared/schema.py)."""
     with engine.connect() as c:
-        cols = [r[1] for r in c.execute(text("PRAGMA table_info(portfolio_positions)"))]
-        if cols and "nome_breve" not in cols:
-            c.execute(text("ALTER TABLE portfolio_positions ADD COLUMN nome_breve VARCHAR(80) DEFAULT ''"))
-            c.commit()
-        if cols and "versato_totale" not in cols:
-            c.execute(text("ALTER TABLE portfolio_positions ADD COLUMN versato_totale FLOAT DEFAULT 0.0"))
-            c.commit()
-        vcols = [r[1] for r in c.execute(text("PRAGMA table_info(portfolio_versamenti)"))]
-        if vcols and "tx_id" not in vcols:
-            c.execute(text("ALTER TABLE portfolio_versamenti ADD COLUMN tx_id INTEGER"))
-            c.commit()
-        if vcols and "ora" not in vcols:
-            c.execute(text("ALTER TABLE portfolio_versamenti ADD COLUMN ora VARCHAR(5) DEFAULT ''"))
-            c.commit()
+        aggiungi_colonne(c, "portfolio_positions", (
+            ("nome_breve", String(80), ""),
+            ("versato_totale", Float(), 0.0),
+        ))
+        aggiungi_colonne(c, "portfolio_versamenti", (
+            ("tx_id", Integer(), None),
+            ("ora", String(5), ""),
+        ))
 
 
 # (nome, tipo, categoria, ticker, isin, pct_target, importo_fisso, note)

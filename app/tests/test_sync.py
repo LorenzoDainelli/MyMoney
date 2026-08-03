@@ -26,6 +26,7 @@ from finance.models import Wallet, Category, Transaction, _MODELLI_SYNC
 
 # Importa sync DOPO aver configurato il path
 import shared.sync as sync_mod
+from motore import engine_di_prova
 
 
 # ── fixture: database in memoria per ogni test ──────────────────────────────
@@ -35,7 +36,7 @@ def test_db(tmp_path, monkeypatch):
     """Crea un database SQLite in memoria per ogni test, isolato."""
     db_path = tmp_path / "test.db"
     db_url = f"sqlite:///{db_path}"
-    test_engine = create_engine(db_url, connect_args={"check_same_thread": False})
+    test_engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=test_engine, autoflush=False, autocommit=False)
 
     # Crea tutte le tabelle

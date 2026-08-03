@@ -18,6 +18,7 @@ from shared.db import Base
 from portfolio.models import Position, Versamento, VersamentoRiga
 import portfolio.service as pf_service
 import portfolio.versamenti as versamenti
+from motore import engine_di_prova
 
 # la funzione VERA, presa prima che la fixture la sostituisca con lo stub
 _PREZZO_REALE = versamenti._prezzo_eur_alla_data
@@ -25,8 +26,7 @@ _PREZZO_REALE = versamenti._prezzo_eur_alla_data
 
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
-    engine = create_engine(f"sqlite:///{tmp_path/'test.db'}",
-                           connect_args={"check_same_thread": False})
+    engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(engine)
 

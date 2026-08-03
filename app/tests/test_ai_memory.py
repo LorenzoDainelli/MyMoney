@@ -17,12 +17,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from shared.db import Base
 import shared.ai_memory as mem
 import shared.ai as ai
+from motore import engine_di_prova
 
 
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
-    engine = create_engine(f"sqlite:///{tmp_path/'test.db'}",
-                           connect_args={"check_same_thread": False})
+    engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(engine)
     import shared.db as db_mod

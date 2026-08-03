@@ -23,6 +23,7 @@ import shared.sync as sync_mod
 import shared.settings_store as store_mod
 import shared.drive_sync as drive_mod
 from finance.models import Wallet, Transaction
+from motore import engine_di_prova
 
 
 class FakeDrive:
@@ -61,7 +62,7 @@ def device_factory(tmp_path):
             self.db_path = tmp_path / f"{name}.db"
             self.sync_dir = tmp_path / f"sync_{name}"
             self.sync_dir.mkdir(exist_ok=True)
-            self.engine = create_engine(f"sqlite:///{self.db_path}")
+            self.engine = engine_di_prova(self.db_path)
             self.Session = sessionmaker(bind=self.engine, autoflush=False, autocommit=False)
             Base.metadata.create_all(self.engine)
 

@@ -21,12 +21,13 @@ from sqlalchemy.orm import sessionmaker
 from shared.db import Base
 import shared.settings_store as store_mod
 import shared.ai as ai
+from motore import engine_di_prova
 
 
 @pytest.fixture(autouse=True)
 def test_db(tmp_path, monkeypatch):
     db_url = f"sqlite:///{tmp_path / 'test.db'}"
-    engine = create_engine(db_url, connect_args={"check_same_thread": False})
+    engine = engine_di_prova(tmp_path / "test.db")
     TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     Base.metadata.create_all(engine)
 

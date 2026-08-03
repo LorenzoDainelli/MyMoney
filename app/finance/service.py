@@ -15,9 +15,10 @@ import uuid
 from bisect import bisect_left
 from datetime import datetime, timedelta
 
-from sqlalchemy import func, select, text
+from sqlalchemy import Boolean, DateTime, Float, Integer, String, func, select, text
 
 from shared.db import SessionLocal, engine
+from shared.schema import aggiungi_colonne, crea_indice, colonne_di
 from finance.models import (Wallet, Category, Transaction,
                             TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO, TIPO_GIRO)
 
@@ -88,44 +89,36 @@ CARTA_ARROTONDA = {"Trade Republic": {"saveback_pct": 1.0, "saveback_tetto": 15.
 
 def migra_schema():
     """Colonne aggiunte dopo la prima release: create_all non altera le tabelle
-    esistenti, quindi le aggiungiamo qui (idempotente, SQLite)."""
+    esistenti, quindi le aggiungiamo qui. Idempotente, e valido sia sul file
+    SQLite del PC sia su un PostgreSQL (vedi shared/schema.py)."""
     with engine.connect() as c:
-        cols = [r[1] for r in c.execute(text("PRAGMA table_info(finance_wallets)"))]
-        if cols and "colore" not in cols:
-            c.execute(text("ALTER TABLE finance_wallets ADD COLUMN colore VARCHAR(20) DEFAULT ''"))
-            c.commit()
-        # carta con arrotondamento e saveback (Trade Republic)
-        for nome, ddl in (("arrotonda", "BOOLEAN DEFAULT 0"),
-                          ("saveback_pct", "FLOAT DEFAULT 0.0"),
-                          ("saveback_tetto", "FLOAT DEFAULT 0.0")):
-            if cols and nome not in cols:
-                c.execute(text(f"ALTER TABLE finance_wallets ADD COLUMN {nome} {ddl}"))
-                c.commit()
+        aggiungi_colonne(c, "finance_wallets", (
+            ("colore", String(20), ""),
+            # carta con arrotondamento e saveback (Trade Republic)
+            ("arrotonda", Boolean(), False),
+            ("saveback_pct", Float(), 0.0),
+            ("saveback_tetto", Float(), 0.0),
+        ))
         # partite di giro: gambe (spesa/rientro) e raggruppamento in una partita
         # + righe generate (arrotondamento/saveback) legate al movimento padre
-        cols = [r[1] for r in c.execute(text("PRAGMA table_info(finance_transactions)"))]
-        for nome, ddl in (("importo_ricevuto", "FLOAT"),
-                          ("data_ricevuto", "DATETIME"),
-                          ("controparte", "VARCHAR(80) DEFAULT ''"),
-                          ("giro_id", "VARCHAR(32) DEFAULT ''"),
-                          ("giro_aperta", "BOOLEAN DEFAULT 0"),
-                          ("parent_tx_id", "INTEGER"),
-                          ("origine", "VARCHAR(20) DEFAULT ''")):
-            if cols and nome not in cols:
-                c.execute(text(f"ALTER TABLE finance_transactions ADD COLUMN {nome} {ddl}"))
-                c.commit()
+        aggiungi_colonne(c, "finance_transactions", (
+            ("importo_ricevuto", Float(), None),
+            ("data_ricevuto", DateTime(), None),
+            ("controparte", String(80), ""),
+            ("giro_id", String(32), ""),
+            ("giro_aperta", Boolean(), False),
+            ("parent_tx_id", Integer(), None),
+            ("origine", String(20), ""),
+        ))
         # sync v2 (multi-dispositivo): identità e versione di ogni record + tombstone
         for tabella in ("finance_wallets", "finance_categories", "finance_transactions"):
-            cols = [r[1] for r in c.execute(text(f"PRAGMA table_info({tabella})"))]
-            for nome, ddl in (("uid", "VARCHAR(32) DEFAULT ''"),
-                              ("updated_at", "DATETIME"),
-                              ("rev", "INTEGER DEFAULT 1"),
-                              ("deleted", "BOOLEAN DEFAULT 0")):
-                if cols and nome not in cols:
-                    c.execute(text(f"ALTER TABLE {tabella} ADD COLUMN {nome} {ddl}"))
-                    c.commit()
-            c.execute(text(f"CREATE INDEX IF NOT EXISTS ix_{tabella}_uid ON {tabella}(uid)"))
-        c.commit()
+            aggiungi_colonne(c, tabella, (
+                ("uid", String(32), ""),
+                ("updated_at", DateTime(), None),
+                ("rev", Integer(), 1),
+                ("deleted", Boolean(), False),
+            ))
+            crea_indice(c, tabella, "uid")
     # Backfill idempotenti: metadati di sync ai record pre-v2, e giro_id alle
     # vecchie partite a riga singola (l'apertura dalla vecchia regola: rimborso
     # assente = aperta). Toccano solo le righe non ancora sistemate.
@@ -147,8 +140,10 @@ def _backfill_meta_sync() -> None:
                 c.execute(text(f"UPDATE {tabella} SET uid=:u WHERE id=:i"),
                           {"u": uuid.uuid4().hex, "i": rid})
             c.execute(text(f"UPDATE {tabella} SET updated_at=:n WHERE updated_at IS NULL"), {"n": now})
-            c.execute(text(f"UPDATE {tabella} SET rev=1 WHERE rev IS NULL"))
-            c.execute(text(f"UPDATE {tabella} SET deleted=0 WHERE deleted IS NULL"))
+            c.execute(text(f"UPDATE {tabella} SET rev=:r WHERE rev IS NULL"), {"r": 1})
+            # il sì/no va passato come valore, non scritto dentro la frase: SQLite
+            # accetta lo 0, PostgreSQL vuole FALSE e rifiuterebbe il numero.
+            c.execute(text(f"UPDATE {tabella} SET deleted=:d WHERE deleted IS NULL"), {"d": False})
 
 
 def _backfill_giro_id() -> None:
