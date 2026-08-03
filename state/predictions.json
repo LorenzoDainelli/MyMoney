@@ -6692,6 +6692,159 @@
       "inviata": true,
       "titolo": "IBM punta ai ricavi dal quantum computing entro il 2028: a rischio $437 miliardi in Bitcoin?",
       "url": "https://finnhub.io/api/news?id=9cb0b9494adad896862121d2c1df989d83091c6b73110936296734d1b35d6c4b"
+    },
+    {
+      "id": "nato-iran-deescalation-20260803",
+      "ticker": "NATO",
+      "data": "2026-08-03",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Trump annulla l'attacco all'Iran: de-escalation mette pressione sull'ETF difesa",
+      "url": "https://www.aljazeera.com/news/2026/8/2/trump-cancels-iran-strike-says-deal-perimeters-reached"
+    },
+    {
+      "id": "pltr-q2-earnings-20260803",
+      "ticker": "PLTR",
+      "data": "2026-08-03",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Palantir riporta i risultati Q2 oggi: Wall Street divisa tra crescita AI e valutazione elevata",
+      "url": "https://finnhub.io/api/news?id=f2aebad449c8b79f1d197554e2766c2fade060f1f13337e566e5fd0101998c60"
+    },
+    {
+      "id": "shel-iran-oil-drop-20260803",
+      "ticker": "SHEL",
+      "data": "2026-08-03",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Petrolio crolla dopo la cancellazione dell'attacco USA all'Iran: cambio di contesto per Shell",
+      "url": "https://www.benzinga.com/news/politics/26/08/60862777/trump-calls-off-massive-attack-on-iran-as-talks-resume"
+    },
+    {
+      "id": "aapl-memoria-iphone-prezzi-20260803",
+      "ticker": "AAPL",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "I costi crescenti dei chip di memoria minacciano i margini Apple: iPhone più caro in vista?",
+      "url": "https://finnhub.io/api/news?id=cb1bb3c5410a42bc0ee6b8bbdc6b7d3ffbac4af327f9186fa0b19d99e0841de8"
+    },
+    {
+      "id": "spcx-xai-gas-plant-20260803",
+      "ticker": "SPCX",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX costruisce una centrale a gas da 1,2 GW per alimentare i data center di xAI",
+      "url": "https://finnhub.io/api/news?id=ee4c673d9f7d024c3bd33fbc3e4e18a7ec5cb33281fbff1f8c3ecfd1c0cf6767"
+    },
+    {
+      "id": "aapl-morgan-stanley-cauto-20260803",
+      "ticker": "AAPL",
+      "data": "2026-08-03",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Morgan Stanley adotta un tono cauto su Apple dopo la trimestrale: percorso AI ancora incerto",
+      "url": "https://finnhub.io/api/news?id=f9ed2111be961165e41dc5bcea60108dd2f9616ebf2c1099096cda6edabb8652"
+    },
+    {
+      "id": "amzn-zoox-dot-regulatory-20260803",
+      "ticker": "AMZN",
+      "data": "2026-08-03",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il DOT USA accelera i veicoli autonomi: Amazon ottiene un'esenzione temporanea per Zoox",
+      "url": "https://finnhub.io/api/news?id=2033e23e2a5338fc2b96d7eeb3540e115f962af085b18904c5d001b87a7fb1ae"
+    },
+    {
+      "id": "msft-linkedin-q2-20260803",
+      "ticker": "MSFT",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "LinkedIn cresce a doppia cifra nel Q2: ulteriore conferma dei risultati solidi di Microsoft",
+      "url": "https://finnhub.io/api/news?id=cea5cdc909171864cad7be178f48a08782e1b067bdd579aa395900859274f8b4"
+    },
+    {
+      "id": "goog-abel-berkshire-20260803",
+      "ticker": "GOOG",
+      "data": "2026-08-03",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il successore di Buffett, Greg Abel, mostra interesse per Alphabet: possibile investimento di Berkshire",
+      "url": "https://finnhub.io/api/news?id=0d7526e6b521de0e09892d31f27247af43bc68d7ed2c892c5f44607285717eea"
     }
   ]
 }
