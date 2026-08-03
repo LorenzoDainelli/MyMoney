@@ -160,6 +160,47 @@ def test_togliere_dalla_lista_chiude_fuori_subito(monkeypatch):
     assert auth.utente_da_richiesta(req) is None
 
 
+# ── la porta: cosa resta aperto ─────────────────────────────────────────────
+
+@pytest.mark.parametrize("percorso", [
+    "/", "/finanze", "/finanze/movimenti", "/portafoglio", "/portafoglio/38",
+    "/pac", "/analisi", "/notizie", "/impostazioni",
+    "/finanze/movimenti/1/dettaglio", "/api/qualcosa", "/pagina-inventata",
+])
+def test_le_pagine_dell_app_sono_chiuse(percorso):
+    """Il cuore della cosa: tutto quello che mostra dati sta dietro la porta.
+    Se un domani si aggiunge una pagina, questa lista non va aggiornata —
+    nasce chiusa da sola, perché l'elenco è di ciò che si APRE."""
+    from shared import auth
+    assert auth.percorso_libero(percorso) is False, f"{percorso} risulta aperta!"
+
+
+@pytest.mark.parametrize("percorso", [
+    "/salute", "/accedi", "/accedi/google", "/accedi/google/ritorno",
+    "/accedi/codice", "/esci", "/static/app.js", "/static/img/logo.png",
+])
+def test_solo_l_ingresso_e_la_grafica_sono_aperti(percorso):
+    from shared import auth
+    assert auth.percorso_libero(percorso) is True, f"{percorso} risulta chiusa!"
+
+
+def test_i_lavori_passano_ma_hanno_la_loro_serratura():
+    """Lo chiama un programma, non una persona: non può fare il login. Passa
+    la porta ma poi deve mostrare la sua parola d'ordine (shared/lavori.py)."""
+    from shared import auth, lavori
+    assert auth.percorso_libero("/lavori/giornaliero") is True
+    assert lavori.token_valido("") is False
+
+
+def test_un_altro_account_google_non_entra_bis(monkeypatch):
+    """Ripetuto qui di proposito: è il rifiuto che conta di più."""
+    auth = _auth_con(monkeypatch, chiave="k", ammessi=["lorenzo@example.com"])
+    for estraneo in ("mario@gmail.com", "lorenzo@example.com.attacco.it",
+                     "LORENZO@EXAMPLE.COM.evil.com", " ", ""):
+        b = auth.crea_biglietto(estraneo, completo=True)
+        assert auth.utente_da_richiesta(FintaRichiesta({auth.NOME_COOKIE: b})) is None
+
+
 def test_un_biglietto_di_un_altra_installazione_non_vale(monkeypatch):
     """Firmato con un'altra chiave: da noi non deve aprire niente."""
     auth = _auth_con(monkeypatch, chiave="chiave-nostra", ammessi=["lorenzo@example.com"])

@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from shared.config import APP_DIR, APP_NAME, JOB_TOKEN
 from shared.db import Base, engine
 from shared.templating import templates
-from shared import ai, lavori, settings_store
+from shared import ai, auth, lavori, settings_store
 
 # Importa i modelli PRIMA di create_all, cosi' le tabelle vengono registrate.
 import shared.settings_store          # noqa: F401  -> tabella shared_settings
@@ -69,6 +69,26 @@ app.include_router(finance_api_router)
 app.include_router(settings_router)
 app.include_router(prefs_router)
 app.include_router(news_router)
+
+
+# --------------------------- la porta d'ingresso ---------------------------
+@app.middleware("http")
+async def _porta_chiusa(request: Request, call_next):
+    """Tutto chiuso, tranne il poco che deve restare aperto.
+
+    L'elenco è di ciò che si APRE (shared/auth.py, PERCORSI_LIBERI), non di ciò
+    che si chiude: così una pagina nuova nasce protetta, e dimenticarsi di
+    proteggerla non è più possibile.
+
+    Sul PC di casa questo controllo non fa nulla: senza chiave di sessione
+    configurata `richiede_accesso()` è falso e si passa sempre, esattamente come
+    l'app ha sempre funzionato.
+    """
+    if not auth.richiede_accesso() or auth.percorso_libero(request.url.path):
+        return await call_next(request)
+    if auth.utente_da_richiesta(request) is None:
+        return RedirectResponse("/accedi", status_code=303)
+    return await call_next(request)
 
 
 # --------------------------- servizio (non sono pagine) ---------------------------

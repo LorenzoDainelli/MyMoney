@@ -23,6 +23,26 @@ from shared import settings_store, sicurezza
 from shared.config import EMAIL_CONSENTITE, SESSION_KEY
 
 NOME_COOKIE = "mymoney_sessione"
+
+# Le uniche pagine raggiungibili senza essere entrati. È una lista di ciò che si
+# APRE, non di ciò che si chiude: così una pagina nuova nasce protetta invece
+# che aperta, e dimenticarsi di proteggerla non è più possibile.
+#
+# `/lavori/giornaliero` è qui ma non è scoperto: ha la sua parola d'ordine
+# (shared/lavori.py), perché lo chiama un programma, non una persona col
+# browser — e a un programma non si può chiedere di fare il login.
+PERCORSI_LIBERI = (
+    "/salute",
+    "/accedi",
+    "/accedi/google",
+    "/accedi/google/ritorno",
+    "/accedi/codice",
+    "/esci",
+    "/lavori/giornaliero",
+)
+
+# Prefissi liberi: file di grafica e simili, che non contengono dati.
+PREFISSI_LIBERI = ("/static/", "/favicon")
 DURATA_SESSIONE = 14 * 24 * 3600      # due settimane
 DURATA_PARZIALE = 10 * 60             # dal login Google al codice: dieci minuti
 
@@ -50,6 +70,18 @@ def richiede_accesso() -> bool:
     dire una firma indovinabile, cioè una serratura finta.
     """
     return bool(SESSION_KEY)
+
+
+def percorso_libero(percorso: str) -> bool:
+    """Vero solo per le pagine che devono funzionare anche senza essere entrati.
+
+    Sta qui e non dentro il middleware perché una regola di sicurezza va in un
+    posto dove i test possano prenderla.
+    """
+    percorso = (percorso or "/").rstrip("/") or "/"
+    if percorso in {p.rstrip("/") or "/" for p in PERCORSI_LIBERI}:
+        return True
+    return any((percorso + "/").startswith(p) for p in PREFISSI_LIBERI)
 
 
 def email_ammessa(email: str) -> bool:
