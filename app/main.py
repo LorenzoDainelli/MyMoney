@@ -4,17 +4,16 @@ Crea le tabelle, precarica il portafoglio la prima volta, collega le pagine.
 Si avvia con run.py (o col doppio click su Avvia-Finanza.bat).
 """
 import json
-import threading
 from datetime import datetime
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 
-from shared.config import APP_DIR, APP_NAME
+from shared.config import APP_DIR, APP_NAME, JOB_TOKEN
 from shared.db import Base, engine
 from shared.templating import templates
-from shared import ai, settings_store
+from shared import ai, lavori, settings_store
 
 # Importa i modelli PRIMA di create_all, cosi' le tabelle vengono registrate.
 import shared.settings_store          # noqa: F401  -> tabella shared_settings
@@ -48,36 +47,13 @@ fin_service.assicura_salvadanaio()     # «Nascosti» + arrotondamento/saveback 
 fin_service.applica_saldi_iniziali()   # saldi di apertura al 4/7/2026 (solo dove ancora a zero)
 
 
-# --- a OGNI avvio aggiorna TUTTI i dati, in background (non blocca l'avvio) ---
-def _refresh_dati_bg():
-    try:
-        reader.refresh_from_origin()        # notizie: ultimo stato dal repo GitHub
-    except Exception:
-        pass
-    try:
-        market.refresh_all()                # prezzi live, sempre
-        market.refresh_all_fundamentals()   # holdings/settori/dividendi (cache 24h)
-        wealth.get_cached()                 # serie del grafico patrimonio
-    except Exception:
-        pass  # mai far fallire l'avvio per i dati: si riproverà
-    try:
-        from shared import drive_sync       # sync Drive (Fase 5), solo se collegato
-        if drive_sync.is_configured() and drive_sync.is_connected():
-            drive_sync.sync_once()
-    except Exception:
-        pass  # best-effort: c'è sempre il bottone "Sincronizza ora"
-    try:
-        from finance.service import compatta_tombstone
-        compatta_tombstone(365)
-    except Exception:
-        pass
-    try:
-        storico.registra()      # la fotografia di oggi, dopo i prezzi freschi
-    except Exception:
-        pass
-
-
-threading.Thread(target=_refresh_dati_bg, daemon=True).start()
+# --- lavori periodici: prezzi, notizie, pulizia, fotografia del patrimonio ---
+# Sul PC partono da soli a ogni avvio, come è sempre stato. Su un server no: là
+# c'è un programma di Google che ci chiama una volta al giorno (l'indirizzo è
+# più sotto), perché un server si spegne quando non lo usi e la fotografia del
+# patrimonio salterebbe i giorni in cui non apri l'app. Vedi shared/lavori.py.
+if not JOB_TOKEN:
+    lavori.in_background()
 
 # --- app web ---
 app = FastAPI(title=APP_NAME)
@@ -93,6 +69,34 @@ app.include_router(finance_api_router)
 app.include_router(settings_router)
 app.include_router(prefs_router)
 app.include_router(news_router)
+
+
+# --------------------------- servizio (non sono pagine) ---------------------------
+@app.get("/salute")
+def salute():
+    """Dice solo «sono in piedi», senza toccare il database.
+
+    Serve a chi ospita l'app per capire se rispondere o riavviarla. Deve restare
+    leggerissimo: se interrogasse il database, un database lento farebbe pensare
+    che l'app sia morta e la farebbe riavviare proprio quando è più in difficoltà.
+    """
+    return {"stato": "ok", "app": APP_NAME}
+
+
+@app.post("/lavori/giornaliero")
+def lavori_giornaliero(request: Request):
+    """Fa partire i lavori periodici. Lo chiama una volta al giorno il programma
+    di Google (Cloud Scheduler), mai una persona.
+
+    Protetto da una parola d'ordine: senza, chiunque conosca l'indirizzo potrebbe
+    farci chiamare i prezzi a raffica. La regola sta in shared/lavori.py, dove è
+    coperta dai test — compresa la parte che conta: se la parola d'ordine non è
+    configurata NON si passa, invece di lasciare aperto.
+    """
+    if not lavori.token_valido(request.headers.get("X-Job-Token", "")):
+        return JSONResponse({"errore": "non autorizzato"}, status_code=401)
+    # su un server il database è uno solo: non c'è niente da sincronizzare
+    return lavori.giornaliero(includi_sync=False)
 
 
 # --------------------------- dashboard (design MyMoney) ---------------------------

@@ -10,8 +10,10 @@ Variabili riconosciute:
   MYMONEY_DB_URL   indirizzo del database (default: il file SQLite in data/)
   MYMONEY_HOST     su quale indirizzo ascoltare (default: solo il PC stesso)
   MYMONEY_PORT     porta del server (default: 8000)
+  MYMONEY_JOB_TOKEN  parola d'ordine per far partire i lavori periodici da fuori
 """
 import os
+import tempfile
 from pathlib import Path
 
 # .../app  (la cartella dell'app, due livelli sopra questo file: shared/config.py)
@@ -38,5 +40,34 @@ IS_SQLITE = DB_URL.startswith("sqlite")
 # Un server in cloud ha bisogno di 0.0.0.0 e della porta che gli assegna lui.
 HOST = os.environ.get("MYMONEY_HOST", "").strip() or "127.0.0.1"
 PORT = int(os.environ.get("PORT") or os.environ.get("MYMONEY_PORT") or 8000)
+
+def _cartella_scrivibile(preferita: Path, ripiego: Path) -> Path:
+    """La prima cartella in cui riusciamo davvero a scrivere.
+
+    Sul PC è sempre `data/`. Su un server il disco dell'app è di sola lettura
+    tranne una cartella temporanea: i file di comodo (cache) vanno lì. Non è
+    un peccato perderli — si riscaricano; i dati veri stanno nel database.
+    """
+    for cartella in (preferita, ripiego):
+        try:
+            cartella.mkdir(parents=True, exist_ok=True)
+            prova = cartella / ".prova-scrittura"
+            prova.write_text("x", encoding="ascii")
+            prova.unlink()
+            return cartella
+        except OSError:
+            continue
+    return ripiego
+
+
+# Dove finiscono i file di comodo (cache delle notizie e simili).
+CACHE_DIR = _cartella_scrivibile(DATA_DIR, Path(tempfile.gettempdir()) / "mymoney")
+
+# Parola d'ordine per l'indirizzo che fa partire i lavori periodici (prezzi,
+# storico, pulizia). Se è impostata vuol dire che c'è qualcuno fuori — un
+# programma di Google — incaricato di chiamarci una volta al giorno: in quel caso
+# NON li facciamo più partire da soli a ogni avvio. Sul PC resta vuota e tutto
+# funziona come è sempre stato.
+JOB_TOKEN = os.environ.get("MYMONEY_JOB_TOKEN", "").strip()
 
 APP_NAME = "Finanza personale"

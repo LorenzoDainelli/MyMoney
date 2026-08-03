@@ -1,0 +1,44 @@
+# Cosa NON deve finire nella scatola che spediamo a Google.
+#
+# La riga più importante è la prima: app/data/ contiene il database con i
+# movimenti veri, i saldi e le chiavi segrete. Se finisse nell'immagine, i dati
+# personali viaggerebbero dentro un pacchetto che sta su un registro in rete —
+# ed è un errore che non si vede, perché l'app funzionerebbe lo stesso.
+
+app/data/
+**/data/finanza.db
+**/*.db
+**/*.db-journal
+**/*.sqlite
+
+# Segreti e chiavi, in qualunque forma
+*.pem
+*.key
+**/service-account*.json
+.env
+.env.*
+
+# Roba che serve solo sul PC
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+app/tests/
+tools/
+backup-*/
+
+# Storia e attrezzi di sviluppo
+.git/
+.github/
+.claude/
+**/.DS_Store
+
+# Documentazione: si legge su GitHub, non serve dentro l'immagine
+docs/
+*.md
+!app/README.md
+
+# Il guscio PWA: con il cloud come unica verità non lo serviamo più da qui
+pwa/
+design_reference/
