@@ -163,7 +163,22 @@ niente, e **i dati veri arrivano per ultimi**.
 `MYMONEY_DB_URL`, `shared/schema.py`, `scripts/travaso_db.py`,
 269 test verdi su tutti e due i motori. Commit `de88461`.
 
-### Fase 1 — Il deploy di prova, con dati finti
+### Fase 1 — Il deploy di prova ✔ FATTA (03/08/2026)
+L'app è online e **privata**: `https://mymoney-1057159819758.europe-west8.run.app`
+risponde **403 a chi non ha le credenziali del progetto**, 200 con le credenziali
+di Lorenzo. Nessun dato vero: il database contiene solo il precarico (8
+portafogli, 38 titoli, 0 movimenti).
+
+Provato: tutte e 7 le pagine rispondono; i lavori periodici girano sul server
+(sei passi su sei, 2,1 s) e `/lavori/giornaliero` resta 401 senza la parola
+d'ordine; le 11 tabelle sono state create su Cloud SQL e lo storico si è
+scritto davvero là dentro; nessun errore nei log.
+
+*Da non dimenticare:* `gcloud run deploy --source` non guarda `.dockerignore` ma
+**`.gcloudignore`**. Prima di caricare, verificare con
+`gcloud meta list-files-for-upload` che `app/data/` non compaia.
+
+#### (com'era pianificata)
 - `Dockerfile` (Python slim, dipendenze, avvio con la porta che dà Cloud Run);
 - `.dockerignore` — **`app/data/` va escluso**, altrimenti i dati veri finiscono
   nell'immagine;
