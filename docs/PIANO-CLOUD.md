@@ -202,12 +202,30 @@ autonoma e sync Drive vanno in pensione.
 | Secret Manager, Scheduler | ~0 € |
 | HTTPS e indirizzo | 0 €, inclusi |
 
-I ~258 € di crediti coprono tutto fino a metà settembre 2026, ma **scadranno
-quasi intatti** (consumo attuale: 1 €/mese): non sono la ragione per farlo.
-La decisione economica vera arriva quando finiscono, e il numero sarà noto.
+I ~258 € di crediti coprono tutto fino a metà settembre 2026. Decisione di
+Lorenzo del 03/08/2026: **usarli**, e alla scadenza decide lui cosa tenere
+acceso. Il vincolo che resta è uno solo: niente spese di tasca sua.
 
-**Cloud SQL si può mettere in pausa** quando non serve: da ricordare il giorno in
-cui l'esperimento finisce.
+**Attenzione, verificato:** la fatturazione è **attiva** sul progetto. Quando i
+crediti finiscono, ciò che è rimasto acceso inizia ad addebitare da solo. Cloud
+Run no (resta nel gratuito), Cloud SQL sì. **Si può mettere in pausa** senza
+perdere i dati: è la leva da usare a settembre.
+
+### Cosa è stato acceso davvero (03/08/2026)
+
+| Cosa | Scelta | Perché |
+|---|---|---|
+| Progetto | `mymoney-502422` | già creato da Lorenzo |
+| Regione | `europe-west8` (Milano) | la più vicina, meno ritardo |
+| Database | Cloud SQL PostgreSQL **17** | la stessa versione provata in locale |
+| Macchina | `db-f1-micro`, edizione **ENTERPRISE** | la più piccola |
+| Disco | 10 GB HDD | il minimo; i dati sono 196 KB |
+| Segreti | `mymoney-db-password`, `mymoney-job-token` | in Secret Manager, mai nel repo |
+| Permessi | solo `cloudsql.client` e `secretmanager.secretAccessor` | il minimo per funzionare |
+
+**Trappola incontrata:** senza specificare l'edizione, Google sceglie
+**ENTERPRISE_PLUS**, che costa parecchio di più e non accetta nemmeno le
+macchine piccole. Va sempre passato `--edition=ENTERPRISE`.
 
 ---
 
