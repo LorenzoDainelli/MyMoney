@@ -33,6 +33,11 @@ Qui si tolgono alla radice, senza toccare il codice di produzione:
 - una fixture autouse punta `shared.db` a un database temporaneo, nuovo per
   ogni test e con tutte le tabelle già create.
 
+Il database temporaneo lo costruisce `tests/motore.py`, che sceglie da solo fra
+SQLite e PostgreSQL: così la stessa suite gira sul motore del PC o su quello che
+useremo davvero sul server (basta impostare MYMONEY_TEST_PG_URL). Dei test verdi
+su un motore diverso da quello di produzione direbbero poco.
+
 Le fixture dei singoli file restano valide così come sono: quando sostituiscono
 `shared.db.SessionLocal` con la propria sessione, il rimando le segue.
 """
@@ -40,8 +45,6 @@ import sys
 from pathlib import Path
 
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 APP_DIR = Path(__file__).resolve().parent.parent
 if str(APP_DIR) not in sys.path:
@@ -49,6 +52,8 @@ if str(APP_DIR) not in sys.path:
 
 import shared.db as db_mod
 from shared.db import Base
+
+from motore import engine_di_prova, ripristina_motore, stato_motore
 
 # Tutti i moduli con modelli o con `SessionLocal`. `main.py` NON va importato:
 # all'import fa `create_all` sul database vero.
@@ -101,17 +106,24 @@ def database_usa_e_getta(tmp_path, monkeypatch):
     Autouse anche per i test che col database non c'entrano nulla: sono proprio
     quelli che, senza fixture, finivano di straforo sul `finanza.db` vero.
     """
-    engine = create_engine(f"sqlite:///{tmp_path / 'conftest.db'}",
-                           connect_args={"check_same_thread": False})
+    # Da rimettere a posto a mano: `configure()` cambia l'oggetto dentro, e
+    # monkeypatch non saprebbe annullarlo (lui sostituisce, non riconfigura).
+    stato = stato_motore()
+
+    # engine_di_prova sceglie SQLite o PostgreSQL secondo MYMONEY_TEST_PG_URL e
+    # aggancia già shared.db al motore nuovo.
+    engine = engine_di_prova(tmp_path / "conftest.db")
     Base.metadata.create_all(engine)
 
     monkeypatch.setattr(db_mod, "engine", engine)
-    monkeypatch.setattr(db_mod, "SessionLocal",
-                        sessionmaker(bind=engine, autoflush=False, autocommit=False))
     for mod in _MODULI_CON_ENGINE:
         monkeypatch.setattr(mod, "engine", engine)
-    # Il diario del sync scrive su file a ogni commit: fuori dai dati veri.
+    # Il diario del sync e i suoi backup scrivono su file: fuori dai dati veri.
     monkeypatch.setattr(shared.sync, "SYNC_DIR", tmp_path / "sync")
+    monkeypatch.setattr(shared.sync, "BACKUP_DIR", tmp_path / "backups")
 
-    yield
-    engine.dispose()
+    try:
+        yield
+    finally:
+        ripristina_motore(stato)
+        engine.dispose()

@@ -35,6 +35,10 @@ log = logging.getLogger("mymoney.sync")
 
 # ── configurazione ──────────────────────────────────────────────────────────
 SYNC_DIR = APP_DIR / "data" / "sync"
+# Anche questa è una costante di modulo e non un percorso calcolato dentro la
+# funzione: così i test possono spostarla altrove e non scrivere mai nella
+# cartella vera dell'app (vedi tests/conftest.py).
+BACKUP_DIR = APP_DIR / "data" / "backups"
 SCHEMA_VERSION = 1
 
 # ── flag thread-local per sopprimere la registrazione durante l'import ──────
@@ -539,7 +543,7 @@ def build_mirror() -> dict:
 def backup_bundle_to_file() -> Path:
     """Scrive un bundle completo (snapshot + diario) su file, PRIMA di una
     sostituzione distruttiva. Serve da rete di sicurezza recuperabile."""
-    backup_dir = APP_DIR / "data" / "backups"
+    backup_dir = BACKUP_DIR
     backup_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     path = backup_dir / f"pre-scarica-{stamp}.json"
