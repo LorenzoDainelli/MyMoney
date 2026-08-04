@@ -7287,6 +7287,193 @@
       "inviata": true,
       "titolo": "Walmart lancia la consegna con droni in Florida (con Wing/Alphabet) e i farmaci dimagranti GLP-1",
       "url": "https://finnhub.io/api/news?id=8c52c6d203d72615c6dbc87695bdfe7b64f15c55b430e5e9d3105f973917fb99"
+    },
+    {
+      "id": "asml-dividendo-interim-17pct-2026",
+      "ticker": "ASML",
+      "data": "2026-08-04",
+      "tipo_evento": "dividendi/buyback",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 75,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "ASML alza il dividendo interinale del 17% e conferma le stime 2026",
+      "url": "https://finnhub.io/api/news?id=084781a9b4bdd83d05aecbeb58e444a9e01f4faa243c61bd297b4dc1b0eed01d"
+    },
+    {
+      "id": "spcx-primo-earnings-quotazione",
+      "ticker": "SPCX",
+      "data": "2026-08-04",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 73,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX riporta oggi il primo earnings da società quotata: titolo +4% in attesa",
+      "url": "https://finnhub.io/api/news?id=65ea333322fb432205b2dded0c2f56bea0abb98b28d34dcc33bfa15fd570a977"
+    },
+    {
+      "id": "nato-usa-missili-iran-riarmo",
+      "ticker": "NATO",
+      "data": "2026-08-04",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La guerra USA-Iran svuota le scorte di missili: forte segnale di necessità di riarmo",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZjVoa01lTFhQYVMtVjRxRWZKSng1YzFUTTNJOVI1T1pWZVNKc1czOWhJWHB3VDFFWnVrY3lLT1FnSVBfU1M1RFdrU2FsYVlKZXdhVm9VbF9PaEFNeGVMR0ZtNmlEeGhkWG1iang1U0kzb3hmWENGSnNXODRzdnZYaE1LYkY4Vm1hbzJEcEl1ZzZIRVBQLS1nYUYyTWdDdjZjXzN0NmtuZm5IV2FEdlBQby1UUnBqc0FF?oc=5"
+    },
+    {
+      "id": "aapl-tre-downgrade-memoria",
+      "ticker": "AAPL",
+      "data": "2026-08-04",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Tre downgrade simultanei su Apple: costi di memoria in crescita per 'diversi trimestri'",
+      "url": "https://finnhub.io/api/news?id=d913494153c46d73ddbff7f5d8b47f6d641c12aea37839ec54a458074c4f48f8"
+    },
+    {
+      "id": "amzn-bezos-vende-4B",
+      "ticker": "AMZN",
+      "data": "2026-08-04",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bezos presenta un piano di vendita da $4 miliardi su Amazon dopo il rally del +20%",
+      "url": "https://finnhub.io/api/news?id=50415a3f12458cc52bbc1bbc8cb1519487b931c196cd57d457bc2eb6363b444f"
+    },
+    {
+      "id": "orcl-credito-allarme-ai-debito",
+      "ticker": "ORCL",
+      "data": "2026-08-04",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 63,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il mercato del credito alerta sulla spesa AI di Oracle: crescente dipendenza dal debito",
+      "url": "https://finnhub.io/api/news?id=1ecf22428fe05c610d9f4166bc182f1bccc354bb592676c39c22c395507febbb"
+    },
+    {
+      "id": "tsm-n3-nvidia-google-saturazione",
+      "ticker": "TSM",
+      "data": "2026-08-04",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "NVIDIA e Google saturano il nodo N3 di TSMC: la capacità resterà stretta per anni",
+      "url": "https://finnhub.io/api/news?id=f2ba88ea292423656479b76152fb7445e4e7a4d42d85efd8c087870aa855d60d"
+    },
+    {
+      "id": "nflx-youtube-peacock-bundling",
+      "ticker": "NFLX",
+      "data": "2026-08-04",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "YouTube Premium si abbina a Peacock: nuova pressione competitiva per Netflix",
+      "url": "https://finnhub.io/api/news?id=772d54b363a67363a98bec3d5f637ca6fcfbdf4dbed068a5e7bb5ff1e77fcce4"
+    },
+    {
+      "id": "jnj-taubert-pensione-cavanaugh",
+      "ticker": "JNJ",
+      "data": "2026-08-04",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Johnson & Johnson: va in pensione la vicepresidente di Innovative Medicine, arriva Cavanaugh",
+      "url": "https://finnhub.io/api/news?id=5708ecdf4b3cffa8897a821239050597bee1821e59a7a11656e55d41c2d635fc"
+    },
+    {
+      "id": "ibm-pt-taglio-15pct-248",
+      "ticker": "IBM",
+      "data": "2026-08-04",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 54,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "IBM: target price tagliato del 15% a $248",
+      "url": "https://finnhub.io/api/news?id=4b5caaaa8be33a153ed8fa542b9710659b6e47f27b4a80311a548262d77fe622"
+    },
+    {
+      "id": "wmt-acquisizione-vibe-co",
+      "ticker": "WMT",
+      "data": "2026-08-04",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Walmart completa l'acquisizione di Vibe.co (advertising TV connessa)",
+      "url": "https://finnhub.io/api/news?id=f5f225af7c6d1236a9d423a688b076c1fcf80e4fd2bfe0adec376f12b3c82829"
     }
   ]
 }

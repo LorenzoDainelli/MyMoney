@@ -2423,6 +2423,86 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=8c52c6d203d72615c6dbc87695bdfe7b64f15c55b430e5e9d3105f973917fb99",
       "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "asml-dividendo-interim-17pct-2026",
+      "ticker": "ASML",
+      "titolo": "ASML alza il dividendo interinale del 17% e conferma le stime 2026",
+      "tipo_evento": "dividendi/buyback",
+      "url": "https://finnhub.io/api/news?id=084781a9b4bdd83d05aecbeb58e444a9e01f4faa243c61bd297b4dc1b0eed01d",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "spcx-primo-earnings-quotazione",
+      "ticker": "SPCX",
+      "titolo": "SpaceX riporta oggi il primo earnings da società quotata: titolo +4% in attesa",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=65ea333322fb432205b2dded0c2f56bea0abb98b28d34dcc33bfa15fd570a977",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "nato-usa-missili-iran-riarmo",
+      "ticker": "NATO",
+      "titolo": "La guerra USA-Iran svuota le scorte di missili: forte segnale di necessità di riarmo",
+      "tipo_evento": "macro tematica",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOZjVoa01lTFhQYVMtVjRxRWZKSng1YzFUTTNJOVI1T1pWZVNKc1czOWhJWHB3VDFFWnVrY3lLT1FnSVBfU1M1RFdrU2FsYVlKZXdhVm9VbF9PaEFNeGVMR0ZtNmlEeGhkWG1iang1U0kzb3hmWENGSnNXODRzdnZYaE1LYkY4Vm1hbzJEcEl1ZzZIRVBQLS1nYUYyTWdDdjZjXzN0NmtuZm5IV2FEdlBQby1UUnBqc0FF?oc=5",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "aapl-tre-downgrade-memoria",
+      "ticker": "AAPL",
+      "titolo": "Tre downgrade simultanei su Apple: costi di memoria in crescita per 'diversi trimestri'",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=d913494153c46d73ddbff7f5d8b47f6d641c12aea37839ec54a458074c4f48f8",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "amzn-bezos-vende-4B",
+      "ticker": "AMZN",
+      "titolo": "Bezos presenta un piano di vendita da $4 miliardi su Amazon dopo il rally del +20%",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=50415a3f12458cc52bbc1bbc8cb1519487b931c196cd57d457bc2eb6363b444f",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "orcl-credito-allarme-ai-debito",
+      "ticker": "ORCL",
+      "titolo": "Il mercato del credito alerta sulla spesa AI di Oracle: crescente dipendenza dal debito",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=1ecf22428fe05c610d9f4166bc182f1bccc354bb592676c39c22c395507febbb",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "tsm-n3-nvidia-google-saturazione",
+      "ticker": "TSM",
+      "titolo": "NVIDIA e Google saturano il nodo N3 di TSMC: la capacità resterà stretta per anni",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=f2ba88ea292423656479b76152fb7445e4e7a4d42d85efd8c087870aa855d60d",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "shel-trump-petrolio-prezzi",
+      "ticker": "SHEL",
+      "titolo": "Trump ordina alle compagnie petrolifere di abbassare i prezzi immediatamente",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=b0ac426e87b2867f6d6d9ed8a9897facf816c881dd36132077a89ed1c05e3ae7",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "nflx-youtube-peacock-bundling",
+      "ticker": "NFLX",
+      "titolo": "YouTube Premium si abbina a Peacock: nuova pressione competitiva per Netflix",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=772d54b363a67363a98bec3d5f637ca6fcfbdf4dbed068a5e7bb5ff1e77fcce4",
+      "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "jnj-taubert-pensione-cavanaugh",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson: va in pensione la vicepresidente di Innovative Medicine, arriva Cavanaugh",
+      "tipo_evento": "cambio CEO/management",
+      "url": "https://finnhub.io/api/news?id=5708ecdf4b3cffa8897a821239050597bee1821e59a7a11656e55d41c2d635fc",
+      "data_invio": "2026-08-04T17:05:00Z"
     }
   ]
 }
