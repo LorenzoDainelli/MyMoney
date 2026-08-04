@@ -2343,6 +2343,86 @@
       "tipo_evento": "earnings",
       "url": "https://finnhub.io/api/news?id=9f2de0229b2b4e6e200d2cc5d04a8b90a4958b58cedca556c1f5b1a8b34d5020",
       "data_invio": "2026-08-03T17:10:00+00:00"
+    },
+    {
+      "id": "pltr-q2-earnings-beat-20260804",
+      "ticker": "PLTR",
+      "titolo": "Palantir: trimestrale Q2 nettamente sopra le attese, titolo +15% in after-hours",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=5ab0b7b6ae1df271ad204107c7e06c9625343fdf87b2fff46a2c16d2888948a3",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "amgn-data-breach-20260804",
+      "ticker": "AMGN",
+      "titolo": "Amgen: data breach espone dati sanitari dei pazienti, indagine in corso",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=e7f353f20f97bf055f0cc435212038f4c95916e647d02d99ac9a33f6f23370b7",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "meta-q2-earnings-ai-capex-20260804",
+      "ticker": "META",
+      "titolo": "Meta: pubblicità in forte crescita nel Q2, ma gli analisti premono sul piano AI da 130 miliardi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=da9d5c65a200dc2a462a4461ec00f7a94043e9f85faf6f3055e82915a43a54b7",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "avgo-eu-antitrust-vmware-20260804",
+      "ticker": "AVGO",
+      "titolo": "Broadcom perde in UE: la Corte respinge il tentativo di bloccare l'accesso ai documenti VMware",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=2ba62af09be48cc5446a5ebdc954b18fb14e1787d6e83dad0a97763afd4b7716",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "ko-q2-earnings-20260804",
+      "ticker": "KO",
+      "titolo": "Coca-Cola: trimestrale Q2 tra le più solide degli ultimi anni, volume, ricavi e utili in crescita",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=1211fa5fc7f51b07e2fd44a8a32ecb73edd946486f70b8c53bb15867b5dfcc6d",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "sndk-hbf-standard-skhynix-20260804",
+      "ticker": "SNDK",
+      "titolo": "SanDisk e SK Hynix lanciano il primo standard open per la memoria flash AI ad alta larghezza di banda (HBF)",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=a7645a35b2c669b387ffa819333768817d91452832ea991ffb1ab70a0b7a40bf",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "goog-meta-whitehouse-ai-safety-20260804",
+      "ticker": "GOOG",
+      "titolo": "Casa Bianca convoca Google, Meta, OpenAI e Anthropic per discutere test volontari di sicurezza AI",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=05a0db6aea9fd1f56ec6fe838621a7b562476b6ea286d4e65e7fe9c5b3d53cd8",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "intc-china-tsmc-pressure-20260804",
+      "ticker": "INTC",
+      "titolo": "Intel sotto doppia pressione: i modelli AI cinesi open-weight avanzano, TSMC allunga nel packaging avanzato",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=184d2f5e58b8fa0daf985f81301a65f99053b56be5ec99b3366c4ff599d4e0a7",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "asml-china-competition-fears-20260804",
+      "ticker": "ASML",
+      "titolo": "Nuovi timori sulla concorrenza cinese fanno scendere i titoli dei semiconduttori, inclusa ASML",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=f5dd2dbd1ac39b7e53b69ffbe19f7d8ab33bf144d394494111f30687ae966b8b",
+      "data_invio": "2026-08-04T05:20:00+00:00"
+    },
+    {
+      "id": "wmt-drone-glp1-20260804",
+      "ticker": "WMT",
+      "titolo": "Walmart lancia la consegna con droni in Florida (con Wing/Alphabet) e i farmaci dimagranti GLP-1",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=8c52c6d203d72615c6dbc87695bdfe7b64f15c55b430e5e9d3105f973917fb99",
+      "data_invio": "2026-08-04T05:20:00+00:00"
     }
   ]
 }

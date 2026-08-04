@@ -7117,6 +7117,176 @@
       "inviata": false,
       "titolo": "Netflix: Anne Sweeney lascia il CDA, nuova nomina e accordi APAC segnalano un possibile cambio strategico",
       "url": "https://finnhub.io/api/news?id=0be93ea3c0fbcd3ded10db9cc094a6106582e9ab1bb901238ee992efde9fffc5"
+    },
+    {
+      "id": "pltr-q2-earnings-beat-20260804",
+      "ticker": "PLTR",
+      "data": "2026-08-04",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 82,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Palantir: trimestrale Q2 nettamente sopra le attese, titolo +15% in after-hours",
+      "url": "https://finnhub.io/api/news?id=5ab0b7b6ae1df271ad204107c7e06c9625343fdf87b2fff46a2c16d2888948a3"
+    },
+    {
+      "id": "amgn-data-breach-20260804",
+      "ticker": "AMGN",
+      "data": "2026-08-04",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amgen: data breach espone dati sanitari dei pazienti, indagine in corso",
+      "url": "https://finnhub.io/api/news?id=e7f353f20f97bf055f0cc435212038f4c95916e647d02d99ac9a33f6f23370b7"
+    },
+    {
+      "id": "meta-q2-earnings-ai-capex-20260804",
+      "ticker": "META",
+      "data": "2026-08-04",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Meta: pubblicità in forte crescita nel Q2, ma gli analisti premono sul piano AI da 130 miliardi",
+      "url": "https://finnhub.io/api/news?id=da9d5c65a200dc2a462a4461ec00f7a94043e9f85faf6f3055e82915a43a54b7"
+    },
+    {
+      "id": "avgo-eu-antitrust-vmware-20260804",
+      "ticker": "AVGO",
+      "data": "2026-08-04",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Broadcom perde in UE: la Corte respinge il tentativo di bloccare l'accesso ai documenti VMware",
+      "url": "https://finnhub.io/api/news?id=2ba62af09be48cc5446a5ebdc954b18fb14e1787d6e83dad0a97763afd4b7716"
+    },
+    {
+      "id": "ko-q2-earnings-20260804",
+      "ticker": "KO",
+      "data": "2026-08-04",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Coca-Cola: trimestrale Q2 tra le più solide degli ultimi anni, volume, ricavi e utili in crescita",
+      "url": "https://finnhub.io/api/news?id=1211fa5fc7f51b07e2fd44a8a32ecb73edd946486f70b8c53bb15867b5dfcc6d"
+    },
+    {
+      "id": "sndk-hbf-standard-skhynix-20260804",
+      "ticker": "SNDK",
+      "data": "2026-08-04",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SanDisk e SK Hynix lanciano il primo standard open per la memoria flash AI ad alta larghezza di banda (HBF)",
+      "url": "https://finnhub.io/api/news?id=a7645a35b2c669b387ffa819333768817d91452832ea991ffb1ab70a0b7a40bf"
+    },
+    {
+      "id": "goog-meta-whitehouse-ai-safety-20260804",
+      "ticker": "GOOG",
+      "data": "2026-08-04",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Casa Bianca convoca Google, Meta, OpenAI e Anthropic per discutere test volontari di sicurezza AI",
+      "url": "https://finnhub.io/api/news?id=05a0db6aea9fd1f56ec6fe838621a7b562476b6ea286d4e65e7fe9c5b3d53cd8"
+    },
+    {
+      "id": "intc-china-tsmc-pressure-20260804",
+      "ticker": "INTC",
+      "data": "2026-08-04",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Intel sotto doppia pressione: i modelli AI cinesi open-weight avanzano, TSMC allunga nel packaging avanzato",
+      "url": "https://finnhub.io/api/news?id=184d2f5e58b8fa0daf985f81301a65f99053b56be5ec99b3366c4ff599d4e0a7"
+    },
+    {
+      "id": "asml-china-competition-fears-20260804",
+      "ticker": "ASML",
+      "data": "2026-08-04",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Nuovi timori sulla concorrenza cinese fanno scendere i titoli dei semiconduttori, inclusa ASML",
+      "url": "https://finnhub.io/api/news?id=f5dd2dbd1ac39b7e53b69ffbe19f7d8ab33bf144d394494111f30687ae966b8b"
+    },
+    {
+      "id": "wmt-drone-glp1-20260804",
+      "ticker": "WMT",
+      "data": "2026-08-04",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Walmart lancia la consegna con droni in Florida (con Wing/Alphabet) e i farmaci dimagranti GLP-1",
+      "url": "https://finnhub.io/api/news?id=8c52c6d203d72615c6dbc87695bdfe7b64f15c55b430e5e9d3105f973917fb99"
     }
   ]
 }
