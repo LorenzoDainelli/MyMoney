@@ -7474,6 +7474,142 @@
       "inviata": false,
       "titolo": "Walmart completa l'acquisizione di Vibe.co (advertising TV connessa)",
       "url": "https://finnhub.io/api/news?id=f5f225af7c6d1236a9d423a688b076c1fcf80e4fd2bfe0adec376f12b3c82829"
+    },
+    {
+      "id": "spcx-q2-2026-earnings",
+      "ticker": "SPCX",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 88,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SpaceX riporta la prima trimestrale da quotata: ricavi $7,8 miliardi (+92%) e obiettivo $1.000 miliardi entro il 2030",
+      "url": "https://finnhub.io/api/news?id=76d234ef9c4bebeaab2deb15610c9047ba31f54a0f6bafd698159e613146852b"
+    },
+    {
+      "id": "aapl-tim-cook-dimissioni",
+      "ticker": "AAPL",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 88,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Tim Cook annuncia le dimissioni da CEO di Apple: il mercato attende il successore",
+      "url": "https://finnhub.io/api/news?id=7168a35ffc6dea1f5320dee8420cb1f90fa10d81dbd2616f4a87f6eb0211accf"
+    },
+    {
+      "id": "goog-q2-fcf-negativo",
+      "ticker": "GOOG",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 80,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Alphabet: free cash flow negativo nel Q2 per la maxispesa AI, titolo cede oltre il 10%",
+      "url": "https://finnhub.io/api/news?id=d6a5ba652527654fe25e98c73ca9f5620a2fc53e4cbaaf2b76d4179422d1ac26"
+    },
+    {
+      "id": "amgn-q2-2026-earnings",
+      "ticker": "AMGN",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Amgen pubblica i risultati del Q2 2026: utili e ricavi a confronto con le attese",
+      "url": "https://finnhub.io/api/news?id=9aad17195addf2454d90ca7b345b9e1bf919cb038b27fc6e87688c29bfea3e5a"
+    },
+    {
+      "id": "intc-chip-rally-ai",
+      "ticker": "INTC",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Rally dei semiconduttori sull'ottimismo AI: Intel rimbalza del 10% insieme ad AMD e al settore",
+      "url": "https://finnhub.io/api/news?id=503cb1ba3bd341834f2edc8bb387c39b462efff08f303459164fc536125b784b"
+    },
+    {
+      "id": "ibm-quantum-2028",
+      "ticker": "IBM",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "IBM: il quantum computing sarà un business significativo entro il 2028 e potrebbe mettere a rischio la crittografia attuale",
+      "url": "https://finnhub.io/api/news?id=f97a475fbc67e3bdf62cd61110e4eae0b70bef57a9a58a66ae3e00bef1b21795"
+    },
+    {
+      "id": "wmt-oppenheimer-downgrade",
+      "ticker": "WMT",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Oppenheimer declassa Walmart da Outperform a Perform in vista della trimestrale del 20 agosto",
+      "url": "https://finnhub.io/api/news?id=baeffa2d2da5d8e045c5ef1ebbb886e1c4849dd4df8a89eee86da38f0d3f890c"
+    },
+    {
+      "id": "amzn-abel-berkshire-vende",
+      "ticker": "AMZN",
+      "data": "2026-08-05T05:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Greg Abel (CEO Berkshire Hathaway) vende 2,3 milioni di azioni Amazon",
+      "url": "https://finnhub.io/api/news?id=ba8700c78b0d2ef52a7900e787cf8a5a2ef884b0b1bffb16d890a8d9f04d4878"
     }
   ]
 }

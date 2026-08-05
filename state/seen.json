@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "orcl-worst-month-1990",
-      "ticker": "ORCL",
-      "titolo": "Oracle crolla del 35% a giugno: il mese peggiore dal 1990",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=79e86940dea5574a33f094d058e1dbcc36a74fbb9c0829826180c6930f195f74",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "spcx-nasdaq100-quiet-period",
-      "ticker": "SPCX",
-      "titolo": "SpaceX esce dal periodo di silenzio post-IPO ed entra nel Nasdaq 100",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=a16525ed99c60f90accce500e5e005d8e06ebe6fb775797f2cb80065f26cf4e8",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "ko-north-america-chief-resigns",
-      "ticker": "KO",
-      "titolo": "Coca-Cola: il responsabile del Nord America si dimette, il CFO prende le redini ad interim",
-      "tipo_evento": "cambio CEO/management",
-      "url": "https://finnhub.io/api/news?id=3893e58b71ec3d9f38a713acbc60bb9a488d30e7db3e0c2d728611090829e20f",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "msft-bigtech-electricity-3t",
-      "ticker": "MSFT",
-      "titolo": "Big Tech spende 3 trilioni di dollari per garantirsi l'energia necessaria all'AI",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=4e9e7c60088a15b355261a9db5e50c59ddb6715d6558b1fc7834f2239b24637e",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "sndk-wdc-memory-rebound-samsung",
-      "ticker": "SNDK",
-      "titolo": "Titoli memoria USA rimbalzano dopo la svendita; occhi puntati sui risultati Samsung la prossima settimana",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=dabeecbfdadd0e951a94216f041ccad29e244cdd20095e96cf60786d86fcb099",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "wdc-bofa-pt-raise",
-      "ticker": "WDC",
-      "titolo": "BofA alza il prezzo obiettivo di Western Digital",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=07da0768a370dab1696a4a2066d385411b2cf9463b877c538610196b168c26d4",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "lly-cancer-drug-china-license",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly cede in licenza un farmaco oncologico a un partner cinese",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=394e6d817f0f1e1d3946ce3afe40d22f68f5826a5a03b1edfbb7d09670ef8155",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "nflx-q2-earnings-july16",
-      "ticker": "NFLX",
-      "titolo": "Netflix annuncia i risultati del Q2 per il 16 luglio: tre metriche chiave sotto osservazione",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=5c7b524bf929c11abc7618065e412cb9bf7314ea5f42157da74572be5d7e9862",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "msft-copilot-unified-app",
-      "ticker": "MSFT",
-      "titolo": "Microsoft unifica tutti i chatbot Copilot AI in un'unica app",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=61f8d94c355578761a5a62c70e6a775a81351cf973e61ed90380680d15d1c82c",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
-      "id": "semis-h1-2026-recap-asml-tsm-avgo",
-      "ticker": "ASML",
-      "titolo": "Semiconduttori H1 2026: potente rimonta nel Q2 dopo un Q1 difficile",
-      "tipo_evento": "macro tematica",
-      "url": "https://finnhub.io/api/news?id=81c952079183dd1deca1e516594039557366d90ca5513e44a4b1c3836a310228",
-      "data_invio": "2026-07-06T05:10:00+00:00"
-    },
-    {
       "id": "msft-taglio-4800-xbox-20260706",
       "ticker": "MSFT",
       "titolo": "Microsoft taglia 4.800 posti e ristruttura Xbox",
@@ -2503,6 +2423,70 @@
       "tipo_evento": "cambio CEO/management",
       "url": "https://finnhub.io/api/news?id=5708ecdf4b3cffa8897a821239050597bee1821e59a7a11656e55d41c2d635fc",
       "data_invio": "2026-08-04T17:05:00Z"
+    },
+    {
+      "id": "spcx-q2-2026-earnings",
+      "ticker": "SPCX",
+      "titolo": "SpaceX riporta la prima trimestrale da quotata: ricavi $7,8 miliardi (+92%) e obiettivo $1.000 miliardi entro il 2030",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=76d234ef9c4bebeaab2deb15610c9047ba31f54a0f6bafd698159e613146852b",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "aapl-tim-cook-dimissioni",
+      "ticker": "AAPL",
+      "titolo": "Tim Cook annuncia le dimissioni da CEO di Apple: il mercato attende il successore",
+      "tipo_evento": "cambio CEO/management",
+      "url": "https://finnhub.io/api/news?id=7168a35ffc6dea1f5320dee8420cb1f90fa10d81dbd2616f4a87f6eb0211accf",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "goog-q2-fcf-negativo",
+      "ticker": "GOOG",
+      "titolo": "Alphabet: free cash flow negativo nel Q2 per la maxispesa AI, titolo cede oltre il 10%",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=d6a5ba652527654fe25e98c73ca9f5620a2fc53e4cbaaf2b76d4179422d1ac26",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "amgn-q2-2026-earnings",
+      "ticker": "AMGN",
+      "titolo": "Amgen pubblica i risultati del Q2 2026: utili e ricavi a confronto con le attese",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=9aad17195addf2454d90ca7b345b9e1bf919cb038b27fc6e87688c29bfea3e5a",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "intc-chip-rally-ai",
+      "ticker": "INTC",
+      "titolo": "Rally dei semiconduttori sull'ottimismo AI: Intel rimbalza del 10% insieme ad AMD e al settore",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=503cb1ba3bd341834f2edc8bb387c39b462efff08f303459164fc536125b784b",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "ibm-quantum-2028",
+      "ticker": "IBM",
+      "titolo": "IBM: il quantum computing sarà un business significativo entro il 2028 e potrebbe mettere a rischio la crittografia attuale",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=f97a475fbc67e3bdf62cd61110e4eae0b70bef57a9a58a66ae3e00bef1b21795",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "wmt-oppenheimer-downgrade",
+      "ticker": "WMT",
+      "titolo": "Oppenheimer declassa Walmart da Outperform a Perform in vista della trimestrale del 20 agosto",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=baeffa2d2da5d8e045c5ef1ebbb886e1c4849dd4df8a89eee86da38f0d3f890c",
+      "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "amzn-abel-berkshire-vende",
+      "ticker": "AMZN",
+      "titolo": "Greg Abel (CEO Berkshire Hathaway) vende 2,3 milioni di azioni Amazon",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=ba8700c78b0d2ef52a7900e787cf8a5a2ef884b0b1bffb16d890a8d9f04d4878",
+      "data_invio": "2026-08-05T05:10:00+00:00"
     }
   ]
 }
