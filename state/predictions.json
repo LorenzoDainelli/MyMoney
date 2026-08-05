@@ -7610,6 +7610,176 @@
       "inviata": true,
       "titolo": "Greg Abel (CEO Berkshire Hathaway) vende 2,3 milioni di azioni Amazon",
       "url": "https://finnhub.io/api/news?id=ba8700c78b0d2ef52a7900e787cf8a5a2ef884b0b1bffb16d890a8d9f04d4878"
+    },
+    {
+      "id": "nvda-spacex-exclusive-2026-08-05",
+      "ticker": "NVDA",
+      "data": "2026-08-05",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 80,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SpaceX userà esclusivamente chip NVIDIA per tutti i suoi sistemi AI: titolo sale del 4%",
+      "url": "https://finnhub.io/api/news?id=9b1322eab4b3365e24d9f2ee1e94ce8a6a20bcc8a375f4c2ae88008e643779e3"
+    },
+    {
+      "id": "ssnlf-chinese-chip-tools-2026-08-05",
+      "ticker": "SSNLF",
+      "data": "2026-08-05",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Samsung e SK Hynix testano strumenti chip cinesi come copertura dal rischio di sanzioni USA",
+      "url": "https://finnhub.io/api/news?id=e4b774fd6bfde9da707e55881731100efdf912ea2bf8e2926d5ea153a327a8af"
+    },
+    {
+      "id": "sndk-memory-bottleneck-2028-2026-08-05",
+      "ticker": "SNDK",
+      "data": "2026-08-05",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il collo di bottiglia sulla memoria resterà fino al 2028: i prezzi salgono, confermato da CEO Apple e dagli analisti",
+      "url": "https://finnhub.io/api/news?id=bcaaae4b93deddded7f544a829c2b3cf94707450c8c9803e6eceefa506b3ceb2"
+    },
+    {
+      "id": "goog-assistant-gemini-2026-08-05",
+      "ticker": "GOOG",
+      "data": "2026-08-05",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google chiude Assistant su Android e punta tutto su Gemini: implicazioni per la pubblicità contestuale",
+      "url": "https://finnhub.io/api/news?id=558234bbf6ae7005b9cdce9806e95b344e9379f8dee3544e7a2693fac4ee36bb"
+    },
+    {
+      "id": "meta-goog-child-safety-senate-2026-08-05",
+      "ticker": "META",
+      "data": "2026-08-05",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Senato USA avanza un pacchetto di leggi per la sicurezza dei minori online: Meta e Google nel mirino",
+      "url": "https://finnhub.io/api/news?id=8aff1939f8ae5a011244152b2e0adc8656933288690c4d0c9a5c135edf33e658"
+    },
+    {
+      "id": "amgn-q2-guidance-raise-2026-08-05",
+      "ticker": "AMGN",
+      "data": "2026-08-05",
+      "tipo_evento": "revisione guidance",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 57,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Amgen: trimestrale Q2 sopra le attese, guidance annuale alzata a 38–39 mld, ma AMG 513 viene abbandonato",
+      "url": "https://finnhub.io/api/news?id=1af5d56d3e4256f76e28ace5da3e91bcb76143676752182ee549789b1e3ad3cf"
+    },
+    {
+      "id": "amzn-zoox-las-vegas-2026-08-05",
+      "ticker": "AMZN",
+      "data": "2026-08-05",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Zoox (Amazon) avvia le prime corse a pagamento a Las Vegas: debutto commerciale del robotaxi",
+      "url": "https://finnhub.io/api/news?id=e30290cb244ba21e3333909adb3778ac6e3571a4649f1f5af68c3f8eba75a37f"
+    },
+    {
+      "id": "wdc-fq4-preview-2026-08-05",
+      "ticker": "WDC",
+      "data": "2026-08-05",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Western Digital FQ4: bilancio risanato e prodotti sold out, ma un'analisi avverte su una valutazione del 66% sopra i fondamentali",
+      "url": "https://finnhub.io/api/news?id=2b3d9b0a749a68be31b3b09e047bd3dc12dff4390b52ed26f3e50075fed236e4"
+    },
+    {
+      "id": "msft-ackman-2b-2026-08-05",
+      "ticker": "MSFT",
+      "data": "2026-08-05",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bill Ackman investe 2 miliardi di dollari in Microsoft mentre altri hedge fund vendevano",
+      "url": "https://finnhub.io/api/news?id=b2811d88cc760a76d92ab70bfc423fa94d7fbdcacab42e551e31f5da1e428048"
+    },
+    {
+      "id": "shel-jones-act-waiver-2026-08-05",
+      "ticker": "SHEL",
+      "data": "2026-08-05",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Casa Bianca verso l'estensione del waiver Jones Act per abbassare i prezzi della benzina negli USA",
+      "url": "https://finnhub.io/api/news?id=a10b1818a216047d892952940917008f999552f14d908ab6bceda9a8ea751cd8"
     }
   ]
 }

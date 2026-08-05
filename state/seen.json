@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "msft-taglio-4800-xbox-20260706",
-      "ticker": "MSFT",
-      "titolo": "Microsoft taglia 4.800 posti e ristruttura Xbox",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=ba62a50e4163b3b6c68c49b119675cacdfe39299aee9f9ed6d81f695d232f21c",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "avgo-aapl-chip-deal-2031-20260706",
-      "ticker": "AVGO",
-      "titolo": "Broadcom estende l'accordo di fornitura chip con Apple fino al 2031",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=99dcddd5bdb5e6a73f8245c6488c4e317d5726550ab7843f793c9ecc8930195d",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "spcx-supply-unlock-40pct-20260706",
-      "ticker": "SPCX",
-      "titolo": "SpaceX: la quota negoziabile potrebbe passare dal 4% al 40% delle azioni entro dicembre",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=333b3c296a207961cbf40e212a19d5fdc5551bea874fc3460d68ee7b4a2c7285",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "spcx-starmind-constellation-20260706",
-      "ticker": "SPCX",
-      "titolo": "SpaceX svela il piano per 'Starmind': una costellazione satellitare basata sull'AI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=290a0fdec53bd7928aee6ae0cabad70dc26ab1619edc2f5880e0701f4476a0fd",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "meta-rotation-to-goog-20260706",
-      "ticker": "META",
-      "titolo": "Wall Street vende Meta e compra Google: META cede circa il 10% nelle ultime sedute",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=f0949ce3ea5dafe3c4ce90a05ce5ebf35b74333ae4e1f7836bb7afdca99cef10",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "sndk-bics10-production-20260706",
-      "ticker": "SNDK",
-      "titolo": "SanDisk avvia la produzione della flash NAND di decima generazione (BiCS10, 332 layer)",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=6082e67e3f0d748c4eeb13ac6de922989fac5698136176c07bc1decb837c0e58",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "orcl-defense-crusoe-piper-20260706",
-      "ticker": "ORCL",
-      "titolo": "Oracle espande la rete difesa con 10 nuovi partner e firma con Crusoe AI; Piper Sandler difende il titolo prima degli utili",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=f6cb98acb625908c6028baa8d48a48266ea69ddd83e641977fbf70072647e529",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "ibm-bofa-target-q2-20260706",
-      "ticker": "IBM",
-      "titolo": "BofA alza il target di prezzo di IBM e prevede un Q2 solido con guidance 2026 in lieve rialzo",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=903c321f1661e41087212023caf08c15b3e49ebb663005e18ad0f4ad335462cb",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "asml-skhynix-ipo-28bn-20260706",
-      "ticker": "ASML",
-      "titolo": "SK Hynix lancia un'IPO da 28 miliardi di dollari sul Nasdaq: i proventi finanzieranno nuove fabbriche e acquisti di attrezzature ASML",
-      "tipo_evento": "macro tematica",
-      "url": "https://finnhub.io/api/news?id=ea66c60a0b6dade8cec46503f55d167e5e2b0c986d517f87bf53cabe0720d1cb",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
-      "id": "intc-price-hike-50-20260706",
-      "ticker": "INTC",
-      "titolo": "Intel aumenta i prezzi dei chip fino a 50 dollari citando le 'dinamiche di mercato'",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c494e6706a91a668506399ca12b49420621b79eb5643ca92784eab5302ef49cd",
-      "data_invio": "2026-07-06T17:10:00+00:00"
-    },
-    {
       "id": "samsung-q2-selloff-chip-20260708",
       "ticker": "SSNLF",
       "titolo": "Samsung riporta un trimestre record ma delude le aspettative: sell-off a catena nei chip",
@@ -2487,6 +2407,86 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=ba8700c78b0d2ef52a7900e787cf8a5a2ef884b0b1bffb16d890a8d9f04d4878",
       "data_invio": "2026-08-05T05:10:00+00:00"
+    },
+    {
+      "id": "nvda-spacex-exclusive-2026-08-05",
+      "ticker": "NVDA",
+      "titolo": "SpaceX userà esclusivamente chip NVIDIA per tutti i suoi sistemi AI: titolo sale del 4%",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=9b1322eab4b3365e24d9f2ee1e94ce8a6a20bcc8a375f4c2ae88008e643779e3",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "ssnlf-chinese-chip-tools-2026-08-05",
+      "ticker": "SSNLF",
+      "titolo": "Samsung e SK Hynix testano strumenti chip cinesi come copertura dal rischio di sanzioni USA",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=e4b774fd6bfde9da707e55881731100efdf912ea2bf8e2926d5ea153a327a8af",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "sndk-memory-bottleneck-2028-2026-08-05",
+      "ticker": "SNDK",
+      "titolo": "Il collo di bottiglia sulla memoria resterà fino al 2028: i prezzi salgono, confermato da CEO Apple e dagli analisti",
+      "tipo_evento": "macro tematica",
+      "url": "https://finnhub.io/api/news?id=bcaaae4b93deddded7f544a829c2b3cf94707450c8c9803e6eceefa506b3ceb2",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "goog-assistant-gemini-2026-08-05",
+      "ticker": "GOOG",
+      "titolo": "Google chiude Assistant su Android e punta tutto su Gemini: implicazioni per la pubblicità contestuale",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=558234bbf6ae7005b9cdce9806e95b344e9379f8dee3544e7a2693fac4ee36bb",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "meta-goog-child-safety-senate-2026-08-05",
+      "ticker": "META",
+      "titolo": "Senato USA avanza un pacchetto di leggi per la sicurezza dei minori online: Meta e Google nel mirino",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=8aff1939f8ae5a011244152b2e0adc8656933288690c4d0c9a5c135edf33e658",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "amgn-q2-guidance-raise-2026-08-05",
+      "ticker": "AMGN",
+      "titolo": "Amgen: trimestrale Q2 sopra le attese, guidance annuale alzata a 38–39 mld, ma AMG 513 viene abbandonato",
+      "tipo_evento": "revisione guidance",
+      "url": "https://finnhub.io/api/news?id=1af5d56d3e4256f76e28ace5da3e91bcb76143676752182ee549789b1e3ad3cf",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "amzn-zoox-las-vegas-2026-08-05",
+      "ticker": "AMZN",
+      "titolo": "Zoox (Amazon) avvia le prime corse a pagamento a Las Vegas: debutto commerciale del robotaxi",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=e30290cb244ba21e3333909adb3778ac6e3571a4649f1f5af68c3f8eba75a37f",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "wdc-fq4-preview-2026-08-05",
+      "ticker": "WDC",
+      "titolo": "Western Digital FQ4: bilancio risanato e prodotti sold out, ma un'analisi avverte su una valutazione del 66% sopra i fondamentali",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=2b3d9b0a749a68be31b3b09e047bd3dc12dff4390b52ed26f3e50075fed236e4",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "msft-ackman-2b-2026-08-05",
+      "ticker": "MSFT",
+      "titolo": "Bill Ackman investe 2 miliardi di dollari in Microsoft mentre altri hedge fund vendevano",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=b2811d88cc760a76d92ab70bfc423fa94d7fbdcacab42e551e31f5da1e428048",
+      "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "shel-jones-act-waiver-2026-08-05",
+      "ticker": "SHEL",
+      "titolo": "Casa Bianca verso l'estensione del waiver Jones Act per abbassare i prezzi della benzina negli USA",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=a10b1818a216047d892952940917008f999552f14d908ab6bceda9a8ea751cd8",
+      "data_invio": "2026-08-05T17:15:00+00:00"
     }
   ]
 }
