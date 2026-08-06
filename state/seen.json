@@ -2487,6 +2487,78 @@
       "tipo_evento": "legale/regolatorio",
       "url": "https://finnhub.io/api/news?id=a10b1818a216047d892952940917008f999552f14d908ab6bceda9a8ea751cd8",
       "data_invio": "2026-08-05T17:15:00+00:00"
+    },
+    {
+      "id": "sndk-q4-2026-earnings",
+      "ticker": "SNDK",
+      "titolo": "SanDisk Q4 supera le stime di utili e ricavi, ma il titolo cede in after-hours",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=7a8ccc61b4d3e29789459bc19d6f4190bfec2cce679f79b31d6d186cc0524301",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "spcx-float-unlock-911m",
+      "ticker": "SPCX",
+      "titolo": "SpaceX: 911 milioni di azioni si sbloccano oggi, il float quasi raddoppia",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=3702ce15fc72cb30bc9dc6ff11a57620821e1c98740fb8657051ab136f335ea8",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "aapl-injunction-openai",
+      "ticker": "AAPL",
+      "titolo": "Apple chiede un'ingiunzione d'urgenza contro OpenAI per furto di segreti commerciali",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=0ddb9659a254ba7a9a0e9b27abba752b12bae6448178c63af2fc6215fcb35cc9",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "lly-q2-2026-glp1",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly: trimestrale Q2 solida, la domanda dei farmaci anti-obesità GLP-1 continua a crescere",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=8db7b6882bc727e982f993c485b5d1df8b840684a25c8eba354b215d6812c54b",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "goog-200b-capex-nvda-avgo",
+      "ticker": "NVDA",
+      "titolo": "Alphabet annuncia un piano da 200 miliardi in infrastrutture AI: ottimismo per NVIDIA e Broadcom",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=7ac664f64f0e20d8cdf5b9a3089e8ca231de11f22fc4a1cfeb6c6688c2b38dac",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "ttwo-call-gta6",
+      "ticker": "TTWO",
+      "titolo": "Take-Two convoca una call per investitori a orario insolito: gli analisti speculano su GTA 6",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=b50a3562dc7a759c199db36cf9b73a15fdad10d3933919ddc444670c5b0c5deb",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "tsm-capex-3nm-2nm",
+      "ticker": "TSM",
+      "titolo": "TSMC alza il budget investimenti per i nodi avanzati 3nm e 2nm, ma il titolo cede",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=78fb68bfebd19b0558f1e77a2cb316d2cc16004a70849d24565ed136235091be",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "meta-ai-hack-third-party",
+      "ticker": "META",
+      "titolo": "Il modello AI di Meta viola un sistema di terze parti: Meta apre un'indagine interna",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=f8b12a308f577a975320966940fd766c9bd7fb8515b04dcc7d58f87967b5c04e",
+      "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "ukrn-nato-membership-ditched",
+      "ticker": "UKRN",
+      "titolo": "L'Ucraina rinuncia alla candidatura NATO: possibile segnale di avanzamento dei negoziati di pace",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.theglobeandmail.com/investing/markets/stocks/GE/pressreleases/36827435/ukraine-ditches-nato-membership-bid-a-defense-etf-buying-opportunity/",
+      "data_invio": "2026-08-06T05:15:00Z"
     }
   ]
 }

@@ -7780,6 +7780,227 @@
       "inviata": true,
       "titolo": "Casa Bianca verso l'estensione del waiver Jones Act per abbassare i prezzi della benzina negli USA",
       "url": "https://finnhub.io/api/news?id=a10b1818a216047d892952940917008f999552f14d908ab6bceda9a8ea751cd8"
+    },
+    {
+      "id": "sndk-q4-2026-earnings",
+      "ticker": "SNDK",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 78,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SanDisk Q4 supera le stime di utili e ricavi, ma il titolo cede in after-hours",
+      "url": "https://finnhub.io/api/news?id=7a8ccc61b4d3e29789459bc19d6f4190bfec2cce679f79b31d6d186cc0524301"
+    },
+    {
+      "id": "spcx-float-unlock-911m",
+      "ticker": "SPCX",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 75,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX: 911 milioni di azioni si sbloccano oggi, il float quasi raddoppia",
+      "url": "https://finnhub.io/api/news?id=3702ce15fc72cb30bc9dc6ff11a57620821e1c98740fb8657051ab136f335ea8"
+    },
+    {
+      "id": "aapl-injunction-openai",
+      "ticker": "AAPL",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 72,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple chiede un'ingiunzione d'urgenza contro OpenAI per furto di segreti commerciali",
+      "url": "https://finnhub.io/api/news?id=0ddb9659a254ba7a9a0e9b27abba752b12bae6448178c63af2fc6215fcb35cc9"
+    },
+    {
+      "id": "lly-q2-2026-glp1",
+      "ticker": "LLY",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Eli Lilly: trimestrale Q2 solida, la domanda dei farmaci anti-obesità GLP-1 continua a crescere",
+      "url": "https://finnhub.io/api/news?id=8db7b6882bc727e982f993c485b5d1df8b840684a25c8eba354b215d6812c54b"
+    },
+    {
+      "id": "goog-200b-capex-nvda-avgo",
+      "ticker": "NVDA",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Alphabet annuncia un piano da 200 miliardi in infrastrutture AI: ottimismo per NVIDIA e Broadcom",
+      "url": "https://finnhub.io/api/news?id=7ac664f64f0e20d8cdf5b9a3089e8ca231de11f22fc4a1cfeb6c6688c2b38dac"
+    },
+    {
+      "id": "ttwo-call-gta6",
+      "ticker": "TTWO",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Take-Two convoca una call per investitori a orario insolito: gli analisti speculano su GTA 6",
+      "url": "https://finnhub.io/api/news?id=b50a3562dc7a759c199db36cf9b73a15fdad10d3933919ddc444670c5b0c5deb"
+    },
+    {
+      "id": "tsm-capex-3nm-2nm",
+      "ticker": "TSM",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "TSMC alza il budget investimenti per i nodi avanzati 3nm e 2nm, ma il titolo cede",
+      "url": "https://finnhub.io/api/news?id=78fb68bfebd19b0558f1e77a2cb316d2cc16004a70849d24565ed136235091be"
+    },
+    {
+      "id": "meta-ai-hack-third-party",
+      "ticker": "META",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il modello AI di Meta viola un sistema di terze parti: Meta apre un'indagine interna",
+      "url": "https://finnhub.io/api/news?id=f8b12a308f577a975320966940fd766c9bd7fb8515b04dcc7d58f87967b5c04e"
+    },
+    {
+      "id": "ukrn-nato-membership-ditched",
+      "ticker": "UKRN",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "L'Ucraina rinuncia alla candidatura NATO: possibile segnale di avanzamento dei negoziati di pace",
+      "url": "https://www.theglobeandmail.com/investing/markets/stocks/GE/pressreleases/36827435/ukraine-ditches-nato-membership-bid-a-defense-etf-buying-opportunity/"
+    },
+    {
+      "id": "goog-deepmind-california",
+      "ticker": "GOOG",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Google accentra la leadership AI in California: ristrutturazione interna di DeepMind",
+      "url": "https://finnhub.io/api/news?id=a87bdd3b96870396f554df81d5f1a4cd20b1fa9f00b4314f5b769a806973dacf"
+    },
+    {
+      "id": "ssnlf-memory-cycle-warning",
+      "ticker": "SSNLF",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Micron avverte: la carenza di memoria attuale potrebbe generare eccesso di offerta nel futuro",
+      "url": "https://finnhub.io/api/news?id=0e956bdc7d34b09764ef9f4bc16652706a54f97583e2a038e97d1b72868733e4"
+    },
+    {
+      "id": "orcl-openai-exposure-lag",
+      "ticker": "ORCL",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Oracle resta indietro rispetto ai pari: l'esposizione a OpenAI è il principale tema per gli investitori",
+      "url": "https://finnhub.io/api/news?id=4e3b17031e9438bd7ab9b17394b16283340242533aef362a9e5428fb4e265aed"
+    },
+    {
+      "id": "nukl-eagle-nuclear-index",
+      "ticker": "NUKL",
+      "data": "2026-08-06T05:15:00Z",
+      "tipo_evento": "ribilanciamento/cambio indice",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Eagle Nuclear aggiunta all'indice Solactive/Global X Uranium ETF: segnale di crescita del settore nucleare",
+      "url": "https://www.globenewswire.com/news-release/2026/08/03/3337512/0/en/Eagle-Nuclear-Energy-Added-to-the-Solactive-Global-Uranium-Nuclear-Components-Total-Return-Index-Qualifying-Eagle-for-Inclusion-in-the-Global-X-Uranium-ETF.html"
     }
   ]
 }
