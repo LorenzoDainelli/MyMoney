@@ -8001,6 +8001,91 @@
       "inviata": false,
       "titolo": "Eagle Nuclear aggiunta all'indice Solactive/Global X Uranium ETF: segnale di crescita del settore nucleare",
       "url": "https://www.globenewswire.com/news-release/2026/08/03/3337512/0/en/Eagle-Nuclear-Energy-Added-to-the-Solactive-Global-Uranium-Nuclear-Components-Total-Return-Index-Qualifying-Eagle-for-Inclusion-in-the-Global-X-Uranium-ETF.html"
+    },
+    {
+      "id": "wdc-earnings-crollo-margini-20260806",
+      "ticker": "WDC",
+      "data": "2026-08-06",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Western Digital crolla dell'11% dopo la trimestrale: ricavi +44% ma le previsioni sui margini deludono",
+      "url": "https://finnhub.io/api/news?id=26ef38f43df522c3425f63d9666f1328da1249bb1b7ced77685ecfa7f764344f"
+    },
+    {
+      "id": "goog-bond-25b-ai-20260806",
+      "ticker": "GOOG",
+      "data": "2026-08-06",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Alphabet emette obbligazioni per 25 miliardi di dollari per finanziare gli investimenti nell'AI",
+      "url": "https://finnhub.io/api/news?id=6b066a259e90e6962f9a1d0dea2c8d3f2fbd8730df17b4008d18964255d448f2"
+    },
+    {
+      "id": "avgo-anthropic-chip-custom-20260806",
+      "ticker": "AVGO",
+      "data": "2026-08-06",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Anthropic costruisce chip AI proprietari: rischio di disintermediazione a lungo termine per Broadcom",
+      "url": "https://finnhub.io/api/news?id=f3f7c62ee677d523c2abfd4195fbb97897586c6ba9f0f9d9640ee4552f19ae71"
+    },
+    {
+      "id": "amzn-anthropic-quota-200b-20260806",
+      "ticker": "AMZN",
+      "data": "2026-08-06",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La quota di Amazon in Anthropic potrebbe valere oltre 200 miliardi di dollari in caso di IPO",
+      "url": "https://finnhub.io/api/news?id=f7195dafd7096db6921a546a8da0936dfa7c6bea661cd1cbc786257334a844f1"
+    },
+    {
+      "id": "spcx-megapack-295m-20260806",
+      "ticker": "SPCX",
+      "data": "2026-08-06",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX acquista 295 milioni di dollari di batterie Tesla nel Q2 per alimentare i data center di xAI",
+      "url": "https://finnhub.io/api/news?id=ddcc7e5419d499dc2bd9e525b1d40d40f57802dbe1b2af879b0f8c52547097c6"
     }
   ]
 }

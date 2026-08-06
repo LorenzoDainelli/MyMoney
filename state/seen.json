@@ -2559,6 +2559,46 @@
       "tipo_evento": "macro tematica",
       "url": "https://www.theglobeandmail.com/investing/markets/stocks/GE/pressreleases/36827435/ukraine-ditches-nato-membership-bid-a-defense-etf-buying-opportunity/",
       "data_invio": "2026-08-06T05:15:00Z"
+    },
+    {
+      "id": "wdc-earnings-crollo-margini-20260806",
+      "ticker": "WDC",
+      "titolo": "Western Digital crolla dell'11% dopo la trimestrale: ricavi +44% ma le previsioni sui margini deludono",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=26ef38f43df522c3425f63d9666f1328da1249bb1b7ced77685ecfa7f764344f",
+      "data_invio": "2026-08-06T17:15:00+00:00"
+    },
+    {
+      "id": "goog-bond-25b-ai-20260806",
+      "ticker": "GOOG",
+      "titolo": "Alphabet emette obbligazioni per 25 miliardi di dollari per finanziare gli investimenti nell'AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=6b066a259e90e6962f9a1d0dea2c8d3f2fbd8730df17b4008d18964255d448f2",
+      "data_invio": "2026-08-06T17:15:00+00:00"
+    },
+    {
+      "id": "avgo-anthropic-chip-custom-20260806",
+      "ticker": "AVGO",
+      "titolo": "Anthropic costruisce chip AI proprietari: rischio di disintermediazione a lungo termine per Broadcom",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=f3f7c62ee677d523c2abfd4195fbb97897586c6ba9f0f9d9640ee4552f19ae71",
+      "data_invio": "2026-08-06T17:15:00+00:00"
+    },
+    {
+      "id": "amzn-anthropic-quota-200b-20260806",
+      "ticker": "AMZN",
+      "titolo": "La quota di Amazon in Anthropic potrebbe valere oltre 200 miliardi di dollari in caso di IPO",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f7195dafd7096db6921a546a8da0936dfa7c6bea661cd1cbc786257334a844f1",
+      "data_invio": "2026-08-06T17:15:00+00:00"
+    },
+    {
+      "id": "spcx-megapack-295m-20260806",
+      "ticker": "SPCX",
+      "titolo": "SpaceX acquista 295 milioni di dollari di batterie Tesla nel Q2 per alimentare i data center di xAI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=ddcc7e5419d499dc2bd9e525b1d40d40f57802dbe1b2af879b0f8c52547097c6",
+      "data_invio": "2026-08-06T17:15:00+00:00"
     }
   ]
 }
