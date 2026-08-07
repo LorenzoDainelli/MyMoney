@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "samsung-q2-selloff-chip-20260708",
-      "ticker": "SSNLF",
-      "titolo": "Samsung riporta un trimestre record ma delude le aspettative: sell-off a catena nei chip",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=164858cd6ac91be1761a488b26a2906f4c30d909f210f251eb499205489c2fbf",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "nukl-smr-corea-usa-giappone-20260708",
-      "ticker": "NUKL",
-      "titolo": "Corea del Sud, USA e Giappone accordo sulla cooperazione SMR: vento in poppa per il nucleare",
-      "tipo_evento": "macro tematica",
-      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQZWw4cmRKTmdZRGR5V3NuN2xvX0w3WkctUjdEczVjRjF3OGxwZHZDQ012RjROMHdOeVJZZDk4bWQyVXZ3VDMwLV9HSWFnM2g1ZUdFeEs0TWhCeDRFakpyTkVWMjNmZ3pNQklJdWYtYmlZM0U0cVJCbVgzWEFCUUNCWUJaeDR0RnZfUmwzSGJPMlhRVzc2aE4wQUFSVlQ1YUQxZTRYUXI5VUg5UElGQWVHSDFaT20?oc=5",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "lly-record-high-20260708",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly raggiunge un nuovo massimo storico: Wall Street si fa ancora più ottimista",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=fc165123b8f5c5e56d10a592305f6c60639b04a3d8419f0acb89ef15cfd4b4b",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "spcx-xai-cursor-model-20260708",
-      "ticker": "SPCX",
-      "titolo": "xAI (divisione AI di SpaceX) pronta a lanciare un nuovo modello con Cursor già questa settimana",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=710af5665ab9eee39c138a09215a51a66e8a5f86f7affd45958027875a01a3d1",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "amgn-recalls-enbrel-20260708",
-      "ticker": "AMGN",
-      "titolo": "Amgen avvia richiami volontari di Corlanor e Sensipar; un giudice blocca intanto il tetto di prezzo su Enbrel",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=4ab3ef6ff1126cf165b77a351fd1ead442295ca99d8f5f60aa888748bc037095",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "nato-ankara-iran-geopolitics-20260708",
-      "ticker": "NATO",
-      "titolo": "Vertice NATO ad Ankara: tensioni USA-Iran e Groenlandia rilanciano il tema difesa",
-      "tipo_evento": "macro tematica",
-      "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPUEVNU2RSNGlfY1hHTkpSVFpWcjFYcDJHa3FHRkNHWEM3U19nM1lxSWN5SUY1Zjl6czA4LTNrNENOZ1lYMFlDZ2JyWllaRURvU2ZJSTctcFEzWUNKLVoxSmdVT3RmWFNfenFhblhMZUFvXzBrb2M3VDkxQm9PdlZIWmN2YmRaS3lPaGRBcE5XcHdrZFV2NWFSNmZuWUY4VjZmWUhXUXB2RHNQS0ZYdnRHMWxkM3daNlJQR3B6eW5yem1qRDhFRXZLVU1fbjJTelh6S1UybQ?oc=5",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "shel-q2-guidance-oil-iran-20260708",
-      "ticker": "SHEL",
-      "titolo": "Shell alza le previsioni di produzione Q2 (gas, upstream, LNG) mentre il petrolio sale per l'Iran",
-      "tipo_evento": "revisione guidance",
-      "url": "https://finnhub.io/api/news?id=c852be3c4033fe83293aedcefd6759310132f3f7070f62c9fef81e8e6aac0366",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "pltr-upgrade-davidson-client-20260708",
-      "ticker": "PLTR",
-      "titolo": "Palantir: upgrade a Buy da DA Davidson e nuovo grande cliente internazionale",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=c43423b182a374444e52d194924019fb327b9a2d8e3cb3e6ec5c167aa83da232",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "orcl-ai-warning-customers-20260708",
-      "ticker": "ORCL",
-      "titolo": "Allarme AI per Oracle: alcuni clienti data center potrebbero non riuscire a onorare i contratti",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=80268fe12003b0a15257665f4bba1e034332ec99617f44a692cce7d523643c9a",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
-      "id": "jnj-imaavy-fair-value-20260708",
-      "ticker": "JNJ",
-      "titolo": "J&J presenta nuovi dati su IMAAVY per miastenia grave: titolo stimato sotto del 34% rispetto al fair value",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=988b39e0f7b6e3dad27847090c940239d91d7ab667196ed8ab12e11e16e84e87",
-      "data_invio": "2026-07-08T05:10:00+00:00"
-    },
-    {
       "id": "nvda-beijing-h200-20260708",
       "ticker": "NVDA",
       "titolo": "Pechino approva i chip H200 di Nvidia: i colossi tech cinesi si precipitano ad acquistare",
@@ -2599,6 +2519,86 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=ddcc7e5419d499dc2bd9e525b1d40d40f57802dbe1b2af879b0f8c52547097c6",
       "data_invio": "2026-08-06T17:15:00+00:00"
+    },
+    {
+      "id": "meta-condanna-minori-nm-2026-08-07",
+      "ticker": "META",
+      "titolo": "Meta condannata a pagare $567 milioni per i danni ai minori sui social",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=4c1fa31e911cdd823060cc90f0d40121f608750a6438f4f2647b8605502981f1",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "orcl-burry-short-2026-08-06",
+      "ticker": "ORCL",
+      "titolo": "Michael Burry ri-apre posizioni short su Oracle con put options",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=6cff919a0f9ad7ffa536f3a6ae95eabf123de3c02f1f4fa9b569df81bd5e15d3",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "nato-accordo-turchia-saudita-pakistan-2026-08-07",
+      "ticker": "NATO",
+      "titolo": "Turchia, Arabia Saudita e Pakistan firmano un accordo di difesa comune",
+      "tipo_evento": "macro tematica",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPVWlCbG9KRkh2aHRNSjBWS25TWEM3V3Y5aDlfbFcwNGZIaldpZ25rNlpGUGVtcDFRQ0JUWnZ5NnhwSGJSZjBSRm5idU9iNFNUcEMxcFJDb0FrcjBUU2JvemN0OWYxazdOS3hzMHBxVVJvOVlsQ1RQcEIyT0R0NXFxSU01SDJJdm1hZklPSEYxSEQxS0t6WFpMemlDdWpFcXh5bW0wMUM3ODBBSjVPVHNJTk5rQ2ViSHdTWWlQeWQ0YjR4MjJNVTdXNDBqcw",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "jnj-guggenheim-target-287-2026-08-06",
+      "ticker": "JNJ",
+      "titolo": "Guggenheim conferma Buy su Johnson & Johnson e alza il target a $287",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=640b1409a72503d9e6f1bc074056e39c7f7a8172eeeb828304077a865221e6fc",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "jnj-investimento-lenti-1B-2026-08-06",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson investe 1 miliardo di dollari per produrre più lenti a contatto negli USA",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=cdb85452f719857131038c097e97d3a481eb0db071fdd1b61d571fffb88433c3",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "lly-novo-nordisk-difficolta-2026-08-06",
+      "ticker": "LLY",
+      "titolo": "Novo Nordisk in difficoltà con guidance mancata: opportunità competitiva per Eli Lilly",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=0d880470a35b5c224053d345c057941e857e5c9faff4b78be6402652f5897ecb",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "spcx-ark-buy-dip-2026-08-06",
+      "ticker": "SPCX",
+      "titolo": "ARK Invest di Cathie Wood acquista SpaceX per 23 milioni dopo il calo post-utili",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5494b5398f5a1fa7f80c77e900ff9cfbe08c09f3e2d297f42b2264e25b048bf7",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "amgn-bernstein-target-345-2026-08-06",
+      "ticker": "AMGN",
+      "titolo": "Bernstein alza il target su Amgen a $345 confermando il giudizio neutro",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=9db3102ab3d2d6fd124632798024314f1fd7e56c4d9299590da6d7a4c91cd93b",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "pltr-ark-vende-114M-2026-08-06",
+      "ticker": "PLTR",
+      "titolo": "ARK Invest vende 11,4 milioni di dollari di Palantir nonostante il boom AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=77ed9010f1c3e7bc594c923a4e12e3e63a1caf0ecdfca5155d0e0e3d44e50e46",
+      "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "shel-hormuz-petrolio-2026-08-07",
+      "ticker": "SHEL",
+      "titolo": "Il petrolio sale per le incertezze sulla riapertura dello Stretto di Hormuz",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNN0Z0cU1oY1hpbHZmZ1JoanRWLXVubmFlTDlWbkpqQ3V1d2dYYlV1U18zVEJ1Zkh1QXFFYm51SVJtZ1ctNHRGYnVlZGk3X0xKcVRHdW5MMzlDM2VQWDBYcmlWc25WX2VaWEJITEJCb2lOOFJsNFRiX0NYOVhCcmxEMWVLVGZXSkJfUzJzQXB2ZTFSMlJnZTczRWVJU3ZTUHEyeWNhcFBuSlI",
+      "data_invio": "2026-08-07T05:15:00+00:00"
     }
   ]
 }

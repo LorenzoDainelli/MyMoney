@@ -8086,6 +8086,176 @@
       "inviata": true,
       "titolo": "SpaceX acquista 295 milioni di dollari di batterie Tesla nel Q2 per alimentare i data center di xAI",
       "url": "https://finnhub.io/api/news?id=ddcc7e5419d499dc2bd9e525b1d40d40f57802dbe1b2af879b0f8c52547097c6"
+    },
+    {
+      "id": "meta-condanna-minori-nm-2026-08-07",
+      "ticker": "META",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Meta condannata a pagare $567 milioni per i danni ai minori sui social",
+      "url": "https://finnhub.io/api/news?id=4c1fa31e911cdd823060cc90f0d40121f608750a6438f4f2647b8605502981f1"
+    },
+    {
+      "id": "orcl-burry-short-2026-08-06",
+      "ticker": "ORCL",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Michael Burry ri-apre posizioni short su Oracle con put options",
+      "url": "https://finnhub.io/api/news?id=6cff919a0f9ad7ffa536f3a6ae95eabf123de3c02f1f4fa9b569df81bd5e15d3"
+    },
+    {
+      "id": "nato-accordo-turchia-saudita-pakistan-2026-08-07",
+      "ticker": "NATO",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Turchia, Arabia Saudita e Pakistan firmano un accordo di difesa comune",
+      "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPVWlCbG9KRkh2aHRNSjBWS25TWEM3V3Y5aDlfbFcwNGZIaldpZ25rNlpGUGVtcDFRQ0JUWnZ5NnhwSGJSZjBSRm5idU9iNFNUcEMxcFJDb0FrcjBUU2JvemN0OWYxazdOS3hzMHBxVVJvOVlsQ1RQcEIyT0R0NXFxSU01SDJJdm1hZklPSEYxSEQxS0t6WFpMemlDdWpFcXh5bW0wMUM3ODBBSjVPVHNJTk5rQ2ViSHdTWWlQeWQ0YjR4MjJNVTdXNDBqcw"
+    },
+    {
+      "id": "jnj-guggenheim-target-287-2026-08-06",
+      "ticker": "JNJ",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 53,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Guggenheim conferma Buy su Johnson & Johnson e alza il target a $287",
+      "url": "https://finnhub.io/api/news?id=640b1409a72503d9e6f1bc074056e39c7f7a8172eeeb828304077a865221e6fc"
+    },
+    {
+      "id": "jnj-investimento-lenti-1B-2026-08-06",
+      "ticker": "JNJ",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Johnson & Johnson investe 1 miliardo di dollari per produrre più lenti a contatto negli USA",
+      "url": "https://finnhub.io/api/news?id=cdb85452f719857131038c097e97d3a481eb0db071fdd1b61d571fffb88433c3"
+    },
+    {
+      "id": "lly-novo-nordisk-difficolta-2026-08-06",
+      "ticker": "LLY",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Novo Nordisk in difficoltà con guidance mancata: opportunità competitiva per Eli Lilly",
+      "url": "https://finnhub.io/api/news?id=0d880470a35b5c224053d345c057941e857e5c9faff4b78be6402652f5897ecb"
+    },
+    {
+      "id": "spcx-ark-buy-dip-2026-08-06",
+      "ticker": "SPCX",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "ARK Invest di Cathie Wood acquista SpaceX per 23 milioni dopo il calo post-utili",
+      "url": "https://finnhub.io/api/news?id=5494b5398f5a1fa7f80c77e900ff9cfbe08c09f3e2d297f42b2264e25b048bf7"
+    },
+    {
+      "id": "amgn-bernstein-target-345-2026-08-06",
+      "ticker": "AMGN",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bernstein alza il target su Amgen a $345 confermando il giudizio neutro",
+      "url": "https://finnhub.io/api/news?id=9db3102ab3d2d6fd124632798024314f1fd7e56c4d9299590da6d7a4c91cd93b"
+    },
+    {
+      "id": "pltr-ark-vende-114M-2026-08-06",
+      "ticker": "PLTR",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "ARK Invest vende 11,4 milioni di dollari di Palantir nonostante il boom AI",
+      "url": "https://finnhub.io/api/news?id=77ed9010f1c3e7bc594c923a4e12e3e63a1caf0ecdfca5155d0e0e3d44e50e46"
+    },
+    {
+      "id": "shel-hormuz-petrolio-2026-08-07",
+      "ticker": "SHEL",
+      "data": "2026-08-07T05:15:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Il petrolio sale per le incertezze sulla riapertura dello Stretto di Hormuz",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNN0Z0cU1oY1hpbHZmZ1JoanRWLXVubmFlTDlWbkpqQ3V1d2dYYlV1U18zVEJ1Zkh1QXFFYm51SVJtZ1ctNHRGYnVlZGk3X0xKcVRHdW5MMzlDM2VQWDBYcmlWc25WX2VaWEJITEJCb2lOOFJsNFRiX0NYOVhCcmxEMWVLVGZXSkJfUzJzQXB2ZTFSMlJnZTczRWVJU3ZTUHEyeWNhcFBuSlI"
     }
   ]
 }
