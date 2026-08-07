@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "nvda-beijing-h200-20260708",
-      "ticker": "NVDA",
-      "titolo": "Pechino approva i chip H200 di Nvidia: i colossi tech cinesi si precipitano ad acquistare",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=15733c4eae076e153d6774e8f6385d370be97ff3426932b9c35aa4043e48788f",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "meta-lawsuit-youth-20260708",
-      "ticker": "META",
-      "titolo": "Meta a processo ad agosto: quattro Stati USA chiedono 1.400 miliardi per dipendenza dei minori",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=216bc1ecd4a107bb470b6a9685b0b2b13c4e694e8f44585c786790317694389f",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "jnj-fda-thermocool-20260708",
-      "ticker": "JNJ",
-      "titolo": "J&J ottiene l'approvazione FDA per il nuovo sistema di ablazione cardiaca THERMOCOOL SMARTTOUCH SF",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=0b3f1e61efb1fb0820fb42c400f359822f8c4ff3603783802b2e65fb1846e0a7",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "meta-cloud-plan-20260708",
-      "ticker": "META",
-      "titolo": "Meta balza del 9% dopo l'annuncio del piano cloud B2B di Zuckerberg",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=ccd7478eff24b58f9e76a7c633ec9908aac36339650fdc461aebce9b879b18e7",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "spcx-ms-debt-tam-20260708",
-      "ticker": "SPCX",
-      "titolo": "Morgan Stanley: SpaceX avrà bisogno di 700 miliardi di debito per raggiungere il TAM da 22.700 miliardi",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=501d64f3008dc88e59bb1a7554c7ad1620c08b1b3e41a426df124344ad3cf16c",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "asml-jefferies-pt-20260708",
-      "ticker": "ASML",
-      "titolo": "Jefferies alza il target di prezzo su ASML citando le solide prospettive dei semiconduttori",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=9cd6e0e20dfcd84cc6b61b1a7d9bd5a1080cc9a635dd0f76f91e0d1c7b351bf6",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "spcx-blueorigin-10b-20260708",
-      "ticker": "SPCX",
-      "titolo": "SpaceX resta al prezzo di IPO mentre Blue Origin raccoglie 10 miliardi nel primo round esterno",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c6c01f13bfb89186d10b16825dba57c10984e6f8f8875cb0094f303d1c34d321",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "nflx-worldcup-rights-20260708",
-      "ticker": "NFLX",
-      "titolo": "Netflix e Disney in gara per i diritti TV dei prossimi Mondiali di Calcio",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=cf9a8981025e36c71142c03ea110a2b47c739e0a21280da1894da4a093641100",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "ttwo-wf-pt289-20260708",
-      "ticker": "TTWO",
-      "titolo": "Wells Fargo conferma Overweight su Take-Two e alza il target a 289 dollari",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=a3b78c9b50991df1b93676eeb2b031de674ce54ac6df2ba3510593b2c8c0046a",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
-      "id": "ibm-lightwell-ai-20260708",
-      "ticker": "IBM",
-      "titolo": "IBM e Red Hat ampliano Lightwell con nuove offerte per l'open source in era AI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=d2e6ae40a9b90b4e33a7152092827e8c946f56a30295b70083a323756e7f4027",
-      "data_invio": "2026-07-08T17:10:00+00:00"
-    },
-    {
       "id": "orcl-sp-downgrade-bbb",
       "ticker": "ORCL",
       "titolo": "Oracle declassata da S&P a BBB-: il peso di 160 miliardi di debiti",
@@ -2599,6 +2519,78 @@
       "tipo_evento": "macro",
       "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNN0Z0cU1oY1hpbHZmZ1JoanRWLXVubmFlTDlWbkpqQ3V1d2dYYlV1U18zVEJ1Zkh1QXFFYm51SVJtZ1ctNHRGYnVlZGk3X0xKcVRHdW5MMzlDM2VQWDBYcmlWc25WX2VaWEJITEJCb2lOOFJsNFRiX0NYOVhCcmxEMWVLVGZXSkJfUzJzQXB2ZTFSMlJnZTczRWVJU3ZTUHEyeWNhcFBuSlI",
       "data_invio": "2026-08-07T05:15:00+00:00"
+    },
+    {
+      "id": "ttwo-q1-fy2026-earnings",
+      "ticker": "TTWO",
+      "titolo": "Take-Two: primo trimestre sopra le attese ma guidance conservativa deprime il titolo, nonostante i preorder record di GTA VI",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=542ca12ab09d1d658a8c6e0a1ae7aa825f9b0e6baa8f83095b62f2027c53c150",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "intc-spcx-jv-chip-119b",
+      "ticker": "INTC",
+      "titolo": "SpaceX, Tesla e Intel formalizzano una joint venture da 119 miliardi di dollari per produrre chip avanzati in Texas",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=8b1554d302732370914dfd3d8b12bcb2421c5036e2f749de1c93d134c1430565",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "meta-942m-new-mexico",
+      "ticker": "META",
+      "titolo": "Secondo fronte legale per Meta in un giorno solo: giudice del New Mexico condanna l'azienda a 942 milioni di dollari",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=a0f17a50fed70e384689e1a766a7ec1188d84de58686e450ad27a312c9efd382",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "ibm-rebound-fraud-inquiry",
+      "ticker": "IBM",
+      "titolo": "IBM rimbalza da quota $233 dopo il crollo post-trimestrale, ma pesa un'indagine per frode su titoli e il calo strutturale del mainframe",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2ad230c3c797b5464591cb9f81bbd63b120faca8c09d33d834f676bf89b041a6",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "sndk-strong-buy-3900",
+      "ticker": "SNDK",
+      "titolo": "Analisti promuovono SanDisk a Strong Buy con target a $3.900: oltre il 200% di upside sulla tesi AI memory",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=5b1d6bcf45aacdf9260b5b13f1e7e96f3963b7e7e427820080700a9556d8ee21",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "trump-mining-ceo-minerali-difesa",
+      "ticker": "XDWM",
+      "titolo": "Trump convoca i CEO delle grandi miniere per garantire forniture di minerali critici alle supply chain della difesa USA",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.bnnbloomberg.ca/business/international/2026/08/07/trump-to-host-mining-ceos-as-administration-seeks-minerals-for-defence-supply-chains/",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-aws-cpu-limit",
+      "ticker": "AMZN",
+      "titolo": "AWS ordina agli ingegneri di ridurre il consumo di CPU: la domanda AI ha saturato la capacità di calcolo interna",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=922683ae2a36957cecd4036ed649f5bbad4e2f367bbccbe2ef896e95a1bbed85",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "damodaran-big-tech-overinvest-ai",
+      "ticker": "GOOG",
+      "titolo": "Il 'Decano della Valutazione' avvisa: le big tech stanno scommettendo sull'AI, non investendo — il rischio di capitale distrutto è reale",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=cc38c4453abb22c5e7fbe1db1716b356a0a19897a010289d815ab76bed172d40",
+      "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "openai-handheld-device-aapl-meta",
+      "ticker": "AAPL",
+      "titolo": "Bloomberg rivela i dettagli del dispositivo portatile di OpenAI: potenziale sfida per Apple e Meta nell'hardware AI consumer",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=967b3561fa5591a1d7f13cbe22cde31fcb1b8768dd740d10fb82ee3df7fce16b",
+      "data_invio": "2026-08-07T17:10:00+00:00"
     }
   ]
 }

@@ -8256,6 +8256,159 @@
       "inviata": true,
       "titolo": "Il petrolio sale per le incertezze sulla riapertura dello Stretto di Hormuz",
       "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNN0Z0cU1oY1hpbHZmZ1JoanRWLXVubmFlTDlWbkpqQ3V1d2dYYlV1U18zVEJ1Zkh1QXFFYm51SVJtZ1ctNHRGYnVlZGk3X0xKcVRHdW5MMzlDM2VQWDBYcmlWc25WX2VaWEJITEJCb2lOOFJsNFRiX0NYOVhCcmxEMWVLVGZXSkJfUzJzQXB2ZTFSMlJnZTczRWVJU3ZTUHEyeWNhcFBuSlI"
+    },
+    {
+      "id": "ttwo-q1-fy2026-earnings",
+      "ticker": "TTWO",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Take-Two: primo trimestre sopra le attese ma guidance conservativa deprime il titolo, nonostante i preorder record di GTA VI",
+      "url": "https://finnhub.io/api/news?id=542ca12ab09d1d658a8c6e0a1ae7aa825f9b0e6baa8f83095b62f2027c53c150"
+    },
+    {
+      "id": "intc-spcx-jv-chip-119b",
+      "ticker": "INTC",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX, Tesla e Intel formalizzano una joint venture da 119 miliardi di dollari per produrre chip avanzati in Texas",
+      "url": "https://finnhub.io/api/news?id=8b1554d302732370914dfd3d8b12bcb2421c5036e2f749de1c93d134c1430565"
+    },
+    {
+      "id": "meta-942m-new-mexico",
+      "ticker": "META",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Secondo fronte legale per Meta in un giorno solo: giudice del New Mexico condanna l'azienda a 942 milioni di dollari",
+      "url": "https://finnhub.io/api/news?id=a0f17a50fed70e384689e1a766a7ec1188d84de58686e450ad27a312c9efd382"
+    },
+    {
+      "id": "ibm-rebound-fraud-inquiry",
+      "ticker": "IBM",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "IBM rimbalza da quota $233 dopo il crollo post-trimestrale, ma pesa un'indagine per frode su titoli e il calo strutturale del mainframe",
+      "url": "https://finnhub.io/api/news?id=2ad230c3c797b5464591cb9f81bbd63b120faca8c09d33d834f676bf89b041a6"
+    },
+    {
+      "id": "sndk-strong-buy-3900",
+      "ticker": "SNDK",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Analisti promuovono SanDisk a Strong Buy con target a $3.900: oltre il 200% di upside sulla tesi AI memory",
+      "url": "https://finnhub.io/api/news?id=5b1d6bcf45aacdf9260b5b13f1e7e96f3963b7e7e427820080700a9556d8ee21"
+    },
+    {
+      "id": "trump-mining-ceo-minerali-difesa",
+      "ticker": "XDWM",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Trump convoca i CEO delle grandi miniere per garantire forniture di minerali critici alle supply chain della difesa USA",
+      "url": "https://www.bnnbloomberg.ca/business/international/2026/08/07/trump-to-host-mining-ceos-as-administration-seeks-minerals-for-defence-supply-chains/"
+    },
+    {
+      "id": "amzn-aws-cpu-limit",
+      "ticker": "AMZN",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "AWS ordina agli ingegneri di ridurre il consumo di CPU: la domanda AI ha saturato la capacità di calcolo interna",
+      "url": "https://finnhub.io/api/news?id=922683ae2a36957cecd4036ed649f5bbad4e2f367bbccbe2ef896e95a1bbed85"
+    },
+    {
+      "id": "damodaran-big-tech-overinvest-ai",
+      "ticker": "GOOG",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il 'Decano della Valutazione' avvisa: le big tech stanno scommettendo sull'AI, non investendo — il rischio di capitale distrutto è reale",
+      "url": "https://finnhub.io/api/news?id=cc38c4453abb22c5e7fbe1db1716b356a0a19897a010289d815ab76bed172d40"
+    },
+    {
+      "id": "openai-handheld-device-aapl-meta",
+      "ticker": "AAPL",
+      "data": "2026-08-07T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bloomberg rivela i dettagli del dispositivo portatile di OpenAI: potenziale sfida per Apple e Meta nell'hardware AI consumer",
+      "url": "https://finnhub.io/api/news?id=967b3561fa5591a1d7f13cbe22cde31fcb1b8768dd740d10fb82ee3df7fce16b"
     }
   ]
 }
