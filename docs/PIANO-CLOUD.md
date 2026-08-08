@@ -190,9 +190,29 @@ scritto davvero là dentro; nessun errore nei log.
 (gli chiedo conferma una volta, riportando il costo stimato).
 **Risultato:** l'app raggiungibile via HTTPS, e la prima fattura vera da guardare.
 
-### Fase 2 — I lavori di fondo (dal §3)
-Lavoro in background dietro a Cloud Scheduler, file a runtime sistemati, segreti
-in Secret Manager. Nessuna dipendenza dal login: si può fare in parallelo.
+### Fase 2 — I lavori di fondo ✔ FATTA (08/08/2026)
+- **Cloud Scheduler**: job `mymoney-giornaliero`, ogni giorno alle **22:30
+  (Europe/Rome)**, POST su `/lavori/giornaliero` con la parola d'ordine
+  nell'intestazione. Provato a mano: sei passi su sei, ~2 s.
+- **Chiave dell'agente in Secret Manager** (`mymoney-gemini-api-key`). La
+  variabile `MYMONEY_GEMINI_API_KEY` **vince** su quella nel database: se
+  vincesse il database, spostarla non sarebbe servito a niente. La pagina
+  Impostazioni lo dice, invece di mostrare una casella che non cambia niente.
+- **Notizie senza `git`**: `news/reader.py` faceva `git fetch` + `git show`, e
+  nel container git non c'è. Adesso scarica `state/predictions.json` da GitHub
+  in HTTPS — è un file pubblico e non contiene niente di personale.
+
+**Una cosa trovata guardando l'esito della prima esecuzione vera.** Il rapporto
+diceva «sei passi su sei ok», ma `_passo` scriveva «ok» ogni volta che la
+funzione non sollevava un'eccezione — e le notizie non ne sollevano mai: se la
+rete manca tornano `False`, apposta. Cioè il passo che avevamo appena riscritto
+era proprio quello di cui non avremmo mai saputo se funzionava. Adesso gli esiti
+sono tre: **ok · niente · errore**.
+
+*Restano fuori, e va detto:* il JSON del service account Vertex è ancora solo
+nel database del PC (l'agente sul server usa Google AI Studio, quindi non
+serve). E `refresh_all` che tornasse 0 titoli aggiornati verrebbe ancora
+riportato come «ok»: `_passo` è generico e non può saperlo.
 
 ### Fase 3 — Il login ✔ SCRITTA (08/08/2026), da accendere
 Il codice c'è tutto ed è provato: `shared/sicurezza.py` (biglietti firmati e
