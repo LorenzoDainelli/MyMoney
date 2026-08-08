@@ -95,6 +95,18 @@
       var qui = "";
       try { qui = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) { return; }
       if (!qui || qui === scelto) return;
+
+      // Il confronto è sull'ORA, non sul nome. Windows in Irlanda fa dire al
+      // browser "Europe/London": nome diverso da "Europe/Dublin", stessa ora
+      // esatta. Avvisare lì sarebbe un allarme per niente — e un avviso che
+      // suona quando non serve è un avviso che si impara a ignorare.
+      function oraIn(zona) {
+        return new Intl.DateTimeFormat("en-GB", {
+          timeZone: zona, hour: "2-digit", minute: "2-digit", hour12: false
+        }).format(new Date());
+      }
+      try { if (oraIn(qui) === oraIn(scelto)) return; } catch (e) { /* avvisa comunque */ }
+
       document.getElementById("tz-dispositivo").value = qui;
       document.getElementById("tz-avviso-testo").textContent =
         {{ t('set.tz_mismatch') | tojson }}.replace("{qui}", qui).replace("{scelto}", scelto);
