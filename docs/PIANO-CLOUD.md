@@ -194,9 +194,30 @@ scritto davvero là dentro; nessun errore nei log.
 Lavoro in background dietro a Cloud Scheduler, file a runtime sistemati, segreti
 in Secret Manager. Nessuna dipendenza dal login: si può fare in parallelo.
 
-### Fase 3 — Il login
-Nell'ordine: accesso con Google → lista di uno → sessione → tutto chiuso per
-default → secondo fattore. Con i test del rimbalzo a ogni passo.
+### Fase 3 — Il login ✔ SCRITTA (08/08/2026), da accendere
+Il codice c'è tutto ed è provato: `shared/sicurezza.py` (biglietti firmati e
+codici a sei cifre), `shared/auth.py` (le regole), `shared/accesso.py` (il giro
+con Google), `shared/accesso_routes.py` (le pagine), il middleware in `main.py`.
+**400 test verdi**, di cui 91 sull'accesso e quasi tutti rifiuti.
+
+Il giro: `/accedi` → Google → **biglietto parziale** (non apre niente, vale dieci
+minuti) → codice a sei cifre → biglietto completo. La prima volta si passa da
+`/accedi/attiva`, che si attacca l'app authenticator; il segreto si salva **solo
+dopo** che un codice giusto ha dimostrato che il telefono lo sa fare.
+
+Provato in locale col giro completo via HTTP: porta chiusa, parziale che non
+apre, codice sbagliato respinto, codice giusto che entra, uscita che esce
+davvero, e il secondo fattore che **non si può riattivare** una volta attivo.
+
+**Manca solo l'accensione**, e dipende da una cosa che deve fare Lorenzo: creare
+il client OAuth (§9). Poi il deploy con le variabili, e il primo accesso vero.
+
+*Cosa NON è stato riusato, di proposito:* l'OAuth di `drive_sync.py`. È lo stesso
+ballo, ma quel modulo va in pensione alla Fase 5 e la porta di casa non si lega a
+un modulo già condannato. In più `drive_sync` tiene lo stato del giro **in
+memoria**: su Cloud Run, dove l'app gira in più copie e si spegne da sola, il
+ritorno da Google può bussare a un'istanza diversa e lì quella variabile non
+esiste. Qui lo stato viaggia in un cookie firmato.
 
 ### Fase 4 — I dati veri
 Travaso (lo script c'è ed è provato), verifica riga per riga, e **il vecchio
@@ -268,3 +289,63 @@ significa rimettere in piedi la sincronizzazione. Prima di quella, è un attimo.
 | Perdere dati nel travaso | basso | Verifica riga per riga, già provata; il vecchio database resta |
 | Costo insostenibile a crediti finiti | basso | Il numero si conosce prima; si torna indietro col §7 |
 | I dati veri esposti prima del login | **alto** | I dati veri entrano in Fase 4, il login è in Fase 3 |
+
+---
+
+## 9. Accendere il login: cosa serve, e chi lo fa
+
+Il codice è pronto. Restano tre cose, e la prima **non posso farla io**: entrare
+nella console Google vuol dire entrare nell'account di Lorenzo.
+
+### 9.1 Il client OAuth (lo fa Lorenzo, una volta)
+
+Nella console Google Cloud, progetto `mymoney-502422`:
+
+1. **API e servizi → Schermata consenso OAuth**. Tipo **Esterno**, stato
+   **In test**. In «Utenti di test» aggiungere il proprio indirizzo Gmail — con
+   l'app in test entra solo chi è in quella lista, ed è un lucchetto in più
+   *prima* del nostro.
+2. **Credenziali → Crea credenziali → ID client OAuth**, tipo **Applicazione
+   web**. In «URI di reindirizzamento autorizzati», **esattamente** questo:
+   ```
+   https://mymoney-1057159819758.europe-west8.run.app/accedi/google/ritorno
+   ```
+   Google confronta carattere per carattere: uno slash in più e rifiuta.
+3. Le due stringhe che escono (ID e segreto) vanno **in un file**, non in chat:
+   `C:\Users\loren\Desktop\Claude\tools\oauth.txt`, ID sulla prima riga, segreto
+   sulla seconda. Da lì le leggo io.
+
+### 9.2 Le variabili del server (le metto io, dopo)
+
+| Variabile | Cos'è | Dove sta |
+|---|---|---|
+| `MYMONEY_SESSION_KEY` | firma i biglietti di sessione | Secret Manager |
+| `MYMONEY_OAUTH_CLIENT_SECRET` | il segreto del client | Secret Manager |
+| `MYMONEY_OAUTH_CLIENT_ID` | l'ID del client (non è un segreto) | variabile |
+| `MYMONEY_EMAIL_CONSENTITE` | chi può entrare — una riga sola | variabile |
+| `MYMONEY_BASE_URL` | `https://mymoney-…run.app` | variabile |
+
+**Nessuna ha un valore di ripiego, ed è voluto.** Senza `MYMONEY_SESSION_KEY`
+l'app non finge un login: resta quella di casa. Con la lista vuota non entra
+nemmeno il proprietario. Meglio chiusi fuori che aperti a tutti.
+
+### 9.3 L'ordine dei passi
+
+1. Deploy con le variabili.
+2. **Aprire il servizio** (`--allow-unauthenticated`). Non è un passo
+   rimandabile: finché Cloud Run è privato risponde 403 a un browser normale, e
+   il ritorno da Google atterra proprio su un browser normale. Il login non si
+   può provare a servizio chiuso.
+3. Primo accesso di Lorenzo e attivazione dell'app authenticator, **subito**.
+4. I dati veri (Fase 4) solo **dopo** che la porta ha retto qualche giorno.
+
+Sul punto 3, la domanda giusta è: fra l'apertura e l'attivazione, chi arriva
+prima al mio telefono? **Nessuno, e non per fortuna.** La pagina di attivazione
+chiede il biglietto parziale, e il biglietto parziale si ottiene solo passando
+la lista di chi può entrare — che ha una riga sola. Uno sconosciuto che facesse
+il login con Google verrebbe respinto *prima*. In quella finestra il rischio
+esiste per una persona sola: chi già controlla l'account Google di Lorenzo.
+
+Ci sono comunque due lucchetti in più, e sono gratis: la schermata di consenso
+**in test** (entra solo chi è fra gli utenti di test), e il fatto che
+l'attivazione si fa in un minuto.
