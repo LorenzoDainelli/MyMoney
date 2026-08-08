@@ -14,7 +14,11 @@
       <div class="page-title" style="margin-bottom:2px;">{{ t('nav.dashboard') }}</div>
       <p class="page-sub" style="margin:0;">{{ t('dash.subtitle') }}{% if d.updated %} · <span class="muted">{{ t('dash.updated', when=d.updated) }}</span>{% endif %}{% if d.tr and d.tr.attivo and not d.tr.assurdo %} · <span class="pill green" style="text-transform:none;">{{ t('pf.tr_badge', d=d.tr.data.strftime('%d/%m')) }}</span>{% endif %}</p>
     </div>
-    <div class="actions" style="margin:0;flex-wrap:nowrap;">
+    {# `flex-wrap` lasciato al foglio di stile (che dice «wrap»): forzarlo a
+       `nowrap` qui teneva i due bottoni su una riga sola anche quando la riga
+       non c'era — sul telefono erano 397 punti in uno schermo da 375, ed era
+       il motivo per cui l'INTERA pagina scorreva di lato. #}
+    <div class="actions" style="margin:0;">
       <a href="/finanze" class="btn primary">{{ icon('wallet', 16) }} {{ t('dash.registra_mov') }}</a>
       <a href="/portafoglio?add=1" class="btn">{{ icon('plus', 16) }} {{ t('dash.btn_add_pos') }}</a>
     </div>

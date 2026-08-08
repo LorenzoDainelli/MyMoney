@@ -1,0 +1,151 @@
+/* =========================================================================
+   MyMoney — il guscio del telefono (Fase 1)
+
+   Foglio SEPARATO di proposito. `styles.css` e `mymoney.css` sono il design
+   freeze v1.0, copiati verbatim dall'handoff: si sostituiscono in blocco quando
+   il design cambia, e metterci dentro roba nostra vorrebbe dire perderla al
+   primo aggiornamento. Qui c'è solo ciò che riguarda lo schermo piccolo, e sta
+   tutto dentro una media query: sul PC questo file non fa assolutamente niente.
+
+   La forma è quella già approvata sulla PWA a luglio (pwa/styles.css): barra in
+   basso a quattro voci, «＋» centrale, pannelli che salgono dal fondo. Non è
+   stata reinventata — è stata portata qui, perché la PWA va in pensione e il
+   disegno no.
+
+   Tutti i colori passano dai token: niente valori fissi, o il tema scuro si
+   romperebbe in silenzio.
+   ========================================================================= */
+
+/* Il gradino: sotto i 760px comanda il telefono. È la stessa soglia che il
+   design freeze usa già altrove, così non si creano due idee di «piccolo». */
+@media (max-width: 760px) {
+
+  /* --- barra in alto: resta solo il marchio ------------------------------
+     La navigazione se ne va in basso, dov'è il pollice. Tema, lingua e uscita
+     finiscono nel pannello «Altro»: in cima non c'era spazio per farli grandi
+     abbastanza da poterli premere. */
+  .topbar .nav,
+  .topbar .prefs { display: none; }
+  .topbar-inner { padding-top: 8px; padding-bottom: 8px; min-height: 0; }
+
+  /* --- il contenuto ------------------------------------------------------ */
+  .wrap {
+    padding: var(--space-5) 14px
+             calc(var(--tel-nav-h) + env(safe-area-inset-bottom, 0px) + 26px);
+  }
+  .page-title { font-size: var(--text-xl); }
+
+  /* Una tabella larga scorre DENTRO la sua card, invece di allargare la
+     pagina: era il difetto che sul telefono si vedeva come «sito schiacciato»
+     con la barra di scorrimento orizzontale. */
+  .card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* --- la barra in basso ------------------------------------------------- */
+  .tel-tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    display: flex; align-items: flex-end; justify-content: space-around;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 8px 4px calc(env(safe-area-inset-bottom, 0px) + 8px);
+    box-shadow: 0 -6px 22px -16px rgba(0, 0, 0, .5);
+  }
+  .tel-tab {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: 0; padding: 4px 0;
+    font: inherit; font-size: 11px; font-weight: var(--fw-semibold);
+    color: var(--faint); text-decoration: none; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tel-tab span { line-height: 1; }
+  .tel-tab.on { color: var(--accent-strong); }
+  .tel-tab:focus-visible { outline: none; box-shadow: var(--ring-focus); border-radius: var(--r-sm); }
+
+  /* Il «＋» sporge dalla barra: è l'azione che si fa dieci volte al giorno,
+     e deve trovarsi senza guardare. */
+  .tel-fab {
+    flex: 0 0 auto; width: 54px; height: 54px; margin-top: -22px;
+    border-radius: var(--r-pill);
+    background: var(--accent); color: var(--on-accent);
+    border: 4px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-md); text-decoration: none;
+  }
+  .tel-fab:active { transform: scale(.94); }
+
+  /* --- il pannello che sale dal fondo ------------------------------------ */
+  .tel-velo {
+    position: fixed; inset: 0; z-index: 70; background: rgba(0, 0, 0, .5);
+    opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .tel-velo.aperto { opacity: 1; pointer-events: auto; }
+  .tel-foglio {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    background: var(--surface); color: var(--ink);
+    border-radius: 22px 22px 0 0;
+    padding: 8px 16px calc(env(safe-area-inset-bottom, 0px) + 18px);
+    max-height: 88vh; overflow-y: auto;
+    transform: translateY(101%);
+    /* `visibility` e non l'attributo `hidden`: quello lo sovrascriverebbe la
+       regola qui sotto, e il pannello resterebbe raggiungibile col tasto TAB
+       pur essendo fuori schermo — invisibile ma non assente. */
+    visibility: hidden;
+    transition: transform var(--dur-slow) cubic-bezier(.32, .72, 0, 1),
+                visibility var(--dur-slow);
+    box-shadow: 0 -12px 40px -16px rgba(0, 0, 0, .55);
+  }
+  .tel-foglio.aperto { transform: translateY(0); visibility: visible; }
+  .tel-presa {
+    width: 40px; height: 4px; border-radius: 2px;
+    background: var(--faint); opacity: .5; margin: 6px auto 14px;
+  }
+  .tel-foglio h2 {
+    font-size: var(--text-lg); font-weight: var(--fw-bold);
+    margin: 0 0 12px; letter-spacing: var(--ls-tight);
+  }
+  /* Voci grandi: si premono con il pollice, non con il mouse. */
+  .tel-voce {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 6px; border-bottom: 1px solid var(--border);
+    color: var(--ink); text-decoration: none;
+    font-size: var(--text-base); font-weight: var(--fw-medium);
+    background: none; border-left: 0; border-right: 0; border-top: 0;
+    width: 100%; font-family: inherit; text-align: left; cursor: pointer;
+  }
+  .tel-voce:last-child { border-bottom: 0; }
+  .tel-voce:active { background: var(--hover); }
+  .tel-voce svg { flex: none; color: var(--muted); }
+  .tel-voce.esci { color: var(--neg); }
+  .tel-voce.esci svg { color: var(--neg); }
+  .tel-foglio form { margin: 0; }
+
+  /* Il modulo di aggiunta occupa tutta la larghezza: il pannello «che cosa
+     cambia» qui starebbe in una colonna da 40 punti. Scende sotto. */
+  .mm-add { grid-template-columns: 1fr; }
+  .mm-add-side { position: static; }
+
+  /* Campi affiancati: due o tre colonne su 347 punti vogliono dire caselle da
+     centosessanta, in cui una data non ci sta. Uno sotto l'altro. Un modulo che
+     si scorre di lato è la cosa che fa abbandonare a metà.
+
+     `minmax(0, 1fr)` e non `1fr`: `1fr` ha un minimo automatico pari alla
+     larghezza minima del CONTENUTO, quindi una casella con dentro un testo
+     lungo allarga la colonna oltre lo schermo e la riga sfora lo stesso — è
+     esattamente quel che faceva qui (una colonna sola, larga 392 in uno spazio
+     da 297). Lo zero le dà il permesso di stringersi. */
+  .row2, .row3 { grid-template-columns: minmax(0, 1fr); }
+  /* Stessa ragione, per le caselle dentro qualunque griglia. */
+  input, select, textarea { min-width: 0; max-width: 100%; }
+}
+
+/* Sul PC la barra del telefono non deve esistere proprio: `display:none` in un
+   solo posto, fuori dalla media query, così non c'è nessun momento in cui
+   comparirebbe (per esempio mentre il CSS è ancora in caricamento). */
+.tel-tabbar, .tel-velo, .tel-foglio { display: none; }
+@media (max-width: 760px) {
+  .tel-tabbar { display: flex; }
+  .tel-velo, .tel-foglio { display: block; }
+}
+
+/* Altezza della barra: serve al padding del contenuto, e sta qui perché è una
+   misura, non una scelta di stile. */
+:root { --tel-nav-h: 62px; }

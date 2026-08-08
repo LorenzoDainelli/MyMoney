@@ -1,0 +1,26 @@
+{
+  "name": "MyMoney",
+  "short_name": "MyMoney",
+  "description": "I tuoi conti, i tuoi titoli e i tuoi movimenti.",
+  "lang": "it",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F6EF",
+  "theme_color": "#A6DA47",
+  "icons": [
+    {
+      "src": "/static/icone/icona-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icone/icona-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

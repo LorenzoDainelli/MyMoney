@@ -138,7 +138,8 @@
   <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.add_movement') }}</div>
   {# Il modulo e, accanto, la CONSEGUENZA: prima si compilava alla cieca e si
      scopriva il portafoglio sbagliato giorni dopo. Vedi movement-preview.js. #}
-  <div class="mm-add">
+  {# ancora del «＋» della barra del telefono (base.html) #}
+  <div class="mm-add" id="aggiungi">
     <div class="mm-add-main">
       {% include "finance_ai_box.html" %}
       {% include "finance_movement_form.html" %}

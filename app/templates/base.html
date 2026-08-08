@@ -6,11 +6,23 @@
 <html lang="{{ lang }}" data-theme="{{ theme }}" data-anim="{{ anim }}">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {# viewport-fit=cover: senza, sull'iPhone la barra in basso finirebbe sotto
+     l'indicatore di sistema e le ultime voci non si premerebbero. #}
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% block title %}{{ t('app.name') }}{% endblock %}</title>
+  {# Installabile sulla schermata Home: si apre a schermo pieno, senza la barra
+     degli indirizzi. La barra del sistema prende il colore del tema. #}
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/static/icone/icona-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="MyMoney">
+  <meta name="theme-color" content="{{ '#151812' if theme=='dark' else '#A6DA47' }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/static/styles.css?v={{ V }}">
+  {# Il guscio del telefono, a parte: styles.css è il design freeze e si
+     sostituisce in blocco, quindi non ci si scrive dentro. #}
+  <link rel="stylesheet" href="/static/telefono.css?v={{ V }}">
   <style>
     /* interactive affordances for the new click targets (tokens only) — dal freeze */
     .mm-rowbtn, .mm-titlebtn { transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
@@ -129,6 +141,55 @@
   </main>
 
   <footer class="disclaimer">{{ t('disclaimer.text') }}</footer>
+
+  {# ==========================================================================
+     Il guscio del telefono. Sul PC questo blocco è invisibile (telefono.css lo
+     nasconde), ma il markup c'è sempre: deciderlo lato server vorrebbe dire
+     indovinare il dispositivo dall'intestazione del browser, che è una cosa che
+     sbaglia. Decide la larghezza dello schermo, che è il fatto vero.
+
+     Quattro destinazioni e un «＋». Le pagine dell'app sono sette e in una
+     barra non ci stanno: le tre che restano vanno nel pannello «Altro», insieme
+     a tema, lingua e uscita. Nella PWA le schede erano quattro in tutto —
+     qui non se ne perde nessuna, è solo questione di dove stanno.
+     ========================================================================== #}
+  <nav class="tel-tabbar" aria-label="{{ t('nav.dashboard') }}">
+    <a class="tel-tab {{ 'on' if active=='home' else '' }}" href="/">
+      {{ icon('dashboard', 22) }}<span>Home</span></a>
+    <a class="tel-tab {{ 'on' if active=='finanze' else '' }}" href="/finanze">
+      {{ icon('finanze', 22) }}<span>{{ t('nav.finance') }}</span></a>
+    {# Il «＋» porta dritto al modulo, che sulla pagina Finanze sta a metà: senza
+       l'ancora si arriverebbe in cima e toccherebbe scorrerlo a cercarlo. #}
+    <a class="tel-fab" href="/finanze#aggiungi" aria-label="Nuovo movimento">
+      {{ icon('plus', 26) }}</a>
+    <a class="tel-tab {{ 'on' if active=='portafoglio' else '' }}" href="/portafoglio">
+      {{ icon('portfolio', 22) }}<span>Titoli</span></a>
+    <button type="button" class="tel-tab" id="tel-altro" aria-expanded="false"
+            aria-controls="tel-foglio-altro">
+      {{ icon('altro', 22) }}<span>Altro</span></button>
+  </nav>
+
+  <div class="tel-velo" id="tel-velo"></div>
+  <div class="tel-foglio" id="tel-foglio-altro" role="dialog" aria-modal="true"
+       aria-label="Altro">
+    <div class="tel-presa"></div>
+    <h2>Altro</h2>
+    <a class="tel-voce" href="/pac">{{ icon('pac', 20) }}{{ t('nav.pac') }}</a>
+    <a class="tel-voce" href="/analisi">{{ icon('analisi', 20) }}{{ t('nav.analisi') }}</a>
+    <a class="tel-voce" href="/notizie">{{ icon('notizie', 20) }}{{ t('nav.news') }}</a>
+    <a class="tel-voce" href="/impostazioni">{{ icon('impostazioni', 20) }}{{ t('nav.settings') }}</a>
+    <form method="post" action="/preferenze">
+      <input type="hidden" name="next" value="{{ cur_path }}">
+      <input type="hidden" name="theme" value="{{ 'dark' if theme=='light' else 'light' }}">
+      <button type="submit" class="tel-voce">
+        {{ icon('moon' if theme=='light' else 'sun', 20) }}{{ t('theme.toggle') }}</button>
+    </form>
+    {% if c_e_login %}
+    <form method="post" action="/esci">
+      <button type="submit" class="tel-voce esci">{{ icon('esci', 20) }}Esci</button>
+    </form>
+    {% endif %}
+  </div>
 
   <script src="/static/app.js?v={{ V }}"></script>
   {% block scripts %}{% endblock %}

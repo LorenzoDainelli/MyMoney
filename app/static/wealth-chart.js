@@ -76,8 +76,14 @@
     var R = DATA[range];
     var series = R.v, times = R.t;
     var lastI = series.length - 1;
-    var w = Math.max(320, Math.round(chartWrap.clientWidth || 760));
-    var H = 264, padT = 16, padB = 26, padL = 50, padR = 14;
+    // Il minimo era 320: su un telefono da 375 la card ne lascia 297, e il
+    // grafico sforava di 23 punti costringendo la card a scorrere di lato.
+    // 240 è il punto sotto il quale una linea con le etichette non si legge più.
+    var w = Math.max(240, Math.round(chartWrap.clientWidth || 760));
+    var H = 264, padT = 16, padB = 26, padR = 14;
+    // Lo spazio a sinistra serve alle etichette «€1.6k». Su uno schermo stretto
+    // 50 punti sono un sesto del grafico: si stringe, e le etichette restano.
+    var padL = w < 380 ? 38 : 50;
     var plotW = Math.max(10, w - padL - padR), plotH = H - padT - padB;
     var dmin = Math.min.apply(null, series), dmax = Math.max.apply(null, series);
     var room = (dmax - dmin) * 0.14 || dmax * 0.02 || 1;
@@ -151,5 +157,12 @@
     var ro = new ResizeObserver(function () { render(); });
     ro.observe(chartWrap);
   }
+  // Due reti di sicurezza sotto al ResizeObserver, perché quello è legato al
+  // disegno dei fotogrammi: se il primo disegno capita prima che il contenitore
+  // abbia una larghezza, il grafico resta a 760 (il ripiego) dentro una card
+  // che ne misura 600, e nessuno lo corregge più. `load` copre il caricamento,
+  // `resize` copre la rotazione del telefono e la finestra tirata sul PC.
+  window.addEventListener('load', function () { render(); });
+  window.addEventListener('resize', function () { render(); });
   render();
 })();

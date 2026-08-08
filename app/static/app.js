@@ -323,3 +323,44 @@ document.addEventListener('click', function (e) {
     for (var i = 0; i < box.length; i++) { adatta(box[i]); aggiorna(box[i]); }
   });
 })();
+
+
+/* ==========================================================================
+   Telefono: il pannello «Altro».
+
+   Le pagine dell'app sono sette e in una barra da quattro non ci stanno. Le tre
+   che restano — più tema e uscita — salgono dal fondo da qui.
+
+   Volutamente senza librerie e senza animazioni scritte a mano: la salita è una
+   transizione CSS, questo codice sposta solo una classe. Meno pezzi, meno cose
+   che si possono rompere su un telefono che non abbiamo sotto mano.
+   ========================================================================== */
+(function () {
+  var apri = document.getElementById('tel-altro');
+  var velo = document.getElementById('tel-velo');
+  var foglio = document.getElementById('tel-foglio-altro');
+  if (!apri || !velo || !foglio) return;
+
+  function mostra(si) {
+    velo.classList.toggle('aperto', si);
+    foglio.classList.toggle('aperto', si);
+    apri.setAttribute('aria-expanded', si ? 'true' : 'false');
+    // Senza questo la pagina dietro scorre insieme al pannello, e sembra che
+    // il pannello scappi via mentre lo si legge.
+    document.body.style.overflow = si ? 'hidden' : '';
+  }
+
+  apri.addEventListener('click', function () {
+    mostra(!foglio.classList.contains('aperto'));
+  });
+  velo.addEventListener('click', function () { mostra(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') mostra(false);
+  });
+  // Toccata una voce si va da un'altra parte: il pannello non deve restare
+  // aperto sotto la pagina nuova se il browser torna indietro dalla cache.
+  foglio.addEventListener('click', function (e) {
+    if (e.target.closest('a, button')) mostra(false);
+  });
+  window.addEventListener('pageshow', function () { mostra(false); });
+})();
