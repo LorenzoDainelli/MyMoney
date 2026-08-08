@@ -44,6 +44,7 @@ seed.applica_nomi_brevi()              # nomi corti degli ETF anche su DB già p
 fin_service.seed_wallets_if_empty()
 fin_service.assicura_wallet_brand()    # conti/carte reali (AIB, Hype, Revolut, TR, PayPal), mai generici
 fin_service.assicura_salvadanaio()     # «Nascosti» + arrotondamento/saveback sulla carta TR
+fin_service.ricalcola_saveback_troncati()  # 1% esatto anche sui saveback vecchi (0,40 -> 0,4045)
 fin_service.applica_saldi_iniziali()   # saldi di apertura al 4/7/2026 (solo dove ancora a zero)
 
 

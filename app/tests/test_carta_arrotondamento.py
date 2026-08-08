@@ -4,12 +4,13 @@ Paghi 7,60 € alla Coop con la carta Trade Republic e succedono tre cose che NO
 sono la stessa cosa:
   · 7,60 € di consumo          -> uscita        (non sono più tuoi)
   · 0,40 € di arrotondamento   -> trasferimento (tuoi, cambiano tasca)
-  · 0,07 € di saveback         -> entrata       (della banca, prima non c'erano)
+  · 0,076 € di saveback        -> entrata       (della banca, prima non c'erano)
 Dal conto escono 8,00 €, ma di spesa ne hai fatta 7,60. Segnare 8,00 falserebbe
 i consumi; segnare 7,60 lascerebbe il conto scoperto di 40 centesimi. Qui si
 difende il fatto che tornino ENTRAMBE le cose, più le regole della carta
-verificate dall'utente il 30/07/2026 (prossimo euro anche sulle cifre tonde,
-1% troncato ai centesimi, tetto di 15 €/mese).
+verificate dall'utente sull'estratto: prossimo euro anche sulle cifre tonde
+(30/07/2026), saveback dell'1% ESATTO — 40,45 € danno 0,4045 €, non 0,40 —
+(08/08/2026), tetto di 15 €/mese.
 
 Niente rete.
 """
@@ -78,13 +79,23 @@ def test_niente_arrotondamento_su_importo_nullo():
     assert fin.arrotondamento(None) == 0.0
 
 
-def test_il_saveback_e_troncato_non_arrotondato():
-    """7,60 × 1% = 0,076 e la banca accredita 0,07. Arrotondando si darebbe 0,08:
-    un centesimo che non arriverà mai, ripetuto a ogni spesa."""
-    assert fin.saveback_dovuto(7.60, 1.0) == 0.07
-    assert fin.saveback_dovuto(12.50, 1.0) == 0.12       # 0,125 -> 0,12
+def test_il_saveback_e_l_uno_percento_esatto():
+    """Il caso che l'ha fatto scoprire: 40,45 € sull'estratto danno 0,4045 € di
+    saveback, non 0,40. Troncando ai centesimi si regalerebbero alla banca fino a
+    0,0099 € per ogni spesa — invisibili una per una, non più a fine anno."""
+    assert fin.saveback_dovuto(40.45, 1.0) == 0.4045
+    assert fin.saveback_dovuto(7.60, 1.0) == 0.076
+    assert fin.saveback_dovuto(12.50, 1.0) == 0.125
     assert fin.saveback_dovuto(3.00, 1.0) == 0.03        # niente errori di virgola
-    assert fin.saveback_dovuto(0.99, 1.0) == 0.0         # meno di un centesimo
+    assert fin.saveback_dovuto(13.00, 1.0) == 0.13       # cifra tonda: nessun decimale in più
+
+
+def test_anche_sotto_il_centesimo_il_saveback_esiste():
+    """Prima una spesa da 0,99 € non maturava niente: 0,0099 arrivavano a zero.
+    Sono pochi, ma sono suoi."""
+    assert fin.saveback_dovuto(0.99, 1.0) == 0.0099
+    assert fin.saveback_dovuto(0.0, 1.0) == 0.0
+    assert fin.saveback_dovuto(7.60, 0.0) == 0.0         # carta senza saveback
 
 
 def test_il_saveback_si_ferma_al_tetto_del_mese():
@@ -96,9 +107,9 @@ def test_il_saveback_si_ferma_al_tetto_del_mese():
 
 def test_il_tetto_gia_maturato_si_legge_dai_movimenti(test_db):
     _spesa(7.60)
-    assert fin.saveback_maturato(ANNO, MESE) == 0.07
+    assert fin.saveback_maturato(ANNO, MESE) == 0.076
     _spesa(7.60)
-    assert fin.saveback_maturato(ANNO, MESE) == 0.14
+    assert fin.saveback_maturato(ANNO, MESE) == 0.152
 
 
 # --------------------------- le tre righe ---------------------------
@@ -111,7 +122,7 @@ def test_una_spesa_fa_tre_righe(test_db):
         assert (spesa.tipo, spesa.importo, spesa.parent_tx_id) == (TIPO_USCITA, 7.60, None)
         assert (arr.tipo, arr.importo, arr.parent_tx_id) == (TIPO_TRASFERIMENTO, 0.40, tid)
         assert (arr.wallet_id, arr.wallet_to_id) == (1, 2)     # carta -> Nascosti
-        assert (sav.tipo, sav.importo, sav.parent_tx_id) == (TIPO_ENTRATA, 0.07, tid)
+        assert (sav.tipo, sav.importo, sav.parent_tx_id) == (TIPO_ENTRATA, 0.076, tid)
         assert sav.wallet_id == 2                              # nasce già nel salvadanaio
 
 
@@ -120,7 +131,9 @@ def test_dal_conto_escono_8_euro_ma_la_spesa_e_760(test_db):
     _spesa(7.60)
     saldi = {r["w"].nome: r["saldo"] for r in fin.saldi()["righe"]}
     assert saldi["Trade Republic"] == 92.00        # 100 − 7,60 − 0,40
-    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.47
+    # 0,40 + 0,076: il saldo di un portafoglio si legge al centesimo, come su un
+    # estratto conto. I decimillesimi restano nel movimento, dove servono.
+    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.48
     assert fin.riepilogo_mese(ANNO, MESE)["uscite"] == 7.60
 
 
@@ -128,24 +141,24 @@ def test_il_saveback_e_un_entrata_del_mese(test_db):
     """Se non lo fosse, il patrimonio crescerebbe di 7 centesimi che nessun
     movimento spiega."""
     _spesa(7.60)
-    assert fin.riepilogo_mese(ANNO, MESE)["entrate"] == 0.07
+    assert fin.riepilogo_mese(ANNO, MESE)["entrate"] == 0.08     # 0,076 al centesimo
 
 
 def test_i_nascosti_contano_nel_patrimonio_ma_non_fra_i_liquidi(test_db):
     _spesa(7.60)
     s = fin.saldi()
-    assert s["bloccato"] == 0.47
+    assert s["bloccato"] == 0.48
     assert s["liquido"] == 92.00                  # senza il salvadanaio
-    assert s["totale"] == 92.47                   # col salvadanaio: sono soldi tuoi
+    assert s["totale"] == 92.48                   # col salvadanaio: sono soldi tuoi
     riga = next(r for r in s["righe"] if r["w"].nome == fin.NOME_WALLET_NASCOSTI)
     assert riga["bloccato"] is True
 
 
-def test_il_patrimonio_scende_di_753_non_di_760(test_db):
-    """Hai consumato 7,60 e ti hanno regalato 0,07."""
+def test_il_patrimonio_scende_di_752_non_di_760(test_db):
+    """Hai consumato 7,60 e ti hanno regalato 0,076."""
     prima = fin.saldi()["totale"]
     _spesa(7.60)
-    assert round(fin.saldi()["totale"] - prima, 2) == -7.53
+    assert round(fin.saldi()["totale"] - prima, 2) == -7.52
 
 
 # --------------------------- quando NON deve scattare ---------------------------
@@ -205,7 +218,7 @@ def test_correggere_l_importo_rifa_i_conti(test_db):
     fin.risincronizza_figlie(tid, 7.60)
     imp = {f.origine: f.importo for f in fin.figlie(tid)}
     assert imp[fin.ORIGINE_ARROTONDAMENTO] == 0.10
-    assert imp[fin.ORIGINE_SAVEBACK] == 0.07          # 7,90% -> 0,079 -> 0,07
+    assert imp[fin.ORIGINE_SAVEBACK] == 0.079         # l'1% di 7,90
 
 
 def test_un_importo_corretto_a_mano_non_viene_riscritto(test_db):
@@ -216,7 +229,7 @@ def test_un_importo_corretto_a_mano_non_viene_riscritto(test_db):
     fin.risincronizza_figlie(tid, 7.60)
     imp = {f.origine: f.importo for f in fin.figlie(tid)}
     assert imp[fin.ORIGINE_ARROTONDAMENTO] == 0.90    # invariato
-    assert imp[fin.ORIGINE_SAVEBACK] == 0.07          # questo sì, era automatico
+    assert imp[fin.ORIGINE_SAVEBACK] == 0.079         # questo sì, era automatico
 
 
 def test_puoi_azzerare_una_delle_due(test_db):
@@ -229,9 +242,9 @@ def test_la_proposta_tiene_conto_di_quanto_e_gia_maturato(test_db):
     with test_db() as db:
         db.get(Wallet, 1).saveback_tetto = 0.10       # tetto finto, basso
         db.commit()
-    _spesa(7.60)                                      # matura 0,07
+    _spesa(7.60)                                      # matura 0,076
     e = fin.extra_carta(1, 7.60, QUANDO)
-    assert e["saveback"] == 0.03                      # quello che manca a 0,10
+    assert e["saveback"] == 0.024                     # quello che manca a 0,10
     assert e["arrotondamento"] == 0.40
 
 
@@ -253,9 +266,9 @@ def test_i_soldi_accantonati_non_sono_rimasti_liquidi(test_db, monkeypatch):
     d = fin.destinazioni_mese(ANNO, MESE)
     val = {v["key"]: v["val"] for v in d["voci"]}
     assert val["speso"] == 7.60
-    assert val["accantonato"] == 0.47
+    assert val["accantonato"] == 0.48
     # le voci fanno ESATTAMENTE le entrate, saveback compreso
-    assert round(sum(val.values()), 2) == d["entrate"] == 1000.07
+    assert round(sum(val.values()), 2) == d["entrate"] == 1000.08
     # ...e «rimasto» è davvero la liquidità in più del mese: 1000 − 7,60 − 0,40
     assert val["rimasto"] == 992.00
 
@@ -276,10 +289,12 @@ def test_quando_la_banca_compra_il_salvadanaio_si_svuota(test_db, monkeypatch):
     _niente_pac(monkeypatch)
     fin.crea_movimento(TIPO_ENTRATA, QUANDO, 1000.0, 1, categoria_nome="Paghetta")
     _spesa(7.60)
-    assert fin.accantonato_mese(ANNO, MESE) == 0.47
+    assert fin.accantonato_mese(ANNO, MESE) == 0.48
 
-    # la banca investe: dal salvadanaio al conto degli investimenti (qui Hype)
-    fin.crea_movimento(TIPO_TRASFERIMENTO, QUANDO, 0.47, 2, wallet_to_id=3)
+    # la banca investe: dal salvadanaio al conto degli investimenti (qui Hype).
+    # Esce la cifra VERA, decimillesimi compresi: se uscisse quella arrotondata
+    # il salvadanaio resterebbe con dentro un residuo che non esiste.
+    fin.crea_movimento(TIPO_TRASFERIMENTO, QUANDO, 0.476, 2, wallet_to_id=3)
     assert fin.accantonato_mese(ANNO, MESE) == 0.0
     assert fin.saldi()["bloccato"] == 0.0
 
@@ -307,9 +322,9 @@ def test_il_modulo_di_modifica_ripropone_gli_importi_veri(test_db):
     e il modulo deve dire al JS quali numeri erano tuoi."""
     tid = _spesa(7.60, arr=0.90)
     ed = fin.dati_modifica(tid)
-    assert (ed["extra_arr"], ed["extra_sav"]) == ("0,90", "0,07")
+    assert (ed["extra_arr"], ed["extra_sav"]) == ("0,90", "0,076")
     assert ed["extra_arr_mio"] is True        # 0,90 non è quello che calcolerebbe l'app
-    assert ed["extra_sav_mio"] is False       # 0,07 sì
+    assert ed["extra_sav_mio"] is False       # 0,076 sì
 
 
 def test_il_saveback_del_movimento_non_riempie_il_tetto_a_se_stesso(test_db):
@@ -318,9 +333,9 @@ def test_il_saveback_del_movimento_non_riempie_il_tetto_a_se_stesso(test_db):
     with test_db() as db:
         db.get(Wallet, 1).saveback_tetto = 0.10
         db.commit()
-    tid = _spesa(7.60)                                    # matura 0,07
+    tid = _spesa(7.60)                                    # matura 0,076
     e = fin.extra_carta(1, 7.60, QUANDO, escludi_tx=tid)
-    assert e["saveback"] == 0.07                          # non 0,03
+    assert e["saveback"] == 0.076                         # non 0,024
 
 
 # ==================== partite di giro ====================
@@ -342,10 +357,10 @@ def test_anche_una_spesa_da_rimborsare_arrotonda(test_db):
             Transaction.parent_tx_id == gamba.id).order_by(Transaction.id).all()
     assert [(f.tipo, f.importo, f.origine) for f in figlie] == [
         (TIPO_TRASFERIMENTO, 0.40, fin.ORIGINE_ARROTONDAMENTO),
-        (TIPO_ENTRATA, 0.07, fin.ORIGINE_SAVEBACK)]
+        (TIPO_ENTRATA, 0.076, fin.ORIGINE_SAVEBACK)]
     saldi = {r["w"].nome: r["saldo"] for r in fin.saldi()["righe"]}
     assert saldi["Trade Republic"] == 92.00        # 100 − 7,60 − 0,40
-    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.47
+    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.48
 
 
 def test_il_rimborso_non_restituisce_l_arrotondamento(test_db):
@@ -354,7 +369,7 @@ def test_il_rimborso_non_restituisce_l_arrotondamento(test_db):
     fin.chiudi_giro(gid, importo=7.60, wallet_id=1, controparte="babbo", data=QUANDO)
     saldi = {r["w"].nome: r["saldo"] for r in fin.saldi()["righe"]}
     assert saldi["Trade Republic"] == 99.60        # rientrati 7,60, non 8,00
-    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.47
+    assert saldi[fin.NOME_WALLET_NASCOSTI] == 0.48
 
 
 def test_una_gamba_su_una_carta_senza_regole_non_genera_niente(test_db):
@@ -427,7 +442,7 @@ def test_modificare_la_partita_rifa_le_figlie_senza_lasciarne_di_orfane(test_db)
         gambe = [t for t in vive if not t.parent_tx_id]
     assert len(gambe) == 1 and gambe[0].importo == 12.34
     assert sorted((f.importo, f.origine) for f in figlie) == [
-        (0.12, fin.ORIGINE_SAVEBACK), (0.66, fin.ORIGINE_ARROTONDAMENTO)]
+        (0.1234, fin.ORIGINE_SAVEBACK), (0.66, fin.ORIGINE_ARROTONDAMENTO)]
     assert all(f.parent_tx_id == gambe[0].id for f in figlie)
     assert fin.saldi()["righe"] and fin.accantonato_mese(ANNO, MESE) == 0.78
 
@@ -439,5 +454,118 @@ def test_il_modulo_di_modifica_ripropone_le_figlie_di_ogni_gamba(test_db):
     ed = fin.dati_modifica(tid)
     assert ed["kind"] == "giro"
     s = ed["spese"][0]
-    assert (s["arr"], s["sav"]) == ("0,90", "0,07")
+    assert (s["arr"], s["sav"]) == ("0,90", "0,076")
     assert s["arr_mio"] is True and s["sav_mio"] is False
+
+
+# ==================== lo storico: i saveback troncati ====================
+# Fino all'08/08/2026 l'app troncava il saveback ai centesimi. Le righe già
+# scritte non si sistemano da sole: chi le ha registrate credeva fossero giuste.
+def _saveback_di(tid):
+    return next(f.importo for f in fin.figlie(tid) if f.origine == fin.ORIGINE_SAVEBACK)
+
+
+def _tronca(tid, valore):
+    """Riporta indietro l'orologio: rimette sulla riga l'importo che ci avrebbe
+    scritto la vecchia formula."""
+    with fin.SessionLocal() as db:
+        f = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one()
+        f.importo = valore
+        db.commit()
+
+
+def test_i_saveback_vecchi_tornano_all_uno_percento_esatto(test_db):
+    """Il caso vero: 40,45 € con 0,40 € di saveback scritto quando si troncava."""
+    tid = _spesa(40.45)
+    _tronca(tid, 0.40)
+    assert fin.ricalcola_saveback_troncati() == 1
+    assert _saveback_di(tid) == 0.4045
+
+
+def test_una_cifra_gia_esatta_non_viene_toccata(test_db):
+    """13,00 € danno 0,13 tondi: vecchia e nuova formula dicono la stessa cosa,
+    e la riga non deve nemmeno essere riscritta (o il telefono riceverebbe una
+    modifica che non modifica niente)."""
+    tid = _spesa(13.00)
+    with fin.SessionLocal() as db:
+        rev_prima = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one().rev
+    assert fin.ricalcola_saveback_troncati() == 0
+    with fin.SessionLocal() as db:
+        f = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one()
+    assert (f.importo, f.rev) == (0.13, rev_prima)
+
+
+def test_un_saveback_scritto_a_mano_resta_tuo(test_db):
+    """0,50 su una spesa da 40,45 non è né la vecchia né la nuova formula: l'hai
+    deciso tu, e una migrazione non disfa una decisione."""
+    tid = _spesa(40.45, sav=0.50)
+    assert fin.ricalcola_saveback_troncati() == 0
+    assert _saveback_di(tid) == 0.50
+
+
+def test_la_correzione_arriva_anche_al_telefono(test_db):
+    """Se non passasse dall'ORM, `rev` resterebbe ferma e la correzione morirebbe
+    su questo PC: il telefono continuerebbe a mostrare 0,40."""
+    tid = _spesa(40.45)
+    _tronca(tid, 0.40)
+    with fin.SessionLocal() as db:
+        prima = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one().rev
+    fin.ricalcola_saveback_troncati()
+    with fin.SessionLocal() as db:
+        f = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one()
+    assert f.rev > prima and f.updated_at is not None
+
+
+def test_ripassare_una_seconda_volta_non_cambia_piu_niente(test_db):
+    """Gira a ogni avvio dell'app: la seconda volta deve trovare tutto a posto."""
+    tid = _spesa(40.45)
+    _tronca(tid, 0.40)
+    assert fin.ricalcola_saveback_troncati() == 1
+    assert fin.ricalcola_saveback_troncati() == 0
+    assert _saveback_di(tid) == 0.4045
+
+
+def test_le_righe_di_una_spesa_cancellata_restano_ferme(test_db):
+    tid = _spesa(40.45)
+    _tronca(tid, 0.40)
+    fin.elimina_movimento(tid)
+    assert fin.ricalcola_saveback_troncati() == 0
+
+
+# ==================== come si legge ====================
+# Tenere 0,4045 nel database e scrivere «€ 0,40» sullo schermo sarebbe far
+# sparire proprio la cosa che si è appena scoperta.
+def test_il_saveback_si_legge_con_i_decimali_che_ha():
+    from shared.formatting import format_eur_esatto
+    assert format_eur_esatto(0.4045) == "€ 0,4045"
+    assert format_eur_esatto(0.076) == "€ 0,076"
+    assert format_eur_esatto(0.13) == "€ 0,13"        # tondo: due cifre, come sempre
+    assert format_eur_esatto(2.0) == "€ 2,00"
+    assert format_eur_esatto(None) == "—"
+
+
+def test_gli_altri_importi_restano_al_centesimo():
+    """Solo il saveback ha i decimillesimi: saldi e totali si leggono in euro e
+    centesimi, altrimenti ogni pagina diventerebbe illeggibile."""
+    from shared.formatting import format_eur
+    assert format_eur(1234.5) == "€ 1.234,50"
+    assert format_eur(0.4045) == "€ 0,40"
+
+
+def test_nel_modulo_il_saveback_non_perde_i_decimali(test_db):
+    """Il modulo rileggeva «0,40» e al salvataggio quel numero vinceva sul
+    calcolo: riaprire una spesa senza cambiare niente le mangiava i decimillesimi."""
+    tid = _spesa(40.45)
+    assert fin.dati_modifica(tid)["extra_sav"] == "0,4045"
+    fin.imposta_figlie(tid, arr=0.55, sav=0.4045)
+    assert _saveback_di(tid) == 0.4045

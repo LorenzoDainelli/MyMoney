@@ -246,6 +246,27 @@ def test_le_righe_generate_restano_legate_sull_altro_dispositivo(device_factory,
     assert tid                                           # la spesa esisteva davvero
 
 
+def test_il_saveback_viaggia_con_tutti_i_suoi_decimali(device_factory, drive_condiviso):
+    """Il sync tagliava ogni importo a 2 decimali. Sul saveback (0,4045 € su una
+    spesa da 40,45) voleva dire spedire 0,40: l'altro dispositivo lo avrebbe
+    mostrato sbagliato e, alla prima modifica fatta da lì, avrebbe rimandato
+    indietro la versione mutilata — cancellando i decimillesimi per sempre."""
+    import finance.service as fin
+    dev1, dev2 = device_factory("uno"), device_factory("due")
+
+    with come_device(dev1):
+        wid = _carta_e_salvadanaio(dev1.Session)
+        fin.crea_uscita_carta(data=datetime.now(), importo=40.45,
+                              wallet_id=wid, categoria_nome="Spesa")
+        drive_mod.sync_once(client=drive_condiviso)
+
+    with come_device(dev2):
+        drive_mod.sync_once(client=drive_condiviso)
+        figlie = fin.lista_movimenti()[0]["figlie"]
+        sav = next(f["t"] for f in figlie if f["t"].origine == fin.ORIGINE_SAVEBACK)
+        assert sav.importo == 0.4045
+
+
 def test_la_figlia_che_arriva_prima_del_genitore_si_lega_lo_stesso(device_factory):
     """Nella lista di operazioni l'ordine non è garantito: se la figlia arriva
     per prima, il genitore non ha ancora un id da puntare. Il legame si chiude

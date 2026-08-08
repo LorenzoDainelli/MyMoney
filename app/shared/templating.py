@@ -34,6 +34,7 @@ def _global_context(request):
 templates = Jinja2Templates(directory=str(APP_DIR / "templates"),
                             context_processors=[_global_context])
 templates.env.filters["eur"] = formatting.format_eur
+templates.env.filters["eur_esatto"] = formatting.format_eur_esatto   # saveback: 0,4045 €
 templates.env.filters["pct"] = formatting.format_pct
 templates.env.filters["qty"] = formatting.format_qty
 templates.env.filters["big"] = formatting.format_compact

@@ -1,9 +1,10 @@
 """Formattazione numeri all'italiana: euro e percentuali.
 
 Esempi:
-    format_eur(1234.5)  -> "€ 1.234,50"
-    format_pct(2.75)    -> "2,75%"
-    format_pct(20)      -> "20%"
+    format_eur(1234.5)        -> "€ 1.234,50"
+    format_eur_esatto(0.4045) -> "€ 0,4045"
+    format_pct(2.75)          -> "2,75%"
+    format_pct(20)            -> "20%"
 Regola: valute in €, percentuali con %, massimo 2 decimali, virgola decimale.
 """
 import re
@@ -17,6 +18,31 @@ def format_eur(value, decimals: int = 2) -> str:
     s = f"{float(value):,.{decimals}f}"          # stile inglese: 1,234.50
     s = s.replace(",", "§").replace(".", ",").replace("§", ".")  # -> 1.234,50
     return f"€ {s}"
+
+
+def decimali_utili(s: str, minimo: int = 2) -> str:
+    """Toglie gli zeri finali di un numero già formattato, ma non scende sotto
+    `minimo` cifre: '0,4045' resta intero, '0,1300' torna '0,13', '2,0000'
+    torna '2,00'. Si aspetta la virgola come separatore decimale."""
+    intero, virgola, dec = s.rpartition(",")
+    if not virgola:
+        return s
+    dec = dec.rstrip("0")
+    dec = dec + "0" * max(0, minimo - len(dec))
+    return f"{intero},{dec}"
+
+
+def format_eur_esatto(value, decimals: int = 4) -> str:
+    """Come format_eur, ma senza nascondere i decimali che ci sono davvero.
+
+    Serve al saveback della carta: l'1% di 40,45 € è 0,4045 €, e scriverlo
+    «€ 0,40» vorrebbe dire far sparire proprio la cosa da guardare. Sui numeri
+    tondi si comporta come sempre — 0,13 resta «€ 0,13», non «€ 0,1300»."""
+    if value is None:
+        return "—"
+    s = f"{float(value):,.{decimals}f}"
+    s = s.replace(",", "§").replace(".", ",").replace("§", ".")
+    return f"€ {decimali_utili(s)}"
 
 
 def format_pct(value, decimals: int = 2) -> str:

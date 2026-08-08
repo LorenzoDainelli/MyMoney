@@ -99,7 +99,10 @@ def _transaction_to_fields(t, session) -> dict:
         cat_uid = cat.uid if cat else None
     return {
         "uid": t.uid, "tipo": t.tipo, "data": _iso(t.data),
-        "importo": round(t.importo or 0.0, 2),
+        # 4 decimali e non 2: il saveback della carta ha i decimillesimi
+        # (0,4045 €). Tagliandoli qui il telefono riceverebbe 0,40 e, alla prima
+        # modifica fatta da lì, li rimanderebbe indietro cancellati per sempre.
+        "importo": round(t.importo or 0.0, 4),
         "wallet_uid": w_uid, "wallet_to_uid": wt_uid,
         "categoria_uid": cat_uid,
         "descrizione": t.descrizione or "",

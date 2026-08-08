@@ -81,10 +81,11 @@ SEED_WALLETS = [
     ("PAC investimenti", "investimento", ""),
 ]
 
-# Regole della carta Trade Republic, VERIFICATE dall'utente il 30/07/2026 (non
-# dedotte): arrotondamento sempre al prossimo euro, saveback 1% troncato ai
-# centesimi con un tetto di 15 € al mese. Sono valori di partenza: restano
-# modificabili sul portafoglio e correggibili su ogni singolo movimento.
+# Regole della carta Trade Republic, VERIFICATE dall'utente (non dedotte):
+# arrotondamento sempre al prossimo euro (30/07/2026), saveback 1% ESATTO — non
+# troncato ai centesimi (08/08/2026) — con un tetto di 15 € al mese. Sono valori
+# di partenza: restano modificabili sul portafoglio e correggibili su ogni
+# singolo movimento.
 CARTA_ARROTONDA = {"Trade Republic": {"saveback_pct": 1.0, "saveback_tetto": 15.0}}
 
 
@@ -459,14 +460,22 @@ def aggiorna_movimento(tid, tipo, data, importo, wallet_id, wallet_to_id=None,
 # ------------------- carta con arrotondamento e saveback -------------------
 # Una spesa con la carta Trade Republic è UN gesto ma TRE fatti diversi, e
 # tenerli distinti è tutto il punto:
-#   7,60 € alla Coop      -> USCITA          (consumo: non sono più tuoi)
-#   0,40 € di arrotondamento -> TRASFERIMENTO (tuoi, cambiano tasca)
-#   0,07 € di saveback    -> ENTRATA         (della banca, prima non c'erano)
+#   7,60 € alla Coop        -> USCITA          (consumo: non sono più tuoi)
+#   0,40 € di arrotondamento -> TRASFERIMENTO  (tuoi, cambiano tasca)
+#   0,076 € di saveback      -> ENTRATA        (della banca, prima non c'erano)
 # Segnare 8,00 € di spesa falserebbe i consumi; segnarne 7,60 lascerebbe il conto
 # scoperto di 40 centesimi. Le tre righe fanno tornare tutte e due le cose.
 NOME_CATEGORIA_SAVEBACK = "Saveback"
 ORIGINE_ARROTONDAMENTO = "arrotondamento"
 ORIGINE_SAVEBACK = "saveback"
+
+# Il saveback si tiene ai DECIMILLESIMI di euro, non ai centesimi: l'1% di una
+# spesa a due decimali ha quattro decimali esatti (40,45 € -> 0,4045 €) e la
+# banca li accredita tutti. Troncarli sarebbe regalarle fino a un centesimo per
+# ogni spesa, e su un anno di spese non è più un dettaglio.
+# L'arrotondamento invece resta a 2 decimali: è la differenza fra due cifre in
+# euro e centesimi, un centesimo in più non esiste proprio.
+DECIMALI_SAVEBACK = 4
 
 
 def arrotondamento(importo: float) -> float:
@@ -480,19 +489,18 @@ def arrotondamento(importo: float) -> float:
 
 def saveback_dovuto(importo: float, pct: float, tetto: float = 0.0,
                     gia_maturato: float = 0.0) -> float:
-    """L'1% della spesa TRONCATO ai centesimi, entro quel che resta del tetto.
+    """L'1% ESATTO della spesa, entro quel che resta del tetto del mese.
 
-    Troncato e non arrotondato: su 7,60 € l'1% fa 0,076 e la banca ne accredita
-    0,07, non 0,08 (unica prova che abbiamo, ed esclude l'arrotondamento normale).
-    Se il tetto del mese è pieno torna 0: meglio zero che un centesimo che la
-    banca non darà. Resta un valore PROPOSTO, sempre correggibile."""
+    Verificato sull'estratto l'08/08/2026: su 40,45 € la banca accredita
+    0,4045 €, non 0,40. Il saveback non si ferma al centesimo — se lo troncassimo
+    gli regaleremmo fino a 0,0099 € per ogni spesa, che a fine anno è una cifra
+    vera. Resta un valore PROPOSTO, sempre correggibile sul singolo movimento."""
     if not importo or importo <= 0 or not pct or pct <= 0:
         return 0.0
-    # importo(€) × pct(%) = centesimi: 7,60 × 1 = 7,6 -> 7 centesimi
-    cent = math.floor(round(importo * pct, 6))
-    val = round(cent / 100.0, 2)
+    val = round(importo * pct / 100.0, DECIMALI_SAVEBACK)
     if tetto and tetto > 0:
-        val = min(val, max(0.0, round(tetto - (gia_maturato or 0.0), 2)))
+        resto = round(tetto - (gia_maturato or 0.0), DECIMALI_SAVEBACK)
+        val = min(val, max(0.0, resto))
     return max(0.0, val)
 
 
@@ -503,7 +511,52 @@ def saveback_maturato(anno: int, mese: int) -> float:
         return round(db.query(func.coalesce(func.sum(Transaction.importo), 0.0)).filter(
             Transaction.origine == ORIGINE_SAVEBACK,
             Transaction.deleted.is_(False),
-            Transaction.data >= start, Transaction.data < end).scalar() or 0.0, 2)
+            Transaction.data >= start, Transaction.data < end).scalar() or 0.0,
+            DECIMALI_SAVEBACK)
+
+
+def ricalcola_saveback_troncati() -> int:
+    """Rimette l'1% ESATTO sui saveback registrati quando l'app li troncava ai
+    centesimi (cioè fino all'08/08/2026). Ritorna quante righe ha corretto.
+
+    Tocca SOLO le righe che coincidono al centesimo con la vecchia formula: se un
+    importo l'hai scritto tu, o il tetto del mese l'aveva già limitato, non
+    combacia e resta dov'è. Passa dall'ORM apposta, così `rev` sale e la
+    correzione arriva anche al telefono invece di fermarsi su questo PC.
+
+    Idempotente: alla seconda esecuzione gli importi non coincidono più con la
+    vecchia formula e non viene toccato niente. Il tetto mensile non viene
+    ricalcolato: la differenza per riga è al massimo 0,0099 €, e le righe che il
+    tetto aveva davvero limitato sono già escluse dal confronto."""
+    with SessionLocal() as db:
+        figlie_sav = db.query(Transaction).filter(
+            Transaction.origine == ORIGINE_SAVEBACK,
+            Transaction.deleted.is_(False),
+            Transaction.parent_tx_id.is_not(None)).all()
+        if not figlie_sav:
+            return 0
+        padri = {p.id: p for p in db.query(Transaction).filter(
+            Transaction.id.in_([f.parent_tx_id for f in figlie_sav])).all()}
+        pct_di = {w.id: (w.saveback_pct or 0.0) for w in db.query(Wallet).all()}
+        corrette = 0
+        for f in figlie_sav:
+            p = padri.get(f.parent_tx_id)
+            if p is None or p.deleted or not (p.importo or 0) > 0:
+                continue
+            pct = pct_di.get(p.wallet_id, 0.0)
+            if not pct:
+                continue
+            vecchio = round(math.floor(round(p.importo * pct, 6)) / 100.0, 2)
+            nuovo = round(p.importo * pct / 100.0, DECIMALI_SAVEBACK)
+            if nuovo == vecchio:
+                continue                      # cifra già esatta: niente da fare
+            if round(f.importo or 0.0, DECIMALI_SAVEBACK) != vecchio:
+                continue                      # tua, o limitata dal tetto: non la tocco
+            f.importo = nuovo
+            corrette += 1
+        if corrette:
+            db.commit()
+        return corrette
 
 
 def regole_carta(wallet_id) -> dict | None:
@@ -532,9 +585,11 @@ def extra_carta(wallet_id, importo: float, data=None, escludi_tx=None,
     if not r or not importo or importo <= 0:
         return vuoto
     quando = data or tempo.adesso()
-    gia = round(saveback_maturato(quando.year, quando.month) + (gia_extra or 0.0), 2)
+    gia = round(saveback_maturato(quando.year, quando.month) + (gia_extra or 0.0),
+                DECIMALI_SAVEBACK)
     if escludi_tx:                      # in modifica: il vecchio saveback non conta
-        gia = round(gia - _importo_figlia(escludi_tx, ORIGINE_SAVEBACK), 2)
+        gia = round(gia - _importo_figlia(escludi_tx, ORIGINE_SAVEBACK),
+                    DECIMALI_SAVEBACK)
     sb = saveback_dovuto(importo, r["saveback_pct"], r["saveback_tetto"], gia)
     return {
         "arrotondamento": arrotondamento(importo) if r["arrotonda"] else 0.0,
@@ -550,12 +605,18 @@ def importo_movimento(tid: int) -> float:
         return round(t.importo or 0.0, 2) if t else 0.0
 
 
+def _decimali(origine: str) -> int:
+    """Quante cifre tiene una riga generata: il saveback ha i decimillesimi,
+    l'arrotondamento è denaro in euro e centesimi e basta."""
+    return DECIMALI_SAVEBACK if origine == ORIGINE_SAVEBACK else 2
+
+
 def _importo_figlia(parent_id: int, origine: str) -> float:
     with SessionLocal() as db:
         t = db.query(Transaction).filter(
             Transaction.parent_tx_id == parent_id, Transaction.origine == origine,
             Transaction.deleted.is_(False)).first()
-        return round(t.importo or 0.0, 2) if t else 0.0
+        return round(t.importo or 0.0, _decimali(origine)) if t else 0.0
 
 
 def movimento(tid: int) -> dict | None:
@@ -608,7 +669,7 @@ def _crea_figlie(db, parent: Transaction, arr: float, sav: float) -> None:
             origine=ORIGINE_ARROTONDAMENTO))
     if sav and sav > 0:
         db.add(Transaction(
-            tipo=TIPO_ENTRATA, data=parent.data, importo=round(sav, 2),
+            tipo=TIPO_ENTRATA, data=parent.data, importo=round(sav, DECIMALI_SAVEBACK),
             wallet_id=dest.id,
             category_id=_get_or_create_categoria(db, NOME_CATEGORIA_SAVEBACK, "entrata"),
             descrizione=NOME_CATEGORIA_SAVEBACK, parent_tx_id=parent.id,
@@ -622,7 +683,7 @@ def crea_uscita_carta(data, importo, wallet_id, categoria_nome="", descrizione="
     quando = data or tempo.adesso()
     prop = extra_carta(wallet_id, importo, quando)
     arr = prop["arrotondamento"] if arr is None else max(0.0, round(arr, 2))
-    sav = prop["saveback"] if sav is None else max(0.0, round(sav, 2))
+    sav = prop["saveback"] if sav is None else max(0.0, round(sav, DECIMALI_SAVEBACK))
     with SessionLocal() as db:
         t = Transaction(
             tipo=TIPO_USCITA, data=quando, importo=abs(importo or 0.0),
@@ -649,8 +710,9 @@ def imposta_figlie(tid: int, arr: float, sav: float) -> None:
         vive = {f.origine: f for f in db.query(Transaction).filter(
             Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
         mancanti_arr = mancanti_sav = 0.0
-        for origine, valore in ((ORIGINE_ARROTONDAMENTO, round(max(0.0, arr or 0.0), 2)),
-                                (ORIGINE_SAVEBACK, round(max(0.0, sav or 0.0), 2))):
+        for origine, valore in (
+                (ORIGINE_ARROTONDAMENTO, round(max(0.0, arr or 0.0), 2)),
+                (ORIGINE_SAVEBACK, round(max(0.0, sav or 0.0), DECIMALI_SAVEBACK))):
             f = vive.get(origine)
             if f is None:
                 if origine == ORIGINE_ARROTONDAMENTO:
@@ -684,7 +746,7 @@ def risincronizza_figlie(tid: int, importo_prima: float) -> None:
         for origine, chiave in ((ORIGINE_ARROTONDAMENTO, "arrotondamento"),
                                 (ORIGINE_SAVEBACK, "saveback")):
             f = vecchie.get(origine)
-            if f is not None and round(f.importo or 0.0, 2) != prima[chiave]:
+            if f is not None and round(f.importo or 0.0, _decimali(origine)) != prima[chiave]:
                 continue                    # corretta a mano: non la tocco
             if f is None:
                 continue                    # non c'era: non la creo dal nulla
@@ -736,8 +798,8 @@ def _figlie_delle_gambe(db, gambe) -> None:
         prop = extra_carta(riga.wallet_id, riga.importo, riga.data,
                            gia_extra=consumato.get(k, 0.0))
         a = prop["arrotondamento"] if arr is None else max(0.0, round(arr, 2))
-        s = prop["saveback"] if sav is None else max(0.0, round(sav, 2))
-        consumato[k] = round(consumato.get(k, 0.0) + s, 2)
+        s = prop["saveback"] if sav is None else max(0.0, round(sav, DECIMALI_SAVEBACK))
+        consumato[k] = round(consumato.get(k, 0.0) + s, DECIMALI_SAVEBACK)
         if a or s:
             _crea_figlie(db, riga, a, s)
 
@@ -878,6 +940,14 @@ def _fmt_importo_form(v) -> str:
     return ("%.2f" % (v or 0.0)).replace(".", ",")
 
 
+def _fmt_saveback_form(v) -> str:
+    """Il saveback nel modulo con i decimali che ha: '0,4045', ma '0,13' resta
+    '0,13'. Se lo scrivessimo troncato, riaprire e salvare un movimento gli
+    mangerebbe i decimillesimi senza che nessuno se ne accorga."""
+    from shared.formatting import decimali_utili
+    return decimali_utili(("%.*f" % (DECIMALI_SAVEBACK, v or 0.0)).replace(".", ","))
+
+
 def _fmt_dt_form(dt) -> str:
     """Data per un <input type=datetime-local>: 'YYYY-MM-DDTHH:MM' ('' se assente)."""
     return dt.strftime("%Y-%m-%dT%H:%M") if dt else ""
@@ -904,7 +974,7 @@ def dati_modifica(tid):
                     Transaction.parent_tx_id.in_([r.id for r in rows]),
                     Transaction.deleted.is_(False)).all():
                 figlie_per_gamba.setdefault(f.parent_tx_id, {})[f.origine] = \
-                    round(f.importo or 0.0, 2)
+                    round(f.importo or 0.0, _decimali(f.origine))
             spese, rientri = [], []
             for r in rows:
                 if (r.importo or 0) > 0:                 # gamba spesa (anche del combo)
@@ -919,7 +989,7 @@ def dati_modifica(tid):
                         "descrizione": r.descrizione or "",
                         "data_local": _fmt_dt_form(r.data),
                         "arr": _fmt_importo_form(gen.get(ORIGINE_ARROTONDAMENTO, 0.0)) if gen else "",
-                        "sav": _fmt_importo_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
+                        "sav": _fmt_saveback_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
                         "arr_mio": bool(gen and gen.get(ORIGINE_ARROTONDAMENTO, 0.0)
                                         != auto["arrotondamento"]),
                         "sav_mio": bool(gen and gen.get(ORIGINE_SAVEBACK, 0.0)
@@ -940,8 +1010,9 @@ def dati_modifica(tid):
                 "spese": spese,
                 "rientri": rientri,
             }
-        gen = {f.origine: round(f.importo or 0.0, 2) for f in db.query(Transaction).filter(
-            Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
+        gen = {f.origine: round(f.importo or 0.0, _decimali(f.origine))
+               for f in db.query(Transaction).filter(
+                   Transaction.parent_tx_id == tid, Transaction.deleted.is_(False)).all()}
     # gli importi delle righe generate tornano nel modulo COSÌ COME SONO: se ne
     # avevi corretto uno, riaprire la modifica non deve fartelo perdere. Il flag
     # dice al JS quali erano tuoi, così non li ricalcola addosso mentre scrivi.
@@ -959,7 +1030,7 @@ def dati_modifica(tid):
         "descrizione": t.descrizione or "",
         "data_local": _fmt_dt_form(t.data),
         "extra_arr": _fmt_importo_form(gen.get(ORIGINE_ARROTONDAMENTO, 0.0)) if gen else "",
-        "extra_sav": _fmt_importo_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
+        "extra_sav": _fmt_saveback_form(gen.get(ORIGINE_SAVEBACK, 0.0)) if gen else "",
         "extra_arr_mio": bool(auto and gen and
                               gen.get(ORIGINE_ARROTONDAMENTO, 0.0) != auto["arrotondamento"]),
         "extra_sav_mio": bool(auto and gen and

@@ -48,7 +48,8 @@
         {% if f.t.origine == 'arrotondamento' %}→ {{ f.wallet_to }}{% else %}→ {{ f.wallet }}{% endif %}
       </span>
     </span>
-    <span class="num {{ 'neg' if f.t.tipo == 'trasferimento' else 'pos' }}">{{ '−' if f.t.tipo == 'trasferimento' else '+' }}{{ f.t.importo | eur }}</span>
+    {# il saveback si mostra con tutti i decimali che ha: 0,4045 € non è 0,40 € #}
+    <span class="num {{ 'neg' if f.t.tipo == 'trasferimento' else 'pos' }}">{{ '−' if f.t.tipo == 'trasferimento' else '+' }}{% if f.t.origine == 'saveback' %}{{ f.t.importo | eur_esatto }}{% else %}{{ f.t.importo | eur }}{% endif %}</span>
   </div>
   {% endfor %}
   <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0 0;font-weight:700;">

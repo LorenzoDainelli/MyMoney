@@ -23,6 +23,14 @@
     var p = Math.abs(Number(n)).toFixed(2).split('.');
     return '€ ' + (neg ? '-' : '') + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + p[1];
   }
+  // Il saveback con i decimali che ha davvero (shared/formatting.decimali_utili):
+  // "0,4045" resta intero, "0,1300" torna "0,13". Senza € davanti: va in un campo.
+  function numSaveback(n) {
+    var p = Math.abs(Number(n)).toFixed(4).split('.');
+    var dec = p[1].replace(/0+$/, '');
+    while (dec.length < 2) dec += '0';
+    return p[0] + ',' + dec;
+  }
   // "1.234,56" / "1234.56" / "20" → numero. Stessa tolleranza del server.
   function num(s) {
     s = String(s || '').replace(/[^\d.,-]/g, '').trim();
@@ -44,8 +52,9 @@
 
   // --- carta che arrotonda ------------------------------------------------
   // Stesse regole del server (finance/service.py: arrotondamento, saveback_dovuto),
-  // verificate sulla carta il 30/07/2026. Qui è solo l'anteprima: al salvataggio
-  // il server rifà i conti, e se scrivi un importo a mano vince il tuo.
+  // verificate sulla carta: arrotondamento il 30/07/2026, saveback all'1% esatto
+  // (non troncato) l'08/08/2026. Qui è solo l'anteprima: al salvataggio il server
+  // rifà i conti, e se scrivi un importo a mano vince il tuo.
   var boxCarta = document.getElementById('mov-carta');
   var inArr = document.getElementById('mov-arr'), onArr = document.getElementById('mov-arr-on');
   var inSav = document.getElementById('mov-sav'), onSav = document.getElementById('mov-sav-on');
@@ -65,11 +74,12 @@
     if (!imp || imp <= 0) return 0;
     return Math.round((Math.floor(imp) + 1 - imp) * 100) / 100;   // 8,00 -> 1,00
   }
+  // l'1% ESATTO, non troncato ai centesimi: su 40,45 € sono 0,4045 €
   function saveback(imp, pct, tetto, gia) {
     if (!imp || imp <= 0 || !pct) return 0;
-    var v = Math.floor(Number((imp * pct).toFixed(6))) / 100;     // troncato, non arrotondato
-    if (tetto > 0) v = Math.min(v, Math.max(0, Math.round((tetto - gia) * 100) / 100));
-    return Math.max(0, Math.round(v * 100) / 100);
+    var v = Math.round(imp * pct * 100) / 10000;                  // 40,45 × 1% -> 0,4045
+    if (tetto > 0) v = Math.min(v, Math.max(0, Math.round((tetto - gia) * 10000) / 10000));
+    return Math.max(0, v);
   }
   function carta() {
     var tipo = (form.querySelector('#mov-tipo') || {}).value || 'uscita';
@@ -86,7 +96,7 @@
     var arr = c.r.arr && onArr.checked ? alProssimoEuro(imp) : 0;
     var sav = onSav.checked ? saveback(imp, c.r.pct, c.r.tetto, savGia) : 0;
     if (!manuale.arr || !onArr.checked) inArr.value = imp ? eur(arr).replace('€ ', '') : '';
-    if (!manuale.sav || !onSav.checked) inSav.value = imp ? eur(sav).replace('€ ', '') : '';
+    if (!manuale.sav || !onSav.checked) inSav.value = imp ? numSaveback(sav) : '';
     inArr.disabled = !onArr.checked;
     inSav.disabled = !onSav.checked;
     var a = onArr.checked ? num(inArr.value) : 0, s = onSav.checked ? num(inSav.value) : 0;
@@ -166,7 +176,7 @@
       var sav = onS.checked ? saveback(imp, w.carta.pct, w.carta.tetto,
                                        (D.sav_gia || 0) + consumato) : 0;
       if (!inA.dataset.mio || !onA.checked) inA.value = imp ? eur(arr).replace('€ ', '') : '';
-      if (!inS.dataset.mio || !onS.checked) inS.value = imp ? eur(sav).replace('€ ', '') : '';
+      if (!inS.dataset.mio || !onS.checked) inS.value = imp ? numSaveback(sav) : '';
       inA.disabled = !onA.checked;
       inS.disabled = !onS.checked;
       consumato += onS.checked ? num(inS.value) : 0;
