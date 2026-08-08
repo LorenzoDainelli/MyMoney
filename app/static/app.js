@@ -364,3 +364,79 @@ document.addEventListener('click', function (e) {
   });
   window.addEventListener('pageshow', function () { mostra(false); });
 })();
+
+
+/* ==========================================================================
+   Telefono: le etichette delle tabelle.
+
+   Una tabella da sette colonne su uno schermo da 375 punti non si legge: o si
+   schiaccia fino a diventare illeggibile, o si scorre di lato cercando le
+   colonne. Sul telefono ogni riga diventa una scheda e ogni cella una riga
+   «etichetta · valore» (il disegno è in telefono.css).
+
+   L'etichetta la sa solo l'intestazione della colonna, e la CSS non può
+   leggerla: gliela passiamo noi qui, copiandola in un attributo. Fatto così
+   invece che scrivendola a mano nei template, vale per TUTTE le tabelle —
+   movimenti, portafoglio, PAC — e anche per quelle che verranno, senza che
+   nessuno debba ricordarsene.
+   ========================================================================== */
+(function () {
+  function etichetta() {
+    var tabelle = document.querySelectorAll('table');
+    for (var t = 0; t < tabelle.length; t++) {
+      var intestazioni = tabelle[t].querySelectorAll('thead th');
+      if (!intestazioni.length) continue;
+      var nomi = [];
+      for (var i = 0; i < intestazioni.length; i++) nomi.push(intestazioni[i].textContent.trim());
+      var righe = tabelle[t].querySelectorAll('tbody tr');
+      for (var r = 0; r < righe.length; r++) {
+        var celle = righe[r].children;
+        // Una riga con colspan è un messaggio ("nessun movimento"), non dati:
+        // appiccicarle l'etichetta della prima colonna direbbe una bugia.
+        if (celle.length === 1 && celle[0].getAttribute('colspan')) continue;
+        for (var c = 0; c < celle.length; c++) {
+          var cella = celle[c];
+          if (nomi[c]) cella.setAttribute('data-etichetta', nomi[c]);
+          // Su un foglio largo una cella vuota è una casella bianca e non
+          // disturba nessuno. In una scheda da telefono diventa una riga
+          // intera che dice «Categoria —»: occupa lo spazio di un'informazione
+          // per comunicare che l'informazione non c'è. Si nasconde (la regola
+          // è in telefono.css, sul PC la tabella resta identica).
+          var testo = cella.textContent.replace(/\s+/g, '').trim();
+          var vuota = (testo === '' || testo === '—' || testo === '-');
+          if (vuota && !cella.querySelector('a, button, input, svg')) {
+            cella.setAttribute('data-vuota', '1');
+          } else {
+            cella.removeAttribute('data-vuota');
+          }
+        }
+      }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', etichetta);
+  } else {
+    etichetta();
+  }
+  // Alcune tabelle arrivano DOPO, caricate a parte: i sottostanti di un titolo
+  // (/portafoglio/<id>/holdings) compaiono quando apri la riga. Senza questo
+  // sarebbero le uniche celle senza etichetta, cioe' le uniche illeggibili sul
+  // telefono. Un osservatore invece di un evento da lanciare a mano: cosi' vale
+  // anche per i pezzi che verranno, senza che nessuno debba ricordarsene.
+  if (typeof MutationObserver !== 'undefined') {
+    var inCoda = null;
+    new MutationObserver(function (cambi) {
+      for (var i = 0; i < cambi.length; i++) {
+        for (var j = 0; j < cambi[i].addedNodes.length; j++) {
+          var n = cambi[i].addedNodes[j];
+          if (n.nodeType === 1 && (n.tagName === 'TABLE' || n.querySelector && n.querySelector('table'))) {
+            // raggruppo: un innerHTML solo puo' scatenare molte notifiche
+            clearTimeout(inCoda);
+            inCoda = setTimeout(etichetta, 0);
+            return;
+          }
+        }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+})();
