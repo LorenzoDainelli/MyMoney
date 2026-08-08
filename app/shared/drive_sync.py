@@ -24,7 +24,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 
-from shared import settings_store
+from shared import settings_store, tempo
 from shared import sync
 
 log = logging.getLogger("mymoney.drive")
@@ -410,7 +410,7 @@ def sync_once(client=None) -> dict:
             break
 
     settings_store.set_setting("drive_last_sync", json.dumps(
-        {"ts": datetime.now().isoformat(timespec="minutes"), **result}))
+        {"ts": tempo.adesso().isoformat(timespec="minutes"), **result}))
     return result
 
 
@@ -487,7 +487,7 @@ def mirror_carica(client=None) -> dict:
         if existing is not None:
             try:
                 old = c.download(existing["id"])
-                bname = BAK_PREFIX + datetime.now().strftime("%Y-%m-%dT%H-%M-%S") + ".json"
+                bname = BAK_PREFIX + tempo.adesso().strftime("%Y-%m-%dT%H-%M-%S") + ".json"
                 c.upload_state(bname, old, file_id=None)
                 _prune_backups(c, files)
             except (DriveError, json.JSONDecodeError):

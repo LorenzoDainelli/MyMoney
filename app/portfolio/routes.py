@@ -13,7 +13,7 @@ from shared.db import SessionLocal
 from shared.templating import templates
 from shared.parsing import to_float, to_date
 from shared.charts import chart_points
-from shared import ai, settings_store
+from shared import ai, settings_store, tempo
 from portfolio.models import Position, TIPO_ETF, TIPO_AZIONE
 from portfolio import service, market, analytics, versamenti
 from finance import service as fin_service
@@ -156,7 +156,7 @@ def _cache_ai_metrica(metric: str, valore: str):
         return None
     if d.get("valore") != valore:
         return None                      # il numero è cambiato: la spiegazione va rifatta
-    if (datetime.now() - quando).days > GIORNI_CACHE_AI:
+    if (tempo.adesso() - quando).days > GIORNI_CACHE_AI:
         return None
     return {"ok": True, "text": d.get("text", ""), "conf": d.get("conf", "media"),
             "dalla_cache": True}
@@ -194,7 +194,7 @@ async def analisi_ai(label: str = Form(""), valore: str = Form(""), metric: str 
     if res.get("ok") and metric:
         settings_store.set_setting(f"ai_metrica_{metric}", json.dumps({
             "valore": valore, "text": res["text"], "conf": res.get("conf", "media"),
-            "when": datetime.now().isoformat(timespec="minutes")}))
+            "when": tempo.adesso().isoformat(timespec="minutes")}))
     return JSONResponse(res)
 
 
@@ -275,7 +275,7 @@ def versamento_form(request: Request, vid: int = 0):
     return templates.TemplateResponse(request, "portfolio_versamento.html", {
         "active": "portafoglio", "posizioni": posizioni, "conti": conti,
         "importo": (pre["importo"] if pre else 100.0),
-        "data": (pre["data"] if pre else date.today()).isoformat(),
+        "data": (pre["data"] if pre else tempo.oggi()).isoformat(),
         "ora": (pre["ora"] if pre else ""),
         "conto": (pre["conto"] if pre else _default_conto(conti)),
         "inclusi_ids": (pre["inclusi_ids"] if pre else {p.id for p in posizioni}),
@@ -297,7 +297,7 @@ def versamento_post(
     """Un solo endpoint: 'anteprima' ricalcola e mostra la tabella; 'conferma'
     scrive (nuovo o modifica) e torna al portafoglio."""
     imp = to_float(importo, 0.0) or 0.0
-    d = to_date(data) or date.today()
+    d = to_date(data) or tempo.oggi()
     incl_ids = {int(x) for x in incl if x.isdigit()}
     posizioni = service.lista_posizioni()
     esclusi = {p.id for p in posizioni if p.id not in incl_ids}
@@ -339,7 +339,7 @@ def allinea_tr(totale: str = Form(""), data: str = Form(""), togli: str = Form("
         service.salva_allineamento_tr(0)
     else:
         service.salva_allineamento_tr(to_float(totale, 0.0) or 0.0,
-                                      to_date(data) or date.today())
+                                      to_date(data) or tempo.oggi())
     return RedirectResponse("/portafoglio?tr=1", status_code=303)
 
 
@@ -535,5 +535,5 @@ def genera_ai_take(pos_id: int):
             # le pagine effettivamente consultate: si citano sempre, così puoi
             # controllare da solo invece di fidarti
             "fonti": res.get("fonti") or [],
-            "when": datetime.now().isoformat(timespec="minutes")}))
+            "when": tempo.adesso().isoformat(timespec="minutes")}))
     return RedirectResponse(f"/portafoglio/{pos_id}", status_code=303)

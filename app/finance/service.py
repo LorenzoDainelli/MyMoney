@@ -19,6 +19,7 @@ from sqlalchemy import Boolean, DateTime, Float, Integer, String, func, select, 
 
 from shared.db import SessionLocal, engine
 from shared.schema import aggiungi_colonne, crea_indice, colonne_di
+from shared import tempo
 from finance.models import (Wallet, Category, Transaction,
                             TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO, TIPO_GIRO)
 
@@ -130,7 +131,7 @@ def _backfill_meta_sync() -> None:
     """Assegna uid e updated_at ai record creati prima della v2 (uid = un id unico
     per riga; updated_at = created_at dove c'è, altrimenti ora). Raw SQL per non
     passare dall'ORM (niente rev++ inutile). Idempotente."""
-    now = datetime.now()
+    now = tempo.adesso()
     with engine.begin() as c:
         c.execute(text("UPDATE finance_transactions SET updated_at=created_at "
                        "WHERE updated_at IS NULL AND created_at IS NOT NULL"))
@@ -164,7 +165,7 @@ def compatta_tombstone(giorni: int = 365) -> int:
     Sicuro per 2 dispositivi che sincronizzano entro l'anno (la cancellazione
     è già stata propagata). Non tocca wallet/categorie."""
     from shared import sync
-    soglia = datetime.now() - timedelta(days=giorni)
+    soglia = tempo.adesso() - timedelta(days=giorni)
     with SessionLocal() as db:
         with sync.importing():
             res = db.query(Transaction).filter(
@@ -398,7 +399,7 @@ def crea_movimento(tipo, data, importo, wallet_id, wallet_to_id=None,
             cat_id = _get_or_create_categoria(
                 db, categoria_nome, "entrata" if tipo == TIPO_ENTRATA else "uscita")
         t = Transaction(
-            tipo=tipo, data=data or datetime.now(), importo=abs(importo or 0.0),
+            tipo=tipo, data=data or tempo.adesso(), importo=abs(importo or 0.0),
             wallet_id=wallet_id,
             wallet_to_id=wallet_to_id if tipo == TIPO_TRASFERIMENTO else None,
             category_id=cat_id if tipo != TIPO_TRASFERIMENTO else None,
@@ -445,7 +446,7 @@ def aggiorna_movimento(tid, tipo, data, importo, wallet_id, wallet_to_id=None,
             cat_id = _get_or_create_categoria(
                 db, categoria_nome, "entrata" if tipo == TIPO_ENTRATA else "uscita")
         t.tipo = tipo
-        t.data = data or t.data or datetime.now()
+        t.data = data or t.data or tempo.adesso()
         t.importo = abs(importo or 0.0)
         t.wallet_id = wallet_id
         t.wallet_to_id = wallet_to_id if tipo == TIPO_TRASFERIMENTO else None
@@ -530,7 +531,7 @@ def extra_carta(wallet_id, importo: float, data=None, escludi_tx=None,
     r = regole_carta(wallet_id)
     if not r or not importo or importo <= 0:
         return vuoto
-    quando = data or datetime.now()
+    quando = data or tempo.adesso()
     gia = round(saveback_maturato(quando.year, quando.month) + (gia_extra or 0.0), 2)
     if escludi_tx:                      # in modifica: il vecchio saveback non conta
         gia = round(gia - _importo_figlia(escludi_tx, ORIGINE_SAVEBACK), 2)
@@ -618,7 +619,7 @@ def crea_uscita_carta(data, importo, wallet_id, categoria_nome="", descrizione="
                       arr=None, sav=None) -> int:
     """Una spesa con la carta e le sue due righe. `arr`/`sav` a None = li calcola
     l'app; un numero (anche 0) = l'hai deciso tu e vince sul calcolo."""
-    quando = data or datetime.now()
+    quando = data or tempo.adesso()
     prop = extra_carta(wallet_id, importo, quando)
     arr = prop["arrotondamento"] if arr is None else max(0.0, round(arr, 2))
     sav = prop["saveback"] if sav is None else max(0.0, round(sav, 2))
@@ -705,7 +706,7 @@ def _riga_spesa(db, gid, aperta, importo, wallet_id, categoria="", descrizione="
     cat_id = _get_or_create_categoria(db, categoria, "")   # categoria come etichetta (kind neutro)
     return Transaction(
         tipo=TIPO_GIRO, giro_id=gid, giro_aperta=aperta,
-        data=data or datetime.now(), importo=abs(importo or 0.0),
+        data=data or tempo.adesso(), importo=abs(importo or 0.0),
         wallet_id=wallet_id, category_id=cat_id,
         descrizione=(descrizione or "").strip())
 
@@ -714,10 +715,10 @@ def _riga_rientro(db, gid, aperta, importo, wallet_id, controparte="", data=None
     # la gamba rientro: importo=0 (non è una spesa), il denaro ENTRA in wallet_to_id
     return Transaction(
         tipo=TIPO_GIRO, giro_id=gid, giro_aperta=aperta,
-        data=data or datetime.now(), importo=0.0,
+        data=data or tempo.adesso(), importo=0.0,
         wallet_id=wallet_id, wallet_to_id=wallet_id,
         importo_ricevuto=abs(importo or 0.0),
-        data_ricevuto=data or datetime.now(),
+        data_ricevuto=data or tempo.adesso(),
         controparte=(controparte or "").strip())
 
 
@@ -1019,7 +1020,7 @@ def giri_aperti():
             controparti_g = sorted({s["controparte"] for s in spese if s["controparte"]} |
                                    {r["controparte"] for r in rientri if r["controparte"]}, key=str.lower)
             out.append({**rec, "spese": spese, "rientri": rientri, "controparti": controparti_g})
-        out.sort(key=lambda g: (g["prima_data"] or datetime.now()))
+        out.sort(key=lambda g: (g["prima_data"] or tempo.adesso()))
     return out
 
 
@@ -1170,7 +1171,7 @@ def data_inizio():
 def serie_liquidita_12m() -> list[float]:
     """Liquidità totale (wallet attivi) a fine di ognuno degli ultimi 12 mesi,
     RICOSTRUITA dai movimenti reali. Ultimo punto = oggi. Niente stime."""
-    now = datetime.now()
+    now = tempo.adesso()
     bounds = []
     for k in range(11, 0, -1):
         y, m = _mesi_indietro_ym(now, k - 1)   # inizio del mese successivo al k-esimo
@@ -1270,7 +1271,7 @@ def calendario_spese(anno, mese):
             return 0
         return min(4, int(bisect_left(scala, v) / len(scala) * 4) + 1)
 
-    now = datetime.now()
+    now = tempo.adesso()
     ultimo = (end - timedelta(days=1)).day
     oggi = now.day if (now.year, now.month) == (anno, mese) else None
     giorni = []
@@ -1420,7 +1421,7 @@ def _parse_iso(s):
 def stato_sync() -> dict:
     """Fotografia dello stato Finanze per la dashboard della PWA: portafogli (con
     saldo attuale), categorie e sintesi del mese. Ogni record porta uid/rev/updated_at."""
-    now = datetime.now()
+    now = tempo.adesso()
     with SessionLocal() as db:
         smap = _saldi_map(db)
         ws = list(db.execute(select(Wallet).order_by(Wallet.ordine, Wallet.id)).scalars().all())

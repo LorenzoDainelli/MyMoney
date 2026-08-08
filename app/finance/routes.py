@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from shared.templating import templates
 from shared.parsing import to_float, to_datetime
-from shared import ai, settings_store
+from shared import ai, settings_store, tempo
 from finance import service
 from finance.models import TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO, TIPO_GIRO
 
@@ -16,8 +16,13 @@ router = APIRouter()
 
 
 def _oggi_local():
-    # ora LOCALE del PC (l'app è locale): utcnow() precompilava il form 1-2 ore indietro
-    return datetime.now().strftime("%Y-%m-%dT%H:%M")
+    """L'ora con cui si precompila il modulo: quella del fuso SCELTO.
+
+    Prima era l'orologio della macchina. Andava bene finché la macchina era una
+    sola; con il telefono all'estero e il server in UTC dava tre orari diversi
+    per lo stesso movimento (vedi shared/tempo.py).
+    """
+    return tempo.adesso().strftime("%Y-%m-%dT%H:%M")
 
 
 def _lettura_ai_salvata():
@@ -33,7 +38,7 @@ def _lettura_ai_salvata():
 
 
 def _ctx_panoramica() -> dict:
-    now = datetime.now()
+    now = tempo.adesso()
     saldi = service.saldi()
     riep = service.riepilogo_mese(now.year, now.month)
     return {
@@ -362,7 +367,7 @@ def _contesto_finanze() -> str:
     l'app non esisteva non è "un mese senza spese", e presentarlo come tale
     invita l'agente a confronti falsi ("le uscite sono cresciute rispetto a
     maggio", quando a maggio semplicemente non registravamo niente)."""
-    now = datetime.now()
+    now = tempo.adesso()
     inizio = service.data_inizio()
     righe = []
     for k in (2, 1, 0):
@@ -386,7 +391,7 @@ def _genera_lettura_finanze() -> None:
     if res.get("ok"):
         settings_store.set_setting("fin_ai", json.dumps({
             "text": res["text"], "conf": res.get("conf", "media"),
-            "when": datetime.now().isoformat(timespec="minutes")}))
+            "when": tempo.adesso().isoformat(timespec="minutes")}))
 
 
 @router.post("/finanze/ai/analisi")

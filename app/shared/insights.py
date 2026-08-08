@@ -17,6 +17,8 @@ Due garanzie che discendono da qui:
 """
 from dataclasses import dataclass, field
 from datetime import datetime
+
+from shared import tempo
 from statistics import median
 
 # ---------------------------------------------------------------------------
@@ -88,7 +90,7 @@ def orizzonte(oggi: datetime = None) -> dict:
     """Da quando esistono i dati, e per quali confronti bastano."""
     from finance import service as fin
 
-    now = oggi or datetime.now()
+    now = oggi or tempo.adesso()
     inizio = fin.data_inizio()
     giorni = max(0, (now - inizio).days)
 
@@ -169,7 +171,7 @@ def fatti_finanze(mesi_storia: int = 6, oggi: datetime = None) -> list:
     """Cosa è successo ai soldi di questo mese che non somiglia ai mesi scorsi."""
     from finance import service as fin
 
-    now = oggi or datetime.now()
+    now = oggi or tempo.adesso()
     fatti = []
     try:
         corrente = fin.riepilogo_mese(now.year, now.month)
@@ -380,7 +382,7 @@ def fatti_pac(oggi: datetime = None) -> list:
     from portfolio import versamenti
     from finance import service as fin
 
-    now = oggi or datetime.now()
+    now = oggi or tempo.adesso()
     fatti = []
     try:
         storico = versamenti.lista()
@@ -481,7 +483,7 @@ def quadro(oggi: datetime = None) -> list:
     """Fotografia del presente in righe brevi e verificabili."""
     from finance import service as fin
 
-    now = oggi or datetime.now()
+    now = oggi or tempo.adesso()
     righe = []
 
     # --- il mese in corso ------------------------------------------------

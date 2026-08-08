@@ -29,7 +29,7 @@ from sqlalchemy.orm import Session
 
 from shared.config import APP_DIR
 from shared.db import SessionLocal
-from shared import settings_store
+from shared import settings_store, tempo
 
 log = logging.getLogger("mymoney.sync")
 
@@ -149,7 +149,7 @@ def _obj_to_sync(obj, session) -> dict | None:
         "rev": obj.rev,
         "updated_at": _iso(obj.updated_at),
         "device_id": get_device_id(),
-        "ts": datetime.now().isoformat(),
+        "ts": tempo.adesso().isoformat(),
     }
 
 
@@ -264,18 +264,20 @@ def _wins(remote_rev, remote_updated, remote_device,
 
 def _parse_dt(s):
     """Parse ISO-8601 → datetime NAIVE (None se invalido). Tollera il suffisso
-    'Z' (UTC) prodotto dal telefono e lo riporta in ora locale naive, così la
-    colonna resta omogenea: mai un mix naive/aware che sporcherebbe i confronti
-    e i calcoli di date altrove."""
+    'Z' (UTC) prodotto dal telefono e lo riporta nell'ora del fuso SCELTO, così
+    la colonna resta omogenea: mai un mix naive/aware che sporcherebbe i
+    confronti e i calcoli di date altrove.
+
+    Prima si usava l'orologio della macchina che riceve: lo stesso movimento,
+    arrivato sul PC o sul server, finiva a due ore di distanza. E sono proprio
+    queste date che decidono la fusione «vince il più recente»."""
     if not s:
         return None
     try:
         dt = datetime.fromisoformat(str(s).replace("Z", "+00:00"))
     except (TypeError, ValueError):
         return None
-    if dt.tzinfo is not None:
-        dt = dt.astimezone().replace(tzinfo=None)
-    return dt
+    return tempo.a_naive(dt)
 
 
 def _schema_troppo_nuovo(s) -> bool:
@@ -410,7 +412,7 @@ def _set_fields(obj, entity, fields, uid_to_wallet_id, uid_to_cat_id):
 
     elif entity == "transaction":
         obj.tipo = fields.get("tipo", "uscita")
-        obj.data = _parse_dt(fields.get("data")) or datetime.now()
+        obj.data = _parse_dt(fields.get("data")) or tempo.adesso()
         obj.importo = fields.get("importo", 0.0)
         obj.descrizione = fields.get("descrizione", "")
         obj.giro_id = fields.get("giro_id", "")
@@ -465,7 +467,7 @@ def build_snapshot() -> dict:
     return {
         "schema": SCHEMA_VERSION,
         "device_id": get_device_id(),
-        "ts": datetime.now().isoformat(),
+        "ts": tempo.adesso().isoformat(),
         "diary_lines": diary_lines_count(),   # cursore iniziale per il client
         "wallets": wallets,
         "categorie": categorie,
@@ -545,7 +547,7 @@ def backup_bundle_to_file() -> Path:
     sostituzione distruttiva. Serve da rete di sicurezza recuperabile."""
     backup_dir = BACKUP_DIR
     backup_dir.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    stamp = tempo.adesso().strftime("%Y-%m-%dT%H-%M-%S")
     path = backup_dir / f"pre-scarica-{stamp}.json"
     with open(path, "w", encoding="utf-8") as f:
         json.dump(export_bundle(), f, ensure_ascii=False, default=str, indent=2)

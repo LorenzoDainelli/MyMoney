@@ -7,6 +7,10 @@ jinja2>=3.1
 sqlalchemy>=2.0
 python-multipart>=0.0.9
 
+# L'elenco dei fusi orari del mondo (shared/tempo.py). Windows non ce l'ha di
+# suo e le immagini Linux ridotte nemmeno: senza, "Europe/Dublin" non esiste.
+tzdata>=2024.1
+
 # Opzionali: servono SOLO se scegli il provider "Vertex AI" per l'agente
 # (Impostazioni → Agente AI → Provider). Con il default "Google AI Studio" non
 # sono necessarie. google-auth firma il token del service account; requests è il

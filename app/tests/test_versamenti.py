@@ -5,7 +5,7 @@ quantità, esclusione di un titolo, e annullamento esatto con elimina().
 I prezzi sono STUBBATI (nessuna rete): il test guarda la logica, non i mercati.
 """
 import sys
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -144,19 +144,28 @@ def test_ora_salvata_sul_versamento(test_db):
 
 def test_prezzo_usa_la_candela_dell_ora(monkeypatch):
     """Con l'ora indicata si prende l'ultima candela oraria FINO a quel momento,
-    non la successiva."""
-    from datetime import datetime as dt, timedelta
-    import portfolio.versamenti as v
+    non la successiva.
 
-    ieri = date.today() - timedelta(days=1)
-    candele = [(dt.combine(ieri, dt.min.time().replace(hour=h)).timestamp(), 10.0 + h)
+    Le candele sono istanti universali: qui si costruiscono NEL FUSO SCELTO,
+    lo stesso in cui l'utente scrive «10:30». Costruirle con l'orologio della
+    macchina faceva passare il test in Italia e fallire in Irlanda — e sul
+    server, che gira in UTC, avrebbe scelto la candela di due ore prima."""
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+    import portfolio.versamenti as v
+    from shared import tempo
+
+    zona = ZoneInfo(tempo.nome_fuso())
+    ieri = tempo.oggi() - timedelta(days=1)
+    candele = [(datetime.combine(ieri, datetime.min.time().replace(hour=h),
+                                 tzinfo=zona).timestamp(), 10.0 + h)
                for h in (9, 10, 11, 12)]
     monkeypatch.setattr(v.market, "history_series", lambda sym, r, i: candele)
     monkeypatch.setattr(v.market, "_yahoo_symbol", lambda tk: tk)
     monkeypatch.setattr(v.market, "_fx_to_eur_rate", lambda cur: 1.0)
 
     p = Position(nome="Alpha", ticker="A", pct_target=100.0)
-    prezzo, fonte = _PREZZO_REALE(p, ieri, {}, date.today(), "10:30")
+    prezzo, fonte = _PREZZO_REALE(p, ieri, {}, tempo.oggi(), "10:30")
     assert (prezzo, fonte) == (20.0, "orario")     # candela delle 10, non delle 11
 
 

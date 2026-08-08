@@ -134,25 +134,30 @@ def test_normalize_regge_una_risposta_vuota():
 
 
 # ------------------------- fuso orario -------------------------
-def test_ora_legale_e_solare_sono_diverse():
-    """Prima l'offset era +2 fisso: da fine ottobre a fine marzo ogni orario
-    mostrato era un'ora avanti, per mezzo anno, senza che nulla lo dicesse."""
-    luglio = datetime(2026, 7, 15, 12, 0)
+def test_ora_legale_e_solare_sono_diverse(monkeypatch):
+    """L'ora mostrata segue l'ora legale. Prima l'offset era +2 fisso: da fine
+    ottobre a fine marzo ogni orario era un'ora avanti, per mezzo anno, senza
+    che nulla lo dicesse."""
+    from shared import tempo
+    monkeypatch.setattr(tempo, "nome_fuso", lambda: "Europe/Rome")
+    luglio = datetime(2026, 7, 15, 12, 0)       # UTC
     dicembre = datetime(2026, 12, 15, 12, 0)
-    assert M.offset_roma(luglio).total_seconds() == 2 * 3600
-    assert M.offset_roma(dicembre).total_seconds() == 1 * 3600
-    assert M.fmt_ts(luglio) == "15/07 · 14:00"
-    assert M.fmt_ts(dicembre) == "15/12 · 13:00"
+    assert M.fmt_ts(luglio) == "15/07 · 14:00"  # ora legale: +2
+    assert M.fmt_ts(dicembre) == "15/12 · 13:00"  # ora solare: +1
 
 
-def test_i_cambi_dell_ora_cadono_di_domenica():
-    for anno in (2026, 2027, 2028):
-        for mese in (3, 10):
-            d = M._ultima_domenica(anno, mese)
-            assert d.weekday() == 6, f"{anno}-{mese} non è domenica"
-            assert d.hour == 1              # 01:00 UTC, regola europea
-            assert d.month == mese
-            assert (d.day + 7) > 31 or (d.month == mese and d.day >= 25)
+def test_l_orario_mostrato_segue_il_fuso_scelto(monkeypatch):
+    """Lo stesso istante, letto da due Paesi diversi. È il motivo per cui la
+    regola dell'ora legale non si può scrivere a mano: fuori dall'Europa i
+    cambi cadono in date diverse."""
+    from shared import tempo
+    istante = datetime(2026, 7, 15, 12, 0)      # UTC
+    monkeypatch.setattr(tempo, "nome_fuso", lambda: "Europe/Rome")
+    assert M.fmt_ts(istante) == "15/07 · 14:00"
+    monkeypatch.setattr(tempo, "nome_fuso", lambda: "Europe/Dublin")
+    assert M.fmt_ts(istante) == "15/07 · 13:00"
+    monkeypatch.setattr(tempo, "nome_fuso", lambda: "UTC")
+    assert M.fmt_ts(istante) == "15/07 · 12:00"
 
 
 def test_fmt_ts_di_niente_e_niente():

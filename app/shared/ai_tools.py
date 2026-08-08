@@ -15,11 +15,13 @@ il resto di ciò che esce da qui.
 """
 from datetime import date, datetime, timedelta
 
+from shared import tempo
+
 MAX_RIGHE = 25          # nessuno strumento restituisce elenchi sterminati
 
 
 def _giorni_fa(n: int) -> datetime:
-    return datetime.now() - timedelta(days=n)
+    return tempo.adesso() - timedelta(days=n)
 
 
 # ===========================================================================
@@ -61,7 +63,7 @@ def spese_per_categoria(mesi: int = 6) -> dict:
     from shared.insights import _mesi_indietro
 
     mesi = max(1, min(int(mesi or 6), 24))
-    now = datetime.now()
+    now = tempo.adesso()
     fuori = []
     for k in range(mesi):
         y, m = _mesi_indietro(now, k)

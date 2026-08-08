@@ -9,7 +9,7 @@ from datetime import date
 from sqlalchemy import select
 
 from shared.db import SessionLocal
-from shared import settings_store
+from shared import settings_store, tempo
 from portfolio.models import Position
 from portfolio import market
 
@@ -49,7 +49,7 @@ def salva_allineamento_tr(totale: float, quando: date = None, attivo: bool = Tru
         return
     settings_store.set_setting(CHIAVE_TR, json.dumps({
         "totale": round(float(totale), 2),
-        "data": (quando or date.today()).isoformat(),
+        "data": (quando or tempo.oggi()).isoformat(),
         "attivo": bool(attivo)}))
 
 
@@ -59,7 +59,7 @@ def _info_tr(totale_stimato: float) -> dict | None:
     if not tr or totale_stimato <= 0 or tr["totale"] <= 0:
         return None
     fattore = tr["totale"] / totale_stimato
-    giorni = (date.today() - tr["data"]).days
+    giorni = (tempo.oggi() - tr["data"]).days
     return {
         "totale": round(tr["totale"], 2),
         "data": tr["data"],

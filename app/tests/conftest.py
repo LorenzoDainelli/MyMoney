@@ -69,6 +69,27 @@ import shared.ai_memory
 import shared.settings_store
 import shared.storico
 import shared.sync
+import shared.tempo
+
+# Il fuso con cui gira la suite. L'app non usa più l'orologio della macchina ma
+# il fuso scelto nelle impostazioni (shared/tempo.py): senza fissarlo qui, gli
+# stessi test darebbero risultati diversi a seconda di dove si trova il PC —
+# esattamente il genere di dipendenza dall'ambiente che questo file esiste per
+# togliere. Roma perché è il fuso di riferimento dei dati già in archivio.
+FUSO_DI_PROVA = "Europe/Rome"
+
+# La funzione VERA, messa da parte prima che la fixture la sostituisca: serve
+# ai test che devono verificare proprio come il fuso viene scelto.
+NOME_FUSO_VERO = shared.tempo.nome_fuso
+
+
+@pytest.fixture
+def fuso_vero(monkeypatch):
+    """Disfa il fuso fisso della suite: qui si vuole la funzione autentica."""
+    monkeypatch.setattr(shared.tempo, "nome_fuso", NOME_FUSO_VERO)
+    shared.tempo.scarta_cache()
+    yield
+    shared.tempo.scarta_cache()
 
 # Moduli che hanno fotografato `SessionLocal` all'import (`shared.db` no: è la
 # sorgente, e rimandare a sé stessa sarebbe un giro infinito).
@@ -121,6 +142,9 @@ def database_usa_e_getta(tmp_path, monkeypatch):
     # Il diario del sync e i suoi backup scrivono su file: fuori dai dati veri.
     monkeypatch.setattr(shared.sync, "SYNC_DIR", tmp_path / "sync")
     monkeypatch.setattr(shared.sync, "BACKUP_DIR", tmp_path / "backups")
+    # Un fuso fisso e noto, e nessun residuo in cache dal test precedente.
+    monkeypatch.setattr(shared.tempo, "nome_fuso", lambda: FUSO_DI_PROVA)
+    shared.tempo.scarta_cache()
 
     try:
         yield

@@ -27,7 +27,7 @@ primo sguardo.
 import json
 from datetime import datetime, timedelta
 
-from shared import settings_store
+from shared import settings_store, tempo
 
 SOGLIA_PCT = 1.5          # oltre questa variazione su 5 giorni la direzione conta
 GIORNI_BORSA = 5          # l'orizzonte "breve" definito nel CLAUDE.md
@@ -131,7 +131,7 @@ def calcola() -> dict:
     baseline = round(max(reali.values()) / tot * 100, 1) if tot else None
     righe.sort(key=lambda r: (r["data"][6:], r["data"][3:5], r["data"][:2]), reverse=True)
     dati = {
-        "quando": datetime.now().isoformat(timespec="minutes"),
+        "quando": tempo.adesso().isoformat(timespec="minutes"),
         "totale": tot, "azzeccate": ok,
         "pct": round(ok / tot * 100, 1) if tot else None,
         "baseline": baseline,

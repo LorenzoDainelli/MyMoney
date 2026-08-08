@@ -24,6 +24,7 @@ from sqlalchemy import String, Text, Integer, DateTime, select, delete
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.db import Base, SessionLocal
+from shared import tempo
 
 TIPO_LETTURA = "lettura"
 TIPO_RICORDO = "ricordo"
@@ -44,7 +45,7 @@ class MemoriaAI(Base):
     testo: Mapped[str] = mapped_column(Text, default="")
     motivo: Mapped[str] = mapped_column(Text, default="")       # perché l'ho salvato
     chiavi: Mapped[str] = mapped_column(Text, default="")       # fatti commentati, separati da |
-    quando: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
+    quando: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso, index=True)
 
 
 # =========================== letture ===========================
@@ -76,7 +77,7 @@ def ultime_letture(superficie: str = "", n: int = 2) -> list:
 def chiavi_gia_dette(superficie: str = "", giorni: int = GIORNI_NON_RIPETERE) -> set:
     """I fatti già commentati di recente: l'agente deve evitarli, a meno che non
     siano cambiati di molto."""
-    limite = datetime.now() - timedelta(days=giorni)
+    limite = tempo.adesso() - timedelta(days=giorni)
     fuori = set()
     with SessionLocal() as db:
         q = select(MemoriaAI.chiavi).where(

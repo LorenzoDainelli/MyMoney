@@ -18,6 +18,7 @@ from datetime import date, datetime
 from sqlalchemy import select, func
 
 from shared.db import SessionLocal
+from shared import tempo
 from portfolio.models import Position, Versamento, VersamentoRiga
 from portfolio import service, market
 
@@ -40,12 +41,17 @@ GIORNI_INTRADAY = 25
 
 def _prezzo_intraday(tk: str, quando: datetime):
     """Prezzo alla ORA indicata, dalle candele orarie. None se non c'è.
-    I timestamp di Yahoo sono epoch: li converto all'ora LOCALE, la stessa in
-    cui l'utente ha scritto l'orario."""
+
+    I timestamp di Yahoo sono istanti universali: vanno letti nello STESSO fuso
+    in cui l'utente ha scritto l'orario, cioè quello scelto nelle impostazioni.
+    Prima si usava l'orologio della macchina: sul server, che gira in UTC,
+    l'app sarebbe andata a cercare la candela di due ore prima — un altro
+    prezzo, non un dettaglio di visualizzazione.
+    """
     serie = market.history_series(market._yahoo_symbol(tk), "1mo", "1h")
     best = None
     for epoch, close in serie:
-        if close and datetime.fromtimestamp(epoch) <= quando:
+        if close and tempo.da_epoch(epoch) <= quando:
             best = close
     return best
 
@@ -73,7 +79,7 @@ def _prezzo_eur_alla_data(p: Position, data: date, qmap: dict, oggi: date, ora=N
     t = parse_ora(ora) if isinstance(ora, str) else ora
     if t is not None and 0 <= (oggi - data).days <= GIORNI_INTRADAY:
         quando = datetime.combine(data, t)
-        if quando <= datetime.now():
+        if quando <= tempo.adesso():
             val = _prezzo_intraday(tk, quando)
             if val is not None:
                 prezzo = in_euro(val)
@@ -127,7 +133,7 @@ def _riparti(posizioni, importo: float, esclusi: set):
 def anteprima(importo: float, data: date, esclusi: set, ora: str = "") -> dict:
     """Calcola (senza salvare nulla) come verrebbe distribuito il versamento."""
     qmap = market.quotes_map()
-    oggi = date.today()
+    oggi = tempo.oggi()
     posizioni = service.lista_posizioni()
     inclusi, euros = _riparti(posizioni, importo, esclusi)
     righe, avvisi, tot = [], [], 0.0
@@ -216,7 +222,7 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
     """Registra un nuovo versamento (vid=None) o ne modifica uno esistente.
     Applica le quote alle posizioni (PMC) e memorizza i delta. Ritorna l'id."""
     qmap = market.quotes_map()
-    oggi = date.today()
+    oggi = tempo.oggi()
     with SessionLocal() as db:
         posizioni = list(db.execute(
             select(Position).order_by(Position.ordine, Position.id)).scalars().all())
@@ -300,7 +306,7 @@ def promemoria(oggi: date = None) -> dict | None:
     storico = lista()
     if not storico:
         return None
-    oggi = oggi or date.today()
+    oggi = oggi or tempo.oggi()
     if any(v["data"].year == oggi.year and v["data"].month == oggi.month
            for v in storico):
         return None                       # questo mese è già registrato

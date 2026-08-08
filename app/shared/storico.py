@@ -25,6 +25,7 @@ from sqlalchemy import Date, DateTime, Float, Integer, select
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.db import Base, SessionLocal
+from shared import tempo
 
 
 class GiornoStorico(Base):
@@ -40,7 +41,7 @@ class GiornoStorico(Base):
     entrate_mese: Mapped[float] = mapped_column(Float, default=0.0)
     uscite_mese: Mapped[float] = mapped_column(Float, default=0.0)
     n_titoli: Mapped[int] = mapped_column(Integer, default=0)
-    aggiornato: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    aggiornato: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)
 
 
 def _misura(oggi: date) -> dict:
@@ -69,7 +70,7 @@ def _misura(oggi: date) -> dict:
 
 def registra(oggi: date = None) -> dict | None:
     """Scrive (o riscrive) la riga di oggi. Idempotente: chiamala quanto vuoi."""
-    oggi = oggi or date.today()
+    oggi = oggi or tempo.oggi()
     try:
         valori = _misura(oggi)
     except Exception:
@@ -78,7 +79,7 @@ def registra(oggi: date = None) -> dict | None:
         g = db.get(GiornoStorico, oggi) or GiornoStorico(data=oggi)
         for k, v in valori.items():
             setattr(g, k, v)
-        g.aggiornato = datetime.now()
+        g.aggiornato = tempo.adesso()
         db.add(g)
         db.commit()
     return valori
@@ -86,7 +87,7 @@ def registra(oggi: date = None) -> dict | None:
 
 def serie(giorni: int = 90) -> list[dict]:
     """Le righe degli ultimi `giorni`, dalla più vecchia alla più recente."""
-    da = date.today() - timedelta(days=max(1, giorni))
+    da = tempo.oggi() - timedelta(days=max(1, giorni))
     with SessionLocal() as db:
         righe = list(db.execute(
             select(GiornoStorico).where(GiornoStorico.data >= da)
@@ -113,7 +114,7 @@ def confronto(giorni: int = 7) -> dict | None:
     Si prende la riga più recente fra quelle vecchie almeno `giorni`: se apri
     l'app a giorni alterni il confronto resta possibile, e diciamo su quanti
     giorni è davvero calcolato invece di far finta che siano 7."""
-    oggi = date.today()
+    oggi = tempo.oggi()
     limite = oggi - timedelta(days=giorni)
     with SessionLocal() as db:
         ora = db.execute(select(GiornoStorico)

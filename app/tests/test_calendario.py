@@ -100,23 +100,19 @@ def test_l_intensita_va_per_rango_non_in_proporzione_al_massimo(test_db):
 
 
 def test_i_giorni_non_ancora_arrivati_non_sono_giorni_senza_spese(monkeypatch, test_db):
-    """Marcarli come 'zero speso' racconterebbe un mese finito che non è finito."""
-    class FintoOggi(datetime):
-        @classmethod
-        def now(cls, tz=None):
-            return cls(ANNO, MESE, 15, 18, 0)
-    monkeypatch.setattr(fin, "datetime", FintoOggi)
+    """Marcarli come 'zero speso' racconterebbe un mese finito che non è finito.
+
+    «Adesso» si finge da shared/tempo: l'app non guarda più l'orologio della
+    macchina ma il fuso scelto, e un test che sostituisce `datetime` non
+    intercetterebbe più niente — passerebbe per finta."""
+    monkeypatch.setattr(fin.tempo, "adesso", lambda: datetime(ANNO, MESE, 15, 18, 0))
     cal = fin.calendario_spese(ANNO, MESE)
     assert [g["g"] for g in cal["giorni"] if g["futuro"]] == list(range(16, 32))
     assert [g["g"] for g in cal["giorni"] if g["oggi"]] == [15]
 
 
 def test_un_altro_mese_non_ha_un_oggi(monkeypatch, test_db):
-    class FintoOggi(datetime):
-        @classmethod
-        def now(cls, tz=None):
-            return cls(ANNO, 9, 3, 18, 0)
-    monkeypatch.setattr(fin, "datetime", FintoOggi)
+    monkeypatch.setattr(fin.tempo, "adesso", lambda: datetime(ANNO, 9, 3, 18, 0))
     cal = fin.calendario_spese(ANNO, MESE)
     assert not any(g["oggi"] or g["futuro"] for g in cal["giorni"])
 

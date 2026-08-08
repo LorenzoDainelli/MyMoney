@@ -25,6 +25,7 @@ import urllib.request
 from datetime import datetime
 
 from shared import settings_store as store
+from shared import tempo
 from shared import privacy
 
 DEFAULT_MODEL = "gemini-2.0-flash"        # modello gratuito; modificabile in Impostazioni
@@ -192,7 +193,7 @@ def eta_lettura(chiave: str):
         quando = datetime.fromisoformat(json.loads(raw).get("when", ""))
     except (json.JSONDecodeError, TypeError, ValueError):
         return None
-    return (datetime.now() - quando).total_seconds() / 3600.0
+    return (tempo.adesso() - quando).total_seconds() / 3600.0
 
 
 def forse_rigenera(chiave: str, genera) -> bool:
@@ -539,7 +540,7 @@ def parse_movimento(testo, wallets, categorie, oggi=None) -> dict:
     testo = (testo or "").strip()
     if not testo:
         return {"ok": False, "error": "vuoto"}
-    oggi = oggi or datetime.now().strftime("%Y-%m-%d")  # data LOCALE: 'ieri' giusto anche di sera
+    oggi = oggi or tempo.adesso().strftime("%Y-%m-%d")  # data LOCALE: 'ieri' giusto anche di sera
     nomi_w = [w.nome for w in wallets]
     nomi_c = [c.nome for c in categorie]
     pulito = privacy.scrub_text(testo)

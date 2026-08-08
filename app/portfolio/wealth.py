@@ -17,7 +17,7 @@ import logging
 import threading
 from datetime import datetime, timedelta
 
-from shared import settings_store
+from shared import settings_store, tempo
 from finance import service as fin_service
 from portfolio import market, versamenti
 from portfolio.service import lista_posizioni
@@ -88,7 +88,7 @@ def _griglia_piatta(key: str, now: datetime, base: float) -> list:
 
 
 def _build() -> dict:
-    now = datetime.now()
+    now = tempo.adesso()
     floor_ts = fin_service.data_inizio().timestamp()   # niente patrimonio prima dell'inizio del tracking
     posizioni = [p for p in lista_posizioni()
                  if (p.ticker or "").strip() and (p.quantita or 0) > 0]
@@ -222,7 +222,7 @@ def get_cached(max_age_min: int = 60) -> dict | None:
     if data is not None:
         try:
             when = datetime.fromisoformat(data["when"])
-            stale = (datetime.now() - when).total_seconds() > max_age_min * 60
+            stale = (tempo.adesso() - when).total_seconds() > max_age_min * 60
         except (KeyError, ValueError):
             stale = True
     if stale:

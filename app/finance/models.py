@@ -33,6 +33,7 @@ from sqlalchemy import String, Float, Integer, DateTime, Text, Boolean, ForeignK
 from sqlalchemy.orm import Mapped, mapped_column, Session
 
 from shared.db import Base
+from shared import tempo
 
 TIPO_ENTRATA = "entrata"
 TIPO_USCITA = "uscita"
@@ -66,7 +67,7 @@ class Wallet(Base):
     saveback_pct: Mapped[float] = mapped_column(Float, default=0.0)   # % (1.0 = 1%)
     saveback_tetto: Mapped[float] = mapped_column(Float, default=0.0)  # €/mese, 0 = nessuno
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # sync v2
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)  # sync v2
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)  # sync v2
     rev: Mapped[int] = mapped_column(Integer, default=1)                          # sync v2
     deleted: Mapped[bool] = mapped_column(Boolean, default=False)                 # sync v2 (tombstone)
 
@@ -78,7 +79,7 @@ class Category(Base):
     kind: Mapped[str] = mapped_column(String(10), default="")   # "" | uscita | entrata
     archiviato: Mapped[bool] = mapped_column(Boolean, default=False)
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # sync v2
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)  # sync v2
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)  # sync v2
     rev: Mapped[int] = mapped_column(Integer, default=1)                          # sync v2
     deleted: Mapped[bool] = mapped_column(Boolean, default=False)                 # sync v2 (tombstone)
 
@@ -87,7 +88,10 @@ class Transaction(Base):
     __tablename__ = "finance_transactions"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     tipo: Mapped[str] = mapped_column(String(15))               # entrata|uscita|trasferimento|giro
-    data: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)   # ora locale (app locale)
+    # L'ora del fuso SCELTO nelle impostazioni (shared/tempo.py), non quella
+    # dell'orologio che esegue il codice: il PC, il telefono e il server in cloud
+    # danno tre risposte diverse, e vicino a mezzanotte la differenza è il giorno.
+    data: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)
     importo: Mapped[float] = mapped_column(Float, default=0.0)  # sempre positivo
     wallet_id: Mapped[int] = mapped_column(ForeignKey("finance_wallets.id"))
     # trasferimento: wallet di destinazione — giro: wallet dove entra il rimborso
@@ -95,7 +99,7 @@ class Transaction(Base):
     category_id: Mapped[int | None] = mapped_column(ForeignKey("finance_categories.id"), nullable=True)
     metodo: Mapped[str] = mapped_column(String(60), default="")  # legacy: non più usato (colonna lasciata per non migrare)
     descrizione: Mapped[str] = mapped_column(Text, default="")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)
     # --- solo partite di giro (tipo == "giro") ---
     giro_id: Mapped[str] = mapped_column(String(32), default="")   # raggruppa le gambe di una partita
     giro_aperta: Mapped[bool] = mapped_column(Boolean, default=False)  # partita in attesa di rimborso
@@ -114,7 +118,7 @@ class Transaction(Base):
     origine: Mapped[str] = mapped_column(String(20), default="")
     # --- metadati di sincronizzazione multi-dispositivo (v2, vedi PIANO-V2.md) ---
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # identità stabile tra dispositivi
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)  # ultima modifica (per la fusione)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)  # ultima modifica (per la fusione)
     rev: Mapped[int] = mapped_column(Integer, default=1)                          # versione del record (sale a ogni modifica)
     deleted: Mapped[bool] = mapped_column(Boolean, default=False)                 # tombstone (soft-delete attivo dalla Fase 4)
 
@@ -169,7 +173,7 @@ def _sync_is_importing() -> bool:
 
 @event.listens_for(Session, "before_flush")
 def _timbra_metadati_sync(session, flush_context, instances):
-    now = datetime.now()
+    now = tempo.adesso()
     importing = _sync_is_importing()
     for obj in session.new:
         if isinstance(obj, _MODELLI_SYNC):

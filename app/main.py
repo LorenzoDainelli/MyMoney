@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from shared.config import APP_DIR, APP_NAME, JOB_TOKEN
 from shared.db import Base, engine
 from shared.templating import templates
-from shared import ai, auth, lavori, settings_store
+from shared import ai, auth, lavori, settings_store, tempo
 
 # Importa i modelli PRIMA di create_all, cosi' le tabelle vengono registrate.
 import shared.settings_store          # noqa: F401  -> tabella shared_settings
@@ -126,7 +126,7 @@ def _dashboard_ctx() -> dict:
     dividendi, punto della settimana AI, esposizione per settore."""
     vista = pf_service.vista_portafoglio()
     sal = fin_service.saldi()
-    now = datetime.now()
+    now = tempo.adesso()
     riep = fin_service.riepilogo_mese(now.year, now.month)
     inv_tot = vista["totale"]
     # solo la liquidità: il conto PAC porta già il valore del Portafoglio (inv_tot),
@@ -309,4 +309,4 @@ def _genera_punto_settimana() -> None:
     if res.get("ok"):
         settings_store.set_setting("dash_ai", json.dumps({
             "text": res["text"], "conf": res["conf"],
-            "when": datetime.now().isoformat(timespec="minutes")}))
+            "when": tempo.adesso().isoformat(timespec="minutes")}))

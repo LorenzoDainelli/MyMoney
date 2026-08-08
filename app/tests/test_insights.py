@@ -321,7 +321,8 @@ def test_niente_mesi_in_cui_l_app_non_esisteva(monkeypatch):
     monkeypatch.setattr(fin, "saldi", lambda: {"totale": 64.0, "liquido": 64.0,
                                                "righe": [1] * 7})
     _riepiloghi(monkeypatch, {(2026, 7): {"uscite": 35.0, "categorie": {"Spesa": 15.0}}})
-    monkeypatch.setattr(fr, "datetime", __import__("datetime").datetime)
+    # (qui c'era il ripristino di `fr.datetime`, che serviva a disfare il finto
+    # orologio di un altro test: ora «adesso» passa tutto da shared/tempo.)
 
     testo = fr._contesto_finanze()
     assert "2026-05" not in testo and "2026-06" not in testo

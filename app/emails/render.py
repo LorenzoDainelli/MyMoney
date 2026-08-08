@@ -51,7 +51,24 @@ IMPACT = {
 
 
 def _oggi() -> str:
-    d = datetime.now(timezone.utc) + timedelta(hours=2)  # ~Europe/Rome (CEST)
+    """La data in cima all'email, nel fuso scelto nell'app.
+
+    Prima erano due ore fisse sopra UTC: giusto per l'Italia d'estate, sbagliato
+    d'inverno e sbagliato ovunque altro. Questo file gira anche fuori dall'app
+    (le routine nel cloud lo chiamano da scripts/render_email.py), dove il
+    database non c'è: in quel caso vale `MYMONEY_FUSO`, altrimenti l'Italia.
+    """
+    try:
+        from shared import tempo
+        d = tempo.adesso()
+    except Exception:
+        import os
+        from zoneinfo import ZoneInfo
+        try:
+            zona = ZoneInfo(os.environ.get("MYMONEY_FUSO", "").strip() or "Europe/Rome")
+        except Exception:
+            zona = timezone.utc
+        d = datetime.now(zona)
     return f"{d.day} {MESI[d.month - 1]} {d.year}"
 
 

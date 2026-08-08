@@ -10,6 +10,7 @@ from datetime import datetime
 
 from shared.templating import templates
 from shared import settings_store as store
+from shared import tempo
 from shared import ai
 from shared import ai_memory
 from shared import drive_sync
@@ -34,7 +35,7 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
     if drive_last and drive_last.get("ts"):
         try:
             ts = datetime.fromisoformat(drive_last["ts"])
-            if (datetime.now() - ts).days > 7:
+            if (tempo.adesso() - ts).days > 7:
                 drive_last_stale = True
         except ValueError:
             pass
@@ -53,6 +54,10 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
         "PROVIDERS": ai.PROVIDERS,
         "vertex_project": store.get_setting("vertex_project", ""),
         "vertex_location": store.get_setting("vertex_location", "") or ai.DEFAULT_VERTEX_LOCATION,
+        # dove sei: decide la data dei movimenti e ogni orario mostrato
+        "fuso": tempo.nome_fuso(),
+        "fuso_ora": tempo.adesso().strftime("%H:%M"),
+        "FUSI": tempo.FUSI,
         "drive_msg": drive,
         "drive_configured": drive_sync.is_configured(),
         "drive_connected": drive_sync.is_connected(),
@@ -64,6 +69,20 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
         "ai_ricordi": ai_memory.ricordi(),
         "ai_letture": ai_memory.ultime_letture(n=5),
     })
+
+
+@router.post("/impostazioni/fuso")
+def salva_fuso(fuso: str = Form("")):
+    """Cambia il fuso di riferimento dell'app.
+
+    Un nome inventato non cambia niente e non rompe niente: `tempo.imposta`
+    accetta solo fusi che esistono davvero. Il valore arriva dal menù, oppure
+    dal pulsante «usa quello del dispositivo», che manda quello dichiarato dal
+    browser — e il browser di uno sconosciuto può dichiarare qualunque cosa.
+    """
+    ok = tempo.imposta(fuso)
+    return RedirectResponse(f"/impostazioni?salvato={1 if ok else 0}#fuso",
+                            status_code=303)
 
 
 @router.post("/impostazioni/memoria/{rid}/dimentica")

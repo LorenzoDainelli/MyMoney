@@ -52,6 +52,56 @@
     </div>
   </div>
 
+  {# ==========================================================================
+     Dove sei. Decide la data dei movimenti e ogni orario mostrato: il PC, il
+     telefono e il server danno tre risposte diverse, quindi la risposta la dai
+     tu una volta sola (shared/tempo.py). L'avviso qui sotto esiste perché
+     l'unico difetto della scelta a mano è dimenticarsene dopo un viaggio.
+     ========================================================================== #}
+  <div class="card navy" id="fuso" style="margin-top:4px;">
+    <div class="card-h">{{ t('set.tz_h') }}</div>
+    <p style="margin:0 0 10px;">{{ t('set.tz_intro') }}</p>
+    <div class="field" style="margin-bottom:0;max-width:380px;">
+      <label>{{ t('set.tz_label') }}</label>
+      <form method="post" action="/impostazioni/fuso">
+        <select name="fuso" onchange="this.form.submit()">
+          {% for id, nome in FUSI %}
+          <option value="{{ id }}" {{ 'selected' if id==fuso else '' }}>{{ nome }} · {{ id }}</option>
+          {% endfor %}
+          {% if fuso not in FUSI | map(attribute=0) | list %}
+          <option value="{{ fuso }}" selected>{{ fuso }}</option>
+          {% endif %}
+        </select>
+      </form>
+      <div class="hint">{{ t('set.tz_now', ora=fuso_ora) }}</div>
+    </div>
+    <div id="tz-avviso" hidden style="margin-top:12px;">
+      <div class="note warn" style="margin:0;">
+        <span id="tz-avviso-testo"></span>
+        <form method="post" action="/impostazioni/fuso" style="margin-top:8px;">
+          <input type="hidden" name="fuso" id="tz-dispositivo">
+          <button type="submit" class="btn">{{ t('set.tz_use_device') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Il browser sa sempre dove sta il dispositivo. Non decide al posto tuo — il
+    // fuso resta una scelta esplicita — ma se non coincide te lo dice, invece di
+    // lasciarti registrare movimenti con l'ora di un altro Paese.
+    (function () {
+      var scelto = {{ fuso | tojson }};
+      var qui = "";
+      try { qui = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) { return; }
+      if (!qui || qui === scelto) return;
+      document.getElementById("tz-dispositivo").value = qui;
+      document.getElementById("tz-avviso-testo").textContent =
+        {{ t('set.tz_mismatch') | tojson }}.replace("{qui}", qui).replace("{scelto}", scelto);
+      document.getElementById("tz-avviso").hidden = false;
+    })();
+  </script>
+
   <div class="note info">{{ t('set.security_note') }}</div>
 
   <!-- Agente AI (Gemini): Studio (gratis) oppure Vertex AI (crediti Cloud) -->

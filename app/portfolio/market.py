@@ -28,24 +28,6 @@ from portfolio.models import Position
 UA = {"User-Agent": "Mozilla/5.0 (finanza-app personale)"}
 TIMEOUT = 8
 
-def _ultima_domenica(anno: int, mese: int) -> datetime:
-    """L'ultima domenica del mese, alle 01:00 UTC: è l'istante in cui l'Unione
-    Europea cambia l'ora (uguale in tutti i suoi fusi)."""
-    d = datetime(anno + (1 if mese == 12 else 0), 1 if mese == 12 else mese + 1, 1, 1)
-    d -= timedelta(days=1)
-    return d - timedelta(days=(d.weekday() + 1) % 7)
-
-
-def offset_roma(utc: datetime) -> timedelta:
-    """Quante ore aggiungere all'UTC per avere l'ora di Roma in quel momento.
-
-    Prima era un +2 fisso (l'ora legale) scritto nel codice: da fine ottobre a
-    fine marzo ogni «aggiornato alle...» sarebbe stato un'ora avanti, per mezzo
-    anno, senza che nulla lo segnalasse. La regola europea sta in cinque righe e
-    non ha bisogno del database dei fusi (che su Windows spesso non c'è)."""
-    inizio = _ultima_domenica(utc.year, 3)      # ultima domenica di marzo, 01:00 UTC
-    fine = _ultima_domenica(utc.year, 10)       # ultima domenica di ottobre, 01:00 UTC
-    return timedelta(hours=2 if inizio <= utc < fine else 1)
 
 # Quante richieste in parallelo verso Yahoo. Il collo di bottiglia è l'attesa di
 # rete, non il PC: in serie l'avvio costava minuti (37 titoli × più chiamate
@@ -320,12 +302,21 @@ def stato_prezzi(max_age_min: int = 360) -> dict:
 
 
 def fmt_ts(dt) -> str | None:
-    """Un istante UTC del database scritto nell'ora di Roma (legale inclusa)."""
+    """Un istante UTC del database scritto nell'ora del fuso SCELTO.
+
+    Qui dentro il database tiene tutto in UTC, che è giusto per confrontare due
+    istanti e inutile da leggere: «prezzi aggiornati alle 11:24» quando sono le
+    13:24 sembra un'app rotta. Prima la conversione era l'ora di Roma calcolata
+    a mano — corretta finché stavi in Italia. Adesso segue il fuso che hai
+    scelto, che è anche l'unico modo di funzionare fuori dall'Europa (le regole
+    dell'ora legale americana sono altre date).
+    """
     if not dt:
         return None
-    if dt.tzinfo is not None:
-        dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
-    return (dt + offset_roma(dt)).strftime("%d/%m · %H:%M")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    from shared import tempo
+    return tempo.a_naive(dt).strftime("%d/%m · %H:%M")
 
 
 # =========================================================================
