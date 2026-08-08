@@ -177,11 +177,26 @@ def test_le_pagine_dell_app_sono_chiuse(percorso):
 
 @pytest.mark.parametrize("percorso", [
     "/salute", "/accedi", "/accedi/google", "/accedi/google/ritorno",
-    "/accedi/codice", "/esci", "/static/app.js", "/static/img/logo.png",
+    "/accedi/attiva", "/accedi/codice", "/esci",
+    "/static/app.js", "/static/img/logo.png",
 ])
 def test_solo_l_ingresso_e_la_grafica_sono_aperti(percorso):
     from shared import auth
     assert auth.percorso_libero(percorso) is True, f"{percorso} risulta chiusa!"
+
+
+def test_il_segreto_del_secondo_fattore_non_esce_dal_server():
+    """Il sync porta in giro movimenti, conti e categorie — non le impostazioni.
+    È così oggi, e questo test esiste perché resti così: il giorno in cui
+    qualcuno aggiungesse le impostazioni alla fotografia, il segreto del secondo
+    fattore finirebbe su Drive e sul telefono, e il gradino in più smetterebbe
+    di essere un gradino."""
+    import json
+    from shared import auth, sync
+    auth.imposta_segreto_totp(sicurezza.nuovo_segreto())
+    fotografia = json.dumps(sync.build_snapshot(), default=str)
+    assert auth.CHIAVE_TOTP not in fotografia
+    assert auth.segreto_totp() not in fotografia
 
 
 def test_i_lavori_passano_ma_hanno_la_loro_serratura():

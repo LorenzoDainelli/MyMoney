@@ -19,6 +19,8 @@ ASSET_V = str(int(time.time()))
 def _global_context(request):
     """Inietta in OGNI pagina: traduttore (t), lingua e tema correnti, elenco lingue
     e il percorso corrente (per tornare qui dopo aver cambiato lingua/tema)."""
+    from shared import auth      # tardivo: auth legge la configurazione, e questo
+                                 # modulo viene importato prima di tutto il resto
     ui = prefs.get_ui()          # tema+lingua+animazioni in una sola query
     return {
         "t": i18n.make_translator(ui["lang"]),
@@ -28,6 +30,9 @@ def _global_context(request):
         "LANGS": i18n.LANGS,
         "cur_path": request.url.path,
         "V": ASSET_V,
+        # Sul PC di casa è falso e la barra resta identica a sempre: un bottone
+        # «esci» dove non si è mai entrati sarebbe solo un modo per confondersi.
+        "c_e_login": auth.richiede_accesso(),
     }
 
 

@@ -1,0 +1,33 @@
+{# Il secondo gradino. Chi arriva qui ha superato Google e non è ancora dentro:
+   il biglietto che ha in tasca apre solo questa pagina, e per dieci minuti. #}
+{% extends "accedi_shell.html" %}
+{% block title %}Codice — {{ t('app.name') }}{% endblock %}
+{% block content %}
+  <div class="card-h" style="margin-bottom:4px;">Il codice a sei cifre</div>
+  <p class="muted" style="margin:0 0 16px;font-size:var(--text-sm);">
+    {{ email }} — apri l'app authenticator e copia il codice di adesso.
+  </p>
+
+  {% if attesa %}
+    <div class="note warn">
+      Troppi tentativi. Riprova fra {{ (attesa // 60) + 1 }} minuti.
+    </div>
+  {% elif errore %}
+    <div class="note err">Codice non valido.</div>
+  {% endif %}
+
+  <form method="post" action="/accedi/codice">
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="field">
+      <input class="mm-cifre" type="text" name="codice" inputmode="numeric"
+             autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6"
+             placeholder="······" autofocus {{ 'disabled' if attesa else '' }}>
+    </div>
+    <button class="btn primary lg" type="submit" style="width:100%;justify-content:center;"
+            {{ 'disabled' if attesa else '' }}>Entra</button>
+  </form>
+
+  <p style="margin:16px 0 0;">
+    <a class="faint" style="font-size:var(--text-xs);" href="/esci">Non sei tu? Esci</a>
+  </p>
+{% endblock %}

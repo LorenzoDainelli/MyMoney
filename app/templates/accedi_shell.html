@@ -1,0 +1,46 @@
+{# ============================================================================
+   Il guscio delle pagine di accesso.
+
+   Non estende base.html di proposito: là dentro c'è la barra di navigazione,
+   e mostrare i nomi delle pagine a chi non è ancora entrato è dirgli com'è
+   fatta la casa. Qui c'è una scatola in mezzo allo schermo e niente altro.
+
+   Il tema (chiaro/scuro) invece è quello scelto: la porta di casa somiglia
+   alla casa.
+   ============================================================================ #}
+<!DOCTYPE html>
+<html lang="{{ lang }}" data-theme="{{ theme }}" data-anim="{{ anim }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Entra — {{ t('app.name') }}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css?v={{ V }}">
+  <style>
+    .mm-porta { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+    .mm-porta .card { width: 100%; max-width: 400px; }
+    .mm-marchio { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .mm-marchio .logo { width: 34px; height: 34px; border-radius: 10px; background: var(--accent);
+                        color: var(--on-accent); display: grid; place-items: center;
+                        font-weight: 800; font-size: 17px; }
+    .mm-marchio b { font-size: var(--text-lg); }
+    /* il codice a sei cifre: cifre grandi e distanziate, si rileggono prima di premere */
+    .mm-cifre { font-size: 26px; letter-spacing: 8px; text-align: center;
+                font-variant-numeric: tabular-nums; }
+    .mm-segreto { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+                  font-size: var(--text-md); background: var(--surface-alt);
+                  border: 1px solid var(--border); border-radius: var(--r-sm);
+                  padding: 10px 12px; word-break: break-all; user-select: all; }
+  </style>
+</head>
+<body>
+  <main class="mm-porta">
+    <div class="card">
+      <div class="mm-marchio">
+        <span class="logo" aria-hidden="true">M</span>
+        <b>{{ t('app.name') }}</b>
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

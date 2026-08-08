@@ -36,6 +36,7 @@ PERCORSI_LIBERI = (
     "/accedi",
     "/accedi/google",
     "/accedi/google/ritorno",
+    "/accedi/attiva",
     "/accedi/codice",
     "/esci",
     "/lavori/giornaliero",

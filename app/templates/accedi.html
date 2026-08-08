@@ -1,0 +1,29 @@
+{# La porta. Un bottone solo: a riconoscerti è Google, noi le password non le
+   gestiamo. #}
+{% extends "accedi_shell.html" %}
+{% block content %}
+  <p class="muted" style="margin:0 0 18px;">
+    I tuoi conti, i tuoi titoli e i tuoi movimenti. Entra per vederli.
+  </p>
+
+  {% if errore %}
+    {# Un motivo solo, sempre lo stesso: quale controllo sia saltato è
+       un'informazione utile a chi sta provando a entrare, non a chi ha
+       diritto. Il dettaglio sta nei log del server. #}
+    <div class="note err">Non è stato possibile entrare. Riprova.</div>
+  {% endif %}
+
+  {% if configurato %}
+    <a class="btn primary lg" href="/accedi/google" style="width:100%;justify-content:center;">
+      Entra con Google
+    </a>
+    <p class="faint" style="font-size:var(--text-xs);margin:14px 0 0;">
+      Poi il codice a sei cifre dell'app authenticator.
+      Entra un solo indirizzo: il tuo.
+    </p>
+  {% else %}
+    <div class="note warn">
+      L'accesso con Google non è ancora configurato su questo server.
+    </div>
+  {% endif %}
+{% endblock %}

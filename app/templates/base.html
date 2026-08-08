@@ -113,6 +113,13 @@
           <input type="hidden" name="theme" value="{{ 'dark' if theme=='light' else 'light' }}">
           <button type="submit" class="theme-btn" title="{{ t('theme.toggle') }}">{{ icon('moon' if theme=='light' else 'sun', 17) }}</button>
         </form>
+        {# Solo quando c'è davvero un login (l'app online). Sul PC di casa non
+           compare: non si è mai entrati, non c'è da uscire. #}
+        {% if c_e_login %}
+        <form method="post" action="/esci">
+          <button type="submit" class="theme-btn" title="Esci">↩</button>
+        </form>
+        {% endif %}
       </div>
     </div>
   </header>

@@ -1,0 +1,53 @@
+{# Una volta sola: si attacca l'app authenticator.
+
+   Niente QR. Scrivere un generatore di QR corretto è qualche centinaio di
+   righe di codice — e sarebbe codice nuovo, mai provato, dentro la porta di
+   casa — per risparmiare trentadue caratteri copiati una volta nella vita.
+   L'inserimento a mano è previsto da tutte le app authenticator. #}
+{% extends "accedi_shell.html" %}
+{% block title %}Attiva il codice — {{ t('app.name') }}{% endblock %}
+{% block content %}
+  <div class="card-h" style="margin-bottom:4px;">Attiva il secondo fattore</div>
+  <p class="muted" style="margin:0 0 16px;font-size:var(--text-sm);">
+    {{ email }} — una volta sola. Da qui in poi, per entrare servirà anche il
+    telefono: chi si impossessasse del tuo account Google resterebbe fuori.
+  </p>
+
+  {% if errore %}<div class="note err">Codice non valido. Riprova.</div>{% endif %}
+
+  <ol class="muted" style="font-size:var(--text-sm);padding-left:18px;margin:0 0 14px;">
+    <li>Apri l'app authenticator (Google Authenticator, Aegis, 1Password…).</li>
+    <li>Aggiungi un conto <b>inserendo una chiave</b>, e copia questa:</li>
+  </ol>
+
+  <div class="mm-segreto" style="margin-bottom:6px;">{{ a_gruppi }}</div>
+  <p class="faint" style="font-size:var(--text-xs);margin:0 0 10px;">
+    Gli spazi non contano. Tipo di chiave: <b>a tempo</b> (time-based).
+  </p>
+  {# Dal telefono questo link apre l'app authenticator e le passa la chiave da
+     solo: è la stessa cosa che farebbe un QR, senza il QR. Dal PC non fa nulla
+     ed è giusto così — lì la chiave si copia a mano. #}
+  <p style="margin:0 0 16px;">
+    <a class="btn sm" href="{{ uri }}">Se sei dal telefono, apri l'app da qui</a>
+  </p>
+
+  <form method="post" action="/accedi/attiva">
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="field">
+      <label>Scrivi il codice che ti mostra adesso</label>
+      <input class="mm-cifre" type="text" name="codice" inputmode="numeric"
+             autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6"
+             placeholder="······" autofocus>
+      {# Il segreto si salva SOLO se questo codice torna: così un errore di
+         copiatura si scopre adesso, non la prossima volta che devi entrare. #}
+      <div class="hint">Serve a verificare che l'app l'abbia copiata bene.</div>
+    </div>
+    <button class="btn primary lg" type="submit" style="width:100%;justify-content:center;">
+      Attiva ed entra
+    </button>
+  </form>
+
+  <p style="margin:16px 0 0;">
+    <a class="faint" style="font-size:var(--text-xs);" href="/esci">Annulla</a>
+  </p>
+{% endblock %}

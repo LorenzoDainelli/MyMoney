@@ -15,6 +15,7 @@ Variabili riconosciute:
                             se manca NON c'è login e l'app resta quella di casa
   MYMONEY_EMAIL_CONSENTITE  chi può entrare, separati da virgola
   MYMONEY_OAUTH_CLIENT_ID / _SECRET   credenziali di «accedi con Google»
+  MYMONEY_BASE_URL indirizzo pubblico dell'app (per il ritorno da Google)
 """
 import os
 import tempfile
@@ -89,5 +90,12 @@ EMAIL_CONSENTITE = [e for e in os.environ.get(
 # Credenziali di «accedi con Google» (create nella console Google Cloud).
 OAUTH_CLIENT_ID = os.environ.get("MYMONEY_OAUTH_CLIENT_ID", "").strip()
 OAUTH_CLIENT_SECRET = os.environ.get("MYMONEY_OAUTH_CLIENT_SECRET", "").strip()
+
+# L'indirizzo pubblico dell'app, scritto a mano perché Google pretende che il
+# «dove torno dopo il login» sia IDENTICO a quello registrato nella console.
+# Ricavarlo dall'intestazione Host funzionerebbe quasi sempre, ma quell'intestazione
+# la scrive chi chiama: preferisco un valore che decidiamo noi. Vuoto = lo si
+# ricava dalla richiesta, che è quel che serve per provare sul PC.
+BASE_URL = os.environ.get("MYMONEY_BASE_URL", "").strip().rstrip("/")
 
 APP_NAME = "Finanza personale"

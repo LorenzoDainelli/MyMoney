@@ -31,6 +31,7 @@ from finance.routes import router as finance_router, _contesto_finanze
 from finance.api_routes import router as finance_api_router
 from shared.settings_routes import router as settings_router
 from shared.prefs_routes import router as prefs_router
+from shared.accesso_routes import router as accesso_router
 from news import reader
 from news.routes import router as news_router
 
@@ -70,6 +71,7 @@ app.include_router(finance_api_router)
 app.include_router(settings_router)
 app.include_router(prefs_router)
 app.include_router(news_router)
+app.include_router(accesso_router)
 
 
 # --------------------------- la porta d'ingresso ---------------------------
