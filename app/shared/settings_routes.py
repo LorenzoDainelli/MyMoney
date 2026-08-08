@@ -44,6 +44,9 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
         "active": "impostazioni",
         "voci": voci, "salvato": bool(salvato),
         "ai_configured": ai.is_configured(),
+        # sul server la chiave viene da Secret Manager: una casella qui non
+        # cambierebbe niente, e va detto invece di mostrarla
+        "chiave_dal_server": ai.chiave_dal_server(),
         "ai_model": ai.get_model(),
         "ai_mode": ai.get_mode(),
         "ai_web": ai.usa_web(),

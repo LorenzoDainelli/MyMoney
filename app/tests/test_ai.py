@@ -299,3 +299,67 @@ def test_una_lettura_mai_scritta_e_da_rigenerare(monkeypatch):
     fatto = threading.Event()
     assert ai.forse_rigenera("prova_ai", fatto.set) is True
     assert fatto.wait(5)
+
+
+# ── la chiave dell'agente: dal database o dall'ambiente (Fase 2 cloud) ──────
+# Sul PC la chiave sta nella tabella impostazioni, dove l'utente la incolla. Su
+# un server quella tabella è un database in rete, e una chiave in un database in
+# rete è una chiave in un posto in più del necessario: là la mette Secret
+# Manager, attraverso una variabile d'ambiente.
+
+def _senza_variabile(monkeypatch):
+    import shared.config as cfg
+    monkeypatch.setattr(cfg, "GEMINI_API_KEY", "")
+
+
+def _con_variabile(monkeypatch, valore="chiave-del-server"):
+    import shared.config as cfg
+    monkeypatch.setattr(cfg, "GEMINI_API_KEY", valore)
+
+
+def test_sul_pc_la_chiave_viene_dalle_impostazioni(monkeypatch):
+    from shared import ai, settings_store as store
+    _senza_variabile(monkeypatch)
+    store.set_setting("gemini_api_key", "chiave-incollata-a-mano")
+    assert ai.chiave_gemini() == "chiave-incollata-a-mano"
+    assert ai.chiave_dal_server() is False
+    assert ai.is_configured() is True
+
+
+def test_sul_server_vince_la_variabile(monkeypatch):
+    """Se vincesse il database, spostare la chiave in Secret Manager non
+    servirebbe a niente: quella vecchia continuerebbe a essere usata."""
+    from shared import ai, settings_store as store
+    store.set_setting("gemini_api_key", "quella-vecchia-del-database")
+    _con_variabile(monkeypatch)
+    assert ai.chiave_gemini() == "chiave-del-server"
+    assert ai.chiave_dal_server() is True
+
+
+def test_col_solo_ambiente_l_agente_e_sbloccato(monkeypatch):
+    """Sul server il database non ha nessuna chiave: senza questo l'agente
+    resterebbe spento pur avendo tutto quello che gli serve."""
+    from shared import ai, settings_store as store
+    store.set_setting("gemini_api_key", "")
+    _con_variabile(monkeypatch)
+    assert ai.is_configured() is True
+
+
+def test_senza_niente_l_agente_resta_spento(monkeypatch):
+    from shared import ai, settings_store as store
+    store.set_setting("gemini_api_key", "")
+    _senza_variabile(monkeypatch)
+    assert ai.chiave_gemini() == ""
+    assert ai.is_configured() is False
+
+
+def test_la_chiave_del_server_arriva_davvero_alla_richiesta(monkeypatch):
+    """Non basta che `is_configured` dica di sì: la chiave deve finire
+    nell'intestazione della chiamata, e negli header — mai nell'URL."""
+    from shared import ai, settings_store as store
+    store.set_setting("gemini_api_key", "")
+    store.set_setting("ai_provider", ai.PROVIDER_STUDIO)
+    _con_variabile(monkeypatch, "AIza-del-secret-manager")
+    url, headers = ai._endpoint_headers("gemini-x")
+    assert headers["x-goog-api-key"] == "AIza-del-secret-manager"
+    assert "AIza-del-secret-manager" not in url

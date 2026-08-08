@@ -243,12 +243,34 @@ def vertex_conf() -> dict:
     }
 
 
+def chiave_gemini() -> str:
+    """La chiave dell'agente, da un posto solo.
+
+    Sul PC sta nella tabella impostazioni, dove l'utente la incolla. Sul server
+    la mette Secret Manager attraverso una variabile d'ambiente, e quella
+    **vince**: così la chiave non deve stare anche dentro un database in rete.
+    """
+    from shared.config import GEMINI_API_KEY
+    return GEMINI_API_KEY or store.get_setting("gemini_api_key", "").strip()
+
+
+def chiave_dal_server() -> bool:
+    """Vero quando la chiave arriva dall'ambiente e non dal database.
+
+    Serve alla pagina Impostazioni: senza questo direbbe «chiave assente»
+    mentre l'agente funziona benissimo, e una casella che non cambia niente è
+    peggio di una casella che non c'è.
+    """
+    from shared.config import GEMINI_API_KEY
+    return bool(GEMINI_API_KEY)
+
+
 def is_configured() -> bool:
     """True se il provider scelto è pronto all'uso (l'agente è sbloccato)."""
     if get_provider() == PROVIDER_VERTEX:
         c = vertex_conf()
         return bool(c["project"] and c["sa_json"])
-    return store.has_key("gemini_api_key")
+    return bool(chiave_gemini())
 
 
 # Credenziali Vertex in cache: google-auth gestisce il refresh del token (~1h),
@@ -297,7 +319,7 @@ def _endpoint_headers(model: str) -> tuple:
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token,
         }
-    key = store.get_setting("gemini_api_key", "").strip()
+    key = chiave_gemini()
     if not key:
         raise RuntimeError("no_key")
     return STUDIO_ENDPOINT.format(model=model), {

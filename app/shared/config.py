@@ -16,6 +16,7 @@ Variabili riconosciute:
   MYMONEY_EMAIL_CONSENTITE  chi può entrare, separati da virgola
   MYMONEY_OAUTH_CLIENT_ID / _SECRET   credenziali di «accedi con Google»
   MYMONEY_BASE_URL indirizzo pubblico dell'app (per il ritorno da Google)
+  MYMONEY_GEMINI_API_KEY   chiave dell'agente; se c'è vince su quella nel DB
 """
 import os
 import tempfile
@@ -90,6 +91,13 @@ EMAIL_CONSENTITE = [e for e in os.environ.get(
 # Credenziali di «accedi con Google» (create nella console Google Cloud).
 OAUTH_CLIENT_ID = os.environ.get("MYMONEY_OAUTH_CLIENT_ID", "").strip()
 OAUTH_CLIENT_SECRET = os.environ.get("MYMONEY_OAUTH_CLIENT_SECRET", "").strip()
+
+# Chiave dell'agente (Google AI Studio). Sul PC sta nella tabella impostazioni,
+# dove l'utente la incolla; su un server quella tabella è un database in rete, e
+# una chiave in un database in rete è una chiave in più posti del necessario.
+# Se questa variabile c'è, **vince**: la mette Secret Manager e l'app non la
+# scrive da nessuna parte.
+GEMINI_API_KEY = os.environ.get("MYMONEY_GEMINI_API_KEY", "").strip()
 
 # L'indirizzo pubblico dell'app, scritto a mano perché Google pretende che il
 # «dove torno dopo il login» sia IDENTICO a quello registrato nella console.

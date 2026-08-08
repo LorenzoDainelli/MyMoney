@@ -185,6 +185,18 @@
             </label>
           {% endif %}
         </div>
+      {% elif chiave_dal_server %}
+        {# Sul server la chiave arriva da Secret Manager, non da qui. Mostrare
+           una casella che non cambia niente sarebbe peggio che non mostrarla:
+           la incolli, premi salva, e l'agente continua a usare l'altra. #}
+        <div class="field">
+          <label>{{ t('set.ai_key') }}</label>
+          <div class="note info" style="margin:0;">
+            La chiave la mette il server (Secret Manager), quindi qui non si
+            cambia. Si aggiorna dalla console di Google, sul segreto
+            <code>mymoney-gemini-api-key</code>.
+          </div>
+        </div>
       {% else %}
         <div class="field">
           <label>{{ t('set.ai_key') }}</label>

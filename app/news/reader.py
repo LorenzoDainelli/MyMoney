@@ -6,8 +6,10 @@ confidenza e rilevanza) e prepariamo card pronte da mostrare, nello stesso stile
 visivo delle email. **Sola lettura**: l'app non modifica nulla del robot.
 """
 import json
-import subprocess
+import os
+import urllib.error
 import urllib.parse
+import urllib.request
 
 from shared.config import APP_DIR, CACHE_DIR
 
@@ -18,6 +20,13 @@ PREDICTIONS = STATE_DIR / "predictions.json"
 # Sta in CACHE_DIR e non in data/ perché su un server quel disco è di sola
 # lettura: è una copia di comodo, si riscarica, non è un dato da custodire.
 REMOTE_CACHE = CACHE_DIR / "news_remote.json"
+
+# Da dove si scaricano le notizie del robot. È un file pubblico del repo: lo
+# legge chiunque, e infatti non contiene niente di personale — sono analisi di
+# notizie, non i conti di nessuno.
+URL_NOTIZIE = os.environ.get("MYMONEY_NEWS_URL", "").strip() or (
+    "https://raw.githubusercontent.com/LorenzoDainelli/news-monitor/"
+    "main/state/predictions.json")
 
 # Impatto -> (freccia, classe .pill del design system). I COLORI vivono nel CSS
 # (light/dark), qui usiamo solo le classi: niente hex fissi -> temi coerenti.
@@ -91,26 +100,31 @@ def _rel_class(score) -> str:
 
 
 def refresh_from_origin() -> bool:
-    """Scarica l'ultima versione delle notizie dal repo GitHub: il robot nel
-    cloud committa `state/predictions.json` su origin/main, quindi all'avvio
-    facciamo `git fetch` e leggiamo il file DA origin/main (il working tree e i
-    tuoi file locali NON vengono toccati). Se git o la rete mancano, si resta
-    sui dati locali: mai far fallire l'app per questo."""
-    repo = str(APP_DIR.parent)
+    """Scarica l'ultima versione delle notizie dal repo GitHub.
+
+    Prima lo faceva con `git fetch` + `git show`, e per il PC andava benissimo.
+    Dentro il container del server **git non c'è** — e non ha senso metterlo:
+    servirebbe a leggere un file che GitHub serve già in HTTPS. Adesso è una
+    richiesta e basta, la stessa sul PC e sul server: una strada sola da
+    mantenere, e nessuna dipendenza dal fatto che intorno all'app ci sia un
+    repository.
+
+    Se la rete manca o il file è storto si resta sui dati che si hanno: le
+    notizie sono un di più, non devono mai far fallire l'app.
+    """
     try:
-        subprocess.run(["git", "-C", repo, "fetch", "origin", "main", "--quiet"],
-                       check=True, timeout=30, capture_output=True)
-        out = subprocess.run(
-            ["git", "-C", repo, "show", "origin/main:state/predictions.json"],
-            check=True, timeout=15, capture_output=True)
-        data = json.loads(out.stdout.decode("utf-8"))
+        req = urllib.request.Request(
+            URL_NOTIZIE, headers={"User-Agent": "MyMoney"})
+        with urllib.request.urlopen(req, timeout=30) as risposta:
+            data = json.loads(risposta.read().decode("utf-8"))
         if not isinstance(data.get("items"), list):
             return False
         REMOTE_CACHE.parent.mkdir(parents=True, exist_ok=True)
         REMOTE_CACHE.write_text(json.dumps(data, ensure_ascii=False),
                                 encoding="utf-8")
         return True
-    except Exception:
+    except (urllib.error.URLError, OSError, TimeoutError,
+            ValueError, json.JSONDecodeError):
         return False
 
 

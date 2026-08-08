@@ -21,7 +21,15 @@ from portfolio.models import Position, Versamento, VersamentoRiga
 import portfolio.service as pf
 import portfolio.versamenti as versamenti
 import shared.settings_store as store
+from shared.tempo import oggi
 from motore import engine_di_prova
+
+# NB: la data «di oggi» si chiede a shared/tempo, non a `oggi()`.
+# Sono due cose diverse: `oggi()` legge l'orologio della macchina, l'app
+# usa il fuso scelto (qui Europe/Rome, fissato da conftest). Fra la mezzanotte
+# di Dublino e quella di Roma i due danno giorni diversi, e un test scritto con
+# il primo falliva per un'ora ogni notte — proprio la dipendenza dall'ambiente
+# che conftest.py esiste per togliere.
 
 
 class _Q:
@@ -68,7 +76,7 @@ def test_allineare_fissa_il_totale_e_riscala_le_stime(test_db, monkeypatch):
     le stime per titolo si spostano tutte dello stesso fattore."""
     _seed(test_db)
     monkeypatch.setattr(pf.market, "quotes_map", lambda: {"A": _Q(10.0), "B": _Q(10.0)})
-    pf.salva_allineamento_tr(80.0, date.today())
+    pf.salva_allineamento_tr(80.0, oggi())
     v = pf.vista_portafoglio()
     assert v["totale"] == 80.0
     assert [r["valore"] for r in v["righe"]] == [40.0, 40.0]
@@ -83,7 +91,7 @@ def test_il_versato_non_si_tocca_mai(test_db, monkeypatch):
     falserebbe il risultato dell'utente, cioè proprio il numero da proteggere."""
     _seed(test_db)
     monkeypatch.setattr(pf.market, "quotes_map", lambda: {"A": _Q(10.0), "B": _Q(10.0)})
-    pf.salva_allineamento_tr(80.0, date.today())
+    pf.salva_allineamento_tr(80.0, oggi())
     v = pf.vista_portafoglio()
     assert sum(r["p"].versato_totale for r in v["righe"]) == 100.0
 
@@ -92,7 +100,7 @@ def test_un_totale_assurdo_viene_mostrato_ma_non_applicato(test_db, monkeypatch)
     """Uno scarto di 40× è quasi sempre una virgola sbagliata, non il mercato."""
     _seed(test_db)
     monkeypatch.setattr(pf.market, "quotes_map", lambda: {"A": _Q(10.0), "B": _Q(10.0)})
-    pf.salva_allineamento_tr(4000.0, date.today())
+    pf.salva_allineamento_tr(4000.0, oggi())
     v = pf.vista_portafoglio()
     assert v["tr"]["assurdo"] is True
     assert v["totale"] == 100.0           # NON applicato
@@ -102,7 +110,7 @@ def test_un_totale_assurdo_viene_mostrato_ma_non_applicato(test_db, monkeypatch)
 def test_un_allineamento_vecchio_viene_segnalato(test_db, monkeypatch):
     _seed(test_db)
     monkeypatch.setattr(pf.market, "quotes_map", lambda: {"A": _Q(10.0), "B": _Q(10.0)})
-    pf.salva_allineamento_tr(95.0, date.today() - timedelta(days=30))
+    pf.salva_allineamento_tr(95.0, oggi() - timedelta(days=30))
     v = pf.vista_portafoglio()
     assert v["tr"]["vecchio"] is True
     assert v["tr"]["giorni"] == 30
@@ -112,7 +120,7 @@ def test_un_allineamento_vecchio_viene_segnalato(test_db, monkeypatch):
 def test_togliere_l_allineamento_riporta_alla_stima(test_db, monkeypatch):
     _seed(test_db)
     monkeypatch.setattr(pf.market, "quotes_map", lambda: {"A": _Q(10.0), "B": _Q(10.0)})
-    pf.salva_allineamento_tr(80.0, date.today())
+    pf.salva_allineamento_tr(80.0, oggi())
     pf.salva_allineamento_tr(0)
     v = pf.vista_portafoglio()
     assert v["tr"] is None and v["totale"] == 100.0
