@@ -219,9 +219,26 @@ memoria**: su Cloud Run, dove l'app gira in più copie e si spegne da sola, il
 ritorno da Google può bussare a un'istanza diversa e lì quella variabile non
 esiste. Qui lo stato viaggia in un cookie firmato.
 
-### Fase 4 — I dati veri
-Travaso (lo script c'è ed è provato), verifica riga per riga, e **il vecchio
-database resta dov'è** finché non passa qualche settimana serena.
+### Fase 4 — I dati veri ✔ FATTA (08/08/2026)
+Travasati: 95 movimenti (78 vivi), 8 conti, 19 categorie, 38 titoli, 39 quotazioni,
+39 schede fondamentali, il PAC con le sue 37 righe, 26 ricordi dell'agente, 8
+fotografie del patrimonio, 17 impostazioni. Zero differenze nei conteggi; uscite,
+entrate, saveback, arrotondamenti e versato al PAC ricontati uno per uno di qua e
+di là, tutti uguali (compresi i decimillesimi dei saveback: 0,4045 è arrivato
+0,4045).
+
+**Dieci impostazioni sono rimaste sul PC apposta** — i quattro segreti (Gemini,
+Vertex, client secret e token del Drive) e il diario del corriere. Il segreto del
+secondo fattore del server, che sul PC non esiste, è sopravvissuto: un travaso
+ingenuo l'avrebbe cancellato azzerando la 2FA in silenzio. Vedi la protezione in
+`scripts/travaso_db.py` e i suoi 7 test.
+
+Per raggiungere Cloud SQL dal PC è stato autorizzato l'indirizzo di casa per il
+tempo del travaso, con connessione cifrata (`sslmode=require`), **e richiuso
+subito dopo**: le reti autorizzate sono di nuovo vuote.
+
+**Il vecchio database resta dov'è**, più una copia in
+`app/data/finanza-prima-del-travaso-20260808-162401.db`.
 
 ### Fase 5 — Le tre copie diventano una
 Dipende dalla scelta del §2. Se A: il PC e il telefono puntano al cloud, PWA
