@@ -123,3 +123,31 @@ def test_il_lucchetto_si_riapre_anche_se_qualcosa_esplode(monkeypatch):
     lavori.giornaliero(includi_sync=False)
     secondo = lavori.giornaliero(includi_sync=False)
     assert "saltato" not in secondo, "il lucchetto e' rimasto chiuso"
+
+
+# ── un passo che non fa niente non è un passo riuscito ─────────────────────
+# Le notizie non sollevano eccezioni: se la rete manca tornano False, così non
+# fanno mai cadere l'app. Finché «ok» voleva dire solo «non è esploso», il
+# rapporto della run diceva ok mentre sul server le notizie erano ferme.
+
+def test_un_passo_che_torna_falso_si_chiama_niente():
+    from shared import lavori
+    esiti = {}
+    lavori._passo(esiti, "notizie", lambda: False)
+    assert esiti["notizie"] == "niente"
+
+
+def test_un_passo_riuscito_resta_ok():
+    from shared import lavori
+    esiti = {}
+    lavori._passo(esiti, "notizie", lambda: True)
+    lavori._passo(esiti, "muto", lambda: None)          # chi non torna niente
+    lavori._passo(esiti, "conta", lambda: 0)            # zero NON è un fallimento
+    assert esiti == {"notizie": "ok", "muto": "ok", "conta": "ok"}
+
+
+def test_un_passo_che_esplode_dice_cosa_e_successo():
+    from shared import lavori
+    esiti = {}
+    lavori._passo(esiti, "prezzi", lambda: (_ for _ in ()).throw(TimeoutError()))
+    assert esiti["prezzi"] == "errore: TimeoutError"

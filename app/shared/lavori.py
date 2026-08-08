@@ -49,10 +49,17 @@ _ultimo_esito: dict = {"quando": None, "passi": {}, "durata": 0.0}
 
 def _passo(esiti: dict, nome: str, funzione) -> None:
     """Esegue un passo e ne annota l'esito. Un passo che fallisce non ferma
-    gli altri: sono indipendenti, e mezzo aggiornamento è meglio di nessuno."""
+    gli altri: sono indipendenti, e mezzo aggiornamento è meglio di nessuno.
+
+    Tre esiti e non due. Alcuni passi non sollevano eccezioni: si arrangiano e
+    tornano `False` — le notizie fanno così di proposito, per non far mai cadere
+    l'app. Chiamare «ok» un passo che non ha fatto niente vuol dire non
+    accorgersene mai, ed è così che sul server le notizie sono rimaste ferme
+    senza che il rapporto dicesse una parola. Chi non torna niente resta «ok».
+    """
     try:
-        funzione()
-        esiti[nome] = "ok"
+        esito = funzione()
+        esiti[nome] = "niente" if esito is False else "ok"
     except Exception as e:                      # noqa: BLE001 - qui è voluto
         esiti[nome] = f"errore: {type(e).__name__}"
         log.warning("lavoro %s fallito: %s", nome, e)
