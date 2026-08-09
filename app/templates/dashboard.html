@@ -87,6 +87,55 @@
     </div>
   </div>
 
+  {# ---------- LA HOME DEL TELEFONO — nascosta sul PC (telefono.css) ----------
+     Sul PC queste due cose stanno su Finanze, che in una finestra larga ci sta
+     tutta: rimetterle qui sarebbe ripetersi. Su un telefono Finanze è lunga
+     diciotto schermate, e «quanto ho sul conto» e «cos'è successo» sono le due
+     domande che si fanno aprendo l'app — subito dopo il patrimonio, che è la
+     hero qui sopra. I conti sono i primi due di Finanze, stesso ordine. #}
+  <section class="tel-home">
+    <div class="tel-home-h">
+      <h2>{{ t('dash.conti') }}</h2>
+      <a href="/finanze">{{ t('dash.vedi_tutto') }} ›</a>
+    </div>
+    <div class="tel-conti">
+      {% for r in d.conti %}
+      {% set acc = (r.w.colore or '') | trim %}
+      <a href="/finanze" class="tel-conto"{% if acc %} style="--acc:{{ acc }};"{% endif %}>
+        <span class="tel-conto-n">{{ r.w.nome }}</span>
+        <span class="tel-conto-s">{{ r.saldo | eur }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="tel-home-h">
+      <h2>{{ t('dash.ultimi') }}</h2>
+      <a href="/finanze">{{ t('dash.vedi_tutto') }} ›</a>
+    </div>
+    {% for m in d.ultimi %}
+    {% set tt = m.t.tipo %}
+    <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov">
+      {# Senza descrizione ripiega sulla categoria e poi sul TIPO — non sul
+         conto, che è già scritto nella riga sotto: veniva fuori «Revolut ·
+         ieri · Revolut», due volte la stessa parola e nessuna che dicesse
+         cos'era. #}
+      <span class="tel-mov-d">{{ m.t.descrizione or m.categoria or t('fin.' ~ tt) }}</span>
+      {# «oggi»/«ieri» li decide il server, che sa qual è il fuso scelto #}
+      <span class="tel-mov-q">{{ t(m.quando) if m.quando else m.t.data.strftime('%d/%m') }} · {{ m.wallet }}{% if m.wallet_to and tt != 'giro' %} → {{ m.wallet_to }}{% endif %}</span>
+      {# Stesso segno e stesso colore del registro, comprese le partite di giro,
+         che restano NEUTRE: non sono entrate né uscite finché non si chiudono. #}
+      {% if tt == 'giro' %}
+      {% set g = m.t.giro_importo_display %}
+      <span class="num tel-mov-i muted">{% if g > 0 %}+{{ g | eur }}{% elif g < 0 %}−{{ (0 - g) | eur }}{% else %}{{ 0 | eur }}{% endif %}</span>
+      {% else %}
+      <span class="num tel-mov-i {{ 'pos' if tt=='entrata' else 'neg' if tt=='uscita' else '' }}">{{ '+' if tt=='entrata' else ('−' if tt=='uscita' else '') }}{{ m.t.importo | eur }}</span>
+      {% endif %}
+    </a>
+    {% else %}
+    <p class="faint" style="margin:0;font-size:13px;">{{ t('fin.no_movements') }}</p>
+    {% endfor %}
+  </section>
+
   {# ---------- corpo a due colonne ---------- #}
   <div style="display:flex;flex-wrap:wrap;gap:20px;margin-top:20px;align-items:stretch;">
 

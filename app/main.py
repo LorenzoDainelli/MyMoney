@@ -230,6 +230,19 @@ def _dashboard_ctx() -> dict:
     # grafico del patrimonio: serie per range dalla cache (rebuild in background)
     w = wealth.get_cached()
 
+    # --- la home del telefono: i conti e le ultime righe -----------------------
+    # Sul PC questo blocco è nascosto (telefono.css), perché là le stesse cose
+    # stanno su Finanze e in una finestra larga ci stanno tutte. Su un telefono
+    # Finanze è lunga diciotto schermate, e «quanto ho sul conto» è la seconda
+    # domanda che ci si fa aprendo l'app — la prima è il patrimonio, che è la hero.
+    # I due conti sono i primi che si vedrebbero su Finanze: stesso ordine
+    # (saldo decrescente, il PAC sempre in fondo), così non ci sono due idee di
+    # «conto principale».
+    conti = sal["righe"][:2]
+    ultimi = fin_service.lista_movimenti(limit=4)
+    for m in ultimi:
+        m["quando"] = tempo.etichetta_giorno(m["t"].data)
+
     return {
         "patrimonio": round(inv_tot + liq + bloc, 2),
         "investito": inv_tot, "liquido": liq, "bloccato": bloc,
@@ -251,6 +264,7 @@ def _dashboard_ctx() -> dict:
         "ai": ai_read, "news": news,
         "ai_on": ai.is_configured(),
         "pac_promemoria": versamenti.promemoria(),
+        "conti": conti, "ultimi": ultimi,
     }
 
 

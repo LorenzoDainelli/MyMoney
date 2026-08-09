@@ -111,6 +111,11 @@ STRINGS = {
     "dash.prossimo_pac": {"it": "Prossimo PAC", "en": "Next DCA", "es": "Próximo DCA", "fr": "Prochain DCA", "de": "Nächster Sparplan", "uk": "Наступний внесок"},
     "dash.in_days": {"it": "tra {n} giorni", "en": "in {n} days", "es": "en {n} días", "fr": "dans {n} jours", "de": "in {n} Tagen", "uk": "через {n} днів"},
     "dash.today": {"it": "oggi", "en": "today", "es": "hoy", "fr": "aujourd'hui", "de": "heute", "uk": "сьогодні"},
+    "dash.yesterday": {"it": "ieri", "en": "yesterday", "es": "ayer", "fr": "hier", "de": "gestern", "uk": "вчора"},
+    # la home del telefono
+    "dash.conti": {"it": "I tuoi conti", "en": "Your accounts", "es": "Tus cuentas", "fr": "Tes comptes", "de": "Deine Konten", "uk": "Твої рахунки"},
+    "dash.ultimi": {"it": "Ultimi movimenti", "en": "Latest movements", "es": "Últimos movimientos", "fr": "Derniers mouvements", "de": "Letzte Bewegungen", "uk": "Останні рухи"},
+    "dash.vedi_tutto": {"it": "Vedi tutto", "en": "See all", "es": "Ver todo", "fr": "Tout voir", "de": "Alle ansehen", "uk": "Показати все"},
     "dash.btn_add_pos": {"it": "Aggiungi posizione", "en": "Add position", "es": "Añadir posición", "fr": "Ajouter une position", "de": "Position hinzufügen", "uk": "Додати позицію"},
     "dash.btn_add_mov": {"it": "Aggiungi movimento", "en": "Add movement", "es": "Añadir movimiento", "fr": "Ajouter un mouvement", "de": "Bewegung hinzufügen", "uk": "Додати рух"},
     "pf.tap_hint": {"it": "tocca un titolo per il dettaglio", "en": "tap a title for details", "es": "toca un título para el detalle", "fr": "touche un titre pour le détail", "de": "Titel antippen für Details", "uk": "торкнись назви для деталей"},

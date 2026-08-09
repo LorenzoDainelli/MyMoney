@@ -150,6 +150,26 @@ def oggi() -> date:
     return adesso().date()
 
 
+def etichetta_giorno(quando) -> str | None:
+    """Chiave di traduzione per «oggi»/«ieri», oppure None se va scritta la data.
+
+    Sta qui, e non in chi la usa, per un motivo solo: il confronto deve passare
+    da `oggi()`. Scritta con `date.today()` guarderebbe l'orologio della
+    macchina, e dall'Irlanda le 23:37 sono già il giorno dopo a Roma — un
+    movimento appena registrato si presenterebbe come «ieri». Mettendola qui
+    nessuno può sbagliare a chiamarla: non c'è un parametro da passare.
+
+    Restituisce la chiave i18n e non il testo: la home la mostra in sei lingue.
+    """
+    g = quando.date() if isinstance(quando, datetime) else quando
+    giorni = (oggi() - g).days
+    if giorni == 0:
+        return "dash.today"
+    if giorni == 1:
+        return "dash.yesterday"
+    return None
+
+
 def da_epoch(epoch) -> datetime:
     """Un istante universale (i timestamp di Yahoo) letto nell'ora del fuso scelto.
 

@@ -217,3 +217,58 @@ def test_la_cache_scade_da_sola(fuso_vero, monkeypatch):
     finto = tempo._adesso_monotono() + tempo._SCADENZA + 1
     monkeypatch.setattr(tempo, "_adesso_monotono", lambda: finto)
     assert tempo.nome_fuso() == "Europe/Dublin"
+
+
+# ── «oggi» / «ieri» sulla home del telefono ─────────────────────────────────
+#
+# La home mostra le ultime righe con l'etichetta relativa invece della data.
+# È comoda e per questo è pericolosa: un'etichetta sbagliata non si vede — «ieri»
+# sembra sempre plausibile — mentre una data sbagliata salterebbe all'occhio.
+
+def test_oggi_e_ieri_guardano_il_giorno_non_le_ore(monkeypatch):
+    """Trentacinque minuti prima possono essere «ieri», ventitré ore prima
+    «oggi»: conta il giorno, non quanto tempo è passato."""
+    monkeypatch.setattr(tempo, "oggi", lambda: date(2026, 8, 9))
+    assert tempo.etichetta_giorno(datetime(2026, 8, 9, 0, 5)) == "dash.today"
+    assert tempo.etichetta_giorno(datetime(2026, 8, 8, 23, 55)) == "dash.yesterday"
+    assert tempo.etichetta_giorno(datetime(2026, 8, 9, 23, 59)) == "dash.today"
+
+
+def test_l_etichetta_segue_il_fuso_scelto_non_l_orologio_della_macchina(monkeypatch):
+    """Il guardiano vero: la data di riferimento arriva da `oggi()`, che sa qual è
+    il fuso scelto. Scritta con `date.today()` questa funzione leggerebbe
+    l'orologio di chi esegue il codice — il PC di casa, o il server in UTC — e
+    vicino a mezzanotte direbbe il giorno di qualcun altro."""
+    lontano = date(2020, 3, 15)                       # non è oggi, e non lo sarà mai più
+    monkeypatch.setattr(tempo, "oggi", lambda: lontano)
+    assert tempo.etichetta_giorno(datetime(2020, 3, 15, 10, 0)) == "dash.today"
+    assert tempo.etichetta_giorno(datetime(2020, 3, 14, 10, 0)) == "dash.yesterday"
+
+
+def test_piu_vecchio_di_ieri_vuole_la_data(monkeypatch):
+    """None non è un caso limite: è il segnale al template di scrivere «07/08».
+    Senza, la home direbbe «ieri» a movimenti di un mese fa."""
+    monkeypatch.setattr(tempo, "oggi", lambda: date(2026, 8, 9))
+    assert tempo.etichetta_giorno(datetime(2026, 8, 7, 12, 0)) is None
+    assert tempo.etichetta_giorno(datetime(2026, 7, 9, 12, 0)) is None
+
+
+def test_accetta_sia_una_data_sia_una_data_con_ora(monkeypatch):
+    """I movimenti hanno l'ora, altre cose no: passare una `date` non deve
+    esplodere."""
+    monkeypatch.setattr(tempo, "oggi", lambda: date(2026, 8, 9))
+    assert tempo.etichetta_giorno(date(2026, 8, 9)) == "dash.today"
+    assert tempo.etichetta_giorno(datetime(2026, 8, 9, 7, 0)) == "dash.today"
+
+
+def test_le_chiavi_che_restituisce_esistono_in_tutte_le_lingue(monkeypatch):
+    """Restituisce chiavi i18n: se una non esistesse, la home stamperebbe la
+    chiave nuda al posto della parola, e solo in una lingua su sei."""
+    from shared import i18n
+    monkeypatch.setattr(tempo, "oggi", lambda: date(2026, 8, 9))
+    chiavi = {tempo.etichetta_giorno(datetime(2026, 8, 9)),
+              tempo.etichetta_giorno(datetime(2026, 8, 8))}
+    for k in chiavi:
+        assert k in i18n.STRINGS, f"chiave assente: {k}"
+        for lingua in ("it", "en", "es", "fr", "de", "uk"):
+            assert i18n.STRINGS[k].get(lingua), f"{k} manca in {lingua}"
