@@ -1,7 +1,8 @@
 """Punto di avvio dell'app (FastAPI).
 
 Crea le tabelle, precarica il portafoglio la prima volta, collega le pagine.
-Si avvia con run.py (o col doppio click su Avvia-Finanza.bat).
+Sul cloud lo avvia il container (Dockerfile); sul PC, per la copia locale,
+run.py — cioe' il doppio click su Avvia-Finanza-Locale.bat.
 """
 import json
 from datetime import datetime

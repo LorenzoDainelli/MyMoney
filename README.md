@@ -26,14 +26,21 @@ di confidenza dichiarato (bassa/media/alta).
 
 ---
 
-## La web app (locale)
+## La web app (sul cloud)
 
-Doppio click su **`Avvia-Finanza.bat`** → si apre il browser su `127.0.0.1:8000`.
+Doppio click su **`Avvia-Finanza.bat`** → apre il browser sull'app online
+(Cloud Run, accesso con Google + codice a sei cifre).
 Dettagli, struttura e privacy in **`app/README.md`**.
 
-- Dati personali e chiavi API stanno **solo** in `app/data/` (gitignored, mai online).
-- A ogni avvio l'app aggiorna da sola notizie, prezzi, fondamentali e grafico
-  del patrimonio, in background.
+- **Telefono e PC sono la stessa app sullo stesso database**: quello che scrivi
+  da una parte c'è già dall'altra. Non c'è niente da sincronizzare.
+- I dati stanno su Cloud SQL; le chiavi in Secret Manager, mai nel repo.
+- Il lavoro giornaliero (notizie, prezzi, fondamentali, grafico del patrimonio)
+  lo chiama Cloud Scheduler una volta al giorno, non l'avvio dell'app.
+- `Avvia-Finanza-Locale.bat` apre la **vecchia copia sul computer**
+  (`app/data/finanza.db`, ferma al travaso dell'8 agosto 2026): serve per
+  guardare indietro o per lavorare senza internet, e quello che ci scrivi
+  **resta lì**. Chiede conferma prima di partire.
 
 ## Il news-monitor (cloud)
 

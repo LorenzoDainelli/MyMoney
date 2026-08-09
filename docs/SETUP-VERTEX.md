@@ -48,7 +48,9 @@ azioni da fare tu nella Console Google Cloud (io non posso creare credenziali).
    ```
    app\.venv\Scripts\python -m pip install -r app\requirements.txt
    ```
-   Poi **riavvia l'app** (`Avvia-Finanza.bat`).
+   Poi **riavvia l'app** (`Avvia-Finanza-Locale.bat`). Questa pagina riguarda la
+   copia locale: sul cloud la chiave dell'agente arriva dal Secret Manager
+   (`MYMONEY_GEMINI_API_KEY`), non dalle Impostazioni.
 2. Nell'app apri **Impostazioni → Agente AI** e nel menù **Provider** scegli
    **Vertex AI (Google Cloud · usa i crediti)**. La pagina si ricarica.
 3. Compila:

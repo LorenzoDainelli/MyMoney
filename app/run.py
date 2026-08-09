@@ -1,6 +1,9 @@
-"""Avvio comodo: fa partire il server e apre il browser sulla pagina dell'app.
+"""Avvio comodo della COPIA LOCALE: fa partire il server sul computer e apre il
+browser su 127.0.0.1.
 
-Lo richiama il file Avvia-Finanza.bat (doppio click). Puoi anche eseguirlo a mano:
+Lo richiama Avvia-Finanza-Locale.bat. L'app di tutti i giorni sta sul cloud e non
+passa da qui: Avvia-Finanza.bat apre direttamente il browser sull'indirizzo online.
+Puoi anche eseguirlo a mano:
     python run.py
 Per fermare l'app: chiudi la finestra nera, oppure premi CTRL+C.
 """

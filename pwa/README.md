@@ -1,5 +1,11 @@
 # MyMoney — guscio PWA (v2)
 
+> ⚠️ **In pensione.** Dall'8 agosto 2026 il telefono apre la web app sul cloud,
+> che ha tutti i dati e tutte le funzioni. Questa PWA tiene una sua copia dentro
+> il telefono e si allinea via Drive: usarla adesso vuol dire creare un terzo
+> insieme di dati che diverge dagli altri due. Resta qui finché non viene smontata
+> (Fase 5 di `docs/PIANO-CLOUD.md`); non aggiungerci nulla.
+
 Questa cartella è l'app installabile sul telefono (Fase 2 del [PIANO-V2](../PIANO-V2.md)).
 È **statica**: HTML + CSS + JS + service worker + icone. **Nessun dato** finanziario
 vive qui — i dati staranno nel telefono (IndexedDB, Fase 3) e nel tuo Google Drive

@@ -1,17 +1,26 @@
-# MyMoney — App finanza personale (locale)
+# MyMoney — App finanza personale
 
 Applicazione personale che unisce **portafoglio investimenti** e **finanze
-personali**, con un agente AI condiviso (Gemini, opzionale). Gira in locale sul
-PC, gratis, e si apre nel browser. Vive nello stesso repo del news-monitor, ma è
-separata: il robot-notizie gira per conto suo nel cloud e l'app lo legge soltanto.
+personali**, con un agente AI condiviso (Gemini, opzionale). Gira su **Cloud Run**
+con i dati su Cloud SQL, e si apre nel browser dal telefono come dal PC. Vive
+nello stesso repo del news-monitor, ma è separata: il robot-notizie gira per conto
+suo nel cloud e l'app lo legge soltanto.
 
-## Come si avvia
-Doppio click su **`Avvia-Finanza.bat`** (nella cartella sopra a questa).
-- Il **primo avvio** prepara l'ambiente e installa le librerie (~1 minuto, solo la prima volta).
-- Poi si apre il browser su <http://127.0.0.1:8000>.
-- Per **chiudere**: chiudi la finestra nera.
+## Come si apre
+Doppio click su **`Avvia-Finanza.bat`** (nella cartella sopra a questa): apre il
+browser sull'app online. Dal telefono, lo stesso indirizzo — è la stessa app sugli
+stessi dati, quindi **non c'è nessuna sincronizzazione da fare**.
+- Alla porta: accesso con Google (una sola email autorizzata) più un **codice a
+  sei cifre** dall'app dell'autenticatore.
+- Sul telefono conviene aggiungerla alla schermata Home: si apre a tutto schermo,
+  senza la barra del browser.
 
-Serve solo **Python 3** già installato (verificato: 3.11). Nessun'altra installazione.
+### La copia locale
+`Avvia-Finanza-Locale.bat` avvia lo stesso programma sul **file di questo
+computer** (`data/finanza.db`), fermo al travaso dell'8 agosto 2026. Serve per
+guardare indietro o per lavorare offline; quello che ci scrivi resta lì e non
+raggiunge il cloud. Il primo avvio prepara l'ambiente (~1 minuto) e serve
+**Python 3** installato (verificato: 3.11).
 
 ## Cosa c'è
 - **Dashboard**: patrimonio con grafico per periodo (1G→MAX), spesa media, saldo

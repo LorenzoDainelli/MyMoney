@@ -78,20 +78,26 @@ fatto da fonte diversa = non reinviare). Mai fidarsi di id inventati dal modello
 
 ---
 
-## 3. Parte B — web app MyMoney (locale)
+## 3. Parte B — web app MyMoney (sul cloud)
 
-App **locale e gratuita**: portafoglio investimenti, finanze personali e agente AI.
-Legge le notizie del robot e riusa la lista titoli.
+Portafoglio investimenti, finanze personali e agente AI. Legge le notizie del robot
+e riusa la lista titoli. Dall'8 agosto 2026 gira **online**: telefono e PC sono la
+stessa app sullo stesso database, quindi non esiste più una sincronizzazione.
 
 ### Stack
-- **FastAPI + Jinja2 + SQLAlchemy/SQLite**. Python 3.11. Server solo su `127.0.0.1:8000`.
-- DB locale: `app/data/finanza.db` (gitignored). Chiavi API in tabella `shared_settings`.
-- Si avvia col **doppio click su `Avvia-Finanza.bat`** (apre il browser).
-- ⚠️ `run.py` usa `reload=False` → **dopo ogni modifica al codice va RIAVVIATA**
-  (chiudere la finestra nera e riaprire il .bat).
+- **FastAPI + Jinja2 + SQLAlchemy**. Python 3.11.
+- **Cloud Run** (`europe-west8`) + **Cloud SQL PostgreSQL 17**; segreti in Secret
+  Manager. Indirizzo e dettagli in `docs/PIANO-CLOUD.md`.
+- Porta d'ingresso: **Google OAuth** (una sola email in lista) + **TOTP** a sei cifre.
+- Si apre col **doppio click su `Avvia-Finanza.bat`** (che ora apre solo il browser
+  sull'indirizzo online). `Avvia-Finanza-Locale.bat` avvia invece la vecchia copia
+  SQLite `app/data/finanza.db`, ferma al travaso: chiede conferma, e quel che ci
+  scrivi resta lì.
+- ⚠️ In locale `run.py` usa `reload=False` → **dopo ogni modifica va riavviata**.
 - Base valuta **EUR**. Tema chiaro/scuro + **6 lingue** (IT/EN/ES/FR/DE/UK).
-- A **ogni avvio** aggiorna da sola, in background: notizie (git fetch da origin/main),
-  prezzi, fondamentali, serie del grafico patrimonio (`main.py: _refresh_dati_bg`).
+- Il lavoro giornaliero (notizie via HTTPS da GitHub, prezzi, fondamentali, serie
+  del grafico) lo chiama **Cloud Scheduler** una volta al giorno su `/lavori/giorno`
+  (`shared/lavori.py`), non più l'avvio dell'app.
 
 ### Design: "MyMoney Design System" (design freeze v1.0)
 - Fonte autorevole del design: cartella

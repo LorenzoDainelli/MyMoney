@@ -1,6 +1,7 @@
 # Il pacchetto con cui gira MyMoney su un server (Cloud Run).
 #
-# Sul PC non serve a niente: là si avvia col doppio click su Avvia-Finanza.bat.
+# Sul PC non serve a niente: là la copia locale parte con Avvia-Finanza-Locale.bat
+# (Avvia-Finanza.bat apre il browser proprio su quello che questo file costruisce).
 # Qui si descrive come costruire una scatola che contiene Python, le librerie e
 # l'app, e nient'altro — in particolare NON i dati (vedi .dockerignore).
 
