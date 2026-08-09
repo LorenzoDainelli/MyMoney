@@ -309,6 +309,22 @@ richiedeva questo.** Verificato sui dati veri: 95 movimenti scaricati e
 rimessi dentro, somma degli importi identica al decimillesimo (12953,5186), 22
 legami fra spese e righe generate ritrovati, saveback ancora a quattro decimali.
 
+### Le due reti di sicurezza, che non sono la stessa cosa (09/08/2026)
+
+**I backup di Cloud SQL erano SPENTI** dalla creazione dell'istanza, e nessuno se
+n'era accorto. Accesi il 09/08/2026: uno al giorno alle **03:00 UTC**, se ne
+tengono **7**, e ne è stato preso subito uno a mano
+(`gcloud sql backups create`, riuscito, conservato nella multiregione `eu`).
+Il ripristino al minuto (PITR) è rimasto **spento**: accenderlo fa riavviare
+l'istanza, e non era chiesto.
+
+Le due reti coprono guasti diversi, e vale la pena non confonderle:
+- **il backup di Cloud SQL** vive dentro Google ed è legato all'istanza. Copre
+  «il database si è rotto» o «ho cancellato la tabella sbagliata». Se sparisse il
+  progetto, o la fatturazione, sparirebbe anche lui;
+- **il JSON che scarichi da Impostazioni** è l'unica copia che è *tua*, e sta
+  dove la metti. Copre tutto il resto, compreso «non voglio più stare qui».
+
 **E la PWA.** Lorenzo l'ha aperta un'ultima volta sul telefono, ha controllato che
 non ci fosse rimasto dentro niente, e la cartella `pwa/` è stata cancellata
 (156 KB, 11 file). Il mount `/pwa` era già sparito dal server. Il codice non è
@@ -325,13 +341,40 @@ a un indirizzo che non risponde più).
 | Voce | Al mese |
 |---|---|
 | Cloud Run | **0 €** — l'uso di una persona sta nel gratuito permanente |
-| Cloud SQL (il database) | **~10-15 €** ← è qui tutto il costo |
-| Secret Manager, Scheduler | ~0 € |
+| Cloud SQL (il database) | **~11-14 €** ← è qui tutto il costo |
+| Backup di Cloud SQL | ~0 € — 7 copie di un database da poche decine di MB |
+| Secret Manager, Scheduler | ~0 € — 6 segreti e 1 job su 3 stanno nel gratuito |
+| Immagini dei deploy | ~0 € — 409 MB al 09/08, il gratuito è 500 MB |
 | HTTPS e indirizzo | 0 €, inclusi |
+
+Prezzi di listino per Milano, non la bolletta vera: quella sta in
+**Fatturazione → Report**, e finché ci sono i crediti segna 0.
+
+**Cloud SQL è già al minimo assoluto**: `db-f1-micro` è la macchina più piccola
+che esiste, 10 GB il disco minimo, e l'alta disponibilità è già spenta (zonale).
+Dentro Cloud SQL non resta niente da tagliare — o si accetta quella cifra, o si
+sposta il database fuori.
+
+**Avviso di spesa a 5 €** creato da Lorenzo il 09/08/2026 sull'account di
+fatturazione `019002-ECD14E-965478`, su questo solo progetto, con soglie a
+50/90/100%. Manda email, **non blocca niente**: non esiste un interruttore
+automatico, alla fine la decisione resta sua.
 
 I ~258 € di crediti coprono tutto fino a metà settembre 2026. Decisione di
 Lorenzo del 03/08/2026: **usarli**, e alla scadenza decide lui cosa tenere
 acceso. Il vincolo che resta è uno solo: niente spese di tasca sua.
+
+### Le tre strade dopo i crediti (stimate il 09/08/2026)
+1. **Lasciare così — ~12-15 €/mese.** Tutto in casa Google, una bolletta sola.
+2. **Spostare il database fuori — ~0 €/mese.** L'app legge `MYMONEY_DB_URL`:
+   parla PostgreSQL e non le importa di chi sia. Un Postgres gestito gratuito
+   (Neon, Supabase) regge questi dati mille volte — il backup completo è 65 KB.
+   Mezza giornata: creare il database, rifare il travaso, cambiare un segreto,
+   ricontare tutto. Il prezzo non è tecnico: un fornitore in più che tiene dati
+   finanziari, e i piani gratuiti mettono il database in pausa quando non lo usi.
+3. **Mettere in pausa Cloud SQL — ~1 €/mese.** Un'istanza ferma paga solo il
+   disco, ma per aprire l'app va riaccesa e ci vogliono minuti: è un parcheggio,
+   non un modo di usarla.
 
 **Attenzione, verificato:** la fatturazione è **attiva** sul progetto. Quando i
 crediti finiscono, ciò che è rimasto acceso inizia ad addebitare da solo. Cloud
