@@ -122,13 +122,14 @@ def test_una_data_gia_nuda_passa_intatta(fuso_vero):
     assert tempo.a_naive(None) is None
 
 
-def test_il_sync_legge_le_date_col_fuso_scelto(fuso_vero):
-    """Stesso controllo, ma sulla porta da cui le date entrano davvero."""
-    from shared import sync
+def test_il_ripristino_legge_le_date_col_fuso_scelto(fuso_vero):
+    """Stesso controllo, ma sulla porta da cui le date entrano davvero: un file
+    di backup, che può portarsi dietro la 'Z' di UTC."""
+    from shared import backup
     tempo.imposta("Europe/Dublin")
-    assert sync._parse_dt("2026-08-20T12:00:00Z") == datetime(2026, 8, 20, 13, 0)
-    assert sync._parse_dt("2026-08-20T12:00:00") == datetime(2026, 8, 20, 12, 0)
-    assert sync._parse_dt("non è una data") is None
+    assert backup._parse_dt("2026-08-20T12:00:00Z") == datetime(2026, 8, 20, 13, 0)
+    assert backup._parse_dt("2026-08-20T12:00:00") == datetime(2026, 8, 20, 12, 0)
+    assert backup._parse_dt("non è una data") is None
 
 
 # ── l'ora legale: perché non si scrive a mano ───────────────────────────────

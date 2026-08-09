@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from shared.db import Base
 from finance.models import Wallet, Transaction, TIPO_USCITA, TIPO_GIRO
 import finance.service as service
-import shared.sync as sync_mod
+import shared.backup as backup_mod
 from motore import engine_di_prova
 
 
@@ -35,9 +35,7 @@ def test_db(tmp_path, monkeypatch):
     monkeypatch.setattr(db_mod, "engine", engine)
     monkeypatch.setattr(db_mod, "SessionLocal", TestSession)
     monkeypatch.setattr(service, "SessionLocal", TestSession)
-    monkeypatch.setattr(sync_mod, "SessionLocal", TestSession)
-    monkeypatch.setattr(sync_mod, "SYNC_DIR", tmp_path / "sync")
-    monkeypatch.setattr(sync_mod, "get_device_id", lambda: "pc_test_device")
+    monkeypatch.setattr(backup_mod, "SessionLocal", TestSession)
     yield {"Session": TestSession}
 
 

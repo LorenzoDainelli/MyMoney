@@ -68,7 +68,7 @@ import portfolio.versamenti
 import shared.ai_memory
 import shared.settings_store
 import shared.storico
-import shared.sync
+import shared.backup
 import shared.tempo
 
 # Il fuso con cui gira la suite. L'app non usa più l'orologio della macchina ma
@@ -96,7 +96,7 @@ def fuso_vero(monkeypatch):
 _MODULI_CON_SESSIONE = (
     finance.service, portfolio.market, portfolio.routes, portfolio.seed,
     portfolio.service, portfolio.versamenti, shared.ai_memory,
-    shared.settings_store, shared.storico, shared.sync,
+    shared.settings_store, shared.storico, shared.backup,
 )
 
 # Moduli che hanno fotografato anche `engine` (lo usano per le migrazioni in SQL
@@ -139,9 +139,8 @@ def database_usa_e_getta(tmp_path, monkeypatch):
     monkeypatch.setattr(db_mod, "engine", engine)
     for mod in _MODULI_CON_ENGINE:
         monkeypatch.setattr(mod, "engine", engine)
-    # Il diario del sync e i suoi backup scrivono su file: fuori dai dati veri.
-    monkeypatch.setattr(shared.sync, "SYNC_DIR", tmp_path / "sync")
-    monkeypatch.setattr(shared.sync, "BACKUP_DIR", tmp_path / "backups")
+    # Il backup preventivo scrive su file: fuori dalla cartella dei dati veri.
+    monkeypatch.setattr(shared.backup, "BACKUP_DIR", tmp_path / "backups")
     # Un fuso fisso e noto, e nessun residuo in cache dal test precedente.
     monkeypatch.setattr(shared.tempo, "nome_fuso", lambda: FUSO_DI_PROVA)
     shared.tempo.scarta_cache()

@@ -186,15 +186,15 @@ def test_solo_l_ingresso_e_la_grafica_sono_aperti(percorso):
 
 
 def test_il_segreto_del_secondo_fattore_non_esce_dal_server():
-    """Il sync porta in giro movimenti, conti e categorie — non le impostazioni.
+    """Il backup porta via movimenti, conti e categorie — non le impostazioni.
     È così oggi, e questo test esiste perché resti così: il giorno in cui
     qualcuno aggiungesse le impostazioni alla fotografia, il segreto del secondo
-    fattore finirebbe su Drive e sul telefono, e il gradino in più smetterebbe
+    fattore finirebbe dentro un file scaricabile, e il gradino in più smetterebbe
     di essere un gradino."""
     import json
-    from shared import auth, sync
+    from shared import auth, backup
     auth.imposta_segreto_totp(sicurezza.nuovo_segreto())
-    fotografia = json.dumps(sync.build_snapshot(), default=str)
+    fotografia = json.dumps(backup.build_snapshot(), default=str)
     assert auth.CHIAVE_TOTP not in fotografia
     assert auth.segreto_totp() not in fotografia
 

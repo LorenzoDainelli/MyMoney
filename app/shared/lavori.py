@@ -65,12 +65,12 @@ def _passo(esiti: dict, nome: str, funzione) -> None:
         log.warning("lavoro %s fallito: %s", nome, e)
 
 
-def giornaliero(includi_sync: bool = True) -> dict:
+def giornaliero() -> dict:
     """Tutti i lavori periodici, in ordine. Torna l'esito passo per passo.
 
-    `includi_sync` a False su un server: con un solo database non c'è niente da
-    sincronizzare, e il diario del sync vuole scrivere su disco (vedi
-    docs/PIANO-CLOUD.md §2).
+    Qui c'era anche un passo `sync_drive`, e un interruttore `includi_sync` per
+    spegnerlo sul server. Sono spariti con la Fase 5: di database ce n'è uno
+    solo, quindi non esiste più niente da sincronizzare con niente.
     """
     if not _in_corso.acquire(blocking=False):
         log.info("lavori gia' in corso, salto")
@@ -88,13 +88,6 @@ def giornaliero(includi_sync: bool = True) -> dict:
         _passo(esiti, "fondamentali", market.refresh_all_fundamentals)
         _passo(esiti, "grafico_patrimonio", wealth.get_cached)
 
-        if includi_sync:
-            def _sync():
-                from shared import drive_sync
-                if drive_sync.is_configured() and drive_sync.is_connected():
-                    drive_sync.sync_once()
-            _passo(esiti, "sync_drive", _sync)
-
         def _pulizia():
             from finance.service import compatta_tombstone
             compatta_tombstone(365)
@@ -111,9 +104,9 @@ def giornaliero(includi_sync: bool = True) -> dict:
     return {"durata": durata, "passi": esiti}
 
 
-def in_background(includi_sync: bool = True) -> None:
+def in_background() -> None:
     """Come sopra, ma senza far aspettare chi ha aperto la pagina."""
-    threading.Thread(target=giornaliero, args=(includi_sync,), daemon=True).start()
+    threading.Thread(target=giornaliero, daemon=True).start()
 
 
 def ultimo_esito() -> dict:

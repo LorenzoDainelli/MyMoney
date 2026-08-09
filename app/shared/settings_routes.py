@@ -4,22 +4,25 @@ L'app funziona senza chiavi. Inserendone una si sbloccano funzioni extra (es.
 l'agente AI con la chiave Gemini). Le chiavi non vengono mai mostrate in chiaro
 ne' loggate.
 """
+import json
+import logging
+
 from fastapi import APIRouter, Request, Form
-from fastapi.responses import RedirectResponse, HTMLResponse
-from datetime import datetime
+from fastapi.responses import RedirectResponse, HTMLResponse, Response
 
 from shared.templating import templates
 from shared import settings_store as store
 from shared import tempo
 from shared import ai
 from shared import ai_memory
-from shared import drive_sync
 
 router = APIRouter()
+log = logging.getLogger("mymoney.impostazioni")
 
 
 @router.get("/impostazioni", response_class=HTMLResponse)
-def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: str = ""):
+def impostazioni(request: Request, salvato: int = 0, ai_test: str = "",
+                 ripristino: str = ""):
     voci = []
     for chiave, meta in store.KNOWN_SETTINGS.items():
         valore = store.get_setting(chiave, "")
@@ -30,16 +33,6 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
             "presente": bool(valore.strip()),
             "mascherato": store.masked(valore) if meta.get("secret") else valore,
         })
-    drive_last = drive_sync.last_sync_info()
-    drive_last_stale = False
-    if drive_last and drive_last.get("ts"):
-        try:
-            ts = datetime.fromisoformat(drive_last["ts"])
-            if (tempo.adesso() - ts).days > 7:
-                drive_last_stale = True
-        except ValueError:
-            pass
-
     return templates.TemplateResponse(request, "settings.html", {
         "active": "impostazioni",
         "voci": voci, "salvato": bool(salvato),
@@ -61,12 +54,7 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "", drive: s
         "fuso": tempo.nome_fuso(),
         "fuso_ora": tempo.adesso().strftime("%H:%M"),
         "FUSI": tempo.FUSI,
-        "drive_msg": drive,
-        "drive_configured": drive_sync.is_configured(),
-        "drive_connected": drive_sync.is_connected(),
-        "drive_last": drive_last,
-        "drive_last_stale": drive_last_stale,
-        "sync_needs_update": bool(store.get_setting("sync_needs_update", "")),
+        "ripristino": ripristino,
         # memoria dell'agente: deve essere LEGGIBILE e cancellabile riga per riga,
         # altrimenti diventa una scatola nera che nessuno può correggere
         "ai_ricordi": ai_memory.ricordi(),
@@ -133,49 +121,68 @@ def prova_ai():
     return RedirectResponse(f"/impostazioni?ai_test={_esito_test(ok, detail)}", status_code=303)
 
 
-# ── Google Drive (Fase 5): collegamento OAuth e sync manuale ────────────────
+# ── il backup: l'unica strada per portarsi via i dati ───────────────────────
+#
+# Finché l'app girava sul PC, i dati erano un file sul disco: bastava copiarlo.
+# Ora stanno in un database che non è tuo, in una regione di Google, e nessuna
+# pagina permetteva di tirarli fuori — la copia sul Drive era l'ultima strada, e
+# se ne va con la Fase 5. Un tasto che scarica tutto è la condizione per poterla
+# togliere, non un extra.
 
-def _drive_redirect_uri(request: Request) -> str:
-    """Il callback torna su QUESTA app (client OAuth di tipo Desktop: qualunque
-    porta di loopback è accettata senza registrarla)."""
-    return str(request.url_for("drive_callback"))
+@router.get("/impostazioni/backup")
+def backup():
+    """Scarica TUTTO in un file JSON: conti, categorie, movimenti.
+
+    È una lettura e basta: non cambia niente e si può premere quando si vuole.
+    Per rimettere dentro un backup c'è `POST /api/finanze/import` — non ha un
+    bottone apposta di proposito, perché è l'unica operazione che può cancellare
+    tutto e non deve stare a un dito di distanza da quella che salva."""
+    from shared import backup as mod_backup
+    contenuto = json.dumps(mod_backup.build_snapshot(), ensure_ascii=False,
+                           default=str, indent=2)
+    nome = f"mymoney-{tempo.adesso().strftime('%Y%m%d-%H%M')}.json"
+    return Response(
+        content=contenuto,
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{nome}"'},
+    )
 
 
-@router.get("/impostazioni/drive/connetti")
-def drive_connetti(request: Request):
-    if not drive_sync.is_configured():
-        return RedirectResponse("/impostazioni?drive=nocred", status_code=303)
-    return RedirectResponse(drive_sync.build_auth_url(_drive_redirect_uri(request)),
+@router.post("/impostazioni/ripristina")
+async def ripristina(request: Request):
+    """Ricarica un file di backup: SVUOTA e rimette dentro quello che c'è nel file.
+
+    Non fonde di proposito. Chi arriva qui non vuole mescolare: vuole tornare a
+    com'era. Prima di toccare qualcosa scrive lo stato attuale in
+    `data/backups/`, così anche un ripristino sbagliato è reversibile — sul PC,
+    dove quella cartella resta. Sul server è un container che si spegne, quindi
+    là la rete di sicurezza vera è il file che ti sei scaricato prima.
+
+    Sta dietro un `<details>` chiuso, non accanto al tasto che salva: è l'unica
+    operazione dell'app che può cancellare tutto in un colpo.
+    """
+    from shared import backup as mod_backup
+    form = await request.form()
+    file = form.get("file")
+    if not file or not hasattr(file, "read"):
+        return RedirectResponse("/impostazioni?ripristino=nofile", status_code=303)
+    try:
+        dati = json.loads(await file.read())
+    except (ValueError, UnicodeDecodeError):
+        return RedirectResponse("/impostazioni?ripristino=illeggibile", status_code=303)
+
+    try:
+        mod_backup.scrivi_su_file()
+    except OSError as e:                        # disco di sola lettura: non è un motivo per fermarsi
+        log.warning("backup preventivo non scritto: %s", e)
+
+    esito = mod_backup.replace_all_from_snapshot(dati)
+    if esito.get("future"):
+        return RedirectResponse("/impostazioni?ripristino=futuro", status_code=303)
+    if not esito.get("ok"):
+        return RedirectResponse("/impostazioni?ripristino=errore", status_code=303)
+    return RedirectResponse(f"/impostazioni?ripristino={esito.get('count', 0)}",
                             status_code=303)
-
-
-@router.get("/impostazioni/drive/callback", name="drive_callback")
-def drive_callback(request: Request, code: str = "", state: str = "", error: str = ""):
-    if error or not code:
-        return RedirectResponse("/impostazioni?drive=rifiutato", status_code=303)
-    ok, _err = drive_sync.handle_callback(code, state, _drive_redirect_uri(request))
-    return RedirectResponse(f"/impostazioni?drive={'ok' if ok else 'err'}", status_code=303)
-
-
-@router.post("/impostazioni/drive/sync")
-def drive_sync_now():
-    result = drive_sync.sync_once()
-    if result.get("ok"):
-        return RedirectResponse("/impostazioni?drive=sync_ok", status_code=303)
-    err = result.get("error")
-    if err == "auth":
-        esito = "auth"
-    elif err == "quota":
-        esito = "quota"
-    else:
-        esito = "sync_err"
-    return RedirectResponse(f"/impostazioni?drive={esito}", status_code=303)
-
-
-@router.post("/impostazioni/drive/scollega")
-def drive_scollega():
-    drive_sync.disconnect()
-    return RedirectResponse("/impostazioni?drive=off", status_code=303)
 
 
 @router.post("/impostazioni")

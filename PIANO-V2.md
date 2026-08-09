@@ -1,5 +1,11 @@
 # MyMoney v2 — Piano a fasi: l'app sul telefono (iPhone), offline, con sync stile Cashew
 
+> ⚠️ **Superato dalla Fase 5 del piano cloud (09/08/2026).** Questo documento
+> descrive la sincronizzazione fra PC, telefono e Google Drive: quel meccanismo
+> **non esiste più**. I dati stanno in un solo database sul cloud e telefono e PC
+> sono due finestre sulla stessa app. Resta qui come storia di come ci si è
+> arrivati, non come descrizione di com'è adesso. Vedi `docs/PIANO-CLOUD.md`.
+
 > Scritto il 12/07/2026, alla chiusura della **v1.0** (tag `v1.0` su GitHub +
 > backup locale). Questo documento è il progetto ESECUTIVO della versione 2:
 > obiettivi, architettura, fasi, problemi previsti, alternative valutate e cosa

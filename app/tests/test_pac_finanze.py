@@ -21,7 +21,7 @@ from shared.db import Base
 from portfolio.models import Position, Versamento
 from finance.models import Wallet, Transaction, TIPO_TRASFERIMENTO
 import shared.settings_store  # noqa: F401  (registra shared_settings, usata dal sync)
-import shared.sync            # noqa: F401  (importalo PRIMA del primo flush, come fa main.py)
+import shared.backup          # noqa: F401
 import portfolio.service as pf_service
 import portfolio.versamenti as versamenti
 import finance.service as fin_service

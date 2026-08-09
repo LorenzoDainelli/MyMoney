@@ -260,17 +260,13 @@ subito dopo**: le reti autorizzate sono di nuovo vuote.
 **Il vecchio database resta dov'è**, più una copia in
 `app/data/finanza-prima-del-travaso-20260808-162401.db`.
 
-### Fase 5 — Le tre copie diventano una
-Dipende dalla scelta del §2. Se A: il PC e il telefono puntano al cloud, PWA
-autonoma e sync Drive vanno in pensione.
+### Fase 5 — Le tre copie diventano una ✔ QUASI FATTA (09/08/2026)
 
-**Primo pezzo fatto (09/08/2026): il PC.** `Avvia-Finanza.bat` non avvia più un
-server, apre il browser sull'indirizzo online. Prima apriva
-`app/data/finanza.db`, che dal travaso è una copia ferma: chi registrava un
-movimento da lì lo scriveva in un database che il telefono non vede, e niente
-nell'interfaccia lo diceva. La vecchia strada resta in
-`Avvia-Finanza-Locale.bat`, che avverte e chiede conferma — serve per guardare i
-dati vecchi e per lavorare offline.
+**Il PC.** `Avvia-Finanza.bat` non avvia più un server, apre il browser
+sull'indirizzo online. Prima apriva `app/data/finanza.db`, che dal travaso è una
+copia ferma: chi registrava un movimento da lì lo scriveva in un database che il
+telefono non vede, e niente nell'interfaccia lo diceva. La vecchia strada resta
+in `Avvia-Finanza-Locale.bat`, che avverte e chiede conferma.
 
 > **I .bat devono restare in ASCII puro.** Con `chcp 65001` attivo bastano due
 > trattini lunghi dentro un commento perché cmd perda l'allineamento fra byte e
@@ -278,9 +274,41 @@ dati vecchi e per lavorare offline.
 > («"MyMoney" non è riconosciuto…»). Nei due file c'è scritto, e il `chcp` è
 > stato tolto.
 
-**Restano:** la PWA in `pwa/` — ha una sua copia dei dati nel telefono e si
-allinea via Drive, quindi è un terzo insieme che diverge; nel suo README c'è
-l'avviso — e il codice del sync a specchio, da mandare in soffitta.
+**Il sync è smontato.** Sono spariti, con i loro test:
+- `shared/drive_sync.py` (523 righe) — OAuth Drive, copia a specchio, la card in
+  Impostazioni, il passo `sync_drive` dei lavori giornalieri, le credenziali
+  `drive_client_id`/`drive_client_secret` e 22 chiavi i18n;
+- il **diario** del sync — un file JSONL scritto a ogni salvataggio. Sul server
+  finiva nel filesystem del container, che su Cloud Run **sta in memoria**: una
+  riga per movimento, che nessuno leggeva e che spariva a ogni riavvio;
+- il canale multi-dispositivo: `/api/finanze/{ops,diary,snapshot,stato,movimenti,
+  parse,mirror/*}` e l'intero `finance/api_routes.py`, più `service.stato_sync`
+  e `service.movimenti_sync`;
+- la fusione «vince il più recente» (`import_ops`, `_wins`, `_apply_one`): con un
+  database solo non c'è niente da far vincere.
+
+**Al suo posto: il backup.** `shared/sync.py` è diventato `shared/backup.py`, che
+tiene solo la fotografia (`build_snapshot`) e la strada del ritorno
+(`replace_all_from_snapshot`). In Impostazioni c'è una card **Backup**:
+- **Scarica i miei dati** → `GET /impostazioni/backup`, un JSON con conti,
+  categorie e movimenti (lapidi comprese, o un ripristino resusciterebbe ciò che
+  avevi cancellato). Riferimenti per `uid`, mai per id interno.
+- **Ripristina da un file** → `POST /impostazioni/ripristina`, ripiegato dentro un
+  `<details>` perché è l'unica cosa nell'app che cancella tutto in un colpo.
+  Svuota e ricarica; non fonde. Prima di toccare qualcosa scrive lo stato attuale
+  in `data/backups/`.
+
+Non è un extra: finché l'app girava sul PC i dati erano un file da copiare, e la
+copia sul Drive era l'ultima strada per tirarli fuori. **Poter togliere quella
+richiedeva questo.** Verificato sui dati veri: 95 movimenti scaricati e
+rimessi dentro, somma degli importi identica al decimillesimo (12953,5186), 22
+legami fra spese e righe generate ritrovati, saveback ancora a quattro decimali.
+
+**Resta solo la cartella `pwa/`.** Il server non la serve più (via il mount
+`/pwa`), ma i file sono ancora nel repo e Cloudflare Pages li pubblica. Va
+cancellata **dopo** che Lorenzo ha aperto la PWA sul telefono un'ultima volta e
+ha controllato che non ci sia rimasto niente: toglierla rompe la pubblicazione, e
+da lì in poi quella copia non si aprirebbe più per recuperare nulla.
 
 ---
 

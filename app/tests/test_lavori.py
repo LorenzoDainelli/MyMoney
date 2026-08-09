@@ -54,7 +54,7 @@ def test_un_passo_che_fallisce_non_ferma_gli_altri(monkeypatch):
     monkeypatch.setattr("finance.service.compatta_tombstone", lambda g: chiamati.append("pulizia"))
     monkeypatch.setattr("shared.storico.registra", lambda: chiamati.append("storico"))
 
-    esito = lavori.giornaliero(includi_sync=False)
+    esito = lavori.giornaliero()
 
     assert esito["passi"]["notizie"].startswith("errore")
     assert esito["passi"]["prezzi"].startswith("errore")
@@ -62,19 +62,20 @@ def test_un_passo_che_fallisce_non_ferma_gli_altri(monkeypatch):
     assert "storico" in chiamati, "la fotografia deve scattare anche se i prezzi falliscono"
 
 
-def test_niente_sync_quando_non_richiesto(monkeypatch):
-    """Su un server il database è uno solo: il sync non deve nemmeno partire."""
+def test_i_passi_sono_questi_e_nessun_altro(monkeypatch):
+    """Un elenco chiuso, e non è pignoleria. Questi lavori girano sul server, dove
+    il disco è di memoria e sparisce: il passo `sync_drive` scriveva un diario che
+    non leggeva nessuno, ed è quello che la Fase 5 ha tolto. Se qualcuno ne
+    riaggiunge uno, questo test lo fa vedere invece di lasciarlo passare."""
     for nome in ("news.reader.refresh_from_origin", "portfolio.market.refresh_all",
                  "portfolio.market.refresh_all_fundamentals", "portfolio.wealth.get_cached",
                  "shared.storico.registra"):
         monkeypatch.setattr(nome, lambda *a, **k: None)
     monkeypatch.setattr("finance.service.compatta_tombstone", lambda g: None)
 
-    esito = lavori.giornaliero(includi_sync=False)
-    assert "sync_drive" not in esito["passi"]
-
-    esito = lavori.giornaliero(includi_sync=True)
-    assert "sync_drive" in esito["passi"]
+    esito = lavori.giornaliero()
+    assert list(esito["passi"]) == ["notizie", "prezzi", "fondamentali",
+                                    "grafico_patrimonio", "pulizia", "storico"]
 
 
 def test_due_chiamate_insieme_non_fanno_il_lavoro_doppio(monkeypatch):
@@ -95,12 +96,12 @@ def test_due_chiamate_insieme_non_fanno_il_lavoro_doppio(monkeypatch):
     esiti = {}
 
     def primo():
-        esiti["a"] = lavori.giornaliero(includi_sync=False)
+        esiti["a"] = lavori.giornaliero()
 
     t = threading.Thread(target=primo)
     t.start()
     time.sleep(0.1)                      # il primo è già dentro
-    esiti["b"] = lavori.giornaliero(includi_sync=False)
+    esiti["b"] = lavori.giornaliero()
     t.join()
 
     assert "saltato" in esiti["b"], "la seconda chiamata doveva essere scartata"
@@ -120,8 +121,8 @@ def test_il_lucchetto_si_riapre_anche_se_qualcosa_esplode(monkeypatch):
     monkeypatch.setattr("finance.service.compatta_tombstone", esplode)
     monkeypatch.setattr("shared.storico.registra", esplode)
 
-    lavori.giornaliero(includi_sync=False)
-    secondo = lavori.giornaliero(includi_sync=False)
+    lavori.giornaliero()
+    secondo = lavori.giornaliero()
     assert "saltato" not in secondo, "il lucchetto e' rimasto chiuso"
 
 

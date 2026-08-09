@@ -1,5 +1,11 @@
 # PIANO-FASE-5 — Collegamento a Google Drive (OAuth)
 
+> ⚠️ **Superato dalla Fase 5 del piano cloud (09/08/2026).** Questo documento
+> descrive la sincronizzazione fra PC, telefono e Google Drive: quel meccanismo
+> **non esiste più**. I dati stanno in un solo database sul cloud e telefono e PC
+> sono due finestre sulla stessa app. Resta qui come storia di come ci si è
+> arrivati, non come descrizione di com'è adesso. Vedi `docs/PIANO-CLOUD.md`.
+
 > Piano-contratto secondo WORKFLOW-AGENTI.md §4. Scritto da Claude Code (cervello)
 > il 15/07/2026. Esecuzione: Claude Code (consentito da §1). Review: Claude Code.
 > Contesto minimo: PIANO-V2.md §Fase 5, docs/SYNC-PROTOCOL.md (protocollo Fase 4).

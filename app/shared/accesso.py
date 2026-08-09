@@ -5,10 +5,11 @@ quanto vale un biglietto), qui c'è la **meccanica** (parlare con Google). Le
 regole si leggono senza sapere niente di OAuth, e la meccanica si cambia il
 giorno in cui Google cambia idea senza rimettere mano alle regole.
 
-**Perché non riusiamo il codice OAuth di `drive_sync.py`.** È lo stesso ballo,
-ma quel modulo va in pensione con la sincronizzazione (Fase 5 del piano cloud):
-appoggiarci il login vorrebbe dire legare la porta di casa a un modulo che
-abbiamo già deciso di buttare. Qui servono venti righe di HTTP, le scriviamo.
+**Perché non abbiamo riusato il codice OAuth di `drive_sync.py`.** Era lo stesso
+ballo, ma quel modulo era già condannato: appoggiarci la porta di casa voleva
+dire legarla a qualcosa che avevamo deciso di buttare. Qui servivano venti righe
+di HTTP e le abbiamo scritte — e infatti con la Fase 5 `drive_sync.py` non
+esiste più, mentre questo file è rimasto in piedi da solo.
 
 **Il dettaglio che su un server cambia tutto.** Il segreto usa-e-getta del giro
 (PKCE) e lo `state` NON stanno in memoria: stanno in un biglietto firmato dentro

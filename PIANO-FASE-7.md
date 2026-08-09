@@ -1,5 +1,11 @@
 # PIANO-FASE-7 — Robustezza e rifiniture del sync
 
+> ⚠️ **Superato dalla Fase 5 del piano cloud (09/08/2026).** Questo documento
+> descrive la sincronizzazione fra PC, telefono e Google Drive: quel meccanismo
+> **non esiste più**. I dati stanno in un solo database sul cloud e telefono e PC
+> sono due finestre sulla stessa app. Resta qui come storia di come ci si è
+> arrivati, non come descrizione di com'è adesso. Vedi `docs/PIANO-CLOUD.md`.
+
 > **Piano-contratto** secondo WORKFLOW-AGENTI.md §4. Fase 1 (progetto) scritta da
 > Claude Code il 15/07/2026. **Fase 2 (esecuzione): Antigravity.** Fase 3 (review):
 > Claude Code.

@@ -36,7 +36,11 @@ raggiunge il cloud. Il primo avvio prepara l'ambiente (~1 minuto) e serve
   (spesa che qualcuno rimborsa: i saldi si muovono davvero, nelle statistiche conta
   solo la differenza; le partite aperte restano in evidenza finché non le chiudi).
 - **Notizie**: le card del news-monitor, aggiornate da GitHub a ogni avvio.
-- **Impostazioni**: aspetto, lingua (6), agente AI Gemini. La chiave resta solo in locale.
+- **Impostazioni**: aspetto, lingua (6), fuso orario, agente AI Gemini (sul cloud
+  la chiave arriva dal Secret Manager), memoria dell'agente leggibile e
+  cancellabile, e **Backup**: scarichi tutti i tuoi dati in un file JSON, e da lì
+  puoi anche rimetterli dentro. È l'unico modo di avere una copia tua di quello
+  che sta nel database sul cloud.
 
 A ogni avvio l'app aggiorna da sola, in background: notizie, prezzi,
 fondamentali e la serie del grafico del patrimonio.

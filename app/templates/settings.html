@@ -252,126 +252,41 @@
     </form>
   </div>
 
-  <!-- Google Drive: copia a SPECCHIO telefono ↔ PC (l'unica sincronizzazione) -->
-  {% set dcid = (voci | selectattr('chiave', 'equalto', 'drive_client_id') | list | first) %}
-  {% set dcs = (voci | selectattr('chiave', 'equalto', 'drive_client_secret') | list | first) %}
+  {# ---------- Backup: l'unica strada per portarsi via i dati ----------
+     Qui c'era la copia a specchio su Google Drive, l'unica sincronizzazione
+     rimasta. Con l'app sul cloud non c'è più niente da sincronizzare — telefono
+     e PC guardano lo stesso database — ma insieme al Drive se ne andava anche
+     l'unico modo di tirare fuori i dati da qui. Questo tasto è la condizione
+     per aver potuto togliere quello. #}
   <div class="card navy" style="margin-top:20px;">
-    <div class="card-h">Sincronizzazione (Google Drive)</div>
-    <p style="margin:0 0 10px;">Telefono e PC tengono <b>la stessa copia</b> in una
-    cartella nascosta del tuo Google Drive. <b>Carica</b> mette lo stato del PC sul
-    Drive; <b>Scarica</b> rimpiazza <b>tutto</b> il PC con la copia dal Drive
-    (sostituzione, non fusione). Prima di ogni sovrascrittura resta un backup.</p>
+    <div class="card-h">{{ t('set.backup_h') }}</div>
+    <p style="margin:0 0 12px;">{{ t('set.backup_p') }}</p>
+    <a class="btn primary" href="/impostazioni/backup">{{ icon('down', 16) }} {{ t('set.backup_btn') }}</a>
+    <p class="faint" style="font-size:12px;margin:12px 0 0;">{{ t('set.backup_nota') }}</p>
 
-    {% if sync_needs_update %}
-      <div class="note err" style="margin-bottom:12px;">{{ t('set.sync_update') }}</div>
+    {% if ripristino == 'nofile' %}<div class="note warn" style="margin-top:12px;">{{ t('set.rip_nofile') }}</div>
+    {% elif ripristino == 'illeggibile' %}<div class="note err" style="margin-top:12px;">{{ t('set.rip_illeggibile') }}</div>
+    {% elif ripristino == 'futuro' %}<div class="note err" style="margin-top:12px;">{{ t('set.rip_futuro') }}</div>
+    {% elif ripristino == 'errore' %}<div class="note err" style="margin-top:12px;">{{ t('set.rip_errore') }}</div>
+    {% elif ripristino %}<div class="note ok" style="margin-top:12px;">{{ t('set.rip_fatto', n=ripristino) }}</div>
     {% endif %}
 
-    {% if drive_msg == 'ok' %}<div class="note ok">{{ t('set.drive_msg_ok') }}</div>
-    {% elif drive_msg == 'sync_ok' %}<div class="note ok">{{ t('set.drive_msg_sync_ok') }}</div>
-    {% elif drive_msg == 'off' %}<div class="note info">{{ t('set.drive_msg_off') }}</div>
-    {% elif drive_msg == 'nocred' %}<div class="note warn">{{ t('set.drive_msg_nocred') }}</div>
-    {% elif drive_msg == 'rifiutato' %}<div class="note warn">{{ t('set.drive_msg_denied') }}</div>
-    {% elif drive_msg == 'auth' %}<div class="note warn">{{ t('set.drive_msg_auth') }}</div>
-    {% elif drive_msg == 'quota' %}<div class="note err">{{ t('set.drive_msg_quota') }}</div>
-    {% elif drive_msg in ('err', 'sync_err') %}<div class="note err">{{ t('set.drive_msg_err') }}</div>
-    {% endif %}
-
-    {% if drive_connected %}
-      <div class="note ok" style="margin-bottom:12px;">{{ t('set.drive_status_on') }}</div>
-      <p class="muted" id="mirror-stato" style="font-size:13px;margin:0 0 12px;">Copia sul Drive: verifico…</p>
-      <div class="note" id="mirror-esito" style="display:none;margin-bottom:12px;"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button type="button" class="btn primary" id="mirror-carica">⬆️ Carica (PC → Drive)</button>
-        <button type="button" class="btn ghost" id="mirror-scarica">⬇️ Scarica (Drive → PC)</button>
-      </div>
-    {% elif drive_configured %}
-      <div class="note warn" style="margin-bottom:12px;">{{ t('set.drive_status_ready') }}</div>
-      <a class="btn primary" href="/impostazioni/drive/connetti">{{ t('set.drive_connect') }}</a>
-    {% else %}
-      <div class="note warn" style="margin-bottom:12px;">{{ t('set.drive_status_unconf') }}<br>
-        <span class="muted" style="font-size:13px;">{{ t('set.drive_guide') }}</span>
-      </div>
-    {% endif %}
-
-    {# credenziali: aperte se non ancora configurate, ripiegate altrimenti (si toccano una volta sola) #}
-    <details style="margin-top:16px;"{% if not drive_configured %} open{% endif %}>
-      <summary class="muted" style="cursor:pointer;font-size:13px;">
-        {% if drive_connected %}Configurazione e scollegamento{% elif drive_configured %}Configurazione{% else %}Credenziali Google (una volta sola){% endif %}
-      </summary>
+    {# Ripiegato apposta: è l'unica cosa in tutta l'app che cancella tutto in un
+       colpo, e non deve stare a un dito dal tasto che invece salva. #}
+    <details style="margin-top:16px;">
+      <summary class="muted" style="cursor:pointer;font-size:13px;">{{ t('set.rip_h') }}</summary>
       <div style="margin-top:12px;">
-        <form class="form" method="post" action="/impostazioni" style="margin:0;padding:0;border:none;box-shadow:none;background:none;max-width:none;">
-          <div class="row2">
-            <div class="field" style="margin-bottom:0;">
-              <label>{{ t('set.drive_cid') }}</label>
-              {% if dcid and dcid.presente %}
-                <div class="muted" style="font-size:13px;margin-bottom:6px;">{{ t('set.current', masked=dcid.mascherato) }}</div>
-              {% endif %}
-              <input type="text" name="drive_client_id" autocomplete="off" placeholder="{{ '…apps.googleusercontent.com' if not (dcid and dcid.presente) else t('set.ph_keep') }}">
-            </div>
-            <div class="field" style="margin-bottom:0;">
-              <label>{{ t('set.drive_csec') }}</label>
-              {% if dcs and dcs.presente %}
-                <div class="muted" style="font-size:13px;margin-bottom:6px;">{{ t('set.current', masked=dcs.mascherato) }}</div>
-              {% endif %}
-              <input type="password" name="drive_client_secret" autocomplete="off" placeholder="{{ 'GOCSPX-…' if not (dcs and dcs.presente) else t('set.ph_keep') }}">
-            </div>
-          </div>
-          <div class="actions" style="margin-bottom:0;margin-top:14px;">
-            <button type="submit" class="btn primary">{{ t('set.drive_save') }}</button>
-          </div>
+        <p class="muted" style="font-size:13px;margin:0 0 10px;">{{ t('set.rip_p') }}</p>
+        <form method="post" action="/impostazioni/ripristina" enctype="multipart/form-data"
+              class="js-confirm" data-confirm="{{ t('set.rip_btn') }}" data-cancel="{{ t('form.cancel') }}"
+              data-msg="{{ t('set.rip_p') }}" style="margin:0;">
+          <input type="file" name="file" accept="application/json,.json" required
+                 style="display:block;margin-bottom:10px;">
+          <button type="submit" class="btn danger">{{ t('set.rip_btn') }}</button>
         </form>
-        {% if drive_connected %}
-        <form method="post" action="/impostazioni/drive/scollega" style="margin-top:12px;">
-          <button type="submit" class="btn ghost">{{ t('set.drive_disconnect') }}</button>
-        </form>
-        {% endif %}
       </div>
     </details>
   </div>
-
-  {% if drive_connected %}
-  <script>
-  (function () {
-    var statoEl = document.getElementById("mirror-stato");
-    var esitoEl = document.getElementById("mirror-esito");
-    var btnUp = document.getElementById("mirror-carica");
-    var btnDown = document.getElementById("mirror-scarica");
-    function quando(iso) { var d = new Date(iso); return isNaN(d) ? "" : d.toLocaleString("it-IT", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
-    function mostraEsito(cls, testo) { esitoEl.className = "note " + cls; esitoEl.textContent = testo; esitoEl.style.display = ""; }
-    var ultimoStato = null;
-    function caricaStato() {
-      return fetch("/api/finanze/mirror/stato").then(function (r) { return r.json(); }).then(function (s) {
-        ultimoStato = s;
-        if (!s.ok) { statoEl.textContent = "Copia sul Drive: non raggiungibile (collega il Drive)."; return; }
-        statoEl.textContent = s.exists ? ("Copia sul Drive · aggiornata il " + (quando(s.modifiedTime) || "?")) : "Sul Drive non c'è ancora una copia: fai «Carica».";
-      }).catch(function () { statoEl.textContent = "Copia sul Drive: non raggiungibile."; });
-    }
-    function occupa(b) { btnUp.disabled = b; btnDown.disabled = b; }
-    btnUp.addEventListener("click", function () {
-      if (!confirm("Caricare lo stato del PC sul Drive, sovrascrivendo la copia attuale? (ne resta un backup)")) return;
-      occupa(true); mostraEsito("info", "Carico sul Drive…");
-      fetch("/api/finanze/mirror/carica", { method: "POST" }).then(function (r) { return r.json(); }).then(function (res) {
-        occupa(false);
-        if (res.ok) { var c = res.counts || {}; mostraEsito("ok", "Copia sul Drive aggiornata (" + (c.movimenti || 0) + " movimenti)."); caricaStato(); }
-        else mostraEsito("err", "Non riuscito (" + (res.error || "errore") + ").");
-      }).catch(function () { occupa(false); mostraEsito("err", "Non riuscito (rete)."); });
-    });
-    btnDown.addEventListener("click", function () {
-      var q = (ultimoStato && ultimoStato.exists) ? (" (del " + (quando(ultimoStato.modifiedTime) || "?") + ")") : "";
-      if (!(ultimoStato && ultimoStato.exists)) { mostraEsito("warn", "Sul Drive non c'è ancora una copia."); return; }
-      if (!confirm("Sostituire TUTTO sul PC con la copia dal Drive" + q + "?\n\nI dati attuali del PC verranno rimpiazzati (ne resta un backup su file).")) return;
-      occupa(true); mostraEsito("info", "Scarico dal Drive e sostituisco…");
-      fetch("/api/finanze/mirror/scarica", { method: "POST" }).then(function (r) { return r.json(); }).then(function (res) {
-        occupa(false);
-        if (res.ok && res.exists) { mostraEsito("ok", "PC allineato alla copia del Drive (" + (res.count || 0) + " movimenti). Backup: " + (res.backup || "—") + ". Ricarico…"); setTimeout(function () { location.href = "/finanze"; }, 1400); }
-        else if (res.ok && !res.exists) mostraEsito("warn", "Sul Drive non c'è ancora una copia.");
-        else mostraEsito("err", "Non riuscito (" + (res.error || "errore") + ").");
-      }).catch(function () { occupa(false); mostraEsito("err", "Non riuscito (rete)."); });
-    });
-    caricaStato();
-  })();
-  </script>
-  {% endif %}
 
   {# ---------- memoria dell'agente: leggibile e cancellabile riga per riga ----------
      Non è una funzione in più: è la contromisura al rischio della memoria. Una

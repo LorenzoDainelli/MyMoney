@@ -21,7 +21,6 @@ import shared.settings_store          # noqa: F401  -> tabella shared_settings
 import portfolio.models               # noqa: F401  -> tabella portfolio_positions
 from portfolio import market          # noqa: F401  -> tabella portfolio_quotes
 import finance.models                 # noqa: F401  -> tabelle finance_*
-import shared.sync                    # noqa: F401  -> hook diario sync (Fase 4)
 from shared import storico            # tabella storico_giornaliero
 
 from portfolio import seed, analytics, wealth, versamenti
@@ -29,7 +28,6 @@ from portfolio import service as pf_service
 from portfolio.routes import router as portfolio_router
 from finance import service as fin_service
 from finance.routes import router as finance_router, _contesto_finanze
-from finance.api_routes import router as finance_api_router
 from shared.settings_routes import router as settings_router
 from shared.prefs_routes import router as prefs_router
 from shared.accesso_routes import router as accesso_router
@@ -61,14 +59,12 @@ if not JOB_TOKEN:
 # --- app web ---
 app = FastAPI(title=APP_NAME)
 app.mount("/static", StaticFiles(directory=str(APP_DIR / "static")), name="static")
-# Guscio PWA (v2): servito anche dal PC per prova/uso in LAN. In produzione il
-# guscio sta su Cloudflare Pages (HTTPS), ma i file sono gli stessi (cartella pwa/).
-_PWA_DIR = APP_DIR.parent / "pwa"
-if _PWA_DIR.exists():
-    app.mount("/pwa", StaticFiles(directory=str(_PWA_DIR), html=True), name="pwa")
+# Qui il server serviva anche il guscio della PWA su /pwa. La PWA va in pensione
+# con la Fase 5: teneva una copia dei dati dentro il telefono e si allineava via
+# Drive, cioè era un terzo insieme che poteva divergere. Il telefono ora apre
+# questa stessa app.
 app.include_router(portfolio_router)
 app.include_router(finance_router)
-app.include_router(finance_api_router)
 app.include_router(settings_router)
 app.include_router(prefs_router)
 app.include_router(news_router)
@@ -119,8 +115,7 @@ def lavori_giornaliero(request: Request):
     """
     if not lavori.token_valido(request.headers.get("X-Job-Token", "")):
         return JSONResponse({"errore": "non autorizzato"}, status_code=401)
-    # su un server il database è uno solo: non c'è niente da sincronizzare
-    return lavori.giornaliero(includi_sync=False)
+    return lavori.giornaliero()
 
 
 # --------------------------- dashboard (design MyMoney) ---------------------------

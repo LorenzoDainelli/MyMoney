@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from shared.db import Base
 from finance.models import Wallet, Category, Transaction, TIPO_USCITA, TIPO_ENTRATA
 import shared.settings_store  # noqa: F401
-import shared.sync            # noqa: F401
+import shared.backup          # noqa: F401
 import finance.service as fin
 from motore import engine_di_prova
 
