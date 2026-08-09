@@ -1,4 +1,56 @@
 // JS dell'app — interazioni del design freeze v1.0.
+
+/* 0) Attrezzi del telefono, condivisi dai due pannelli che salgono dal fondo:
+      il dettaglio di una posizione (§5) e il pannello «Altro» (in fondo al file).
+      Sono dichiarazioni di funzione, quindi valgono in tutto il file a
+      prescindere da dove stanno scritte.
+
+      `mmTrascina` è il gesto che più di ogni altro distingue un pannello di
+      un'app da un riquadro di un sito: si tira giù e se ne va, senza cercare
+      la ✕. Trenta righe, nessuna libreria. */
+function mmTelefono() { return window.matchMedia('(max-width: 760px)').matches; }
+
+// `foglio` è il pannello, `chiudi()` lo chiude davvero, `riposo` è la trasforma
+// che ha da aperto (stringa vuota se gliela dà una classe CSS).
+function mmTrascina(foglio, chiudi, riposo) {
+  var y0 = null, dy = 0, transizione = '';
+  riposo = riposo || '';
+
+  foglio.addEventListener('touchstart', function (e) {
+    // Solo se il contenuto è già in cima: altrimenti il dito che riporta su una
+    // lista lunga chiuderebbe il pannello ogni volta.
+    if (e.touches.length !== 1 || foglio.scrollTop > 0) return;
+    y0 = e.touches[0].clientY;
+    dy = 0;
+    transizione = foglio.style.transition;
+    foglio.style.transition = 'none';       // mentre trascini comanda il dito
+  }, { passive: true });
+
+  foglio.addEventListener('touchmove', function (e) {
+    if (y0 === null) return;
+    var d = e.touches[0].clientY - y0;
+    if (d <= 0) { dy = 0; foglio.style.transform = riposo; return; }   // su, no
+    dy = d;
+    // Non passivo apposta: senza questo iOS fa rimbalzare il pannello mentre lo
+    // tiri, e il gesto sembra rotto.
+    e.preventDefault();
+    foglio.style.transform = 'translateY(' + d + 'px)';
+  }, { passive: false });
+
+  function fine() {
+    if (y0 === null) return;
+    var quanto = dy;
+    y0 = null; dy = 0;
+    foglio.style.transition = transizione;
+    foglio.style.transform = riposo;
+    // Un quarto dell'altezza, al massimo 90 punti: sotto è un tocco storto
+    // mentre si scorre, sopra è la volontà di chiudere.
+    if (quanto > Math.min(90, foglio.offsetHeight * 0.25)) chiudi();
+  }
+  foglio.addEventListener('touchend', fine, { passive: true });
+  foglio.addEventListener('touchcancel', fine, { passive: true });
+}
+
 // 1) Conferma di eliminazione INLINE (come nel prototipo: Conferma/Annulla al
 //    posto del bottone, reversibile). Testi tradotti via data-confirm/data-cancel;
 //    se mancano si torna al window.confirm classico (data-msg).
@@ -102,12 +154,22 @@ document.addEventListener('click', function (e) {
 })();
 
 // 5) Drawer del dettaglio posizione (PositionDetail del freeze): i link con
-//    data-drawer aprono il dettaglio in un pannello che scivola da destra
-//    (backdrop sfocato, ESC/X/click fuori per chiudere). Senza JS o in caso
-//    di errore si naviga normalmente alla pagina.
+//    data-drawer aprono il dettaglio in un pannello (backdrop sfocato, ESC/X/
+//    click fuori per chiudere). Senza JS o in caso di errore si naviga
+//    normalmente alla pagina.
+//
+//    Da dove entra dipende dallo schermo. Sul PC scivola da destra, com'è nel
+//    design freeze. Sul telefono SALE DAL FONDO: un pannello che entra di lato
+//    su uno schermo da 375 punti è largo quanto la pagina, quindi non è un
+//    pannello — è una pagina messa storta, e infatti si leggeva così. Dal fondo
+//    invece arriva dove sta il pollice, si vede cosa c'è dietro, e si chiude
+//    tirandolo giù.
 (function () {
   var reduce = function () { return document.documentElement.dataset.anim === 'spente'; };
-  var root = null, aside = null, backdrop = null, prevOverflow = '';
+  var root = null, aside = null, backdrop = null, prevOverflow = '', giu = false;
+
+  var CHIUSO = function () { return giu ? 'translateY(101%)' : 'translateX(102%)'; };
+  var APERTO = function () { return giu ? 'translateY(0)' : 'translateX(0)'; };
 
   function onKey(e) { if (e.key === 'Escape') close(); }
 
@@ -119,14 +181,17 @@ document.addEventListener('click', function (e) {
     document.body.style.overflow = prevOverflow;
     if (reduce()) { r.remove(); return; }
     b.style.opacity = '0';
-    a.style.transform = 'translateX(102%)';
+    a.style.transform = CHIUSO();
     setTimeout(function () { r.remove(); }, 260);
   }
 
   function open(url) {
     if (root) return;
+    giu = mmTelefono();
     root = document.createElement('div');
-    root.style.cssText = 'position:fixed;inset:0;z-index:60;';
+    // Sopra la barra in basso (60) e sopra il pannello «Altro» (80), o il
+    // dettaglio si aprirebbe sotto la navigazione.
+    root.style.cssText = 'position:fixed;inset:0;z-index:' + (giu ? 90 : 60) + ';';
     root.setAttribute('role', 'dialog');
     root.setAttribute('aria-modal', 'true');
     backdrop = document.createElement('div');
@@ -134,9 +199,31 @@ document.addEventListener('click', function (e) {
       (reduce() ? '' : 'transition:opacity var(--dur-base) var(--ease-out);');
     backdrop.addEventListener('click', close);
     aside = document.createElement('aside');
-    aside.style.cssText = 'position:absolute;top:0;right:0;height:100%;width:min(560px,94vw);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-lg);overflow-y:auto;transform:translateX(102%);' +
-      (reduce() ? '' : 'transition:transform var(--dur-slow) var(--ease-out);');
-    aside.innerHTML = '<div class="faint" style="padding:24px;">…</div>';
+    aside.style.cssText = (giu
+      ? 'position:absolute;left:0;right:0;bottom:0;max-height:88vh;' +
+        'border-top:1px solid var(--border);border-radius:22px 22px 0 0;' +
+        'box-shadow:0 -12px 40px -16px rgba(0,0,0,.55);' +
+        'padding-bottom:env(safe-area-inset-bottom, 0px);transform:translateY(101%);' +
+        (reduce() ? '' : 'transition:transform var(--dur-slow) cubic-bezier(.32,.72,0,1);')
+      : 'position:absolute;top:0;right:0;height:100%;width:min(560px,94vw);' +
+        'border-left:1px solid var(--border);box-shadow:var(--shadow-lg);transform:translateX(102%);' +
+        (reduce() ? '' : 'transition:transform var(--dur-slow) var(--ease-out);')
+    ) + 'background:var(--surface);overflow-y:auto;-webkit-overflow-scrolling:touch;';
+
+    // Il corpo è separato dall'aside perché la presa non deve sparire quando
+    // arriva l'HTML del pannello e riscrive il contenuto.
+    var corpo = aside;
+    if (giu) {
+      var presa = document.createElement('div');
+      presa.className = 'tel-presa';
+      presa.setAttribute('aria-hidden', 'true');
+      aside.appendChild(presa);
+      corpo = document.createElement('div');
+      aside.appendChild(corpo);
+      mmTrascina(aside, close, 'translateY(0)');
+    }
+    corpo.innerHTML = '<div class="faint" style="padding:24px;">…</div>';
+
     root.appendChild(backdrop);
     root.appendChild(aside);
     document.body.appendChild(root);
@@ -145,11 +232,11 @@ document.addEventListener('click', function (e) {
     document.addEventListener('keydown', onKey);
     requestAnimationFrame(function () { requestAnimationFrame(function () {
       backdrop.style.opacity = '1';
-      aside.style.transform = 'translateX(0)';
+      aside.style.transform = APERTO();
     }); });
     fetch(url + (url.indexOf('?') >= 0 ? '&' : '?') + 'panel=1')
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-      .then(function (h) { if (root) aside.innerHTML = h; })
+      .then(function (h) { if (root) corpo.innerHTML = h; })
       .catch(function () { window.location.href = url; });
   }
 
@@ -354,6 +441,9 @@ document.addEventListener('click', function (e) {
     mostra(!foglio.classList.contains('aperto'));
   });
   velo.addEventListener('click', function () { mostra(false); });
+  // Si chiude anche tirandolo giù, come il dettaglio (§5). La trasforma da
+  // aperto qui la dà la classe `.aperto`, quindi il riposo è la stringa vuota.
+  mmTrascina(foglio, function () { mostra(false); }, '');
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') mostra(false);
   });

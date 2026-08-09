@@ -69,7 +69,13 @@
 
   /* --- il contenuto ------------------------------------------------------ */
   .wrap {
-    padding: var(--space-5) 14px
+    /* In alto lo scalino del sistema. Serve solo da quando la barra col logo
+       non c'è più: era lei a fare da cuscinetto. Con `viewport-fit=cover` (che
+       serve alla barra in basso) la pagina arriva davvero fino al bordo dello
+       schermo, quindi installata sulla schermata Home il titolo finirebbe
+       sotto l'orologio e il notch. Nel browser l'inset vale 0 e non cambia
+       niente: si vede solo a schermo pieno, cioè dove sarebbe il problema. */
+    padding: calc(var(--space-5) + env(safe-area-inset-top, 0px)) 14px
              calc(var(--tel-nav-h) + env(safe-area-inset-bottom, 0px) + 26px);
   }
   .page-title { font-size: var(--text-xl); }
@@ -158,6 +164,32 @@
   .table-wrap tbody td:first-child { padding-right: 44px; }
   /* Le righe di messaggio ("nessun movimento") non sono schede. */
   .table-wrap tbody tr td[colspan] { display: block; text-align: center; }
+
+  /* ======================================================================
+     LA PRIMA SCHERMATA
+
+     Su un telefono la prima schermata è quasi tutto quello che si guarda: si
+     apre l'app, si legge, si chiude. Qui sopra ci finivano 186 punti di
+     intestazione e 512 di numeri incolonnati — 698 su 812, cioè l'86% dello
+     schermo per arrivare al primo dato.
+     ====================================================================== */
+
+  /* Le due scorciatoie della dashboard: vanno dove vanno già la barra in basso
+     e il «＋», e a 375 punti nemmeno stanno affiancate (due bottoni impilati,
+     93 punti). Sul PC restano dove sono. */
+  .dash-scorciatoie { display: none; }
+
+  /* I tre numeri: il patrimonio sopra a tutta larghezza, gli altri due
+     affiancati. Sono corti — una cifra e una riga di spiegazione — e uno sotto
+     l'altro costavano mezza schermata per dire tre cose.
+
+     Doppia classe (`.grid.mm-stats4`) e non `.mm-stats4`: la regola che li
+     incolonna sta nel blocco <style> di base.html, che nel documento viene DOPO
+     questo foglio. A parità di specificità vincerebbe quella; un punto di
+     specificità in più risolve senza dover spostare l'ordine dei fogli, che
+     cambierebbe la cascata di tutto il resto. */
+  .grid.mm-stats4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .grid.mm-stats4 > .stat.hero { grid-column: 1 / -1; }
 
   /* --- la barra in basso ------------------------------------------------- */
   .tel-tabbar {
