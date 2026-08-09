@@ -264,6 +264,24 @@ subito dopo**: le reti autorizzate sono di nuovo vuote.
 Dipende dalla scelta del §2. Se A: il PC e il telefono puntano al cloud, PWA
 autonoma e sync Drive vanno in pensione.
 
+**Primo pezzo fatto (09/08/2026): il PC.** `Avvia-Finanza.bat` non avvia più un
+server, apre il browser sull'indirizzo online. Prima apriva
+`app/data/finanza.db`, che dal travaso è una copia ferma: chi registrava un
+movimento da lì lo scriveva in un database che il telefono non vede, e niente
+nell'interfaccia lo diceva. La vecchia strada resta in
+`Avvia-Finanza-Locale.bat`, che avverte e chiede conferma — serve per guardare i
+dati vecchi e per lavorare offline.
+
+> **I .bat devono restare in ASCII puro.** Con `chcp 65001` attivo bastano due
+> trattini lunghi dentro un commento perché cmd perda l'allineamento fra byte e
+> caratteri: riparte a metà riga ed esegue i commenti come comandi
+> («"MyMoney" non è riconosciuto…»). Nei due file c'è scritto, e il `chcp` è
+> stato tolto.
+
+**Restano:** la PWA in `pwa/` — ha una sua copia dei dati nel telefono e si
+allinea via Drive, quindi è un terzo insieme che diverge; nel suo README c'è
+l'avviso — e il codice del sync a specchio, da mandare in soffitta.
+
 ---
 
 ## 6. Costi
