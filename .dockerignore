@@ -39,6 +39,5 @@ docs/
 *.md
 !app/README.md
 
-# Il guscio PWA: con il cloud come unica verità non lo serviamo più da qui
-pwa/
+# I riferimenti di design: servono a chi scrive il codice, non al server
 design_reference/

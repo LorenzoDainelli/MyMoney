@@ -8,9 +8,14 @@ ordine, e — soprattutto — le cose che si romperebbero se le ignorassimo.
 
 ---
 
-## 0. Com'è fatto oggi (e perché conta)
+## 0. Com'era prima di questo piano (e perché conta)
 
-Non c'è "l'app": ci sono **tre pezzi** che si parlano attraverso Google Drive.
+> Al 09/08/2026 **niente di questo esiste più**: il piano è arrivato in fondo, e
+> i tre pezzi qui sotto sono diventati uno solo. Questa sezione resta perché
+> senza sapere da dove si partiva non si capisce perché le fasi sono in
+> quest'ordine.
+
+Non c'era "l'app": c'erano **tre pezzi** che si parlavano attraverso Google Drive.
 
 1. **L'app sul PC** — FastAPI + SQLite (`app/`). È quella completa: finanze,
    portafoglio, agente AI, notizie. Ascolta solo su `127.0.0.1`, quindi la vede
@@ -304,11 +309,14 @@ richiedeva questo.** Verificato sui dati veri: 95 movimenti scaricati e
 rimessi dentro, somma degli importi identica al decimillesimo (12953,5186), 22
 legami fra spese e righe generate ritrovati, saveback ancora a quattro decimali.
 
-**Resta solo la cartella `pwa/`.** Il server non la serve più (via il mount
-`/pwa`), ma i file sono ancora nel repo e Cloudflare Pages li pubblica. Va
-cancellata **dopo** che Lorenzo ha aperto la PWA sul telefono un'ultima volta e
-ha controllato che non ci sia rimasto niente: toglierla rompe la pubblicazione, e
-da lì in poi quella copia non si aprirebbe più per recuperare nulla.
+**E la PWA.** Lorenzo l'ha aperta un'ultima volta sul telefono, ha controllato che
+non ci fosse rimasto dentro niente, e la cartella `pwa/` è stata cancellata
+(156 KB, 11 file). Il mount `/pwa` era già sparito dal server. Il codice non è
+perso: `git checkout 3963fd0 -- pwa/` lo riporta indietro.
+
+Da fare **fuori dal repo**, sul suo account: eliminare il progetto su Cloudflare
+Pages e togliere l'icona vecchia dalla schermata Home del telefono (adesso punta
+a un indirizzo che non risponde più).
 
 ---
 
