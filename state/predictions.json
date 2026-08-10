@@ -8545,6 +8545,278 @@
       "inviata": true,
       "titolo": "Meta introduce nuovi incentivi per gli utenti paganti: strumenti per far crescere audience e follower",
       "url": "https://finnhub.io/api/news?id=f7dde7c6e3b1932bdbe16ff7d04382190290b94df96d9eae312905aa0f6588f5"
+    },
+    {
+      "id": "intel-emissione-15b",
+      "ticker": "INTC",
+      "data": "2026-08-10",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 78,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Intel lancia un'emissione azionaria da 15 miliardi di dollari per finanziare la fonderia AI, titolo -4,5%",
+      "url": "https://finnhub.io/api/news?id=6cf68e61d058bf31c383e7c079d01519dd2e82bc933a9a7d3e13ac8a2bc44ddc"
+    },
+    {
+      "id": "jnj-fda-ottava",
+      "ticker": "JNJ",
+      "data": "2026-08-10",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 75,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La FDA approva il robot chirurgico Ottava di J&J: Johnson & Johnson entra nel mercato della chirurgia robotica soft-tissue",
+      "url": "https://finnhub.io/api/news?id=c8b0be6128448ed6517a29d353ee86a9af7c0598f9d11c7fcacb0a597f3ab561"
+    },
+    {
+      "id": "msft-maia300-nvda",
+      "ticker": "NVDA",
+      "data": "2026-08-10",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 74,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Microsoft accelera il chip AI Maia 300 e porta la produzione da TSMC: segnale di disintermediazione per NVIDIA",
+      "url": "https://finnhub.io/api/news?id=d7235609f83a06ff23cb0f98ffbb59aa104566916b7ab03f58ea08b084bb2ae3"
+    },
+    {
+      "id": "aapl-jefferies-downgrade",
+      "ticker": "AAPL",
+      "data": "2026-08-10",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Jefferies declassa Apple a Underperform: il piano iPhone tutto in vetro incontra ostacoli produttivi, titolo -2,2%",
+      "url": "https://finnhub.io/api/news?id=7077c2709fd71e42853711467d121692efa347a12f4c15a2e12fea83aeeeb2ec"
+    },
+    {
+      "id": "sndk-wdc-jpm-memoria-2anni",
+      "ticker": "SNDK",
+      "data": "2026-08-10",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "JPMorgan avverte: la carenza di chip di memoria potrebbe durare altri due anni",
+      "url": "https://finnhub.io/api/news?id=60e80a3422931a02e8b8c642a968d5f4571becd13efae605837f153f31993d8b"
+    },
+    {
+      "id": "tsm-sony-sensori-6b",
+      "ticker": "TSM",
+      "data": "2026-08-10",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 70,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Sony e TSMC pianificano una fabbrica da 6,3 miliardi di dollari in Giappone per i sensori camera di iPhone e l'AI fisica",
+      "url": "https://finnhub.io/api/news?id=d1320d0cc63935097e9dd132dc9dc3e535639ad69c1b240ec2929b7ee9658427"
+    },
+    {
+      "id": "asml-tsm-revenue-luglio-45",
+      "ticker": "ASML",
+      "data": "2026-08-10",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 68,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "TSMC: ricavi di luglio +45% su base annua, le azioni dei produttori di attrezzature per chip salgono",
+      "url": "https://finnhub.io/api/news?id=7a1523e75fffdf22d5321a7c1c3b833bf3e178f66d51874e041d9876954ad566"
+    },
+    {
+      "id": "nvda-lancium-stargate-3b",
+      "ticker": "NVDA",
+      "data": "2026-08-10",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "NVIDIA investe fino a 3 miliardi di dollari in Lancium, il primo sito operativo del progetto Stargate",
+      "url": "https://finnhub.io/api/news?id=259e4639219df0b720556b00ff19e8c4dfe014935b296e6be9a0cf6f7ca257fe"
+    },
+    {
+      "id": "meta-manifesto-ai",
+      "ticker": "META",
+      "data": "2026-08-10",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Zuckerberg pubblica un manifesto sull'AI aperta e critica i concorrenti per la concentrazione del potere",
+      "url": "https://finnhub.io/api/news?id=78a402b837b7ccd836158e5b5fd1ec1d54d9ce48bd37ae8147db929fb26ffee0"
+    },
+    {
+      "id": "goog-capex-205b",
+      "ticker": "GOOG",
+      "data": "2026-08-10",
+      "tipo_evento": "revisione guidance",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Alphabet alza le previsioni di capex AI 2026 a 205 miliardi di dollari",
+      "url": "https://finnhub.io/api/news?id=5b1bf41cefd0322176926e3ba3b4ee928b28ddb1e44421b329ec53cfe5f3bea1"
+    },
+    {
+      "id": "nflx-analisti-40pct-upside",
+      "ticker": "NFLX",
+      "data": "2026-08-10",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Analisti vedono il 40% di upside in Netflix dopo il calo prolungato",
+      "url": "https://finnhub.io/api/news?id=a1b832ebcbf59f330922e8dbe81dd579d19386fca2491d75f2046c071f8b6435"
+    },
+    {
+      "id": "wdc-hdd-industria-30b",
+      "ticker": "WDC",
+      "data": "2026-08-10",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "I ricavi dell'industria HDD potrebbero superare i 30 miliardi di dollari nel 2026 grazie alla domanda AI",
+      "url": "https://finnhub.io/api/news?id=2c983d5a4971e3940eca675f5b6e56064cabd843a580eea19b74308e1fa53a22"
+    },
+    {
+      "id": "wmt-sales-spese-deleverage",
+      "ticker": "WMT",
+      "data": "2026-08-10",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Walmart: vendite USA +4,5% ma le spese crescono più in fretta e comprimono i margini",
+      "url": "https://finnhub.io/api/news?id=88bbffe87a97ca98878792353d5a37b0fc549f83d9e6b16a5ad8c6a9d0daeb1d"
+    },
+    {
+      "id": "sndk-rischi-primari",
+      "ticker": "SNDK",
+      "data": "2026-08-10",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Due rischi primari per SanDisk: minacce convergenti mettono a rischio il rally post-spinoff",
+      "url": "https://finnhub.io/api/news?id=6ca033528cca75ae6b4351c3804c48f888913eac70e0e08675458146a7692cad"
+    },
+    {
+      "id": "ko-celsius-acquisizione",
+      "ticker": "KO",
+      "data": "2026-08-10",
+      "tipo_evento": "M&A",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "I giganti delle bevande, inclusa Coca-Cola, circolano intorno a Celsius Holdings come potenziale acquisizione",
+      "url": "https://finnhub.io/api/news?id=53092f45f71097fb1e008b577501f5dfbab42ed33e0514deb00ca5e3c35e4059"
+    },
+    {
+      "id": "amgn-guggenheim-target-388",
+      "ticker": "AMGN",
+      "data": "2026-08-10",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "Guggenheim mantiene Neutral su Amgen ma alza il target di prezzo a 388 dollari",
+      "url": "https://finnhub.io/api/news?id=60a9a79aa089eb5e9afc933632c55786dea91f6b58129376974cbbca45c8b823"
     }
   ]
 }

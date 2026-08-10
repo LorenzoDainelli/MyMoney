@@ -2495,6 +2495,86 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=f7dde7c6e3b1932bdbe16ff7d04382190290b94df96d9eae312905aa0f6588f5",
       "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "intel-emissione-15b",
+      "ticker": "INTC",
+      "titolo": "Intel lancia un'emissione azionaria da 15 miliardi di dollari per finanziare la fonderia AI, titolo -4,5%",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=6cf68e61d058bf31c383e7c079d01519dd2e82bc933a9a7d3e13ac8a2bc44ddc",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "jnj-fda-ottava",
+      "ticker": "JNJ",
+      "titolo": "La FDA approva il robot chirurgico Ottava di J&J: Johnson & Johnson entra nel mercato della chirurgia robotica soft-tissue",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=c8b0be6128448ed6517a29d353ee86a9af7c0598f9d11c7fcacb0a597f3ab561",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "msft-maia300-nvda",
+      "ticker": "NVDA",
+      "titolo": "Microsoft accelera il chip AI Maia 300 e porta la produzione da TSMC: segnale di disintermediazione per NVIDIA",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=d7235609f83a06ff23cb0f98ffbb59aa104566916b7ab03f58ea08b084bb2ae3",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "aapl-jefferies-downgrade",
+      "ticker": "AAPL",
+      "titolo": "Jefferies declassa Apple a Underperform: il piano iPhone tutto in vetro incontra ostacoli produttivi, titolo -2,2%",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=7077c2709fd71e42853711467d121692efa347a12f4c15a2e12fea83aeeeb2ec",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "sndk-wdc-jpm-memoria-2anni",
+      "ticker": "SNDK",
+      "titolo": "JPMorgan avverte: la carenza di chip di memoria potrebbe durare altri due anni",
+      "tipo_evento": "macro tematica",
+      "url": "https://finnhub.io/api/news?id=60e80a3422931a02e8b8c642a968d5f4571becd13efae605837f153f31993d8b",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "tsm-sony-sensori-6b",
+      "ticker": "TSM",
+      "titolo": "Sony e TSMC pianificano una fabbrica da 6,3 miliardi di dollari in Giappone per i sensori camera di iPhone e l'AI fisica",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=d1320d0cc63935097e9dd132dc9dc3e535639ad69c1b240ec2929b7ee9658427",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "asml-tsm-revenue-luglio-45",
+      "ticker": "ASML",
+      "titolo": "TSMC: ricavi di luglio +45% su base annua, le azioni dei produttori di attrezzature per chip salgono",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=7a1523e75fffdf22d5321a7c1c3b833bf3e178f66d51874e041d9876954ad566",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "nvda-lancium-stargate-3b",
+      "ticker": "NVDA",
+      "titolo": "NVIDIA investe fino a 3 miliardi di dollari in Lancium, il primo sito operativo del progetto Stargate",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=259e4639219df0b720556b00ff19e8c4dfe014935b296e6be9a0cf6f7ca257fe",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "meta-manifesto-ai",
+      "ticker": "META",
+      "titolo": "Zuckerberg pubblica un manifesto sull'AI aperta e critica i concorrenti per la concentrazione del potere",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=78a402b837b7ccd836158e5b5fd1ec1d54d9ce48bd37ae8147db929fb26ffee0",
+      "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "goog-capex-205b",
+      "ticker": "GOOG",
+      "titolo": "Alphabet alza le previsioni di capex AI 2026 a 205 miliardi di dollari",
+      "tipo_evento": "revisione guidance",
+      "url": "https://finnhub.io/api/news?id=5b1bf41cefd0322176926e3ba3b4ee928b28ddb1e44421b329ec53cfe5f3bea1",
+      "data_invio": "2026-08-10T17:03:00+00:00"
     }
   ]
 }
