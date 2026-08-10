@@ -8409,6 +8409,142 @@
       "inviata": true,
       "titolo": "Bloomberg rivela i dettagli del dispositivo portatile di OpenAI: potenziale sfida per Apple e Meta nell'hardware AI consumer",
       "url": "https://finnhub.io/api/news?id=967b3561fa5591a1d7f13cbe22cde31fcb1b8768dd740d10fb82ee3df7fce16b"
+    },
+    {
+      "id": "aapl-ceo-ternus-2026-08-10",
+      "ticker": "AAPL",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 70,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple cambia CEO: John Ternus prende il posto di Tim Cook, mentre i prezzi della memoria erodono i margini",
+      "url": "https://finnhub.io/api/news?id=5a14bc7f4d27941a03532c537133b62a0a6ad90d592e3f4a49cd690b7952a7b3"
+    },
+    {
+      "id": "asml-lithography-rival-400m-2026-08-10",
+      "ticker": "ASML",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Una startup da 400 milioni di dollari sfida il monopolio di ASML nelle macchine per chip",
+      "url": "https://finnhub.io/api/news?id=8f578fc7f04b92299ab0a56a73cf97779ae3b412d4edf939c6a19f0952f29970"
+    },
+    {
+      "id": "pltr-q2-earnings-analyst-picks-2026-08-10",
+      "ticker": "PLTR",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Palantir: trimestrale superiore alle attese, tre grandi banche la scelgono come titolo AI preferito con target a 255 dollari",
+      "url": "https://finnhub.io/api/news?id=430b8af128c0c7e986ebabd2d830669153ec4475c6a641bccdbe70a743e66214"
+    },
+    {
+      "id": "spcx-moon-capex-risk-2026-08-10",
+      "ticker": "SPCX",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SpaceX avrebbe toccato la luna, ma post-IPO pesano 400 miliardi di capex previsto e rischio diluizione azionaria",
+      "url": "https://finnhub.io/api/news?id=cbf887a218504f386eeafb42ea7724e547dd26c0a1391b510b8f1131cfb2e041"
+    },
+    {
+      "id": "lly-amzn-glp1-medicare-50-2026-08-10",
+      "ticker": "LLY",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amazon Pharmacy lancia i farmaci dimagranti GLP-1 a 50 dollari al mese per i pazienti Medicare: pressione competitiva su Eli Lilly",
+      "url": "https://finnhub.io/api/news?id=94d82dbdbb2621fa343f905b14fe0424c0b1ea9ae83a9c6b0f3d10e720e2dcad"
+    },
+    {
+      "id": "intc-foundry-security-client-2026-08-10",
+      "ticker": "INTC",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Intel Foundry si aggiudica un grande cliente nella sicurezza informatica per la produzione di chip specializzati",
+      "url": "https://finnhub.io/api/news?id=d0d661e2986f7307738c5f1bbfd29de0a7f934070f636c19c9eaf3eed6735395"
+    },
+    {
+      "id": "orcl-google-gemini-2026-08-10",
+      "ticker": "ORCL",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Oracle integra i modelli Gemini di Google Cloud nelle sue applicazioni aziendali",
+      "url": "https://finnhub.io/api/news?id=23eb7fb887b8ec2f023f4ab7b092da160a1991d243987fdcecfbc40490dabfa8"
+    },
+    {
+      "id": "meta-paid-incentives-2026-08-10",
+      "ticker": "META",
+      "data": "2026-08-10T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Meta introduce nuovi incentivi per gli utenti paganti: strumenti per far crescere audience e follower",
+      "url": "https://finnhub.io/api/news?id=f7dde7c6e3b1932bdbe16ff7d04382190290b94df96d9eae312905aa0f6588f5"
     }
   ]
 }

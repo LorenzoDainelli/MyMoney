@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "meta-nvda-chip-ai-proprietario",
-      "ticker": "META",
-      "titolo": "Meta pianifica la produzione di un chip AI proprietario: NVIDIA regge",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=e26ad5566c55bb6902d2c5b7df0b6f02f1ff6f6a9543db3d70a69cb0abf12a6f",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "jnj-q2-earnings-preview",
-      "ticker": "JNJ",
-      "titolo": "Johnson & Johnson: attesa per i risultati Q2 con stime degli analisti in chiaroscuro",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=1f52f873241b901f657ddaf086aba8d0e482b06569ce93acf95f3cf49f028cd7",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "ttwo-russell-value-rimossa",
-      "ticker": "TTWO",
-      "titolo": "Take-Two rimossa dagli indici Russell Value: pressione istituzionale sulle azioni",
-      "tipo_evento": "ribilanciamento/cambio indice",
-      "url": "https://finnhub.io/api/news?id=ff122b9449bb9c899cbf312a9adf49fbf71fb6c1051caa1a8eeab4f417041462",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "intc-margini-200b-capex",
-      "ticker": "INTC",
-      "titolo": "Intel: margini operativi in ripresa grazie all'AI PC e Xeon, ma il piano da $200 miliardi resta sotto esame",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=07e1f88f08be4725cf3accd7457da65bed13bc00d60602031be2981482122857",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "cina-ban-elio-semiconduttori",
-      "ticker": "ASML",
-      "titolo": "La Cina vieta temporaneamente l'export di elio: potenziale impatto sulla filiera dei semiconduttori",
-      "tipo_evento": "macro",
-      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNc3JNM3pfZEJxTV9oX1JMNXdpSzJ5a2NvTFBNZXBHUWpLMnEyM3BqYjNEcDg0WGZsZGhSaktsODR1di1NbU56SzJRZ2NmcXloY3p1MURESl8xS3NFTDRaYkFLZ3VLQU40X0Rwb0V1amJPRE1BVmdLZmJEc29YVjB0d1FQTFgzZWFSekwxRzE0aDFaeDlUZWlsNkpUcUNuNWM?oc=5",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "ko-q2-earnings-preview",
-      "ticker": "KO",
-      "titolo": "Coca-Cola si avvicina alla trimestrale Q2 con domanda resiliente: Jefferies e altri analisti ottimisti",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=9a1927650b0807ddbebd7fea1b66c6704a77709b7f095c518ab7722468b4bed0",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "wdc-analyst-target-hike-hamr",
-      "ticker": "WDC",
-      "titolo": "Western Digital: target price alzato dagli analisti, spinta dall'AI grazie alla tecnologia HAMR e nuovi accordi",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=07f0688fa1c9c27e5180c0e973e21c0eb0de0b87b03aba67dfc5ade40604f8e7",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "ibm-susquehanna-neutral",
-      "ticker": "IBM",
-      "titolo": "IBM: Susquehanna avvia la copertura con Neutral — tanti pregi, ma valutazione già piena",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=c329cdb2be35ddde6e443a8d9cd6ff0e9a9daae1a998c4ab63909a6969a715e2",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "orcl-msft-uk-cloud-regolatorio",
-      "ticker": "ORCL",
-      "titolo": "Il UK classifica i grandi cloud provider come infrastruttura critica finanziaria: nuovi obblighi in arrivo",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=fa0c21d42bfe5bc6337749b03983021cd357225f4990a4ff94bdf7abd7bfd6e6",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
-      "id": "pltr-gnp-seguros-latam",
-      "ticker": "PLTR",
-      "titolo": "Palantir conquista il primo cliente commerciale in America Latina: accordo pluriennale con GNP Seguros",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=21195e042b1fa1e0b65b9084eb2476ff96532cde91f60f8faacc0d0705d8249a",
-      "data_invio": "2026-07-10T17:30:00+00:00"
-    },
-    {
       "id": "aapl-openai-lawsuit-2026-07-13",
       "ticker": "AAPL",
       "titolo": "Apple avvia causa contro OpenAI per furto di segreti commerciali sull'AI hardware",
@@ -2511,6 +2431,70 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=967b3561fa5591a1d7f13cbe22cde31fcb1b8768dd740d10fb82ee3df7fce16b",
       "data_invio": "2026-08-07T17:10:00+00:00"
+    },
+    {
+      "id": "aapl-ceo-ternus-2026-08-10",
+      "ticker": "AAPL",
+      "titolo": "Apple cambia CEO: John Ternus prende il posto di Tim Cook, mentre i prezzi della memoria erodono i margini",
+      "tipo_evento": "cambio CEO/management",
+      "url": "https://finnhub.io/api/news?id=5a14bc7f4d27941a03532c537133b62a0a6ad90d592e3f4a49cd690b7952a7b3",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "asml-lithography-rival-400m-2026-08-10",
+      "ticker": "ASML",
+      "titolo": "Una startup da 400 milioni di dollari sfida il monopolio di ASML nelle macchine per chip",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=8f578fc7f04b92299ab0a56a73cf97779ae3b412d4edf939c6a19f0952f29970",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-q2-earnings-analyst-picks-2026-08-10",
+      "ticker": "PLTR",
+      "titolo": "Palantir: trimestrale superiore alle attese, tre grandi banche la scelgono come titolo AI preferito con target a 255 dollari",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=430b8af128c0c7e986ebabd2d830669153ec4475c6a641bccdbe70a743e66214",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "spcx-moon-capex-risk-2026-08-10",
+      "ticker": "SPCX",
+      "titolo": "SpaceX avrebbe toccato la luna, ma post-IPO pesano 400 miliardi di capex previsto e rischio diluizione azionaria",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=cbf887a218504f386eeafb42ea7724e547dd26c0a1391b510b8f1131cfb2e041",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "lly-amzn-glp1-medicare-50-2026-08-10",
+      "ticker": "LLY",
+      "titolo": "Amazon Pharmacy lancia i farmaci dimagranti GLP-1 a 50 dollari al mese per i pazienti Medicare: pressione competitiva su Eli Lilly",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=94d82dbdbb2621fa343f905b14fe0424c0b1ea9ae83a9c6b0f3d10e720e2dcad",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "intc-foundry-security-client-2026-08-10",
+      "ticker": "INTC",
+      "titolo": "Intel Foundry si aggiudica un grande cliente nella sicurezza informatica per la produzione di chip specializzati",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=d0d661e2986f7307738c5f1bbfd29de0a7f934070f636c19c9eaf3eed6735395",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-google-gemini-2026-08-10",
+      "ticker": "ORCL",
+      "titolo": "Oracle integra i modelli Gemini di Google Cloud nelle sue applicazioni aziendali",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=23eb7fb887b8ec2f023f4ab7b092da160a1991d243987fdcecfbc40490dabfa8",
+      "data_invio": "2026-08-10T05:10:00+00:00"
+    },
+    {
+      "id": "meta-paid-incentives-2026-08-10",
+      "ticker": "META",
+      "titolo": "Meta introduce nuovi incentivi per gli utenti paganti: strumenti per far crescere audience e follower",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=f7dde7c6e3b1932bdbe16ff7d04382190290b94df96d9eae312905aa0f6588f5",
+      "data_invio": "2026-08-10T05:10:00+00:00"
     }
   ]
 }
