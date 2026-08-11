@@ -2575,6 +2575,78 @@
       "tipo_evento": "revisione guidance",
       "url": "https://finnhub.io/api/news?id=5b1bf41cefd0322176926e3ba3b4ee928b28ddb1e44421b329ec53cfe5f3bea1",
       "data_invio": "2026-08-10T17:03:00+00:00"
+    },
+    {
+      "id": "nvda-fondo-500b-ai-infrastrutture",
+      "ticker": "NVDA",
+      "titolo": "Nvidia lancia un fondo da 500 miliardi di dollari per le infrastrutture AI con le grandi banche d'investimento",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f3a23cc1f7d6937f332dea64a5ac88a72d2ed4677b33bca2ab7a2aae93a5fce2",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "wdc-17pct-down-earnings",
+      "ticker": "WDC",
+      "titolo": "Western Digital perde il 17,6% dopo risultati record: il mercato vende sull'attesa",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=d9564212ef54f3f24ec2d330efe247fbc572fba77e7e5c8f2e53105ab8dcc83f",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "nflx-upfront-ad-raddoppio",
+      "ticker": "NFLX",
+      "titolo": "Netflix quasi raddoppia gli impegni pubblicitari per il 2026-27: il motore advertising è acceso",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=68b68641fc11ab53483163216425cea9074eb2782aace478987d29488afaef57",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "jpm-sp500-target-8000",
+      "ticker": "JPM",
+      "titolo": "JPMorgan alza il target S&P 500 a fine 2026 a 8.000 punti sulla forza degli utili AI",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=33cc1e557a329b2c4f9e4c1012f7956483595d03a28c40cac09a742634571123",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "tsm-capex-64b-2026",
+      "ticker": "TSM",
+      "titolo": "TSMC stanzia fino a 64 miliardi di dollari di investimenti nel 2026: espansione record",
+      "tipo_evento": "revisione guidance",
+      "url": "https://finnhub.io/api/news?id=fb65c8acb8a41ed558cbcde544d495faee06087f5950962969b8793a8ceeb771",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "nukl-oklo-criticita-deep-fission",
+      "ticker": "NUKL",
+      "titolo": "Il settore nucleare avanza: primo reattore di Oklo critico, Deep Fission ottiene l'approvazione del design",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.ans.org/news/2026-08-06/article-8226/industry-updateaugust-2026/",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "pltr-burry-nuove-put",
+      "ticker": "PLTR",
+      "titolo": "Michael Burry scommette contro Palantir: nuove put malgrado il rally AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f6e808a5c2a3a8662167c318bea15d0ecc65a47ebb68e5246616db7fea8f5bbc",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "ssnlf-samsung-netlist-patent-200m",
+      "ticker": "SSNLF",
+      "titolo": "Samsung risolve la disputa brevettuale con Netlist: accordo da $200 milioni e fornitura DRAM/NAND per 5 anni",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=ac6ef3a192e7d248d0e6bd335e4cbb591e45deb79f6d1b52a5e4d9784a5d6a70",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "meta-ai-costi-energia-acqua",
+      "ticker": "META",
+      "titolo": "Meta: i data center AI si scontrano con i costi di energia e acqua in rapida crescita",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=1bbd2da411dda1566f4e87e4324c619d56aef2e74baf782aaeb11c7b826ea235",
+      "data_invio": "2026-08-11T05:13:58.904552+00:00"
     }
   ]
 }
