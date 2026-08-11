@@ -2647,6 +2647,86 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=1bbd2da411dda1566f4e87e4324c619d56aef2e74baf782aaeb11c7b826ea235",
       "data_invio": "2026-08-11T05:13:58.904552+00:00"
+    },
+    {
+      "id": "meta-goog-lawsuits-3000-2026-08-11",
+      "ticker": "META",
+      "titolo": "Tribunale USA dà il via libera a oltre 3.000 cause contro Meta, Google, TikTok e Snap per dipendenza delle piattaforme sui minori",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=58988733d04deb8eae00a1bbfda622ed0a2d6cb962329f2464b4589cbe6a3df3",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "shel-redsea-hormuz-2026-08-11",
+      "ticker": "SHEL",
+      "titolo": "Quattro marinai uccisi in attacco nel Mar Rosso, missili nel Golfo: tensione Iran-USA pesa sulle rotte energetiche globali",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPWXg2TDlnMzVlaTc1d1hoaFVFTG91b29XZzlBMC1hNGZ1REtpdDlTLXZFcGF5Mjg0N1ZvaVpSZlpEYkR6TUM1Mktja1k2TDdIVGlBZHBrMEFGdHNXSFFQV0s0eEY3aHRBcXNxa3FKUkR6Y1RmSVZOS0lwbGVZTVFKX3VUMzU5c2wwZ2VjZ1pqWU1PeDNhb0lOeFlzcDFnN1lS?oc=5",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "ttwo-jpmorgan-overweight-2026-08-11",
+      "ticker": "TTWO",
+      "titolo": "JPMorgan avvia la copertura di Take-Two Interactive con rating Overweight e target a 310 dollari",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=44aa27112a47262b02bff34188e0db283154cd38517814bf6d13431f661db084",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "amzn-zoox-robotaxi-lasvegas-2026-08-11",
+      "ticker": "AMZN",
+      "titolo": "Amazon lancia il servizio di robotaxi a pagamento di Zoox a Las Vegas e chiede una regolamentazione del settore",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=0eeae98792cf1e0f96b584693645a6b9358d956818b85ca5e7d69bb010026299",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "nflx-downgrade-cannibalization-2026-08-11",
+      "ticker": "NFLX",
+      "titolo": "Analista declassa Netflix: mercato streaming saturo e rischio cannibalizzazione sottovalutati",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=45bff1f3afe2c1f0188a0de7a518b47cc492045c6e2481f9666bfba4aa268789",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "ssnlf-dram-shortage-kuo-2026-08-11",
+      "ticker": "SSNLF",
+      "titolo": "Ming-Chi Kuo smentisce la storia dei chip Apple bloccati da TSMC, ma conferma: la carenza di DRAM è reale",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=6b9354b51001604cccd0b8ea3ad75c57176d834e3c33663a9b4e2a8a7dec35cd",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "ko-alltime-high-valuation-2026-08-11",
+      "ticker": "KO",
+      "titolo": "Coca-Cola tocca nuovi massimi storici: le azioni sono diventate troppo care a 26 volte gli utili?",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2adbca2c439be6f4f63a470017eefe7f65a6b302a081486fb8276f9db7f5ee2d",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "jnj-q2-earnings-2026-08-11",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson chiude il secondo trimestre con vendite in crescita del 6,6%: meglio posizionata di Medtronic",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=e1475054062b34cd1e579db6e30f51d53ff66584d8bd4898bca58b1dd1f00b49",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "jpm-klarna-payments-2026-08-11",
+      "ticker": "JPM",
+      "titolo": "Klarna integra per la prima volta J.P. Morgan Payments negli USA: nuovo tassello nella strategia fintech di JPMorgan",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=04d250b0ef84642e8701b84388ce37d29b8cbec244a7d873db4168d0d1b331dd",
+      "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "goog-abbott-health-2026-08-11",
+      "ticker": "GOOG",
+      "titolo": "Google Health si allea con Abbott: l'AI di Google interpreta i dati glicemici del biowearable Lingo",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=8e3ec80fd74ce35e77aac90235b0e7d528c318608293f82275d21fffb259acf7",
+      "data_invio": "2026-08-11T17:10:00+00:00"
     }
   ]
 }

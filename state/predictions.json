@@ -8970,6 +8970,193 @@
       "inviata": true,
       "titolo": "Meta: i data center AI si scontrano con i costi di energia e acqua in rapida crescita",
       "url": "https://finnhub.io/api/news?id=1bbd2da411dda1566f4e87e4324c619d56aef2e74baf782aaeb11c7b826ea235"
+    },
+    {
+      "id": "meta-goog-lawsuits-3000-2026-08-11",
+      "ticker": "META",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Tribunale USA dà il via libera a oltre 3.000 cause contro Meta, Google, TikTok e Snap per dipendenza delle piattaforme sui minori",
+      "url": "https://finnhub.io/api/news?id=58988733d04deb8eae00a1bbfda622ed0a2d6cb962329f2464b4589cbe6a3df3"
+    },
+    {
+      "id": "shel-redsea-hormuz-2026-08-11",
+      "ticker": "SHEL",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Quattro marinai uccisi in attacco nel Mar Rosso, missili nel Golfo: tensione Iran-USA pesa sulle rotte energetiche globali",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPWXg2TDlnMzVlaTc1d1hoaFVFTG91b29XZzlBMC1hNGZ1REtpdDlTLXZFcGF5Mjg0N1ZvaVpSZlpEYkR6TUM1Mktja1k2TDdIVGlBZHBrMEFGdHNXSFFQV0s0eEY3aHRBcXNxa3FKUkR6Y1RmSVZOS0lwbGVZTVFKX3VUMzU5c2wwZ2VjZ1pqWU1PeDNhb0lOeFlzcDFnN1lS?oc=5"
+    },
+    {
+      "id": "ttwo-jpmorgan-overweight-2026-08-11",
+      "ticker": "TTWO",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "JPMorgan avvia la copertura di Take-Two Interactive con rating Overweight e target a 310 dollari",
+      "url": "https://finnhub.io/api/news?id=44aa27112a47262b02bff34188e0db283154cd38517814bf6d13431f661db084"
+    },
+    {
+      "id": "amzn-zoox-robotaxi-lasvegas-2026-08-11",
+      "ticker": "AMZN",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amazon lancia il servizio di robotaxi a pagamento di Zoox a Las Vegas e chiede una regolamentazione del settore",
+      "url": "https://finnhub.io/api/news?id=0eeae98792cf1e0f96b584693645a6b9358d956818b85ca5e7d69bb010026299"
+    },
+    {
+      "id": "nflx-downgrade-cannibalization-2026-08-11",
+      "ticker": "NFLX",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Analista declassa Netflix: mercato streaming saturo e rischio cannibalizzazione sottovalutati",
+      "url": "https://finnhub.io/api/news?id=45bff1f3afe2c1f0188a0de7a518b47cc492045c6e2481f9666bfba4aa268789"
+    },
+    {
+      "id": "ssnlf-dram-shortage-kuo-2026-08-11",
+      "ticker": "SSNLF",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Ming-Chi Kuo smentisce la storia dei chip Apple bloccati da TSMC, ma conferma: la carenza di DRAM è reale",
+      "url": "https://finnhub.io/api/news?id=6b9354b51001604cccd0b8ea3ad75c57176d834e3c33663a9b4e2a8a7dec35cd"
+    },
+    {
+      "id": "ko-alltime-high-valuation-2026-08-11",
+      "ticker": "KO",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Coca-Cola tocca nuovi massimi storici: le azioni sono diventate troppo care a 26 volte gli utili?",
+      "url": "https://finnhub.io/api/news?id=2adbca2c439be6f4f63a470017eefe7f65a6b302a081486fb8276f9db7f5ee2d"
+    },
+    {
+      "id": "jnj-q2-earnings-2026-08-11",
+      "ticker": "JNJ",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Johnson & Johnson chiude il secondo trimestre con vendite in crescita del 6,6%: meglio posizionata di Medtronic",
+      "url": "https://finnhub.io/api/news?id=e1475054062b34cd1e579db6e30f51d53ff66584d8bd4898bca58b1dd1f00b49"
+    },
+    {
+      "id": "jpm-klarna-payments-2026-08-11",
+      "ticker": "JPM",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Klarna integra per la prima volta J.P. Morgan Payments negli USA: nuovo tassello nella strategia fintech di JPMorgan",
+      "url": "https://finnhub.io/api/news?id=04d250b0ef84642e8701b84388ce37d29b8cbec244a7d873db4168d0d1b331dd"
+    },
+    {
+      "id": "goog-abbott-health-2026-08-11",
+      "ticker": "GOOG",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 51,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google Health si allea con Abbott: l'AI di Google interpreta i dati glicemici del biowearable Lingo",
+      "url": "https://finnhub.io/api/news?id=8e3ec80fd74ce35e77aac90235b0e7d528c318608293f82275d21fffb259acf7"
+    },
+    {
+      "id": "wmt-mcmillon-fed-2026-08-11",
+      "ticker": "WMT",
+      "data": "2026-08-11T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 51,
+      "descrittivo": false,
+      "inviata": false,
+      "titolo": "L'ex CEO di Walmart Doug McMillon entra nei tavoli dati della Fed: possibili implicazioni per i prezzi al dettaglio",
+      "url": "https://finnhub.io/api/news?id=61a661a1ab0f7888a5bb2cd845b75105847d251b8a055a7d62b79e23bdca2686"
     }
   ]
 }
