@@ -14,6 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import portfolio.wealth as W
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 
 
 def test_le_serie_si_sommano_sulla_griglia_unione():
@@ -87,6 +88,6 @@ def test_senza_storia_il_grafico_non_perde_i_titoli():
     l'hero sopra mostra il patrimonio intero."""
     from datetime import datetime, timedelta
 
-    now = datetime.now()
+    now = tempo.adesso()
     g = W._griglia_piatta("D0", now + timedelta(hours=1), base=120.0)
     assert g and all(v == 120.0 for _, v in g)

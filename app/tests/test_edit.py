@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 from finance.models import Wallet, Transaction, TIPO_USCITA, TIPO_GIRO
 import finance.service as service
 import shared.backup as backup_mod
@@ -57,14 +58,14 @@ def _saldo(Session, wid):
 def test_aggiorna_movimento_inplace(test_db):
     Session = test_db["Session"]
     wid = _wallet(Session, saldo=100.0)
-    service.crea_movimento(TIPO_USCITA, datetime.now(), 30.0, wid,
+    service.crea_movimento(TIPO_USCITA, tempo.adesso(), 30.0, wid,
                            categoria_nome="Spesa", descrizione="vecchia")
     with Session() as db:
         t = db.execute(select(Transaction)).scalar_one()
         tid, uid_before = t.id, t.uid
     assert _saldo(Session, wid) == 70.0
 
-    ok = service.aggiorna_movimento(tid, tipo=TIPO_USCITA, data=datetime.now(),
+    ok = service.aggiorna_movimento(tid, tipo=TIPO_USCITA, data=tempo.adesso(),
                                     importo=50.0, wallet_id=wid,
                                     categoria_nome="Spesa", descrizione="nuova")
     assert ok is True
@@ -127,7 +128,7 @@ def test_aggiorna_giro_senza_spese_non_fa_nulla(test_db):
 def test_dati_modifica_generic(test_db):
     Session = test_db["Session"]
     wid = _wallet(Session)
-    service.crea_movimento(TIPO_USCITA, datetime.now(), 12.34, wid, descrizione="x")
+    service.crea_movimento(TIPO_USCITA, tempo.adesso(), 12.34, wid, descrizione="x")
     with Session() as db:
         tid = db.execute(select(Transaction)).scalar_one().id
     d = service.dati_modifica(tid)

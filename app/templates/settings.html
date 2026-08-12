@@ -135,6 +135,13 @@
       <div class="hint">{{ t('set.ai_provider_hint') }}</div>
     </div>
 
+    {# Scelto Vertex, gira Studio: succede quando il service account non c'è su
+       questa macchina (sul server è voluto — un segreto non viaggia). Detto qui,
+       o la pagina direbbe «Vertex» mentre l'agente parla da un'altra parte. #}
+    {% if ai_ripiegato %}
+      <div class="note warn" style="margin-bottom:12px;">{{ t('set.ai_ripiego') }}</div>
+    {% endif %}
+
     {% if ai_configured %}
       <div class="note ok" style="margin-bottom:12px;">{{ t('set.ai_status_on') }}</div>
     {% elif ai_provider == 'vertex' %}

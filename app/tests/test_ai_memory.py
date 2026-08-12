@@ -15,6 +15,7 @@ from sqlalchemy.orm import sessionmaker
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 import shared.ai_memory as mem
 import shared.ai as ai
 from motore import engine_di_prova
@@ -71,7 +72,7 @@ def test_le_osservazioni_vecchie_scadono(test_db):
     mem.salva_lettura("dashboard", "Vecchia", chiavi=["cat:vecchia:sopra"])
     with test_db() as db:
         riga = db.query(mem.MemoriaAI).first()
-        riga.quando = datetime.now() - timedelta(days=mem.GIORNI_NON_RIPETERE + 3)
+        riga.quando = tempo.adesso() - timedelta(days=mem.GIORNI_NON_RIPETERE + 3)
         db.commit()
     assert mem.chiavi_gia_dette("dashboard") == set()   # oltre la finestra: si può ridire
 

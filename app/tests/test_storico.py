@@ -17,6 +17,7 @@ from sqlalchemy.orm import sessionmaker
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 import shared.storico as S
 from motore import engine_di_prova
 
@@ -72,7 +73,7 @@ def test_se_i_dati_non_ci_sono_non_si_scrive_una_riga_a_zero(monkeypatch):
 def test_il_confronto_separa_i_tuoi_soldi_dal_mercato():
     """Se il portafoglio è salito di 110 € ma tu ne hai versati 100, il mercato
     ha fatto 10: è l'unica scomposizione che risponde a «come sto andando»."""
-    oggi = date.today()
+    oggi = tempo.oggi()
     _scrivi(oggi - timedelta(days=7), investito=200.0, versato=200.0, patrimonio=300.0)
     _scrivi(oggi, investito=310.0, versato=300.0, patrimonio=420.0)
     c = S.confronto(7)
@@ -85,14 +86,14 @@ def test_il_confronto_separa_i_tuoi_soldi_dal_mercato():
 def test_niente_confronto_se_non_c_e_abbastanza_passato():
     """Con un giorno solo in archivio «rispetto a settimana scorsa» non esiste,
     e inventarlo sarebbe esattamente ciò che l'app non deve fare."""
-    _scrivi(date.today(), investito=100.0)
+    _scrivi(tempo.oggi(), investito=100.0)
     assert S.confronto(7) is None
 
 
 def test_il_confronto_usa_la_riga_piu_vicina_e_dice_quanti_giorni_sono():
     """Se non apri l'app tutti i giorni, il confronto resta possibile ma deve
     dichiarare l'intervallo VERO, non fingere che siano 7 giorni."""
-    oggi = date.today()
+    oggi = tempo.oggi()
     _scrivi(oggi - timedelta(days=20), investito=100.0, versato=100.0)
     _scrivi(oggi - timedelta(days=11), investito=150.0, versato=140.0)
     _scrivi(oggi, investito=200.0, versato=180.0)
@@ -102,7 +103,7 @@ def test_il_confronto_usa_la_riga_piu_vicina_e_dice_quanti_giorni_sono():
 
 
 def test_la_serie_e_in_ordine_e_taglia_il_troppo_vecchio():
-    oggi = date.today()
+    oggi = tempo.oggi()
     for k in (100, 30, 2, 0):
         _scrivi(oggi - timedelta(days=k), investito=float(k))
     date_serie = [g["data"] for g in S.serie(60)]

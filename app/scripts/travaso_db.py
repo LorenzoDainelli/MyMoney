@@ -74,7 +74,16 @@ IMPOSTAZIONI_CHE_VIAGGIANO = frozenset({
     "ui_theme", "ui_lang", "ui_anim",
     # dove sei: decide la data dei movimenti e ogni orario mostrato
     "fuso_orario",
-    # come è configurato l'agente — sono scelte, non chiavi
+    # come è configurato l'agente — sono scelte, non chiavi.
+    #
+    # ATTENZIONE, qui c'è una trappola già scattata per davvero (08/08/2026):
+    # `ai_provider` viaggia, `vertex_service_account_json` no — è un segreto, e
+    # sta nell'elenco qui sotto. Di là restava scritto «vertex» senza il modo di
+    # parlarci: l'agente era spento IN SILENZIO, con le vecchie letture ancora
+    # sulle pagine a far sembrare tutto normale. **Una scelta può viaggiare dove
+    # la sua chiave non può.** Continua a viaggiare (è una preferenza, come
+    # `ai_mode`), ma adesso `ai.get_provider()` se ne accorge e ripiega su
+    # Studio, e le Impostazioni lo dicono invece di tacere.
     "ai_mode", "ai_provider", "gemini_model",
     "vertex_model", "vertex_project", "vertex_location",
     # quello che l'agente ha già scritto: si rigenera, ma perderlo vorrebbe dire

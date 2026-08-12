@@ -15,6 +15,7 @@ from sqlalchemy.orm import sessionmaker
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 from portfolio.models import Position, Versamento, VersamentoRiga
 import portfolio.service as pf_service
 import portfolio.versamenti as versamenti
@@ -61,7 +62,7 @@ def _pos(Session, pid):
 def test_riparto_e_accumulo_pmc(test_db):
     Session = test_db
     ids = _seed(Session)
-    vid = versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
     assert vid is not None
 
     a, b, c = _pos(Session, ids["A"]), _pos(Session, ids["B"]), _pos(Session, ids["C"])
@@ -70,7 +71,7 @@ def test_riparto_e_accumulo_pmc(test_db):
     assert (round(a.quantita, 6), round(b.quantita, 6), round(c.quantita, 6)) == (5.0, 3.0, 2.0)
 
     # secondo PAC identico: le quantità si SOMMANO (una sola posizione, PMC)
-    versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
     a2 = _pos(Session, ids["A"])
     assert round(a2.quantita, 6) == 10.0 and a2.versato_totale == 100.0
 
@@ -84,7 +85,7 @@ def test_esclusione_ridistribuisce(test_db):
     Session = test_db
     ids = _seed(Session)
     # escludo Gamma: l'importo si ridistribuisce fra A(50) e B(30) -> 62.5 / 37.5
-    versamenti.salva(100.0, date.today(), "TR", esclusi={ids["C"]})
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi={ids["C"]})
     a, b, c = _pos(Session, ids["A"]), _pos(Session, ids["B"]), _pos(Session, ids["C"])
     assert round(a.versato_totale + b.versato_totale, 2) == 100.0
     assert round(a.versato_totale, 2) == 62.5 and round(b.versato_totale, 2) == 37.5
@@ -101,7 +102,7 @@ def test_totale_esatto_con_arrotondamenti(test_db):
             Position(nome="Z", ticker="Z", pct_target=34.0, ordine=2),
         ])
         db.commit()
-    versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
     with Session() as db:
         tot = sum(p.versato_totale for p in db.execute(select(Position)).scalars())
     assert round(tot, 2) == 100.0
@@ -110,7 +111,7 @@ def test_totale_esatto_con_arrotondamenti(test_db):
 def test_elimina_ripristina(test_db):
     Session = test_db
     ids = _seed(Session)
-    vid = versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
     assert versamenti.elimina(vid) is True
 
     a, b, c = _pos(Session, ids["A"]), _pos(Session, ids["B"]), _pos(Session, ids["C"])
@@ -135,7 +136,7 @@ def test_parse_ora():
 def test_ora_salvata_sul_versamento(test_db):
     Session = test_db
     _seed(Session)
-    vid = versamenti.salva(100.0, date.today(), "TR", esclusi=set(), ora="09:30")
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:30")
     with Session() as db:
         assert db.get(Versamento, vid).ora == "09:30"
     assert versamenti.dettaglio(vid)["ora"] == "09:30"
@@ -181,7 +182,7 @@ def test_un_titolo_a_target_zero_non_prende_niente_dal_pac(test_db):
                         pct_target=0.0, ordine=3))
         db.commit()
 
-    versamenti.salva(100.0, date.today(), "TR", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
     with Session() as db:
         oro = db.execute(select(Position).where(
             Position.isin == "IE00B4ND3602")).scalars().one()
@@ -199,6 +200,6 @@ def test_l_oro_non_entra_nemmeno_nell_anteprima(test_db):
         db.add(Position(nome="Oro", ticker="EGLN", isin="IE00B4ND3602",
                         pct_target=0.0, ordine=3))
         db.commit()
-    a = versamenti.anteprima(100.0, date.today(), esclusi=set())
+    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set())
     assert a["n_inclusi"] == 3
     assert "EGLN" not in [r["ticker"] for r in a["righe"]]

@@ -273,3 +273,57 @@ def test_le_chiavi_che_restituisce_esistono_in_tutte_le_lingue(monkeypatch):
         assert k in i18n.STRINGS, f"chiave assente: {k}"
         for lingua in ("it", "en", "es", "fr", "de", "uk"):
             assert i18n.STRINGS[k].get(lingua), f"{k} manca in {lingua}"
+
+
+# ── la sentinella: nessuno legga l'orologio della macchina ───────────────────
+# Tutto il resto di questo file difende UN punto per volta. Questo difende la
+# REGOLA, e lo fa leggendo il codice invece che eseguendolo: `shared/tempo.py`
+# è l'unico posto autorizzato a chiedere che ore sono, perché è l'unico che
+# passa dal fuso scelto in Impostazioni.
+#
+# Serve perché la regola si dimentica. In produzione era già rispettata; nei
+# test no, e per un motivo che sembrava innocuo — «tanto è una data di prova».
+# Ma il codice sotto test confronta con `tempo.adesso()`, e con l'app impostata
+# su Roma e il PC in Irlanda i due orologi distano un'ora: fra le 23 e
+# mezzanotte `date.today()` e `tempo.oggi()` sono due giorni diversi, e il test
+# falliva a seconda dell'ora in cui lo si lanciava. Un test che fallisce a caso
+# è peggio di un test che manca: insegna a rilanciare invece che a guardare.
+#
+# Guarda l'ALBERO SINTATTICO, non il testo. Prima cercava le due stringhe riga
+# per riga, e il primo colpevole era una frase in italiano dentro una docstring
+# qui sopra, che di orologi ne legge zero. Un controllo che accusa la prosa lo
+# si finisce per zittire, e zittito non difende più niente. Con `ast` restano
+# solo le chiamate vere: commenti, docstring e nomi di variabile non lo toccano.
+
+def test_solo_tempo_py_puo_guardare_l_orologio_della_macchina():
+    import ast
+    from pathlib import Path
+
+    # (oggetto, metodo) delle chiamate che leggono l'orologio di sistema.
+    VIETATE = {("date", "today"), ("datetime", "now")}
+    APP = Path(__file__).resolve().parent.parent
+    ESENTI = {APP / "shared" / "tempo.py"}       # l'unica fonte autorizzata
+
+    colpevoli = []
+    for f in sorted(APP.rglob("*.py")):
+        if f in ESENTI or ".venv" in f.parts or "__pycache__" in f.parts:
+            continue
+        albero = ast.parse(f.read_text(encoding="utf-8"), filename=str(f))
+        for nodo in ast.walk(albero):
+            if not isinstance(nodo, ast.Call):
+                continue
+            fn = nodo.func
+            if not (isinstance(fn, ast.Attribute) and isinstance(fn.value, ast.Name)):
+                continue
+            if (fn.value.id, fn.attr) not in VIETATE:
+                continue
+            # `datetime.now(fuso())` con un fuso ESPLICITO è un'altra cosa: è
+            # quello che fa tempo.adesso(), e non guarda l'orologio di sistema.
+            if nodo.args or nodo.keywords:
+                continue
+            colpevoli.append(f"{f.relative_to(APP)}:{nodo.lineno}  "
+                             f"{fn.value.id}.{fn.attr}()")
+
+    assert not colpevoli, (
+        "l'ora va chiesta a shared/tempo.py (adesso/oggi), non alla macchina:\n"
+        + "\n".join(colpevoli))

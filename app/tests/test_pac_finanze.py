@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 from portfolio.models import Position, Versamento
 from finance.models import Wallet, Transaction, TIPO_TRASFERIMENTO
 import shared.settings_store  # noqa: F401  (registra shared_settings, usata dal sync)
@@ -60,7 +61,7 @@ def _movimenti(Session):
 
 def test_pac_crea_un_solo_trasferimento(test_db):
     Session = test_db
-    vid = versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    vid = versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
 
     movs = _movimenti(Session)
     assert len(movs) == 1
@@ -75,10 +76,10 @@ def test_pac_crea_un_solo_trasferimento(test_db):
 
 def test_modifica_aggiorna_lo_stesso_movimento(test_db):
     Session = test_db
-    vid = versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    vid = versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
     tx_prima = _movimenti(Session)[0].id
 
-    versamenti.salva(150.0, date.today(), "Trade Republic", esclusi=set(), vid=vid)
+    versamenti.salva(150.0, tempo.oggi(), "Trade Republic", esclusi=set(), vid=vid)
     movs = _movimenti(Session)
     assert len(movs) == 1                      # non si duplica
     assert movs[0].id == tx_prima and movs[0].importo == 150.0
@@ -86,14 +87,14 @@ def test_modifica_aggiorna_lo_stesso_movimento(test_db):
 
 def test_elimina_toglie_anche_il_movimento(test_db):
     Session = test_db
-    vid = versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    vid = versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
     assert versamenti.elimina(vid) is True
     assert _movimenti(Session) == []
 
 
 def test_conto_pac_ha_saldo_vivo_dal_portafoglio(test_db, monkeypatch):
     Session = test_db
-    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
 
     # il Portafoglio vale 100,42 € (mercato salito): il conto PAC deve seguirlo,
     # SENZA che nasca un movimento per i 42 centesimi.
@@ -118,7 +119,7 @@ def test_conto_pac_ha_saldo_vivo_dal_portafoglio(test_db, monkeypatch):
 
 def test_senza_prezzi_il_saldo_resta_quello_dei_movimenti(test_db, monkeypatch):
     Session = test_db
-    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
     monkeypatch.setattr(pf_service, "vista_portafoglio",
                         lambda: {"righe": [], "totale": 0.0, "ha_totale": False})
     pac = next(r for r in fin_service.saldi()["righe"]
@@ -142,10 +143,10 @@ def test_il_grafico_e_l_hero_partono_dalla_stessa_liquidita(test_db, monkeypatch
     from datetime import datetime, timedelta
 
     Session = test_db
-    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
     monkeypatch.setattr(pf_service, "vista_portafoglio", _finta_vista(Session))
 
-    domani = datetime.now() + timedelta(days=1)
+    domani = tempo.adesso() + timedelta(days=1)
     assert fin_service.liquidita_alle_date([domani])[0] == fin_service.saldi()["liquido"]
 
 
@@ -155,10 +156,10 @@ def test_senza_prezzi_i_soldi_del_pac_non_spariscono_dal_grafico(test_db, monkey
     che resta di quei soldi, toglierlo li farebbe sparire invece di spostarli."""
     from datetime import datetime, timedelta
 
-    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
     monkeypatch.setattr(pf_service, "vista_portafoglio",
                         lambda: {"righe": [], "totale": 0.0, "ha_totale": False})
-    domani = datetime.now() + timedelta(days=1)
+    domani = tempo.adesso() + timedelta(days=1)
     assert fin_service.liquidita_alle_date([domani])[0] == 0.0   # -100 da TR, +100 sul PAC
 
 
@@ -197,7 +198,7 @@ def test_niente_doppio_conteggio_nel_patrimonio(test_db, monkeypatch):
     """Il conto PAC vale quanto il Portafoglio: nel patrimonio va contato UNA volta.
     'liquido' è la liquidità vera (senza i conti derivati)."""
     Session = test_db
-    versamenti.salva(100.0, date.today(), "Trade Republic", esclusi=set())
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set())
 
     def finta_vista():
         with Session() as db:

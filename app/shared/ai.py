@@ -222,9 +222,44 @@ def forse_rigenera(chiave: str, genera) -> bool:
     return True
 
 
-def get_provider() -> str:
+def provider_scelto() -> str:
+    """Il provider come sta scritto nelle impostazioni: la SCELTA, non l'uso."""
     p = store.get_setting("ai_provider", PROVIDER_STUDIO).strip().lower()
     return p if p in PROVIDERS else PROVIDER_STUDIO
+
+
+def get_provider() -> str:
+    """Il provider che si usa DAVVERO.
+
+    Di norma è quello scelto. C'è un caso in cui i due non coincidono, ed è
+    successo per davvero: **una scelta può viaggiare dove la sua chiave non
+    può**. Il travaso sul server porta `ai_provider` (è una preferenza) ma
+    lascia indietro `vertex_service_account_json` (è un segreto, e un segreto
+    non si mette in un database in rete — vedi scripts/travaso_db.py). Di là
+    restava quindi scritto «vertex» senza il modo di parlarci: `is_configured()`
+    rispondeva False, la chiave Gemini del Secret Manager non veniva nemmeno
+    guardata perché quel ramo del codice non lo attraversa nessuno, e l'agente
+    era spento **in silenzio** — con le vecchie letture ancora sulle pagine, che
+    facevano sembrare tutto normale.
+
+    Qui il ripiego: se manca il service account ma una chiave Studio c'è, si usa
+    Studio. La stessa logica che vale già per la chiave, dove l'ambiente vince
+    sul database. Chi ha Vertex configurato davvero non se ne accorge: il
+    ripiego scatta solo quando l'alternativa è non funzionare.
+    """
+    p = provider_scelto()
+    if p == PROVIDER_VERTEX and not vertex_conf()["sa_json"] and chiave_gemini():
+        return PROVIDER_STUDIO
+    return p
+
+
+def provider_ripiegato() -> bool:
+    """Vero quando si usa Studio pur avendo scelto Vertex (vedi get_provider).
+
+    Serve alle Impostazioni: una pagina che mostra «Vertex» mentre gira Studio
+    è esattamente il silenzio che ha nascosto il guasto.
+    """
+    return provider_scelto() != get_provider()
 
 
 def set_provider(value: str) -> None:

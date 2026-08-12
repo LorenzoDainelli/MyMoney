@@ -19,6 +19,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from shared.db import Base
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
 import shared.settings_store as store_mod
 import shared.ai as ai
 from motore import engine_di_prova
@@ -38,6 +39,12 @@ def test_db(tmp_path, monkeypatch):
     # la cache credenziali Vertex è a livello di modulo: azzerala tra i test
     ai._vertex_cache["fp"] = None
     ai._vertex_cache["creds"] = None
+    # La chiave può arrivare anche dall'AMBIENTE (sul server la mette Secret
+    # Manager, e lì vince). Su una macchina che ce l'ha esportata questi test
+    # direbbero il contrario di quello che verificano: qui l'ambiente è vuoto
+    # per definizione, e chi vuole la chiave se la scrive nel database di prova.
+    import shared.config as config_mod
+    monkeypatch.setattr(config_mod, "GEMINI_API_KEY", "")
     yield
 
 
@@ -84,6 +91,59 @@ def test_set_provider_valida():
     assert ai.get_provider() == "vertex"
     ai.set_provider("boh")                        # ignorato
     assert ai.get_provider() == "vertex"
+
+
+# ── la scelta che viaggia dove la sua chiave non può ─────────────────────────
+# Successo per davvero (08/08/2026): il travaso sul server porta `ai_provider`
+# — è una preferenza — e lascia indietro il service account, che è un segreto.
+# Di là restava scritto «vertex» senza il modo di parlarci: l'agente era spento
+# IN SILENZIO, con le vecchie letture ancora sulle pagine a far sembrare che
+# tutto andasse. Questi test sono la sentinella perché non si ripeta.
+
+def test_vertex_senza_service_account_ripiega_sulla_chiave_del_server():
+    ai.set_provider("vertex")
+    store_mod.set_setting("vertex_project", "mymoney-502422")
+    # nessun service account: è esattamente lo stato del database in cloud
+    assert ai.is_configured() is False              # prima: agente spento
+    assert ai.get_provider() == "vertex"            # e nessuno lo diceva
+
+    store_mod.set_setting("gemini_api_key", "AIzaTEST")     # la chiave del server
+    assert ai.get_provider() == "studio"            # ora si usa quello che c'è
+    assert ai.is_configured() is True
+    assert ai.provider_scelto() == "vertex"         # la scelta resta la sua
+    assert ai.provider_ripiegato() is True          # e la pagina può dirlo
+
+
+def test_chi_ha_vertex_configurato_davvero_non_ripiega():
+    """Il ripiego non deve rubare il provider a chi ce l'ha per davvero: scatta
+    solo quando l'alternativa è non funzionare."""
+    ai.set_provider("vertex")
+    store_mod.set_setting("vertex_project", "mymoney-502422")
+    store_mod.set_setting("vertex_service_account_json", '{"type":"service_account"}')
+    store_mod.set_setting("gemini_api_key", "AIzaTEST")     # c'è anche questa
+    assert ai.get_provider() == "vertex"
+    assert ai.provider_ripiegato() is False
+
+
+def test_senza_nessuna_chiave_il_provider_resta_quello_scelto():
+    """Senza alternative non si ripiega. Dire «studio» a chi non ha una chiave
+    Studio sposterebbe solo il messaggio d'errore, e quello giusto è «a Vertex
+    manca il service account»."""
+    ai.set_provider("vertex")
+    assert ai.get_provider() == "vertex"
+    assert ai.provider_ripiegato() is False
+    assert ai.is_configured() is False
+
+
+def test_il_modello_segue_il_provider_in_uso_non_quello_scelto():
+    """`_model_key` passa da `get_provider`: ripiegando su Studio si deve
+    leggere `gemini_model`, o si chiederebbe a Studio un nome di modello che
+    esiste solo su Vertex — cioè un 404 al posto di una risposta."""
+    ai.set_provider("vertex")
+    store_mod.set_setting("vertex_model", "gemini-3.1-pro")     # solo su Vertex
+    store_mod.set_setting("gemini_model", "gemini-2.5-flash")
+    store_mod.set_setting("gemini_api_key", "AIzaTEST")
+    assert ai.get_model() == "gemini-2.5-flash"
 
 
 # ── modello: ogni provider ha il suo (i 2.0 su Vertex danno 404) ─────────────
@@ -253,7 +313,7 @@ def test_esito_test_mappa_vertexlibs(monkeypatch):
 def _lettura_di(ore_fa):
     from datetime import timedelta
     return json.dumps({"text": "x", "conf": "media",
-                       "when": (datetime.now() - timedelta(hours=ore_fa)).isoformat()})
+                       "when": (tempo.adesso() - timedelta(hours=ore_fa)).isoformat()})
 
 
 def test_a_domanda_non_rigenera_mai_da_sola(monkeypatch):

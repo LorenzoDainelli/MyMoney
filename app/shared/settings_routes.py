@@ -45,7 +45,14 @@ def impostazioni(request: Request, salvato: int = 0, ai_test: str = "",
         "ai_web": ai.usa_web(),
         "ai_test": ai_test,
         "MODES": ai.MODES,
-        "ai_provider": ai.get_provider(),
+        # La SCELTA, non l'uso: la tendina deve mostrare quello che ha scelto
+        # lui, o sembrerebbe che il salvataggio non abbia preso.
+        "ai_provider": ai.provider_scelto(),
+        # ...e accanto, se i due non coincidono, chi sta girando davvero. Vedi
+        # ai.get_provider(): sul server «vertex» può restare scritto senza la
+        # sua chiave, e una pagina che tace lì è ciò che ha tenuto nascosto
+        # l'agente spento per quattro giorni.
+        "ai_ripiegato": ai.provider_ripiegato(),
         "ai_default_model": ai.default_model(),
         "PROVIDERS": ai.PROVIDERS,
         "vertex_project": store.get_setting("vertex_project", ""),
