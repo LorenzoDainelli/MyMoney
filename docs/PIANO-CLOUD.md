@@ -334,6 +334,43 @@ Da fare **fuori dal repo**, sul suo account: eliminare il progetto su Cloudflare
 Pages e togliere l'icona vecchia dalla schermata Home del telefono (adesso punta
 a un indirizzo che non risponde più).
 
+### L'agente era spento, e nessuno lo diceva (12/08/2026)
+
+Un difetto nato **dal travaso stesso**, rimasto nascosto quattro giorni. Vale la
+pena raccontarlo per intero, perché la forma si ripeterà.
+
+L'elenco delle impostazioni che viaggiano (`scripts/travaso_db.py`) porta
+`ai_provider` — è una preferenza, non una chiave — e lascia indietro
+`vertex_service_account_json`, che è un **segreto** e non va in un database in
+rete. Sul PC il provider era `vertex`. Sul server è quindi arrivato «vertex»
+**senza il modo di parlarci**: `is_configured()` rispondeva `False`, e la chiave
+Gemini messa in Secret Manager durante la Fase 2 non veniva neanche guardata,
+perché quel ramo del codice lo attraversa solo il provider `studio`.
+
+Nessun errore, nessuna pagina rotta. Le vecchie letture dell'agente
+(`dash_ai`, `fin_ai`) erano viaggiate anche loro: le pagine mostravano testo, e
+il testo sembrava fresco. **Un guasto che si presenta come normalità.**
+
+La regola generale: **una scelta può viaggiare dove la sua chiave non può.**
+
+Cosa è cambiato (commit `8c71663`):
+- `ai.get_provider()` ripiega su Studio quando il provider scelto è Vertex, il
+  service account manca, e una chiave Studio c'è. Chi ha Vertex configurato per
+  davvero non se ne accorge: il ripiego scatta solo quando l'alternativa è non
+  funzionare;
+- `ai.provider_scelto()` resta la **scelta** dell'utente (la tendina delle
+  Impostazioni deve mostrare quella, o sembrerebbe che il salvataggio non
+  abbia preso), e `provider_ripiegato()` dice quando i due non coincidono —
+  la pagina lo scrive, invece di tacere;
+- quattro test in `app/tests/test_ai.py` fanno da sentinella;
+- il commento nell'elenco del travaso spiega la trappola dov'è nata.
+
+**Resta una cosa da fare, sul suo account:** la chiave privata del service
+account Vertex sta ancora dentro il `finanza.db` locale, che è congelato e non
+lo apre più nessuno. Se Vertex non serve, va **revocata dalla Console** — una
+chiave resta valida finché non la si revoca, e cancellarla dal file non la
+disattiva.
+
 ---
 
 ## 6. Costi
