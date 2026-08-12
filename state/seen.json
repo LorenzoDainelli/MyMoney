@@ -1,46 +1,6 @@
 {
   "items": [
     {
-      "id": "skhynix-warning-sndk-wdc-2026-07-13",
-      "ticker": "SNDK",
-      "titolo": "SK Hynix emette un profit warning storico: SanDisk e Western Digital cedono il 6%, Intel il 4%",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=42d1edba85f645d8fc7ce039cfdbb2f54aac3f4535f5e03ab90f51d36df7a266",
-      "data_invio": "2026-07-13T17:05:00+00:00"
-    },
-    {
-      "id": "meta-datacenter-louisiana-50b-2026-07-13",
-      "ticker": "META",
-      "titolo": "Meta annuncia un data center AI da oltre 50 miliardi in Louisiana: il più grande nella storia della società",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=6540b5fb8052448f14bf5973c176f6a4ba2b01c2b79d32c66fb9dacef24aba89",
-      "data_invio": "2026-07-13T17:05:00+00:00"
-    },
-    {
-      "id": "aapl-ath-citi-365-2026-07-13",
-      "ticker": "AAPL",
-      "titolo": "Apple tocca nuovi massimi storici: Citi alza il target di prezzo a 365 dollari",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=e8fc26bd40b1f8832627dc97ba88ba94d58e369106e05624431b4413d350f3ce",
-      "data_invio": "2026-07-13T17:05:00+00:00"
-    },
-    {
-      "id": "nflx-wedbush-oppenheimer-pre-earnings-2026-07-13",
-      "ticker": "NFLX",
-      "titolo": "Netflix: Wedbush e Oppenheimer vedono pubblicità e margini in crescita prima dei risultati trimestrali",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=e9a599ac504324de6467a82f33687ce62057bbee329cf2d3a3439d3d84dfb3bb",
-      "data_invio": "2026-07-13T17:05:00+00:00"
-    },
-    {
-      "id": "spcx-cathie-wood-54m-2026-07-13",
-      "ticker": "SPCX",
-      "titolo": "Cathie Wood compra 54 milioni di dollari di azioni SpaceX nell'arco di una settimana",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=f9b778750087e7257dcaa89a698cc3abdd980ec775cf51eb75bfbabbca689d65",
-      "data_invio": "2026-07-13T17:05:00+00:00"
-    },
-    {
       "id": "nvda-white-list-asia-2026-07-14",
       "ticker": "NVDA",
       "titolo": "Nvidia dimezza i clienti asiatici autorizzati ai chip AI: nasce la \"white list\"",
@@ -2703,6 +2663,78 @@
       "tipo_evento": "upgrade/downgrade analisti",
       "url": "https://finnhub.io/api/news?id=383b148d809392fba2c65840e1db42886431b183a7e1be340b1012550da54a8c",
       "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "spcx-norvegia-swf-2026-08-12",
+      "ticker": "SPCX",
+      "titolo": "Il fondo sovrano norvegese da 2.300 miliardi investe 1,22 miliardi in SpaceX",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=2a50269c6e35b49bb49729fea8b708e15ace63ddce8404522c29690389b2748f",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "goog-gemini-1b-utenti-2026-08-12",
+      "ticker": "GOOG",
+      "titolo": "Google Gemini raggiunge 1 miliardo di utenti mensili: il prodotto in più rapida crescita nella storia di Google",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=65e7fc7554adb7740c44e2b3c6ddd82a57e44bea077cd7adba3386de4af0d354",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "spcx-musk-ai-business-2026-08-12",
+      "ticker": "SPCX",
+      "titolo": "Musk: entro settembre l'AI diventerà il business principale di SpaceX, superando Starlink",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=11e402cf842a1115f49674c4e1e0791fd4e25df9e4e0ac49e3cd626d7392d760",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "orcl-quantinuum-quantum-2026-08-12",
+      "ticker": "ORCL",
+      "titolo": "Oracle porta il quantum computing di Quantinuum sul suo cloud con un accordo pluriennale",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=22aa240f54a202d18a701589ae11d3cc64385d6f83e41a447c68b041e86befd6",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "meta-capex-130-145b-2026-08-12",
+      "ticker": "META",
+      "titolo": "Meta alza il capex 2026 a 130-145 miliardi puntando sull'AI open-source, ma i margini si comprimono",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=62084edb78d23f8efc7103ff88876ccc38d66a6f1660f94472218867c984cbd2",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "macro-cpi-luglio-2026-08-12",
+      "ticker": "MACRO",
+      "titolo": "CPI USA di luglio in linea con le attese: dollaro debole, aspettative sui tassi stabili",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNZnhDSnpIWUFyU185anRuZ0lKYjItT2RJaWU3czNGbGdwVVBTbzRlaEF1QjJ3cERWVEZUVkV2Q0kwc3FtQVBpVWx3SmFnbTVlcEkyX0ZYb0lhd2tDQ0ZXcXl1RHl4aTR6dXVjYnRYZjZVUlN0TDE1QXJ4cF9SaHNueElkRF94cGlXbHJZdnlBSExxZzhaMVAxa0lKblNReU0tdFJJ?oc=5",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "goog-pixel-watch5-insulina-2026-08-12",
+      "ticker": "GOOG",
+      "titolo": "Pixel Watch 5 misurerà la resistenza all'insulina: primo wearable consumer al mondo",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=a7c9567af7ce351ee676df69be29ca5eb2135c9e9c4b2d15c7f8521f84b4bd4d",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "lly-retatrutide-upgrade-2026-08-12",
+      "ticker": "LLY",
+      "titolo": "Upgrade su Eli Lilly: il Retatrutide cambia il profilo rischio/rendimento, analista rivede al rialzo",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=7bfc4b9332d97a09de7dfbe3cb43cc3e1d4b127d00f25ae64f7b45081dc0433c",
+      "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "intc-ubs-target-112-2026-08-12",
+      "ticker": "INTC",
+      "titolo": "UBS abbassa il target di Intel da 121 a 112 dollari confermando il rating Neutral",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=88f3ff8be6c1004bd387a2308e39417700436c3a78b88c6c57f5cc54d866e3d1",
+      "data_invio": "2026-08-12T17:14:24Z"
     }
   ]
 }

@@ -9276,6 +9276,159 @@
       "inviata": true,
       "titolo": "SeekingAlpha declassa Microsoft: competizione cloud crescente e valutazione lascia poco spazio ai rialzi",
       "url": "https://finnhub.io/api/news?id=383b148d809392fba2c65840e1db42886431b183a7e1be340b1012550da54a8c"
+    },
+    {
+      "id": "spcx-norvegia-swf-2026-08-12",
+      "ticker": "SPCX",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il fondo sovrano norvegese da 2.300 miliardi investe 1,22 miliardi in SpaceX",
+      "url": "https://finnhub.io/api/news?id=2a50269c6e35b49bb49729fea8b708e15ace63ddce8404522c29690389b2748f"
+    },
+    {
+      "id": "goog-gemini-1b-utenti-2026-08-12",
+      "ticker": "GOOG",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google Gemini raggiunge 1 miliardo di utenti mensili: il prodotto in più rapida crescita nella storia di Google",
+      "url": "https://finnhub.io/api/news?id=65e7fc7554adb7740c44e2b3c6ddd82a57e44bea077cd7adba3386de4af0d354"
+    },
+    {
+      "id": "spcx-musk-ai-business-2026-08-12",
+      "ticker": "SPCX",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Musk: entro settembre l'AI diventerà il business principale di SpaceX, superando Starlink",
+      "url": "https://finnhub.io/api/news?id=11e402cf842a1115f49674c4e1e0791fd4e25df9e4e0ac49e3cd626d7392d760"
+    },
+    {
+      "id": "orcl-quantinuum-quantum-2026-08-12",
+      "ticker": "ORCL",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Oracle porta il quantum computing di Quantinuum sul suo cloud con un accordo pluriennale",
+      "url": "https://finnhub.io/api/news?id=22aa240f54a202d18a701589ae11d3cc64385d6f83e41a447c68b041e86befd6"
+    },
+    {
+      "id": "meta-capex-130-145b-2026-08-12",
+      "ticker": "META",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Meta alza il capex 2026 a 130-145 miliardi puntando sull'AI open-source, ma i margini si comprimono",
+      "url": "https://finnhub.io/api/news?id=62084edb78d23f8efc7103ff88876ccc38d66a6f1660f94472218867c984cbd2"
+    },
+    {
+      "id": "macro-cpi-luglio-2026-08-12",
+      "ticker": "MACRO",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "CPI USA di luglio in linea con le attese: dollaro debole, aspettative sui tassi stabili",
+      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNZnhDSnpIWUFyU185anRuZ0lKYjItT2RJaWU3czNGbGdwVVBTbzRlaEF1QjJ3cERWVEZUVkV2Q0kwc3FtQVBpVWx3SmFnbTVlcEkyX0ZYb0lhd2tDQ0ZXcXl1RHl4aTR6dXVjYnRYZjZVUlN0TDE1QXJ4cF9SaHNueElkRF94cGlXbHJZdnlBSExxZzhaMVAxa0lKblNReU0tdFJJ?oc=5"
+    },
+    {
+      "id": "goog-pixel-watch5-insulina-2026-08-12",
+      "ticker": "GOOG",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Pixel Watch 5 misurerà la resistenza all'insulina: primo wearable consumer al mondo",
+      "url": "https://finnhub.io/api/news?id=a7c9567af7ce351ee676df69be29ca5eb2135c9e9c4b2d15c7f8521f84b4bd4d"
+    },
+    {
+      "id": "lly-retatrutide-upgrade-2026-08-12",
+      "ticker": "LLY",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Upgrade su Eli Lilly: il Retatrutide cambia il profilo rischio/rendimento, analista rivede al rialzo",
+      "url": "https://finnhub.io/api/news?id=7bfc4b9332d97a09de7dfbe3cb43cc3e1d4b127d00f25ae64f7b45081dc0433c"
+    },
+    {
+      "id": "intc-ubs-target-112-2026-08-12",
+      "ticker": "INTC",
+      "data": "2026-08-12T17:14:24Z",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "UBS abbassa il target di Intel da 121 a 112 dollari confermando il rating Neutral",
+      "url": "https://finnhub.io/api/news?id=88f3ff8be6c1004bd387a2308e39417700436c3a78b88c6c57f5cc54d866e3d1"
     }
   ]
 }
