@@ -132,11 +132,19 @@
     <table>
       <thead>
         <tr>
+          {# `tel-via` = questa colonna sul telefono non si mostra (app.js la
+             copia sulle celle, telefono.css la nasconde). Sette colonne a
+             schede fanno sette righe per titolo: 229 punti l'uno, per 39
+             titoli, cioè novemila punti di scorrimento. Restano le tre che si
+             guardano davvero — che cos'è, quanto vale, come va. Le altre non
+             spariscono: categoria, quantità e PMC stanno nel pannello che si
+             apre toccando la riga; la % target sta nella pagina PAC, che è la
+             pagina di cui quel numero parla. #}
           <th class="sortable" data-type="text">{{ t('th.title') }}</th>
-          <th class="sortable" data-type="text">{{ t('th.category') }}</th>
-          <th class="num sortable" data-type="num">{{ t('th.pct_target') }}</th>
-          <th class="num sortable" data-type="num">{{ t('th.qty') }}</th>
-          <th class="num sortable" data-type="num" title="{{ t('pf.pmc_full') }}">{{ t('pf.pmc') }}</th>
+          <th class="sortable tel-via" data-type="text">{{ t('th.category') }}</th>
+          <th class="num sortable tel-via" data-type="num">{{ t('th.pct_target') }}</th>
+          <th class="num sortable tel-via" data-type="num">{{ t('th.qty') }}</th>
+          <th class="num sortable tel-via" data-type="num" title="{{ t('pf.pmc_full') }}">{{ t('pf.pmc') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.value') }}</th>
           <th class="num sortable" data-type="num">{{ t('th.pl') }}</th>
           <th style="width:1%;"></th>

@@ -158,9 +158,13 @@
       {{ icon('dashboard', 22) }}<span>Home</span></a>
     <a class="tel-tab {{ 'on' if active=='finanze' else '' }}" href="/finanze">
       {{ icon('finanze', 22) }}<span>{{ t('nav.finance') }}</span></a>
-    {# Il «＋» porta dritto al modulo, che sulla pagina Finanze sta a metà: senza
-       l'ancora si arriverebbe in cima e toccherebbe scorrerlo a cercarlo. #}
-    <a class="tel-fab" href="/finanze#aggiungi" aria-label="Nuovo movimento">
+    {# Il «＋» APRE il modulo in un pannello, da qualunque schermata: `data-drawer`
+       è lo stesso meccanismo del dettaglio (app.js §5), quindi sale dal fondo sul
+       telefono. Prima era un'ancora a `/finanze#aggiungi` e per registrare un
+       caffè si caricava una pagina lunga diciotto schermate, la si scorreva fino
+       a metà, e alla fine ci si ritrovava lì invece che dov'eri. Senza JS il
+       collegamento resta valido e apre la pagina: nessuno rimane a piedi. #}
+    <a class="tel-fab" href="/finanze/nuovo" data-drawer aria-label="Nuovo movimento">
       {{ icon('plus', 26) }}</a>
     <a class="tel-tab {{ 'on' if active=='portafoglio' else '' }}" href="/portafoglio">
       {{ icon('portfolio', 22) }}<span>Titoli</span></a>
@@ -192,6 +196,10 @@
   </div>
 
   <script src="/static/app.js?v={{ V }}"></script>
+  {# «Che cosa cambia» serviva solo a Finanze finché il modulo stava solo lì.
+     Ora il «＋» lo apre da ogni schermata, quindi il file va caricato ovunque:
+     dove il modulo non c'è esce alla prima riga e non costa niente. #}
+  <script src="/static/movement-preview.js?v={{ V }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -31,9 +31,30 @@
     </div>
   </div>
 
+  {# ---------- telefono: gli stessi conti, in riga ----------
+     Le card qui sotto sono alte 177 punti l'una: otto conti fanno 1.584 punti,
+     due schermate di telefono per leggere otto numeri. Qui il conto è il suo
+     nome e il suo saldo, con la riga di colore che lo fa riconoscere — il resto
+     (tipo, quota sul totale, barra) è roba da schermo grande, dove lo spazio
+     c'è. Il blocco esiste solo sul telefono; sul PC comanda la griglia sotto. #}
+  {% if saldi.righe %}
+  <div class="tel-conti tel-solo" style="margin-top:14px;">
+    {% for r in saldi.righe %}
+    {% set acc = (r.w.colore or '') | trim %}
+    {# Un <div>, non un link: siamo già su Finanze, e un collegamento che non
+       porta da nessuna parte è peggio di nessun collegamento — si preme e non
+       succede niente, e da lì in poi non ti fidi più nemmeno degli altri. #}
+    <div class="tel-conto"{% if acc %} style="--acc:{{ acc }};"{% endif %}>
+      <span class="tel-conto-n">{{ r.w.nome }}</span>
+      <span class="tel-conto-s">{{ r.saldo | eur }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {# ---------- portafogli: griglia .mm-wallet (simple mode, FinanceScreen.jsx) ---------- #}
   {% if saldi.righe %}
-  <div class="grid mm-wallets" style="margin-top:14px;">
+  <div class="grid mm-wallets pc-solo" style="margin-top:14px;">
     {% for r in saldi.righe %}
     {% set share = (r.saldo / saldi.totale * 100) if saldi.totale else 0 %}
     {% set acc = (r.w.colore or '') | trim %}
@@ -134,12 +155,16 @@
   </div>
   {% endif %}
 
-  {# ---------- aggiungi un movimento (AI "scrivi a parole" + form) ---------- #}
-  <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.add_movement') }}</div>
+  {# ---------- aggiungi un movimento (AI "scrivi a parole" + form) ----------
+     Sul telefono questo blocco NON si vede: lo stesso modulo lo apre il «＋»
+     della barra, in un pannello, da qualunque schermata. Qui erano 1.014 punti
+     di caselle aperte in mezzo alla pagina, sempre, anche le nove volte su
+     dieci in cui uno apre Finanze per guardare e non per scrivere. #}
+  <div class="page-title pc-solo" style="font-size:18px;margin-top:20px;">{{ t('fin.add_movement') }}</div>
   {# Il modulo e, accanto, la CONSEGUENZA: prima si compilava alla cieca e si
      scopriva il portafoglio sbagliato giorni dopo. Vedi movement-preview.js. #}
   {# ancora del «＋» della barra del telefono (base.html) #}
-  <div class="mm-add" id="aggiungi">
+  <div class="mm-add pc-solo" id="aggiungi">
     <div class="mm-add-main">
       {% include "finance_ai_box.html" %}
       {% include "finance_movement_form.html" %}
@@ -149,15 +174,7 @@
       <div id="mov-effetto"><p class="faint" style="margin:0;font-size:13px;line-height:var(--lh-relaxed);">{{ t('fin.eff_empty') }}</p></div>
     </aside>
   </div>
-  <script type="application/json" id="mov-effetto-dati">{{ effetto | tojson }}</script>
-  <script type="application/json" id="mov-effetto-testi">{{ {
-      'empty': t('fin.eff_empty'), 'out': t('fin.eff_month_out'), 'in': t('fin.eff_month_in'),
-      'neg': t('fin.eff_neg'), 'derived': t('fin.eff_derived'), 'giro': t('fin.eff_giro'),
-      'transfer': t('fin.eff_transfer'), 'cat': t('fin.eff_cat'),
-      'cat1': t('fin.eff_cat_one'), 'catnew': t('fin.eff_cat_new'),
-      'ctit': t('fin.carta_tit'), 'csav': t('fin.carta_sav_pct'),
-      'cnota': t('fin.carta_nota'), 'ctetto': t('fin.carta_tetto')
-  } | tojson }}</script>
+  {% include "finance_effetto_dati.html" %}
 
   {# ---------- spese · il mese in numeri · lettura AI ---------- #}
   <div class="mm-grid-3" style="margin-top:18px;align-items:stretch;">
@@ -177,7 +194,7 @@
              massimo: con un regalo da 75 € una scala lineare spegnerebbe tutto
              il resto del mese. I giorni non ancora arrivati restano vuoti:
              non sono giorni «senza spese». ---- #}
-      <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <div class="mm-cal-box" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
         <div class="muted" style="font-size:12px;text-transform:uppercase;letter-spacing:var(--ls-caps);font-weight:600;margin-bottom:10px;">{{ t('fin.cal_title') }}</div>
         <div class="mm-cal">
           {% for d in t('fin.cal_dows').split(',') %}
@@ -284,6 +301,53 @@
 
   {# ---------- tutti i movimenti (header ordinabili, default: data desc) ---------- #}
   <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.all_movements') }}</div>
-  {% include "finance_movements_table.html" %}
+
+  {# --- telefono: la stessa cosa, ma come lista ---------------------------
+     La tabella qui sotto diventa una scheda per riga: 174 punti l'una, che su
+     58 movimenti fanno 10.101 punti — il 69% dell'intera pagina, e dodici
+     schermate per arrivare in fondo. Il problema non è la tabella: è che ogni
+     riga ripete sei etichette («Portafoglio», «Categoria»…) che l'occhio non
+     legge, e stampa una data completa su ognuna anche quando dieci movimenti
+     sono dello stesso giorno.
+     Qui la data si dice UNA volta, in testa al giorno, con quanto è entrato o
+     uscito quel giorno; e la riga resta cosa · dove · quanto. Le stesse righe
+     della Home, che così si somigliano invece di essere due idee diverse. --- #}
+  {# `data-altri`: la scritta del pulsante la sa il server, che sa la lingua.
+     Scritta nel JS sarebbe in italiano anche per le altre cinque. #}
+  <div class="tel-elenco tel-solo" data-progressivo data-unita=".tel-giorno"
+       data-quanti="12" data-altri="{{ t('fin.mostra_altri') }}">
+    {% for g in per_giorno %}
+    <section class="tel-giorno">
+      <div class="tel-giorno-h">
+        <span class="tel-giorno-d">
+          {%- if g.etichetta -%}{{ t(g.etichetta) }}
+          {%- else -%}
+            {{ t('fin.dows_brevi').split(',')[g.giorno.weekday()] }} {{ g.giorno.day }} {{ t('fin.mesi_brevi').split(',')[g.giorno.month - 1] }}
+          {%- endif -%}
+        </span>
+        {% if g.totale %}
+        <span class="num tel-giorno-t {{ 'pos' if g.totale > 0 else 'neg' }}">{{ '+' if g.totale > 0 else '−' }}{{ g.totale | abs | eur }}</span>
+        {% endif %}
+      </div>
+      {% for m in g.righe %}
+      {% set tt = m.t.tipo %}
+      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov">
+        <span class="tel-mov-d">{{ m.t.descrizione or m.categoria or t('fin.' ~ tt) }}</span>
+        <span class="tel-mov-q">{{ m.t.data.strftime('%H:%M') }} · {{ m.wallet }}{% if m.wallet_to and tt != 'giro' %} → {{ m.wallet_to }}{% endif %}{% if m.categoria and m.t.descrizione %} · {{ m.categoria }}{% endif %}</span>
+        {% if tt == 'giro' %}{% set gamt = m.t.giro_importo_display %}
+        <span class="num tel-mov-i muted">{% if gamt > 0 %}+{{ gamt | eur }}{% elif gamt < 0 %}−{{ (0 - gamt) | eur }}{% else %}{{ 0 | eur }}{% endif %}</span>
+        {% else %}
+        <span class="num tel-mov-i {{ 'pos' if tt=='entrata' else 'neg' if tt=='uscita' else '' }}">{{ '+' if tt=='entrata' else ('−' if tt=='uscita' else '') }}{{ m.t.importo | eur }}</span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </section>
+    {% else %}
+    <p class="faint">{{ t('fin.no_movements') }}</p>
+    {% endfor %}
+  </div>
+
+  <div class="pc-solo">{% include "finance_movements_table.html" %}</div>
 {% endblock %}
-{% block scripts %}<script src="/static/movement-preview.js?v={{ V }}"></script>{% endblock %}
+{# movement-preview.js sta in base.html: il modulo non nasce più solo qui, lo
+   apre anche il «＋» della barra da qualunque schermata. #}

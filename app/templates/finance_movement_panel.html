@@ -1,0 +1,29 @@
+{# Il modulo «nuovo movimento» da solo, per il pannello che sale dal fondo.
+
+   È quello che apre il «＋» della barra del telefono, da qualunque schermata.
+   Prima il «＋» era un'ancora a `/finanze#aggiungi`: per registrare un caffè si
+   caricava una pagina lunga diciotto schermate e la si scorreva fino a metà.
+   Registrare una spesa è la cosa che si fa più spesso in tutta l'app, e la cosa
+   che si fa più spesso non può essere un viaggio.
+
+   Il markup è lo STESSO della panoramica (gli stessi due `include`), quindi il
+   modulo è uno solo: se domani cambia un campo, cambia in tutti e due i posti
+   senza che nessuno debba ricordarsene. #}
+<div class="mm-nuovo">
+<h2>{{ t('fin.add_movement') }}</h2>
+
+<div class="tel-modulo">
+  {% include "finance_ai_box.html" %}
+  {% include "finance_movement_form.html" %}
+
+  {# «Che cosa cambia»: appiccicato al bordo basso del pannello mentre scorri i
+     campi. Sulla panoramica è una colonna a destra, ma qui una colonna non c'è
+     — e in fondo alla pagina non lo leggerebbe nessuno, che è come non averlo. #}
+  <div class="card mm-add-side tel-effetto" style="margin:0;">
+    <div class="card-h">{{ t('fin.eff_title') }}</div>
+    <div id="mov-effetto"><p class="faint" style="margin:0;font-size:13px;line-height:var(--lh-relaxed);">{{ t('fin.eff_empty') }}</p></div>
+  </div>
+</div>
+</div>
+
+{% include "finance_effetto_dati.html" %}

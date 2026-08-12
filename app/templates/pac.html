@@ -47,7 +47,10 @@
       <thead>
         <tr>
           <th>{{ t('th.title') }}</th>
-          <th>{{ t('th.category') }}</th>
+          {# Sul telefono via la categoria: questa pagina risponde a «di questi
+             100 €, quanto va dove», e la risposta sono le due colonne dei
+             numeri. La categoria si legge accanto al titolo nel Portafoglio. #}
+          <th class="tel-via">{{ t('th.category') }}</th>
           <th class="num">{{ t('th.pct_target') }}</th>
           <th class="num">{{ t('pac.col_quota') }}</th>
         </tr>

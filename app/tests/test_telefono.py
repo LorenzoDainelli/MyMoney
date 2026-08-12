@@ -1,0 +1,171 @@
+"""Quello che il TELEFONO ha aggiunto al server.
+
+Il grosso del lavoro sul telefono è CSS e template, e quello si misura nel
+browser (l'ho fatto: Finanze da 18,1 a 4 schermate). Ma due pezzi sono finiti
+nel server, e quelli vanno difesi come tutto il resto:
+
+1. **Il raggruppamento per giorno** (`_per_giorno`). L'elenco dei movimenti
+   scriveva la data su ognuna delle 58 righe; adesso la scrive una volta sola
+   in testa al giorno, col totale di quel giorno accanto. Un totale sbagliato
+   è peggio di nessun totale: si legge di sfuggita e ci si crede.
+
+2. **Dove si torna dopo aver salvato** (`_torna_a`). Il «＋» si preme da
+   qualunque pagina e alla fine deve riportarti lì. Lo dice il `Referer`, che
+   è roba del browser: se lo si prendesse per buono, il modulo rimanderebbe
+   dove vuole chi ha scritto il link.
+
+Niente `TestClient`: le rotte e le funzioni si chiamano come funzioni normali,
+con una `Request` costruita a mano — stessa scelta di test_accesso_pagine.py.
+"""
+import sys
+from datetime import datetime, timedelta
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+import pytest
+from starlette.requests import Request
+
+from shared import tempo          # che ora è: il fuso scelto, non l'orologio del PC
+import finance.routes as rotte
+import finance.service as service
+from finance.models import TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO
+
+
+# ── impianto ────────────────────────────────────────────────────────────────
+
+def _mov(tipo, quando, importo, giro=None):
+    """Un movimento nella forma in cui `_per_giorno` lo riceve dal service:
+    un dizionario con dentro l'oggetto della riga."""
+    class Riga:
+        pass
+    r = Riga()
+    r.tipo = tipo
+    r.data = quando
+    r.importo = importo
+    r.giro_importo_display = giro
+    return {"t": r}
+
+
+def richiesta(referer=None, host="mymoney.example.app"):
+    intestazioni = [(b"host", host.encode())]
+    if referer is not None:
+        intestazioni.append((b"referer", referer.encode()))
+    return Request({
+        "type": "http", "http_version": "1.1", "method": "GET",
+        "scheme": "https", "path": "/finanze/nuovo", "raw_path": b"/finanze/nuovo",
+        "query_string": b"", "root_path": "", "headers": intestazioni,
+        "client": ("203.0.113.7", 5555), "server": (host, 443),
+    })
+
+
+# ── il raggruppamento per giorno ────────────────────────────────────────────
+
+def test_i_movimenti_dello_stesso_giorno_stanno_insieme():
+    g = datetime(2026, 8, 9, 9, 0)
+    righe = [_mov(TIPO_USCITA, g.replace(hour=20), 10.0),
+             _mov(TIPO_USCITA, g.replace(hour=13), 5.0),
+             _mov(TIPO_USCITA, datetime(2026, 8, 8, 11, 0), 7.0)]
+    giorni = rotte._per_giorno(righe)
+    assert [x["giorno"].day for x in giorni] == [9, 8]
+    assert [len(x["righe"]) for x in giorni] == [2, 1]
+
+
+def test_l_ordine_dei_movimenti_dentro_il_giorno_non_cambia():
+    """Arrivano già dal database in ordine di data decrescente. Se il
+    raggruppamento li rimescolasse, l'elenco direbbe che hai preso il caffè
+    prima di uscire di casa."""
+    g = datetime(2026, 8, 9)
+    righe = [_mov(TIPO_USCITA, g.replace(hour=20), 10.0),
+             _mov(TIPO_USCITA, g.replace(hour=13), 5.0),
+             _mov(TIPO_USCITA, g.replace(hour=8), 3.0)]
+    giorni = rotte._per_giorno(righe)
+    assert [r["t"].data.hour for r in giorni[0]["righe"]] == [20, 13, 8]
+
+
+def test_lo_stesso_giorno_in_due_mesi_diversi_non_si_fonde():
+    """Il confronto è sulla DATA intera, non sul numero del giorno: il 9 luglio
+    e il 9 agosto sono due giorni, e un `.day` distratto li sommerebbe."""
+    righe = [_mov(TIPO_USCITA, datetime(2026, 8, 9, 10, 0), 10.0),
+             _mov(TIPO_USCITA, datetime(2026, 7, 9, 10, 0), 20.0)]
+    giorni = rotte._per_giorno(righe)
+    assert len(giorni) == 2
+    assert [x["totale"] for x in giorni] == [-10.0, -20.0]
+
+
+def test_il_totale_del_giorno_e_entrate_meno_uscite():
+    g = datetime(2026, 8, 9, 12, 0)
+    righe = [_mov(TIPO_ENTRATA, g, 100.0), _mov(TIPO_USCITA, g, 30.0)]
+    assert rotte._per_giorno(righe)[0]["totale"] == pytest.approx(70.0)
+
+
+def test_i_trasferimenti_non_entrano_nel_totale_del_giorno():
+    """Spostare 500 € da un conto all'altro non è un giorno in cui hai speso
+    500 €. Contarli farebbe apparire in rosso il giorno in cui metti da parte,
+    che è esattamente il contrario di quello che è successo."""
+    g = datetime(2026, 8, 9, 12, 0)
+    righe = [_mov(TIPO_TRASFERIMENTO, g, 500.0), _mov(TIPO_USCITA, g, 12.0)]
+    giorni = rotte._per_giorno(righe)
+    assert giorni[0]["totale"] == pytest.approx(-12.0)
+    assert len(giorni[0]["righe"]) == 2        # si vede, ma non si somma
+
+
+def test_l_etichetta_del_giorno_passa_dal_fuso_scelto(monkeypatch):
+    """«oggi»/«ieri» le decide shared.tempo, non l'orologio della macchina:
+    è la stessa regola della home, e qui si difende che valga anche qui."""
+    monkeypatch.setattr(tempo, "oggi", lambda: datetime(2026, 8, 9).date())
+    righe = [_mov(TIPO_USCITA, datetime(2026, 8, 9, 10, 0), 1.0),
+             _mov(TIPO_USCITA, datetime(2026, 8, 8, 10, 0), 1.0),
+             _mov(TIPO_USCITA, datetime(2026, 7, 1, 10, 0), 1.0)]
+    giorni = rotte._per_giorno(righe)
+    assert [x["etichetta"] for x in giorni] == ["dash.today", "dash.yesterday", None]
+
+
+def test_senza_movimenti_non_ci_sono_giorni():
+    assert rotte._per_giorno([]) == []
+
+
+# ── dove si torna dopo aver salvato ─────────────────────────────────────────
+# `Referer` lo scrive il browser e lo può scrivere chiunque. Questi test sono
+# soprattutto RIFIUTI: quello che conta è cosa NON passa.
+
+def test_si_torna_alla_pagina_da_cui_e_stato_premuto_il_piu():
+    assert rotte._torna_a(richiesta("https://mymoney.example.app/portafoglio")) == "/portafoglio"
+    assert rotte._torna_a(richiesta("https://mymoney.example.app/")) == "/"
+
+
+def test_un_referer_di_un_altro_sito_viene_buttato():
+    """Senza questo il campo `next` del modulo diventerebbe un trampolino: si
+    salva un movimento e ci si ritrova su un sito di qualcun altro."""
+    assert rotte._torna_a(richiesta("https://evil.example/rubo")) == ""
+    assert rotte._torna_a(richiesta("http://evil.example/")) == ""
+
+
+def test_anche_senza_schema_un_indirizzo_assoluto_viene_buttato():
+    """`//evil.example/x` per urlparse è un percorso, per il browser è un
+    indirizzo assoluto. È la forma con cui questo controllo si aggira."""
+    assert rotte._torna_a(richiesta("//evil.example/x")) == ""
+
+
+def test_gli_schemi_strani_vengono_buttati():
+    assert rotte._torna_a(richiesta("javascript:alert(1)")) == ""
+    assert rotte._torna_a(richiesta("data:text/html,<b>x</b>")) == ""
+
+
+def test_senza_referer_non_si_inventa_niente():
+    assert rotte._torna_a(richiesta(None)) == ""
+    assert rotte._torna_a(richiesta("")) == ""
+
+
+def test_non_si_torna_al_modulo_stesso():
+    """Salvare e ritrovarsi il modulo vuoto davanti sembra che non sia successo
+    niente — ed è il momento in cui uno registra la spesa una seconda volta."""
+    assert rotte._torna_a(richiesta("https://mymoney.example.app/finanze/nuovo")) == ""
+
+
+def test_il_ripiego_e_finanze():
+    """Quello che `_torna_a` scarta diventa «/finanze» nel contesto, non una
+    stringa vuota: un campo `next` vuoto manderebbe il salvataggio alla radice
+    del sito, che è un posto in cui non si voleva andare."""
+    assert rotte._ctx_modulo("")["next_url"] == "/finanze"
+    assert rotte._ctx_modulo("/portafoglio")["next_url"] == "/portafoglio"

@@ -1,0 +1,18 @@
+{# I dati del riquadro «che cosa cambia», letti da static/movement-preview.js.
+
+   Sta in un pezzo a parte perché lo usano in DUE posti — la panoramica di
+   Finanze e il pannello del «＋» — e due copie che si allontanano vorrebbero
+   dire un saldo diverso a seconda di dove hai aperto il modulo.
+
+   `type="application/json"`: il browser non lo esegue, lo tiene lì come testo.
+   È l'unico modo perché sopravviva anche quando il pannello arriva via fetch e
+   viene infilato con innerHTML, che gli <script> veri non li fa partire. #}
+<script type="application/json" id="mov-effetto-dati">{{ effetto | tojson }}</script>
+<script type="application/json" id="mov-effetto-testi">{{ {
+    'empty': t('fin.eff_empty'), 'out': t('fin.eff_month_out'), 'in': t('fin.eff_month_in'),
+    'neg': t('fin.eff_neg'), 'derived': t('fin.eff_derived'), 'giro': t('fin.eff_giro'),
+    'transfer': t('fin.eff_transfer'), 'cat': t('fin.eff_cat'),
+    'cat1': t('fin.eff_cat_one'), 'catnew': t('fin.eff_cat_new'),
+    'ctit': t('fin.carta_tit'), 'csav': t('fin.carta_sav_pct'),
+    'cnota': t('fin.carta_nota'), 'ctetto': t('fin.carta_tetto')
+} | tojson }}</script>

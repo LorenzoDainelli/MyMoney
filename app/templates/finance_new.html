@@ -1,0 +1,14 @@
+{# `/finanze/nuovo` aperto come pagina vera: senza JS, o digitando l'indirizzo.
+
+   Il pannello del «＋» chiede lo stesso indirizzo con `?panel=1` e ne riceve
+   solo il corpo. Qui quel corpo sta dentro il guscio dell'app, con la barra e
+   gli stili — un frammento nudo funzionerebbe ma sembrerebbe una pagina rotta,
+   ed è proprio l'impressione che stiamo togliendo.
+
+   Il titolo lo scrive il pezzo incluso (l'`<h2>`), che nel pannello serve
+   comunque: metterne un altro qui vorrebbe dire scriverlo due volte. #}
+{% extends "base.html" %}
+{% block title %}{{ t('fin.add_movement') }} — {{ t('app.name') }}{% endblock %}
+{% block content %}
+  {% include "finance_movement_panel.html" %}
+{% endblock %}

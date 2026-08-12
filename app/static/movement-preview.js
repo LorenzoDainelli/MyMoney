@@ -7,7 +7,7 @@
    Nessun calcolo nuovo: i saldi e le uscite per categoria arrivano già
    calcolati dal server (finance/routes.py), il JS fa solo la somma dell'unico
    movimento in corso. */
-(function () {
+function mmCollegaModulo() {
   var host = document.getElementById('mov-effetto');
   var form = document.getElementById('mov-form');
   var elD = document.getElementById('mov-effetto-dati');
@@ -273,4 +273,17 @@
   form.addEventListener('input', render);
   form.addEventListener('change', render);
   render();
-})();
+}
+
+/* Il modulo non nasce piu' solo dentro la pagina Finanze: il «+» della barra
+   del telefono lo cala in un pannello, con la sua fetch, DOPO che questo file
+   e' gia' stato letto. Un IIFE avrebbe girato a vuoto una volta sola e trovato
+   la pagina senza modulo, quindi ora e' una funzione con un nome: la chiama
+   app.js quando il pannello e' arrivato. Chiamarla dove il modulo non c'e' non
+   costa niente — esce subito alla prima riga. */
+window.mmCollegaModulo = mmCollegaModulo;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mmCollegaModulo);
+} else {
+  mmCollegaModulo();
+}

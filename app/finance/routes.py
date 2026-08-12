@@ -37,37 +37,81 @@ def _lettura_ai_salvata():
         return None
 
 
+def _per_giorno(movimenti: list) -> list:
+    """I movimenti raggruppati per giorno, per la lista del telefono.
+
+    Il raggruppamento sta QUI e non nel template perché con un giorno serve
+    anche il suo totale, e sommare dentro Jinja vuol dire inventarsi variabili
+    che sopravvivono al ciclo. I movimenti arrivano già in ordine di data
+    decrescente, quindi basta guardare se il giorno è cambiato.
+
+    Nel totale del giorno **i trasferimenti non entrano**: spostare soldi da un
+    conto all'altro non è un giorno in cui hai speso, e contarli farebbe
+    apparire −500 il giorno in cui hai messo da parte 500.
+    """
+    giorni = []
+    for m in movimenti:
+        g = m["t"].data.date()
+        if not giorni or giorni[-1]["giorno"] != g:
+            giorni.append({"giorno": g, "etichetta": tempo.etichetta_giorno(g),
+                           "righe": [], "totale": 0.0})
+        blocco = giorni[-1]
+        blocco["righe"].append(m)
+        tt = m["t"].tipo
+        if tt == TIPO_ENTRATA:
+            blocco["totale"] += m["t"].importo or 0.0
+        elif tt == TIPO_USCITA:
+            blocco["totale"] -= m["t"].importo or 0.0
+        elif tt == TIPO_GIRO:
+            blocco["totale"] += m["t"].giro_importo_display or 0.0
+    return giorni
+
+
+def _dati_effetto(saldi, riep, now) -> dict:
+    """Materiale del riquadro «che cosa cambia»: saldi dei conti e uscite già
+    registrate per categoria, letti dal JS (static/movement-preview.js).
+
+    Sta in una funzione sua perché lo usano DUE contesti — la panoramica e il
+    pannello del «＋» — e due copie che divergono vorrebbero dire un saldo
+    diverso a seconda di dove hai aperto il modulo.
+    """
+    return {
+        "wallets": {str(r["w"].id): {
+            "nome": r["w"].nome, "saldo": r["saldo"],
+            "derivato": bool(r.get("derivato")),
+            "bloccato": bool(r.get("bloccato")),
+            # regole della carta: servono al JS per proporre arrotondamento e
+            # saveback mentre scrivi. Il calcolo è lo stesso del server, e il
+            # server lo rifà comunque al salvataggio: qui è solo anteprima.
+            "carta": ({"arr": bool(r["w"].arrotonda),
+                       "pct": r["w"].saveback_pct or 0.0,
+                       "tetto": r["w"].saveback_tetto or 0.0}
+                      if (r["w"].arrotonda or (r["w"].saveback_pct or 0.0)) else None),
+        } for r in saldi["righe"]},
+        "mese": {"entrate": riep["entrate"], "uscite": riep["uscite"]},
+        "cat": service.uscite_per_categoria_mese(now.year, now.month),
+        "salvadanaio": service.NOME_WALLET_NASCOSTI,
+        "sav_gia": service.saveback_maturato(now.year, now.month),
+    }
+
+
 def _ctx_panoramica() -> dict:
     now = tempo.adesso()
     saldi = service.saldi()
     riep = service.riepilogo_mese(now.year, now.month)
+    movimenti = service.lista_movimenti()        # TUTTI, data desc
     return {
+        # Gli STESSI movimenti, raggruppati per giorno: è la forma che serve
+        # alla lista del telefono. Non è una seconda lettura del database —
+        # è la stessa lista guardata in un altro modo.
+        "per_giorno": _per_giorno(movimenti),
         "active": "finanze",
         "saldi": saldi,
         "riep": riep,
         "calendario": service.calendario_spese(now.year, now.month),
         "destinazioni": service.destinazioni_mese(now.year, now.month),
-        # materiale per il riquadro «che cosa cambia» accanto al modulo: saldi
-        # dei conti e uscite già registrate per categoria, letti dal JS.
-        "effetto": {
-            "wallets": {str(r["w"].id): {
-                "nome": r["w"].nome, "saldo": r["saldo"],
-                "derivato": bool(r.get("derivato")),
-                "bloccato": bool(r.get("bloccato")),
-                # regole della carta: servono al JS per proporre arrotondamento e
-                # saveback mentre scrivi. Il calcolo è lo stesso del server, e il
-                # server lo rifà comunque al salvataggio: qui è solo anteprima.
-                "carta": ({"arr": bool(r["w"].arrotonda),
-                           "pct": r["w"].saveback_pct or 0.0,
-                           "tetto": r["w"].saveback_tetto or 0.0}
-                          if (r["w"].arrotonda or (r["w"].saveback_pct or 0.0)) else None),
-            } for r in saldi["righe"]},
-            "mese": {"entrate": riep["entrate"], "uscite": riep["uscite"]},
-            "cat": service.uscite_per_categoria_mese(now.year, now.month),
-            "salvadanaio": service.NOME_WALLET_NASCOSTI,
-            "sav_gia": service.saveback_maturato(now.year, now.month),
-        },
-        "movimenti": service.lista_movimenti(),      # TUTTI, data desc
+        "effetto": _dati_effetto(saldi, riep, now),
+        "movimenti": movimenti,
         "wallets": service.wallets(),
         "categorie": service.categorie(),
         "tipi": (TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO, TIPO_GIRO),
@@ -77,6 +121,96 @@ def _ctx_panoramica() -> dict:
         "ai_on": ai.is_configured(),
         "lettura_ai": _lettura_ai_salvata(),
     }
+
+
+def _torna_a(request) -> str:
+    """Da quale pagina è stato premuto il «＋», per tornarci dopo il salvataggio.
+
+    Lo dice l'intestazione `Referer`, che è **roba del browser**: può contenere
+    qualunque cosa, compreso l'indirizzo di un altro sito. Se lo passassimo così
+    com'è al campo `next` del modulo, il salvataggio finirebbe con un rimbalzo
+    là fuori — un redirect aperto, cioè un pezzo di casa nostra che porta gente
+    dove vuole chi ha scritto il link.
+
+    Quindi: si accettano solo percorsi di questo sito, e si torna sempre una
+    stringa che comincia per «/». Nel dubbio, `/finanze`.
+    """
+    from urllib.parse import urlparse
+
+    grezzo = (request.headers.get("referer") or "").strip()
+    if not grezzo:
+        return ""
+
+    p = urlparse(grezzo)
+    # Un indirizzo con un host diverso dal nostro non è una nostra pagina. E
+    # nemmeno uno con uno schema strano (`javascript:`, `data:`): quelli non
+    # hanno un percorso di cui fidarsi.
+    if p.scheme and p.scheme not in ("http", "https"):
+        return ""
+    try:
+        nostro = request.url.netloc
+    except Exception:
+        nostro = ""
+    if p.netloc and p.netloc != nostro:
+        return ""
+
+    percorso = p.path or ""
+    # «//evil.com» è un percorso per urlparse solo quando manca lo schema, e per
+    # il browser è un indirizzo assoluto: non deve passare.
+    if not percorso.startswith("/") or percorso.startswith("//"):
+        return ""
+    # Tornare al modulo stesso vorrebbe dire riaprirlo vuoto dopo aver salvato.
+    if percorso.startswith("/finanze/nuovo"):
+        return ""
+    return percorso
+
+
+def _ctx_modulo(next_url: str = "") -> dict:
+    """Solo quello che serve al MODULO: campi, suggerimenti e «che cosa cambia».
+
+    Non è `_ctx_panoramica()` alleggerito per gusto: quella carica tutti i
+    movimenti, il calendario del mese e le destinazioni, cioè il grosso della
+    pagina. Il «＋» del telefono si preme dieci volte al giorno da qualunque
+    schermata, e farlo pagare come l'apertura di Finanze si sentirebbe.
+    """
+    now = tempo.adesso()
+    saldi = service.saldi()
+    riep = service.riepilogo_mese(now.year, now.month)
+    return {
+        "active": "finanze",
+        "wallets": service.wallets(),
+        "categorie": service.categorie(),
+        "controparti": service.controparti(),
+        "tipi": (TIPO_ENTRATA, TIPO_USCITA, TIPO_TRASFERIMENTO, TIPO_GIRO),
+        "oggi": _oggi_local(),
+        "ai_on": ai.is_configured(),
+        # stesso materiale del riquadro «che cosa cambia» della panoramica: se
+        # qui fosse diverso, il conto mostrato dipenderebbe da dove hai aperto
+        # il modulo, ed è esattamente il genere di bugia che nessuno scopre.
+        "effetto": _dati_effetto(saldi, riep, now),
+        # Dove si torna dopo il salvataggio: la pagina da cui è stato premuto il
+        # «＋», non «/finanze». Aprire il modulo dalla Home e ritrovarsi altrove
+        # è il modo più veloce per far sembrare l'app un sito di pagine slegate.
+        "next_url": next_url or "/finanze",
+    }
+
+
+@router.get("/finanze/nuovo", response_class=HTMLResponse)
+def nuovo_movimento(request: Request, panel: int = 0):
+    """Il modulo da solo, per il «＋» della barra del telefono.
+
+    Prima il «＋» era un'ancora a `/finanze#aggiungi`: portava in mezzo a una
+    pagina lunga diciotto schermate, e per registrare un caffè bisognava
+    caricare tutto il registro. Adesso sale un pannello dal fondo, da qualunque
+    schermata, e alla fine si torna dov'eri.
+    """
+    ctx = _ctx_modulo(_torna_a(request))
+    if panel:
+        return templates.TemplateResponse(request, "finance_movement_panel.html", ctx)
+    # Senza JS (o aprendo l'indirizzo a mano) resta una pagina vera, non un
+    # frammento nudo: stessa forma, dentro il guscio dell'app.
+    ctx["pagina_intera"] = True
+    return templates.TemplateResponse(request, "finance_new.html", ctx)
 
 
 # ------------------------------ panoramica ------------------------------

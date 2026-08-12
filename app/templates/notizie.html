@@ -15,6 +15,11 @@
   </div>
 
   {% if cards %}
+  {# Trentuno schede da trecento punti l'una fanno dodici schermate di telefono.
+     Sul telefono se ne aprono otto per volta (app.js, `data-progressivo`); sul
+     PC il contenitore non fa niente e restano tutte, com'erano. #}
+  <div data-progressivo data-unita=".card" data-quanti="8"
+       data-altri="{{ t('fin.mostra_altri') }}">
   {% for c in cards %}
   <div class="card" style="margin-bottom:14px;">
     <div style="display:flex;align-items:center;gap:8px;">
@@ -34,6 +39,7 @@
     </div>
   </div>
   {% endfor %}
+  </div>
   <p class="faint" style="font-size:12px;">{{ t('news.readonly') }}</p>
   {% else %}
   <div class="empty">

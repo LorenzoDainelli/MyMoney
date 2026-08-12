@@ -368,6 +368,13 @@ STRINGS = {
     "fin.bloccato": {"it": "Non spendibili", "en": "Not spendable", "es": "No disponibles", "fr": "Non disponibles", "de": "Nicht verfügbar", "uk": "Недоступні"},
     "fin.cal_title": {"it": "Giorno per giorno", "en": "Day by day", "es": "Día a día", "fr": "Jour par jour", "de": "Tag für Tag", "uk": "День за днем"},
     "fin.cal_dows": {"it": "L,M,M,G,V,S,D", "en": "M,T,W,T,F,S,S", "es": "L,M,X,J,V,S,D", "fr": "L,M,M,J,V,S,D", "de": "M,D,M,D,F,S,S", "uk": "П,В,С,Ч,П,С,Н"},
+    # Le intestazioni dei giorni nella lista del telefono: «sab 9 ago». Da lunedì
+    # a domenica, come `date.weekday()`. Servono qui e non nel template perché
+    # l'app parla sei lingue, e `strftime('%a')` risponderebbe nella lingua del
+    # SERVER — che è una terza lingua, diversa da tutte e due.
+    "fin.dows_brevi": {"it": "lun,mar,mer,gio,ven,sab,dom", "en": "Mon,Tue,Wed,Thu,Fri,Sat,Sun", "es": "lun,mar,mié,jue,vie,sáb,dom", "fr": "lun,mar,mer,jeu,ven,sam,dim", "de": "Mo,Di,Mi,Do,Fr,Sa,So", "uk": "пн,вт,ср,чт,пт,сб,нд"},
+    "fin.mesi_brevi": {"it": "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic", "en": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", "es": "ene,feb,mar,abr,may,jun,jul,ago,sep,oct,nov,dic", "fr": "janv,févr,mars,avr,mai,juin,juil,août,sept,oct,nov,déc", "de": "Jan,Feb,Mär,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez", "uk": "січ,лют,бер,кві,тра,чер,лип,сер,вер,жов,лис,гру"},
+    "fin.mostra_altri": {"it": "Mostra altri", "en": "Show more", "es": "Mostrar más", "fr": "Afficher plus", "de": "Mehr anzeigen", "uk": "Показати ще"},
     "fin.cal_less": {"it": "meno", "en": "less", "es": "menos", "fr": "moins", "de": "weniger", "uk": "менше"},
     "fin.cal_more": {"it": "più", "en": "more", "es": "más", "fr": "plus", "de": "mehr", "uk": "більше"},
     "fin.cal_nothing": {"it": "niente speso", "en": "nothing spent", "es": "nada gastado", "fr": "rien dépensé", "de": "nichts ausgegeben", "uk": "нічого не витрачено"},

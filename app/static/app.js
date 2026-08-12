@@ -199,6 +199,10 @@ document.addEventListener('click', function (e) {
       (reduce() ? '' : 'transition:opacity var(--dur-base) var(--ease-out);');
     backdrop.addEventListener('click', close);
     aside = document.createElement('aside');
+    // Un nome per il pannello: serve al CSS per dare i margini SOLO qui dentro.
+    // Il modulo del «＋» vive in due posti — nel pannello e come pagina intera —
+    // e la pagina i suoi margini ce li ha già dal `.wrap`.
+    aside.className = 'mm-drawer';
     aside.style.cssText = (giu
       ? 'position:absolute;left:0;right:0;bottom:0;max-height:88vh;' +
         'border-top:1px solid var(--border);border-radius:22px 22px 0 0;' +
@@ -236,7 +240,18 @@ document.addEventListener('click', function (e) {
     }); });
     fetch(url + (url.indexOf('?') >= 0 ? '&' : '?') + 'panel=1')
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-      .then(function (h) { if (root) corpo.innerHTML = h; })
+      .then(function (h) {
+        if (!root) return;
+        corpo.innerHTML = h;
+        // Il pannello può contenere il modulo del «＋». I suoi ascoltatori sono
+        // in delega e valgono già (app.js §6), ma «che cosa cambia» aggancia
+        // elementi precisi, e quegli elementi sono arrivati ADESSO: senza questa
+        // riga il riquadro resterebbe sulla frase d'attesa mentre scrivi.
+        if (window.mmCollegaModulo) window.mmCollegaModulo();
+        // Sul telefono la prima casella NON prende il fuoco da sola: aprirebbe
+        // la tastiera coprendo i due terzi del pannello prima ancora di aver
+        // visto cosa c'è dentro.
+      })
       .catch(function () { window.location.href = url; });
   }
 
@@ -457,6 +472,72 @@ document.addEventListener('click', function (e) {
 
 
 /* ==========================================================================
+   Telefono: le liste lunghe si aprono un pezzo per volta.
+
+   Sono due, e sono lo stesso problema. I movimenti: novantacinque righe, dodici
+   schermate, venti secondi di scorrimento per arrivare in fondo. Le notizie:
+   trentuno schede da trecento punti l'una. In tutti e due i casi il titolo
+   della pagina promette TUTTO, e ha ragione a prometterlo — quindi non si
+   taglia niente: si apre a richiesta.
+
+   Si conta a unità INTERE, mai a metà. Un giorno spezzato — l'intestazione che
+   promette una data e sotto tre movimenti su sette — è peggio di un giorno in
+   meno: sembra che manchino dei soldi. Quindi si aggiungono unità finché non si
+   è superata la soglia, e l'ultima si mostra tutta.
+
+   Solo sul telefono: su uno schermo grande le righe ci stanno, e un pulsante
+   per vedere quello che si vede già sarebbe un ostacolo inventato.
+
+   Senza JS non succede niente e le liste restano lunghe — complete, che è il
+   modo giusto di rompersi.
+   ========================================================================== */
+(function () {
+  if (!mmTelefono()) return;
+
+  function progressivo(cont) {
+    var sel = cont.dataset.unita || '*';
+    var unita = Array.prototype.filter.call(cont.children, function (el) {
+      return el.matches(sel);
+    });
+    if (!unita.length) return;
+
+    var soglia = parseInt(cont.dataset.quanti, 10) || 10;
+    var aperte = 0;
+
+    // Quanto «pesa» un'unità: un giorno vale i suoi movimenti, una scheda vale
+    // uno. Senza il peso, dodici giorni da una riga e dodici giorni da dieci
+    // darebbero due pagine lunghe in modo molto diverso.
+    function peso(u) { return u.querySelectorAll('.tel-mov').length || 1; }
+
+    var bottone = document.createElement('button');
+    bottone.type = 'button';
+    bottone.className = 'tel-altri';
+
+    function apri() {
+      var conto = 0;
+      while (aperte < unita.length && conto < soglia) {
+        unita[aperte].style.display = '';
+        conto += peso(unita[aperte]);
+        aperte++;
+      }
+      var restano = 0;
+      for (var i = aperte; i < unita.length; i++) restano += peso(unita[i]);
+      if (restano) bottone.textContent = (cont.dataset.altri || '···') + ' (' + restano + ')';
+      else bottone.remove();
+    }
+
+    for (var i = 0; i < unita.length; i++) unita[i].style.display = 'none';
+    cont.appendChild(bottone);
+    bottone.addEventListener('click', apri);
+    apri();
+  }
+
+  var conti = document.querySelectorAll('[data-progressivo]');
+  for (var i = 0; i < conti.length; i++) progressivo(conti[i]);
+})();
+
+
+/* ==========================================================================
    Telefono: le etichette delle tabelle.
 
    Una tabella da sette colonne su uno schermo da 375 punti non si legge: o si
@@ -487,6 +568,17 @@ document.addEventListener('click', function (e) {
         for (var c = 0; c < celle.length; c++) {
           var cella = celle[c];
           if (nomi[c]) cella.setAttribute('data-etichetta', nomi[c]);
+          // Una colonna può dichiarare, UNA volta nella sua intestazione, che
+          // sul telefono non serve: `<th class="tel-via">`. Le posizioni del
+          // portafoglio hanno sette colonne, e a schede diventano sette righe
+          // per titolo — 229 punti a testa, 39 titoli, novemila punti. Il
+          // dettaglio non sparisce: sta nel pannello che si apre toccando la
+          // riga, che è il posto dove uno lo va a cercare davvero.
+          // Dichiararlo nell'intestazione e non cella per cella vuol dire che
+          // vale anche per le righe che arrivano dopo, caricate a parte.
+          if (intestazioni[c] && intestazioni[c].classList.contains('tel-via')) {
+            cella.classList.add('tel-via');
+          }
           // Su un foglio largo una cella vuota è una casella bianca e non
           // disturba nessuno. In una scheda da telefono diventa una riga
           // intera che dice «Categoria —»: occupa lo spazio di un'informazione
