@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "aapl-openai-lawsuit-2026-07-13",
-      "ticker": "AAPL",
-      "titolo": "Apple avvia causa contro OpenAI per furto di segreti commerciali sull'AI hardware",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=a2bc4b2e83515181eb1fae20e425e7aebdd8233ec1c641c2f11d56ac83fca788",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "shel-iran-oil-2026-07-13",
-      "ticker": "SHEL",
-      "titolo": "Attacchi USA all'Iran vicino allo Stretto di Hormuz: il petrolio sale del 4%",
-      "tipo_evento": "macro",
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOUFpPY1lfc0lIc0xsNVlaSkZQanVuM3RZd0lUMTdLMlktT0dLajFOWExXSTZEd1pJd1kteDBWeTk5UnFHMmFtdUE1cWdmMEZwaDR4M09lV3NENXlhTHIwOUc1NEhTbGNYQTBZUmFNYlRIT3RUWWNyc3JZOXR2WXFrTWRFTmc1V2FHWnlDRW90YkJrOW1WWGstZ0d1bS1JaEJYZTcya0dUdkN4VzZQczhz?oc=5",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "nato-summit-ankara-2026-07-13",
-      "ticker": "NATO",
-      "titolo": "Summit NATO ad Ankara: 57 miliardi in nuovi contratti difesa, 70 miliardi all'Ucraina",
-      "tipo_evento": "macro tematica",
-      "url": "https://tresorfx.com/article.php?slug=nato-industry-forum-2026-defence-deals-signed-what-it-means-for-defence-stocks-and-markets",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "nvda-rack-delay-2028-2026-07-13",
-      "ticker": "NVDA",
-      "titolo": "Possibile ritardo dei rack NVIDIA di nuova generazione (2028): spazio per AMD e Google",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=3cd991655d4cdeaa4a578b841f964bf00d3d1d0fe2f441922829c044b64ee7a4",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "intc-server-price-hike-2026-07-13",
-      "ticker": "INTC",
-      "titolo": "Intel alza i prezzi dei chip server: la domanda AI supera la capacità produttiva",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=f7ff853c76c06e0e5fb1a6f18e2ce14e66de1fae8df73dcafd1e872b1f97a233",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "meta-manus-eu-probe-2026-07-13",
-      "ticker": "META",
-      "titolo": "Pechino blocca l'acquisizione AI da 2 miliardi di Meta; l'UE apre un'indagine sul design delle app",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=301a712dae530ddc2310f55e0bd761ee861c08e43a0fb86fe4e5b5887704ed7c",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "jpm-q2-earnings-preview-2026-07-13",
-      "ticker": "JPM",
-      "titolo": "JPMorgan Chase riporta domani i risultati Q2 2026: cosa tenere d'occhio",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=5d0c680376c0c74b538e81cd07dc80aecbdecf6d9ac19c425e43c903a5fece14",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "sndk-goldman-target-2026-07-13",
-      "ticker": "SNDK",
-      "titolo": "Goldman Sachs fissa un target ambizioso su SanDisk, puntando al superciclo delle memorie AI",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=1377c8f1c900acedefc491a91a007fd0cfe7822cbbfc57d429733b3f41dfb27d",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "asml-earnings-week-2026-07-13",
-      "ticker": "ASML",
-      "titolo": "ASML riporta i risultati questa settimana: la domanda di macchine EUV per l'AI sotto i riflettori",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=be8a7e25bd648b9d168672c8ccdb1dcebb365f3c11f3d51c03c27b2ed0f9dbe1",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
-      "id": "tsm-q2-earnings-jul16-2026-07-13",
-      "ticker": "TSM",
-      "titolo": "Taiwan Semiconductor riporta il 16 luglio: forte crescita attesa nel Q2 grazie alla domanda AI",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=0cc77e30ad19e0252aafb19bbd465d9fc5f1e33058f06a29444b97b0bf5ff854",
-      "data_invio": "2026-07-13T05:10:00Z"
-    },
-    {
       "id": "skhynix-warning-sndk-wdc-2026-07-13",
       "ticker": "SNDK",
       "titolo": "SK Hynix emette un profit warning storico: SanDisk e Western Digital cedono il 6%, Intel il 4%",
@@ -2727,6 +2647,62 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=8e3ec80fd74ce35e77aac90235b0e7d528c318608293f82275d21fffb259acf7",
       "data_invio": "2026-08-11T17:10:00+00:00"
+    },
+    {
+      "id": "lly-foundayo-uk-approval-20260812",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly ottiene l'approvazione in UK per Foundayo, la pillola anti-obesità orale: sfida Wegovy di Novo Nordisk in Europa",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=19dbe250bd1d79cfa3fff53b2c0b0c01f22356f877e7370c084578f6b31f2d53",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "ibm-together-ai-deal-20260812",
+      "ticker": "IBM",
+      "titolo": "IBM firma un contratto da 240 milioni di dollari con Together AI per l'inferenza AI su larga scala",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=26ea1910ab6451080740a5be13f6bffdeb2ccc03763cad1d66d01eedb04b6d67",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "meta-muse-glimmer-treasury-20260812",
+      "ticker": "META",
+      "titolo": "Il Segretario al Tesoro USA approva pubblicamente Muse Glimmer di Meta: segnale di supporto governativo all'AI dell'azienda",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=f91dd3922c019b1fb206a0c89d4745a6fb2a1ad7eff6aedb7c9b34d336fe4a9c",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "ukrn-ukraine-peace-proposals-20260812",
+      "ticker": "UKRN",
+      "titolo": "Zelensky consegna agli USA le proposte di pace con la Russia: passo avanti verso la ricostruzione dell'Ucraina",
+      "tipo_evento": "macro tematica",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOYUctM2tDd2gxSEhzQk9QV2dud0d0ajdkR0U2TmdlZ2VpQm44U1BhclBHQ184WVFFS1ZnX2l4c1dlb3FiMG9Ld0hSeUNJU0dFSTl6VHFzTVlRSXQ0Z3BUQWtvLW5oTFZJTGJiOG1Sb0dTSGN2V1lzcGJWemhYZjloZnI2YmtvcnZ3dHRGMkpSOGExM3RZTVFxeGFfWkNoXzhpUk5iX0QxVHVWYmpnT05rTnhFM25MeHNnek85UFlLdS15QQ?oc=5",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "sndk-buy-initiation-20260812",
+      "ticker": "SNDK",
+      "titolo": "Un analista avvia la copertura di SanDisk con giudizio Buy: i contratti a lungo termine sono ignorati dal mercato",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=6961ffda41f1c85b42a6c9d98c2b6dd3bfcd29e2bbb196e3287a32fa4f81739f",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "avgo-jpm-chip-boom-20260812",
+      "ticker": "AVGO",
+      "titolo": "JPMorgan: il boom dei chip AI si allarga a 2.250 miliardi entro il 2027, Broadcom tra i sei titoli meglio posizionati",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=9eaece3b92d74dffd216e24bf0ac115c08ba97f25b2a6a9ea8ae468759897284",
+      "data_invio": "2026-08-12T05:10:00+00:00"
+    },
+    {
+      "id": "msft-sa-downgrade-20260812",
+      "ticker": "MSFT",
+      "titolo": "SeekingAlpha declassa Microsoft: competizione cloud crescente e valutazione lascia poco spazio ai rialzi",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=383b148d809392fba2c65840e1db42886431b183a7e1be340b1012550da54a8c",
+      "data_invio": "2026-08-12T05:10:00+00:00"
     }
   ]
 }

@@ -9157,6 +9157,125 @@
       "inviata": false,
       "titolo": "L'ex CEO di Walmart Doug McMillon entra nei tavoli dati della Fed: possibili implicazioni per i prezzi al dettaglio",
       "url": "https://finnhub.io/api/news?id=61a661a1ab0f7888a5bb2cd845b75105847d251b8a055a7d62b79e23bdca2686"
+    },
+    {
+      "id": "lly-foundayo-uk-approval-20260812",
+      "ticker": "LLY",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 70,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly ottiene l'approvazione in UK per Foundayo, la pillola anti-obesità orale: sfida Wegovy di Novo Nordisk in Europa",
+      "url": "https://finnhub.io/api/news?id=19dbe250bd1d79cfa3fff53b2c0b0c01f22356f877e7370c084578f6b31f2d53"
+    },
+    {
+      "id": "ibm-together-ai-deal-20260812",
+      "ticker": "IBM",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "IBM firma un contratto da 240 milioni di dollari con Together AI per l'inferenza AI su larga scala",
+      "url": "https://finnhub.io/api/news?id=26ea1910ab6451080740a5be13f6bffdeb2ccc03763cad1d66d01eedb04b6d67"
+    },
+    {
+      "id": "meta-muse-glimmer-treasury-20260812",
+      "ticker": "META",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 63,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il Segretario al Tesoro USA approva pubblicamente Muse Glimmer di Meta: segnale di supporto governativo all'AI dell'azienda",
+      "url": "https://finnhub.io/api/news?id=f91dd3922c019b1fb206a0c89d4745a6fb2a1ad7eff6aedb7c9b34d336fe4a9c"
+    },
+    {
+      "id": "ukrn-ukraine-peace-proposals-20260812",
+      "ticker": "UKRN",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Zelensky consegna agli USA le proposte di pace con la Russia: passo avanti verso la ricostruzione dell'Ucraina",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOYUctM2tDd2gxSEhzQk9QV2dud0d0ajdkR0U2TmdlZ2VpQm44U1BhclBHQ184WVFFS1ZnX2l4c1dlb3FiMG9Ld0hSeUNJU0dFSTl6VHFzTVlRSXQ0Z3BUQWtvLW5oTFZJTGJiOG1Sb0dTSGN2V1lzcGJWemhYZjloZnI2YmtvcnZ3dHRGMkpSOGExM3RZTVFxeGFfWkNoXzhpUk5iX0QxVHVWYmpnT05rTnhFM25MeHNnek85UFlLdS15QQ?oc=5"
+    },
+    {
+      "id": "sndk-buy-initiation-20260812",
+      "ticker": "SNDK",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Un analista avvia la copertura di SanDisk con giudizio Buy: i contratti a lungo termine sono ignorati dal mercato",
+      "url": "https://finnhub.io/api/news?id=6961ffda41f1c85b42a6c9d98c2b6dd3bfcd29e2bbb196e3287a32fa4f81739f"
+    },
+    {
+      "id": "avgo-jpm-chip-boom-20260812",
+      "ticker": "AVGO",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "JPMorgan: il boom dei chip AI si allarga a 2.250 miliardi entro il 2027, Broadcom tra i sei titoli meglio posizionati",
+      "url": "https://finnhub.io/api/news?id=9eaece3b92d74dffd216e24bf0ac115c08ba97f25b2a6a9ea8ae468759897284"
+    },
+    {
+      "id": "msft-sa-downgrade-20260812",
+      "ticker": "MSFT",
+      "data": "2026-08-12T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "SeekingAlpha declassa Microsoft: competizione cloud crescente e valutazione lascia poco spazio ai rialzi",
+      "url": "https://finnhub.io/api/news?id=383b148d809392fba2c65840e1db42886431b183a7e1be340b1012550da54a8c"
     }
   ]
 }
