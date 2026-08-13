@@ -9429,6 +9429,176 @@
       "inviata": true,
       "titolo": "UBS abbassa il target di Intel da 121 a 112 dollari confermando il rating Neutral",
       "url": "https://finnhub.io/api/news?id=88f3ff8be6c1004bd387a2308e39417700436c3a78b88c6c57f5cc54d866e3d1"
+    },
+    {
+      "id": "ssnlf-temasek-samsung-skhynix",
+      "ticker": "SSNLF",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Il fondo sovrano di Singapore acquista partecipazioni in Samsung e SK Hynix: memoria in rally del 7%",
+      "url": "https://finnhub.io/api/news?id=688c220117eebd0192104bd977f75d290e2a16d439794eab9678ec9ca1390959"
+    },
+    {
+      "id": "goog-brin-gemini-riorganizzazione",
+      "ticker": "GOOG",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Sergey Brin interviene direttamente per riportare Gemini al vertice dell'AI: riorganizzazione e meeting all-hands in Google",
+      "url": "https://finnhub.io/api/news?id=079193d82a1b115d9b8c1dbce347b0b0beb0dd53ec2d2c450e10c28f84d1f851"
+    },
+    {
+      "id": "lly-retatrutide-venditori-illegali",
+      "ticker": "LLY",
+      "data": "2026-08-13",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly querela oltre 200 venditori abusivi di retatrutide e avverte i consumatori sui rischi",
+      "url": "https://finnhub.io/api/news?id=74fc4253cb1300007f3b3a3e8fc709b87c799a119423afd9f0d487a8546069a2"
+    },
+    {
+      "id": "nato-spesa-difesa-record-2026",
+      "ticker": "NATO",
+      "data": "2026-08-13",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Spesa difesa NATO 2026 a quota record: 634 miliardi di dollari per gli alleati europei, +20% rispetto al 2024",
+      "url": "https://www.nato.int/en/news-and-events/articles/news/2026/07/07/defence-investment-update-record-spending-in-europe-and-canada"
+    },
+    {
+      "id": "nukl-usa-uranio-squilibrio-supply",
+      "ticker": "NUKL",
+      "data": "2026-08-13",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "USA: squilibrio record nella supply chain dell'uranio — consumate 73 volte le tonnellate prodotte localmente",
+      "url": "https://www.globenewswire.com/news-release/2026/08/10/3341890/0/en/america-consumed-50-million-pounds-of-uranium-produced-677-000.html"
+    },
+    {
+      "id": "nflx-analista-buy-target-106-2027",
+      "ticker": "NFLX",
+      "data": "2026-08-13",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Analista avvia copertura positiva su Netflix: potere degli utili 2027 sottovalutato, target $106 (+40%)",
+      "url": "https://finnhub.io/api/news?id=9a46d00c56a0d762972e08efb5da37bb57a30e71da63945edf74a2087441742c"
+    },
+    {
+      "id": "wmt-q2-beat-raise-preview-20ago",
+      "ticker": "WMT",
+      "data": "2026-08-13",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Walmart Q2 il 20 agosto: analisti si attendono un ciclo beat-and-raise trainato dal digitale, RBC Outperform a $137",
+      "url": "https://finnhub.io/api/news?id=1e4f5bb2836bbbafff1d696161687a50be6df821904bfe04b761635cae5367e8"
+    },
+    {
+      "id": "ibm-quantum-stock-crash",
+      "ticker": "IBM",
+      "data": "2026-08-13",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "IBM espande le capacità quantum mentre il titolo è sotto pressione: investimento strategico di lungo periodo",
+      "url": "https://finnhub.io/api/news?id=cd64f5da8f63ddc77990642fab4063db4ef6fb1fe5f3f431fccfe6610e26c0ba"
+    },
+    {
+      "id": "aapl-government-affairs-gatten",
+      "ticker": "AAPL",
+      "data": "2026-08-13",
+      "tipo_evento": "cambio CEO/management",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple rafforza le relazioni istituzionali: nominato nuovo responsabile government affairs da American Airlines",
+      "url": "https://finnhub.io/api/news?id=f3d407d07ed10e8e99f0d267901a4ec6eaa976b2433687fd824c0c484a6de0b4"
+    },
+    {
+      "id": "amgn-centro-rd-hyderabad",
+      "ticker": "AMGN",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amgen inaugura un nuovo centro di scienza e innovazione a Hyderabad, India",
+      "url": "https://finnhub.io/api/news?id=bccd923da82b5927dd871d78e7a649189f06fed04fada2c3503e7af9c9771763"
     }
   ]
 }

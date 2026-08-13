@@ -1,78 +1,6 @@
 {
   "items": [
     {
-      "id": "nvda-white-list-asia-2026-07-14",
-      "ticker": "NVDA",
-      "titolo": "Nvidia dimezza i clienti asiatici autorizzati ai chip AI: nasce la \"white list\"",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=c4ceeee14402cd8402e2fcae0899bd2cb448f28f59f4bca74a531367145f5f9e",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "tsm-vendite-36pct-2026-07-14",
-      "ticker": "TSM",
-      "titolo": "TSMC: vendite mensili +36% trainate dall'AI — atteso il quinto trimestre record il 16 luglio",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=6a24630aa40c5ab11060dcbf04d0a1310f826c409d8943f3f3f4bb05adc3e5dc",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "spcx-bond-25b-calo16-2026-07-14",
-      "ticker": "SPCX",
-      "titolo": "SpaceX emette bond da 25 miliardi con rating investment-grade, ma il titolo perde il 16%",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=aaa9f68929320c3bb10d765ed8b9fb0deee8ee6be13aab63c0280728c383ed63",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "goog-tpu-compute-business-2026-07-14",
-      "ticker": "GOOG",
-      "titolo": "Alphabet vuole vendere la potenza dei suoi chip TPU come servizio AI a clienti esterni",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=2f18335680da58251e72fac677fbd7e685d5903e1ccf37e4054ecdf67dc5e9bd",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "shel-sprng-energy-india-2026-07-14",
-      "ticker": "SHEL",
-      "titolo": "Shell vende la sua divisione rinnovabili in India (Sprng Energy) per 1,8 miliardi di dollari",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=ac29cb65c875e7d0ff39bcdc82d4e52eaaf0e2159610bab671e90702a3557fd2",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "nflx-mlb-home-run-derby-2026-07-14",
-      "ticker": "NFLX",
-      "titolo": "Netflix conquista i diritti esclusivi per l'Home Run Derby MLB: primo grande evento live in esclusiva",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=8e26bfeaf71adf49e47614a6744facdf7943bcd0fce688dd3e58969ab6e3ad1f",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "orcl-14mesi-low-openai-liability-2026-07-14",
-      "ticker": "ORCL",
-      "titolo": "Oracle ai minimi da 14 mesi: il deal OpenAI da 300 miliardi definito una \"passività\" dagli investitori",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c943b11bdddf050addf1748f255652f233a7dc81d1ea85b4b30a6304bfdeba19",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "lly-cathie-wood-acquisto-2026-07-14",
-      "ticker": "LLY",
-      "titolo": "Cathie Wood (ARK Invest) aumenta la posizione su Eli Lilly",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=4485315c448a89a6ae42a93ee1eff88cb436b1981d6da3cd995a10471ecdc57d",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
-      "id": "wdc-q4fy2026-earnings-date-2026-07-14",
-      "ticker": "WDC",
-      "titolo": "Western Digital: risultati Q4 FY2026 programmati per il 5 agosto 2026",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=dfacd50390ba892ac701deef6fecec1a7e257a6c7c31fefd90036a6e5c0e1a09",
-      "data_invio": "2026-07-14T05:05:00+00:00"
-    },
-    {
       "id": "ibm-q2-earnings-miss-2026-07-14",
       "ticker": "IBM",
       "titolo": "IBM crolla del 25% nella peggiore seduta della sua storia: l'AI mangia i ricavi IT tradizionali",
@@ -2735,6 +2663,86 @@
       "tipo_evento": "upgrade/downgrade analisti",
       "url": "https://finnhub.io/api/news?id=88f3ff8be6c1004bd387a2308e39417700436c3a78b88c6c57f5cc54d866e3d1",
       "data_invio": "2026-08-12T17:14:24Z"
+    },
+    {
+      "id": "ssnlf-temasek-samsung-skhynix",
+      "ticker": "SSNLF",
+      "titolo": "Il fondo sovrano di Singapore acquista partecipazioni in Samsung e SK Hynix: memoria in rally del 7%",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=688c220117eebd0192104bd977f75d290e2a16d439794eab9678ec9ca1390959",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "goog-brin-gemini-riorganizzazione",
+      "ticker": "GOOG",
+      "titolo": "Sergey Brin interviene direttamente per riportare Gemini al vertice dell'AI: riorganizzazione e meeting all-hands in Google",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=079193d82a1b115d9b8c1dbce347b0b0beb0dd53ec2d2c450e10c28f84d1f851",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "lly-retatrutide-venditori-illegali",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly querela oltre 200 venditori abusivi di retatrutide e avverte i consumatori sui rischi",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=74fc4253cb1300007f3b3a3e8fc709b87c799a119423afd9f0d487a8546069a2",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "nato-spesa-difesa-record-2026",
+      "ticker": "NATO",
+      "titolo": "Spesa difesa NATO 2026 a quota record: 634 miliardi di dollari per gli alleati europei, +20% rispetto al 2024",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.nato.int/en/news-and-events/articles/news/2026/07/07/defence-investment-update-record-spending-in-europe-and-canada",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "nukl-usa-uranio-squilibrio-supply",
+      "ticker": "NUKL",
+      "titolo": "USA: squilibrio record nella supply chain dell'uranio — consumate 73 volte le tonnellate prodotte localmente",
+      "tipo_evento": "macro tematica",
+      "url": "https://www.globenewswire.com/news-release/2026/08/10/3341890/0/en/america-consumed-50-million-pounds-of-uranium-produced-677-000.html",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "nflx-analista-buy-target-106-2027",
+      "ticker": "NFLX",
+      "titolo": "Analista avvia copertura positiva su Netflix: potere degli utili 2027 sottovalutato, target $106 (+40%)",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=9a46d00c56a0d762972e08efb5da37bb57a30e71da63945edf74a2087441742c",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "wmt-q2-beat-raise-preview-20ago",
+      "ticker": "WMT",
+      "titolo": "Walmart Q2 il 20 agosto: analisti si attendono un ciclo beat-and-raise trainato dal digitale, RBC Outperform a $137",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=1e4f5bb2836bbbafff1d696161687a50be6df821904bfe04b761635cae5367e8",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "ibm-quantum-stock-crash",
+      "ticker": "IBM",
+      "titolo": "IBM espande le capacità quantum mentre il titolo è sotto pressione: investimento strategico di lungo periodo",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=cd64f5da8f63ddc77990642fab4063db4ef6fb1fe5f3f431fccfe6610e26c0ba",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "aapl-government-affairs-gatten",
+      "ticker": "AAPL",
+      "titolo": "Apple rafforza le relazioni istituzionali: nominato nuovo responsabile government affairs da American Airlines",
+      "tipo_evento": "cambio CEO/management",
+      "url": "https://finnhub.io/api/news?id=f3d407d07ed10e8e99f0d267901a4ec6eaa976b2433687fd824c0c484a6de0b4",
+      "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "amgn-centro-rd-hyderabad",
+      "ticker": "AMGN",
+      "titolo": "Amgen inaugura un nuovo centro di scienza e innovazione a Hyderabad, India",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=bccd923da82b5927dd871d78e7a649189f06fed04fada2c3503e7af9c9771763",
+      "data_invio": "2026-08-13T05:11:20Z"
     }
   ]
 }
