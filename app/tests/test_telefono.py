@@ -169,3 +169,54 @@ def test_il_ripiego_e_finanze():
     del sito, che è un posto in cui non si voleva andare."""
     assert rotte._ctx_modulo("")["next_url"] == "/finanze"
     assert rotte._ctx_modulo("/portafoglio")["next_url"] == "/portafoglio"
+
+
+# ── i conti a zero non si mostrano (griglia del telefono) ───────────────────
+# Quattro riquadri che dicono «€ 0,00» si prendevano metà della griglia per non
+# dire niente. Nascosti, non spariti: la pagina li elenca sotto per nome.
+
+def _conto(nome, saldo):
+    return {"w": type("W", (), {"nome": nome, "colore": ""})(), "saldo": saldo}
+
+
+def test_i_conti_a_zero_finiscono_fra_i_vuoti():
+    visti, vuoti = rotte._conti_da_mostrare(
+        [_conto("Trade Republic", 1183.0), _conto("AIB", 0.0), _conto("Hype", 26.28)])
+    assert [r["w"].nome for r in visti] == ["Trade Republic", "Hype"]
+    assert [r["w"].nome for r in vuoti] == ["AIB"]
+
+
+def test_un_conto_in_rosso_non_e_un_conto_vuoto():
+    """Un saldo negativo è la cosa che si deve vedere per PRIMA. Un controllo
+    scritto come «non è positivo» lo nasconderebbe proprio quando serve."""
+    visti, vuoti = rotte._conti_da_mostrare([_conto("Contanti", -12.40)])
+    assert [r["w"].nome for r in visti] == ["Contanti"]
+    assert vuoti == []
+
+
+def test_gli_spiccioli_sotto_il_centesimo_contano_come_zero():
+    """0,004 € si scrive comunque «€ 0,00»: mostrarlo sarebbe la stessa riga
+    vuota con una scusa in più."""
+    visti, vuoti = rotte._conti_da_mostrare([_conto("PayPal", 0.004)])
+    assert visti == []
+    assert [r["w"].nome for r in vuoti] == ["PayPal"]
+
+
+def test_un_centesimo_vero_invece_si_vede():
+    visti, _ = rotte._conti_da_mostrare([_conto("PayPal", 0.01)])
+    assert [r["w"].nome for r in visti] == ["PayPal"]
+
+
+def test_l_ordine_dei_conti_non_cambia():
+    """Arrivano ordinati per saldo dal service: rimescolarli vorrebbe dire due
+    idee diverse di «conto principale» fra la Home e Finanze."""
+    visti, _ = rotte._conti_da_mostrare(
+        [_conto("A", 100.0), _conto("B", 0.0), _conto("C", 50.0), _conto("D", 10.0)])
+    assert [r["w"].nome for r in visti] == ["A", "C", "D"]
+
+
+def test_un_saldo_mancante_conta_come_zero():
+    """Meglio nasconderlo che stampare «€ 0,00» per un dato che non c'è."""
+    visti, vuoti = rotte._conti_da_mostrare([{"w": type("W", (), {"nome": "X"})(), "saldo": None}])
+    assert visti == []
+    assert len(vuoti) == 1

@@ -375,6 +375,7 @@ STRINGS = {
     "fin.dows_brevi": {"it": "lun,mar,mer,gio,ven,sab,dom", "en": "Mon,Tue,Wed,Thu,Fri,Sat,Sun", "es": "lun,mar,mié,jue,vie,sáb,dom", "fr": "lun,mar,mer,jeu,ven,sam,dim", "de": "Mo,Di,Mi,Do,Fr,Sa,So", "uk": "пн,вт,ср,чт,пт,сб,нд"},
     "fin.mesi_brevi": {"it": "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic", "en": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec", "es": "ene,feb,mar,abr,may,jun,jul,ago,sep,oct,nov,dic", "fr": "janv,févr,mars,avr,mai,juin,juil,août,sept,oct,nov,déc", "de": "Jan,Feb,Mär,Apr,Mai,Jun,Jul,Aug,Sep,Okt,Nov,Dez", "uk": "січ,лют,бер,кві,тра,чер,лип,сер,вер,жов,лис,гру"},
     "fin.mostra_altri": {"it": "Mostra altri", "en": "Show more", "es": "Mostrar más", "fr": "Afficher plus", "de": "Mehr anzeigen", "uk": "Показати ще"},
+    "fin.conti_vuoti": {"it": "{n} conti a zero, non mostrati:", "en": "{n} accounts at zero, not shown:", "es": "{n} cuentas a cero, no mostradas:", "fr": "{n} comptes à zéro, non affichés :", "de": "{n} Konten auf null, nicht angezeigt:", "uk": "{n} рахунків з нулем, не показано:"},
     "fin.cal_less": {"it": "meno", "en": "less", "es": "menos", "fr": "moins", "de": "weniger", "uk": "менше"},
     "fin.cal_more": {"it": "più", "en": "more", "es": "más", "fr": "plus", "de": "mehr", "uk": "більше"},
     "fin.cal_nothing": {"it": "niente speso", "en": "nothing spent", "es": "nada gastado", "fr": "rien dépensé", "de": "nichts ausgegeben", "uk": "нічого не витрачено"},

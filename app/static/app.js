@@ -538,6 +538,56 @@ document.addEventListener('click', function (e) {
 
 
 /* ==========================================================================
+   Registra PAC: spuntare o togliere tutti i titoli in un colpo.
+
+   I titoli sono trentotto. Per versare solo sull'oro toccava togliere
+   trentasette spunte una per una — e a metà non ti ricordi più dove sei
+   arrivato, il che è peggio della fatica: si sbaglia il versamento.
+
+   UN bottone solo, che si capovolge: se c'è qualcosa di spuntato deseleziona
+   tutto, se non c'è più niente rimette tutto. Serve anche per tornare indietro,
+   e non lascia in pagina un secondo pulsante che è sempre quello sbagliato.
+
+   Le due scritte arrivano dal template (`data-tutti`/`data-nessuno`): il
+   server sa la lingua, questo file no.
+   ========================================================================== */
+(function () {
+  var bottone = document.querySelector('[data-pac-tutti]');
+  var griglia = document.querySelector('.pac-titoli');
+  if (!bottone || !griglia) return;
+
+  var caselle = griglia.querySelectorAll('input[type=checkbox]');
+  if (!caselle.length) { bottone.remove(); return; }
+  var conta = document.querySelector('[data-pac-conta]');
+
+  function spuntate() {
+    var n = 0;
+    for (var i = 0; i < caselle.length; i++) if (caselle[i].checked) n++;
+    return n;
+  }
+
+  function aggiorna() {
+    var n = spuntate();
+    // Il bottone dice sempre cosa FARÀ, non in che stato sei: «Deseleziona
+    // tutto» finché c'è qualcosa da togliere, poi diventa il modo di tornare
+    // indietro.
+    bottone.textContent = n ? bottone.dataset.nessuno : bottone.dataset.tutti;
+    if (conta) conta.textContent = n + '/' + caselle.length;
+  }
+
+  bottone.addEventListener('click', function () {
+    var accendi = spuntate() === 0;
+    for (var i = 0; i < caselle.length; i++) caselle[i].checked = accendi;
+    aggiorna();
+  });
+  // Anche le spunte messe a mano devono muovere contatore e scritta, o dopo un
+  // clic solo il bottone racconterebbe una cosa e la griglia un'altra.
+  griglia.addEventListener('change', aggiorna);
+  aggiorna();
+})();
+
+
+/* ==========================================================================
    Telefono: le etichette delle tabelle.
 
    Una tabella da sette colonne su uno schermo da 375 punti non si legge: o si

@@ -14,6 +14,13 @@
     .pac-tog input { width: auto; flex: 0 0 auto; }
     .pac-tog .t { font-weight: 700; }
     .pac-tog .muted { margin-left: auto; }
+    /* La riga sopra la griglia: etichetta a sinistra, contatore e bottone a
+       destra. Va a capo da sola sul telefono, dove i tre pezzi affiancati
+       starebbero in centoventi punti l'uno. */
+    .pac-cap { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; }
+    .pac-cap label { flex: 1 1 auto; }
+    .pac-conta { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .pac-cap .btn { flex: 0 0 auto; }
   </style>
   <div class="page-title">{{ 'Modifica versamento PAC' if vid else 'Registra PAC' }}</div>
   <p class="page-sub">Un acquisto distribuito sui titoli, secondo le quote target.
@@ -49,7 +56,19 @@
     </div>
 
     <div class="field">
-      <label>Titoli inclusi in questo PAC</label>
+      {# Trentotto titoli: per versare solo sull'oro toccava togliere trentasette
+         spunte una per una, e a metà non ti ricordi più dove sei arrivato. Un
+         bottone solo, che si capovolge: se c'è qualcosa di spuntato deseleziona
+         tutto, se non c'è niente rimette tutto. Così serve anche per tornare
+         indietro, e non ci sono due pulsanti di cui uno è sempre inutile.
+         Il contatore accanto dice a colpo d'occhio quanti ne stai versando —
+         è il numero che sbagli quando ne deselezioni tanti a mano. #}
+      <div class="pac-cap">
+        <label style="margin:0;">Titoli inclusi in questo PAC</label>
+        <span class="pac-conta num" data-pac-conta aria-live="polite"></span>
+        <button type="button" class="btn sm ghost" data-pac-tutti
+                data-nessuno="Deseleziona tutto" data-tutti="Seleziona tutto"></button>
+      </div>
       <div class="pac-titoli">
         {% for p in posizioni %}
         <label class="pac-tog">
@@ -59,7 +78,8 @@
         </label>
         {% endfor %}
       </div>
-      <div class="hint">Di default sono tutti inclusi. Togli la spunta per escludere un titolo da questo versamento.</div>
+      <div class="hint">Di default sono tutti inclusi. Togli la spunta per escludere un titolo da questo versamento.
+        Le quote dei titoli esclusi si ridistribuiscono sugli altri.</div>
     </div>
 
     <div class="actions" style="margin-bottom:0;">

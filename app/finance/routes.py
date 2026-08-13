@@ -67,6 +67,23 @@ def _per_giorno(movimenti: list) -> list:
     return giorni
 
 
+def _conti_da_mostrare(righe: list) -> tuple[list, list]:
+    """Divide i conti in «da mostrare» e «vuoti», per la griglia del telefono.
+
+    Quattro riquadri che dicono «€ 0,00» si prendevano metà della griglia per
+    non dire niente, e spingevano i conti veri sotto il bordo dello schermo.
+
+    Il confronto è sul saldo **arrotondato ai centesimi**: un conto da 0,004 €
+    scrive comunque «€ 0,00», e mostrarlo sarebbe la stessa riga vuota con una
+    scusa in più. Un saldo **negativo non è zero** e resta dov'è — anzi, è la
+    cosa che si deve vedere per prima.
+    """
+    visti, vuoti = [], []
+    for r in righe:
+        (vuoti if round(r.get("saldo") or 0.0, 2) == 0 else visti).append(r)
+    return visti, vuoti
+
+
 def _dati_effetto(saldi, riep, now) -> dict:
     """Materiale del riquadro «che cosa cambia»: saldi dei conti e uscite già
     registrate per categoria, letti dal JS (static/movement-preview.js).
@@ -100,7 +117,12 @@ def _ctx_panoramica() -> dict:
     saldi = service.saldi()
     riep = service.riepilogo_mese(now.year, now.month)
     movimenti = service.lista_movimenti()        # TUTTI, data desc
+    conti_visti, conti_vuoti = _conti_da_mostrare(saldi["righe"])
     return {
+        # Solo per la griglia del telefono: sul PC le card ci stanno tutte e
+        # restano quelle del design freeze.
+        "conti_visti": conti_visti,
+        "conti_vuoti": conti_vuoti,
         # Gli STESSI movimenti, raggruppati per giorno: è la forma che serve
         # alla lista del telefono. Non è una seconda lettura del database —
         # è la stessa lista guardata in un altro modo.

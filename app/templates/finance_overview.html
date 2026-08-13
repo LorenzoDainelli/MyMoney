@@ -37,9 +37,16 @@
      nome e il suo saldo, con la riga di colore che lo fa riconoscere — il resto
      (tipo, quota sul totale, barra) è roba da schermo grande, dove lo spazio
      c'è. Il blocco esiste solo sul telefono; sul PC comanda la griglia sotto. #}
-  {% if saldi.righe %}
+  {# I conti VUOTI non si mostrano: quattro riquadri che dicono € 0,00 si
+     prendevano metà della griglia per non dire niente, e spingevano i conti
+     veri sotto il bordo dello schermo. Il confronto è sul saldo ARROTONDATO ai
+     centesimi, perché un conto da 0,004 € scrive comunque «€ 0,00» e mostrarlo
+     sarebbe la stessa riga vuota con una scusa in più.
+     Un saldo NEGATIVO non è zero e resta: è la cosa che si deve vedere per
+     prima. #}
+  {% if conti_visti %}
   <div class="tel-conti tel-solo" style="margin-top:14px;">
-    {% for r in saldi.righe %}
+    {% for r in conti_visti %}
     {% set acc = (r.w.colore or '') | trim %}
     {# Un <div>, non un link: siamo già su Finanze, e un collegamento che non
        porta da nessuna parte è peggio di nessun collegamento — si preme e non
@@ -50,6 +57,15 @@
     </div>
     {% endfor %}
   </div>
+  {% endif %}
+  {% if conti_vuoti %}
+  {# Nascosti, non spariti. Un conto che non si vede più senza che nessuno lo
+     dica è il modo migliore per far pensare «ho perso un conto» — e per
+     rendere il numero in cima («8 portafogli») una bugia apparente. #}
+  <p class="faint tel-solo" style="margin:8px 2px 0;font-size:12px;">
+    {{ t('fin.conti_vuoti', n=(conti_vuoti | length)) }}
+    <span class="muted">{{ conti_vuoti | map(attribute='w.nome') | join(' · ') }}</span>
+  </p>
   {% endif %}
 
   {# ---------- portafogli: griglia .mm-wallet (simple mode, FinanceScreen.jsx) ---------- #}
