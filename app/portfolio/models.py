@@ -6,7 +6,7 @@ in tabelle separate, così i tuoi dati restano puliti e mai 'inventati'.
 """
 from datetime import date, datetime, timezone
 
-from sqlalchemy import String, Float, Integer, Date, DateTime, Text
+from sqlalchemy import String, Float, Integer, Date, DateTime, Text, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shared.db import Base
@@ -75,6 +75,13 @@ class Versamento(Base):
     # al portafoglio "PAC investimenti". Uno solo per versamento (viene
     # aggiornato/eliminato insieme al PAC, mai duplicato).
     tx_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # Non tutti i versamenti sono IL PAC del mese. L'ETC oro lo compra la banca
+    # con i saveback e gli arrotondamenti, quando le pare e per pochi centesimi:
+    # è un acquisto vero e va registrato, ma non è la rata mensile. Senza questa
+    # distinzione un acquisto d'oro da 7 centesimi il 3 del mese farebbe credere
+    # all'app che il PAC di quel mese è già fatto (vedi `versamenti.promemoria`),
+    # e sporcherebbe «giorno tipico» e «importo tipico», che sono mediane.
+    fuori_piano: Mapped[bool] = mapped_column(Boolean, default=False)
     creato_il: Mapped[datetime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None))
 

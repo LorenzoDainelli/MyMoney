@@ -12,7 +12,7 @@ news-monitor (cosi' la lista e' scritta una volta sola).
 I dati di DETTAGLIO (prezzi, AUM, TER, holdings...) NON sono qui e NON vanno mai
 inventati: arrivano dalle fonti dati. Qui c'e' solo l'anagrafica.
 """
-from sqlalchemy import Float, Integer, String
+from sqlalchemy import Boolean, Float, Integer, String
 
 from shared.db import SessionLocal, engine
 from shared.schema import aggiungi_colonne
@@ -47,6 +47,9 @@ def migra_schema():
         aggiungi_colonne(c, "portfolio_versamenti", (
             ("tx_id", Integer(), None),
             ("ora", String(5), ""),
+            # I versamenti già registrati sono tutti il PAC vero: partire da
+            # False è la risposta giusta per la storia che c'è.
+            ("fuori_piano", Boolean(), False),
         ))
 
 

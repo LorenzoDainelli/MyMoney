@@ -109,23 +109,51 @@ def _prezzo_eur_alla_data(p: Position, data: date, qmap: dict, oggi: date, ora=N
 
 
 def _riparti(posizioni, importo: float, esclusi: set):
-    """Assegna a ogni titolo incluso la sua quota in € (proporzionale alla %
-    target, normalizzata). Ritorna (lista_posizioni_incluse, {id: euro})."""
-    inclusi = [p for p in posizioni
-               if p.id not in esclusi and not p.is_fisso and (p.pct_target or 0) > 0]
-    somma = sum(p.pct_target for p in inclusi)
+    """Assegna a ogni titolo scelto la sua quota in €.
+    Ritorna (lista_posizioni_incluse, {id: euro}).
+
+    **Caso normale:** proporzionale alla % target, normalizzata sui soli
+    inclusi — escludere un titolo redistribuisce la sua quota sugli altri.
+
+    **Secondo caso, e non è una scorciatoia:** i titoli scelti possono non
+    avere NESSUNA quota target. Succede con l'ETC oro, che ha `pct_target = 0`
+    di proposito, perché non fa parte della ripartizione dei 100 € mensili:
+    quello lo compra la banca con i saveback e gli arrotondamenti. Prima quei
+    titoli venivano scartati dal filtro e il modulo rispondeva «nessun titolo
+    incluso», che era vero ma inutile — l'app sapeva dell'oro come 38ª
+    posizione, sapeva che il saveback lo compra, e non dava nessun modo di
+    registrare l'acquisto.
+
+    Quando nessuno dei titoli scelti ha una quota si divide **in parti uguali**.
+    Con un titolo solo vuol dire tutto a lui, che è il caso vero. Questo ramo
+    si accende solo dove prima non usciva niente: nulla di ciò che già
+    funzionava può cambiare comportamento.
+    """
+    scelti = [p for p in posizioni if p.id not in esclusi and not p.is_fisso]
+    con_quota = [p for p in scelti if (p.pct_target or 0) > 0]
+    if con_quota:
+        # Basta che UNO dei scelti abbia una quota perché comandino le quote:
+        # in un versamento misto un titolo a target zero non deve mangiarsi
+        # una fetta che nel piano non gli spetta.
+        inclusi = con_quota
+        pesi = {p.id: p.pct_target for p in inclusi}
+    else:
+        inclusi = scelti
+        pesi = {p.id: 1.0 for p in inclusi}
+
+    somma = sum(pesi.values())
     if importo <= 0 or somma <= 0 or not inclusi:
         return [], {}
     euros, acc = {}, 0.0
     for p in inclusi:
-        e = round(importo * p.pct_target / somma, 2)
+        e = round(importo * pesi[p.id] / somma, 2)
         euros[p.id] = e
         acc += e
     # l'arrotondamento ai centesimi può lasciare un residuo: lo metto sul titolo
     # con più peso, così la somma torna ESATTA all'importo.
     resid = round(importo - acc, 2)
     if resid and inclusi:
-        big = max(inclusi, key=lambda p: (p.pct_target, p.id))
+        big = max(inclusi, key=lambda p: (pesi[p.id], p.id))
         euros[big.id] = round(euros[big.id] + resid, 2)
     return inclusi, euros
 
@@ -144,8 +172,14 @@ def anteprima(importo: float, data: date, esclusi: set, ora: str = "") -> dict:
         qta = round(euro / prezzo, 6) if (prezzo and prezzo > 0) else None
         if qta is None:
             avvisi.append(p.ticker or p.nome_vista)
+        # La percentuale MOSTRATA è la fetta vera di questo versamento, non la
+        # quota target grezza. Con tutti i titoli inclusi le due coincidono
+        # (i target fanno 100). Con qualche esclusione la quota grezza direbbe
+        # «20%» accanto a un importo che è il 25 — e sull'oro, che di target ne
+        # ha zero, direbbe «0%» accanto a tutti i soldi del versamento.
         righe.append({"id": p.id, "ticker": p.ticker, "nome": p.nome_vista,
-                      "pct": p.pct_target, "euro": euro, "prezzo": prezzo,
+                      "pct": round(euro / importo * 100, 2) if importo else 0.0,
+                      "euro": euro, "prezzo": prezzo,
                       "qta": qta, "fonte": fonte})
     return {"righe": righe, "totale": round(tot, 2), "n_inclusi": len(inclusi),
             "avvisi": avvisi, "data": data, "importo": round(importo, 2)}
@@ -240,6 +274,12 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
             db.add(v)
         v.data, v.importo, v.conto = data, round(importo, 2), (conto or "").strip()
         v.ora = (ora or "").strip()[:5]
+        # È il PAC del mese, o un acquisto a parte? Lo dicono i titoli: se
+        # nessuno di quelli comprati ha una quota nel piano, questo versamento
+        # nel piano non c'è — è l'oro comprato dalla banca coi saveback. Serve
+        # a `promemoria()`, che altrimenti conterebbe 7 centesimi d'oro come
+        # «la rata di agosto è fatta».
+        v.fuori_piano = not any((p.pct_target or 0) > 0 for p in inclusi)
         db.flush()                                # per avere v.id
         for p in inclusi:
             euro = euros[p.id]
@@ -303,7 +343,17 @@ def promemoria(oggi: date = None) -> dict | None:
     funzione tace (regola: mai inventare un'abitudine che non esiste)."""
     from statistics import median
 
-    storico = lista()
+    # Solo i versamenti DEL PIANO. Gli acquisti a parte — l'oro che la banca
+    # compra coi saveback, pochi centesimi quando le pare — non sono la rata
+    # mensile: contarli spegnerebbe il promemoria del mese («c'è già un
+    # versamento di agosto») e sposterebbe le due mediane qui sotto, il giorno
+    # tipico e l'importo tipico, verso date e cifre che non sono mai state tue.
+    # Solo i versamenti DEL PIANO. Gli acquisti a parte — l'oro che la banca
+    # compra coi saveback, pochi centesimi quando le pare — non sono la rata
+    # mensile: contarli spegnerebbe il promemoria del mese («c'è già un
+    # versamento di agosto») e sposterebbe le due mediane qui sotto, il giorno
+    # tipico e l'importo tipico, verso date e cifre che non sono mai state tue.
+    storico = [v for v in lista() if not v.get("fuori_piano")]
     if not storico:
         return None
     oggi = oggi or tempo.oggi()
@@ -369,5 +419,6 @@ def lista() -> list:
             n = db.execute(select(func.count()).select_from(VersamentoRiga)
                            .where(VersamentoRiga.versamento_id == v.id)).scalar()
             out.append({"id": v.id, "data": v.data, "ora": v.ora or "",
-                        "importo": v.importo, "conto": v.conto, "n_titoli": n or 0})
+                        "importo": v.importo, "conto": v.conto, "n_titoli": n or 0,
+                        "fuori_piano": bool(v.fuori_piano)})
         return out

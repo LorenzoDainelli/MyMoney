@@ -203,3 +203,128 @@ def test_l_oro_non_entra_nemmeno_nell_anteprima(test_db):
     a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set())
     assert a["n_inclusi"] == 3
     assert "EGLN" not in [r["ticker"] for r in a["righe"]]
+
+
+# ── acquisti FUORI dal piano mensile (l'ETC oro comprato coi saveback) ───────
+#
+# L'oro ha `pct_target = 0` di proposito: non fa parte della ripartizione dei
+# 100 € mensili, lo compra la banca con saveback e arrotondamenti. Ma è una
+# posizione vera e gli acquisti vanno registrati — e prima non si poteva:
+# `_riparti` scartava i titoli senza quota e il modulo rispondeva «nessun
+# titolo incluso», cioè l'app sapeva dell'oro e non dava modo di comprarlo.
+
+def _seed_con_oro(Session):
+    """I tre soliti titoli con quota, più l'oro che di quota non ne ha."""
+    with Session() as db:
+        db.add_all([
+            Position(nome="Alpha", ticker="A", pct_target=50.0, ordine=0),
+            Position(nome="Beta", ticker="B", pct_target=30.0, ordine=1),
+            Position(nome="Gamma", ticker="C", pct_target=20.0, ordine=2),
+            Position(nome="iShares Physical Gold", ticker="EGLN", pct_target=0.0, ordine=3),
+        ])
+        db.commit()
+        return {p.ticker: p.id for p in db.execute(select(Position)).scalars()}
+
+
+def test_un_titolo_senza_quota_scelto_da_solo_si_prende_tutto(test_db):
+    """Il caso vero: 0,07 € di oro comprati dalla banca coi saveback."""
+    Session = test_db
+    ids = _seed_con_oro(Session)
+    altri = {i for t, i in ids.items() if t != "EGLN"}
+    a = versamenti.anteprima(0.07, tempo.oggi(), esclusi=altri)
+    assert a["n_inclusi"] == 1
+    assert a["righe"][0]["ticker"] == "EGLN"
+    assert a["righe"][0]["euro"] == pytest.approx(0.07)
+    assert a["righe"][0]["pct"] == pytest.approx(100.0)   # non «0%», che era il target
+    assert a["totale"] == pytest.approx(0.07)
+
+
+def test_il_pac_normale_non_cambia_di_una_virgola(test_db):
+    """Il ramo nuovo si accende SOLO dove prima non usciva niente. Con dei
+    titoli a quota fra i scelti comandano le quote, come sempre."""
+    Session = test_db
+    ids = _seed_con_oro(Session)
+    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set())
+    per_ticker = {r["ticker"]: r["euro"] for r in a["righe"]}
+    assert per_ticker == {"A": 50.0, "B": 30.0, "C": 20.0}
+    assert "EGLN" not in per_ticker        # quota 0: nel piano non c'e'
+    assert a["totale"] == pytest.approx(100.0)
+
+
+def test_un_titolo_senza_quota_non_ruba_niente_agli_altri(test_db):
+    """Sceglierlo INSIEME ai titoli del piano non deve dargli una fetta che nel
+    piano non gli spetta: basta che uno degli scelti abbia una quota perche'
+    comandino le quote."""
+    Session = test_db
+    ids = _seed_con_oro(Session)
+    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi={ids["C"]})
+    per_ticker = {r["ticker"]: r["euro"] for r in a["righe"]}
+    assert "EGLN" not in per_ticker
+    # 50 e 30 rinormalizzati su 80 -> 62,50 e 37,50, e il totale resta esatto
+    assert per_ticker == {"A": 62.5, "B": 37.5}
+    assert a["totale"] == pytest.approx(100.0)
+
+
+def test_piu_titoli_senza_quota_si_dividono_in_parti_uguali(test_db):
+    """Non e' il caso di tutti i giorni, ma la regola dev'essere dichiarata: se
+    NESSUNO degli scelti ha una quota, l'unica risposta neutra e' meta' e meta'
+    — e si vede nell'anteprima prima di confermare."""
+    Session = test_db
+    with Session() as db:
+        db.add_all([Position(nome="Oro", ticker="EGLN", pct_target=0.0, ordine=0),
+                    Position(nome="Argento", ticker="SLVR", pct_target=0.0, ordine=1)])
+        db.commit()
+    a = versamenti.anteprima(10.0, tempo.oggi(), esclusi=set())
+    assert sorted(r["euro"] for r in a["righe"]) == [5.0, 5.0]
+    assert a["totale"] == pytest.approx(10.0)
+
+
+def test_l_acquisto_di_solo_oro_viene_marcato_fuori_piano(test_db):
+    Session = test_db
+    ids = _seed_con_oro(Session)
+    altri = {i for t, i in ids.items() if t != "EGLN"}
+    vid = versamenti.salva(0.07, tempo.oggi(), "Nascosti", esclusi=altri)
+    assert vid is not None
+    voci = {v["id"]: v for v in versamenti.lista()}
+    assert voci[vid]["fuori_piano"] is True
+
+
+def test_il_pac_del_mese_non_e_fuori_piano(test_db):
+    Session = test_db
+    _seed_con_oro(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
+    assert versamenti.lista()[0]["fuori_piano"] is False
+
+
+# ── il promemoria del PAC non si fa zittire da 7 centesimi d'oro ─────────────
+# E' il punto in cui questa funzione poteva rompere qualcosa di gia' fatto:
+# `promemoria()` tace se in questo mese c'e' gia' UN versamento qualsiasi.
+
+def test_un_acquisto_fuori_piano_non_spegne_il_promemoria(test_db):
+    """Senza il flag, 0,07 € d'oro il 3 del mese direbbero «la rata di questo
+    mese e' fatta» e il promemoria non comparirebbe piu' fino al mese dopo."""
+    Session = test_db
+    ids = _seed_con_oro(Session)
+    altri = {i for t, i in ids.items() if t != "EGLN"}
+
+    # una storia di PAC veri nei mesi scorsi, tutti il giorno 16
+    for mese in (4, 5, 6, 7):
+        versamenti.salva(100.0, date(2026, mese, 16), "TR", esclusi=set())
+    # ...e in agosto, per ora, solo un acquisto d'oro
+    versamenti.salva(0.07, date(2026, 8, 3), "Nascosti", esclusi=altri)
+
+    p = versamenti.promemoria(oggi=date(2026, 8, 20))
+    assert p is not None, "il PAC di agosto NON e' stato fatto: il promemoria deve uscire"
+    assert p["giorno"] == 16                       # la mediana non e' scivolata al 3
+    assert p["importo_tipico"] == pytest.approx(100.0)   # ne' l'importo a 0,07
+    assert p["n_versamenti"] == 4                  # i quattro veri, non cinque
+
+
+def test_col_pac_del_mese_registrato_il_promemoria_tace(test_db):
+    """Il rovescio: se la rata c'e' davvero, non si deve ricordare niente."""
+    Session = test_db
+    _seed_con_oro(Session)
+    for mese in (4, 5, 6, 7):
+        versamenti.salva(100.0, date(2026, mese, 16), "TR", esclusi=set())
+    versamenti.salva(100.0, date(2026, 8, 16), "TR", esclusi=set())
+    assert versamenti.promemoria(oggi=date(2026, 8, 20)) is None
