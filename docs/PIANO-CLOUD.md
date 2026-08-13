@@ -183,6 +183,38 @@ scritto davvero là dentro; nessun errore nei log.
 **`.gcloudignore`**. Prima di caricare, verificare con
 `gcloud meta list-files-for-upload` che `app/data/` non compaia.
 
+> #### Il punto in cui quel `.` fa male (13/08/2026)
+>
+> `--source .` vuol dire «la cartella in cui sei adesso». Lanciato per sbaglio da
+> `C:\Users\loren`, ha cominciato a impacchettare la **cartella utente intera**:
+> dentro ci sono `Desktop\Claude\tools\` (password di Cloud SQL, token del
+> lavoro, credenziali OAuth) e `app\data\finanza.db` coi movimenti veri. Il
+> `.gcloudignore` non c'entrava niente: quello sta **dentro il repo**, e da lì
+> non copriva un bel nulla.
+>
+> Si è fermato da solo con un `FileNotFoundError` su una cartella del telefono
+> collegato via Phone Link (`CrossDevice\Redmi Note 11 Pro+ 5G\...`), **mentre
+> faceva l'elenco dei file e prima di caricare**. Verificato dopo: nel bucket
+> `gs://run-sources-mymoney-502422-europe-west8/` ci sono 10 archivi, tutti da
+> ~470 KB, il più recente del 9 agosto. Non è uscito niente. Ma si è salvato per
+> coincidenza, non per difesa.
+>
+> **Da qui in poi si pubblica con `Pubblica.bat`**, nella radice del repo. Non
+> usa il `.`: prende `%~dp0`, cioè la cartella di sé stesso, quindi punta al
+> repo da qualunque posto lo si lanci. Prima di spedire stampa quanti file
+> partirebbero e **si ferma da solo** se nell'elenco compare un `.db`, un
+> `.env`, o un file di chiavi; poi chiede conferma.
+>
+> Due trappole di cmd trovate scrivendolo, tutte e due già scattate:
+> - **`gcloud.cmd` è un file batch.** Un `.bat` chiamato da un `.bat` *senza*
+>   `call` prende il posto di chi lo chiama e non torna più indietro: lo script
+>   moriva in silenzio subito dopo aver scritto l'elenco. Serve `call`.
+> - **I `.bat` vogliono CRLF.** `.gitattributes` normalizzava tutto a LF, e con i
+>   soli LF i blocchi su più righe (`if (...)`, `for /f`, `choice`) possono
+>   sbagliare a ritrovare la riga dopo. Aggiunta la riga `*.bat text eol=crlf`.
+>   Resta valida anche la regola vecchia: **ASCII puro**, o cmd perde il conto
+>   fra byte e caratteri ed esegue i commenti come comandi.
+
 #### (com'era pianificata)
 - `Dockerfile` (Python slim, dipendenze, avvio con la porta che dà Cloud Run);
 - `.dockerignore` — **`app/data/` va escluso**, altrimenti i dati veri finiscono

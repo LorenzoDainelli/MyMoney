@@ -2,3 +2,10 @@
 * text=auto eol=lf
 *.py text eol=lf
 *.sh text eol=lf
+
+# I .bat NO: girano solo su Windows, e cmd.exe li vuole in CRLF. Con i soli LF
+# i blocchi su piu' righe - if (...), for /f, choice - possono sbagliare a
+# ritrovare la riga dopo. E' la cugina della trappola gia' nota: quei file
+# devono anche restare in ASCII puro, o cmd perde il conto fra byte e caratteri
+# e finisce per eseguire i commenti come se fossero comandi.
+*.bat text eol=crlf
