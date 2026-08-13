@@ -9599,6 +9599,142 @@
       "inviata": true,
       "titolo": "Amgen inaugura un nuovo centro di scienza e innovazione a Hyderabad, India",
       "url": "https://finnhub.io/api/news?id=bccd923da82b5927dd871d78e7a649189f06fed04fada2c3503e7af9c9771763"
+    },
+    {
+      "id": "sndk-investor-day-2026",
+      "ticker": "SNDK",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SanDisk all'Investor Day 2026: piano di crescita a lungo termine e 35 miliardi di cassa da impiegare",
+      "url": "https://finnhub.io/api/news?id=a180b34b3a4a20256a684ed02e8432c266ddd733cb562fe68fa5ff9a51b1468e"
+    },
+    {
+      "id": "spcx-morgan-stanley-double-down-2026-08-13",
+      "ticker": "SPCX",
+      "data": "2026-08-13",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 63,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Morgan Stanley rinnova e rafforza la raccomandazione su SpaceX agli investitori istituzionali",
+      "url": "https://finnhub.io/api/news?id=76008c3e8b9ae6fdba991a79ed57fdfefcd5c22ae9424e83e82104c6db978d29"
+    },
+    {
+      "id": "aapl-siri-ai-publishers-2026-08-13",
+      "ticker": "AAPL",
+      "data": "2026-08-13",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple tratta con gli editori per pagare i contenuti che alimenteranno la nuova Siri AI: budget di centinaia di milioni di dollari",
+      "url": "https://finnhub.io/api/news?id=38a0c5163b9c99a1a5f29c4b40b45edaca961c5578426b89400941bab0b9c168"
+    },
+    {
+      "id": "ibm-openai-push-2026-08-13",
+      "ticker": "IBM",
+      "data": "2026-08-13",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 61,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "IBM lancia una grande practice OpenAI in IBM Consulting con migliaia di risorse, dopo che il CEO aveva ammesso ritardi sull'AI",
+      "url": "https://finnhub.io/api/news?id=ce2a3bd953eb923ae47ec0bf213a697103e8497b5b3f0a157f4e02aeedfc12c6"
+    },
+    {
+      "id": "intc-ritorno-memorie-2026-08-13",
+      "ticker": "INTC",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 57,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Il CEO di Intel apre al ritorno nel mercato delle memorie: possibile sfida a Micron, SK Hynix e SanDisk",
+      "url": "https://finnhub.io/api/news?id=7b71d391f2052c959b783af31c92dcd45b1c14bef6331dcb199e64b6cf87fc02"
+    },
+    {
+      "id": "wdc-fair-value-boost-ai-2026-08-13",
+      "ticker": "WDC",
+      "data": "2026-08-13",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 56,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "La domanda AI di storage fa salire la stima del fair value di Western Digital da 585 a 662 dollari",
+      "url": "https://finnhub.io/api/news?id=a396cb65c398c107f369697c703f7592fcd26a76a70043259e695f935db175cc"
+    },
+    {
+      "id": "nflx-ackman-acquisto-2026-08-13",
+      "ticker": "NFLX",
+      "data": "2026-08-13",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bill Ackman acquista Netflix: Pershing Square entra nel titolo giù del 35% nel 2026 scommettendo sul rimbalzo",
+      "url": "https://finnhub.io/api/news?id=d0a5094c6d7ae07aa3ed473b1f5aa92efcebd59cadd9ec2a2891a89026a84c3d"
+    },
+    {
+      "id": "goog-prezzi-carenza-memoria-2026-08-13",
+      "ticker": "GOOG",
+      "data": "2026-08-13",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 51,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Google aumenta i prezzi a causa della carenza globale di chip di memoria per l'AI: l'effetto domino del boom AI",
+      "url": "https://finnhub.io/api/news?id=7b47feade36c3f1afb7f5f31c58bf704c74251335928767f8c0213fef99f612e"
     }
   ]
 }

@@ -1,22 +1,6 @@
 {
   "items": [
     {
-      "id": "ibm-q2-earnings-miss-2026-07-14",
-      "ticker": "IBM",
-      "titolo": "IBM crolla del 25% nella peggiore seduta della sua storia: l'AI mangia i ricavi IT tradizionali",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=3354152afa3dd1c48f7b04823e242f9d8e8b66f8a7dfab0461e7a31337d68c0f",
-      "data_invio": "2026-07-14T17:07:31+00:00"
-    },
-    {
-      "id": "wdc-kioxia-merger-2026-07-14",
-      "ticker": "WDC",
-      "titolo": "Western Digital riapre i colloqui di fusione con Kioxia per il consolidamento del mercato NAND",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=0d16dcc958c290a2ef452f97106040fd69d0cb0fecac738c1be3dda007bc97c0",
-      "data_invio": "2026-07-14T17:07:31+00:00"
-    },
-    {
       "id": "lly-fda-selpercatinib-2026-07-15",
       "ticker": "LLY",
       "titolo": "Eli Lilly ottiene l'approvazione definitiva FDA per selpercatinib nei tumori solidi",
@@ -2743,6 +2727,70 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=bccd923da82b5927dd871d78e7a649189f06fed04fada2c3503e7af9c9771763",
       "data_invio": "2026-08-13T05:11:20Z"
+    },
+    {
+      "id": "sndk-investor-day-2026",
+      "ticker": "SNDK",
+      "titolo": "SanDisk all'Investor Day 2026: piano di crescita a lungo termine e 35 miliardi di cassa da impiegare",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=a180b34b3a4a20256a684ed02e8432c266ddd733cb562fe68fa5ff9a51b1468e",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "spcx-morgan-stanley-double-down-2026-08-13",
+      "ticker": "SPCX",
+      "titolo": "Morgan Stanley rinnova e rafforza la raccomandazione su SpaceX agli investitori istituzionali",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=76008c3e8b9ae6fdba991a79ed57fdfefcd5c22ae9424e83e82104c6db978d29",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "aapl-siri-ai-publishers-2026-08-13",
+      "ticker": "AAPL",
+      "titolo": "Apple tratta con gli editori per pagare i contenuti che alimenteranno la nuova Siri AI: budget di centinaia di milioni di dollari",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=38a0c5163b9c99a1a5f29c4b40b45edaca961c5578426b89400941bab0b9c168",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "ibm-openai-push-2026-08-13",
+      "ticker": "IBM",
+      "titolo": "IBM lancia una grande practice OpenAI in IBM Consulting con migliaia di risorse, dopo che il CEO aveva ammesso ritardi sull'AI",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=ce2a3bd953eb923ae47ec0bf213a697103e8497b5b3f0a157f4e02aeedfc12c6",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "intc-ritorno-memorie-2026-08-13",
+      "ticker": "INTC",
+      "titolo": "Il CEO di Intel apre al ritorno nel mercato delle memorie: possibile sfida a Micron, SK Hynix e SanDisk",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=7b71d391f2052c959b783af31c92dcd45b1c14bef6331dcb199e64b6cf87fc02",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "wdc-fair-value-boost-ai-2026-08-13",
+      "ticker": "WDC",
+      "titolo": "La domanda AI di storage fa salire la stima del fair value di Western Digital da 585 a 662 dollari",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=a396cb65c398c107f369697c703f7592fcd26a76a70043259e695f935db175cc",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "nflx-ackman-acquisto-2026-08-13",
+      "ticker": "NFLX",
+      "titolo": "Bill Ackman acquista Netflix: Pershing Square entra nel titolo giù del 35% nel 2026 scommettendo sul rimbalzo",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=d0a5094c6d7ae07aa3ed473b1f5aa92efcebd59cadd9ec2a2891a89026a84c3d",
+      "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "goog-prezzi-carenza-memoria-2026-08-13",
+      "ticker": "GOOG",
+      "titolo": "Google aumenta i prezzi a causa della carenza globale di chip di memoria per l'AI: l'effetto domino del boom AI",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=7b47feade36c3f1afb7f5f31c58bf704c74251335928767f8c0213fef99f612e",
+      "data_invio": "2026-08-13T17:30:00+00:00"
     }
   ]
 }
