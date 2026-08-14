@@ -2791,6 +2791,86 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=d7829df9bb82f3ae92f4ef79d2e4eff0a0f97b8115b9cdab3e96e886b05dda93",
       "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "spcx-spacex-cursor-deal-60b",
+      "ticker": "SPCX",
+      "titolo": "SpaceX acquista Cursor per 60 miliardi di dollari: Musk punta sull'AI per gli sviluppatori",
+      "tipo_evento": "M&A",
+      "url": "https://finnhub.io/api/news?id=e8bac4ce992f5925a7e2113166ab7542d287d443a1def2af6c52e441344a23ab",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "pltr-q2-2026-earnings",
+      "ticker": "PLTR",
+      "titolo": "Palantir Q2 2026: ricavi +93%, margine operativo 62% e pipeline record da 2,1 miliardi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=a06ac29afd583ec34368562cc142d703883fbb808d6bb801af8619e518abcd1f",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "ko-guidance-rialzo-q2-2026",
+      "ticker": "KO",
+      "titolo": "Coca-Cola alza le stime 2026 e migliora i margini: domanda globale resiliente",
+      "tipo_evento": "revisione guidance",
+      "url": "https://finnhub.io/api/news?id=ecd4a25780abe328bce456f597b3125bb3a9bf092c9a767bde8294ba8b907e99",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "intc-emissione-20b-fcf-positivo",
+      "ticker": "INTC",
+      "titolo": "Intel emette azioni per 20 miliardi: diluizione nel breve, FCF positivo per la prima volta in 4 anni",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=9edfaa9c1eaaa99e96821e6bd32aedf1072d72d880224161c576d68d4a72b407",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "lly-q2-2026-earnings-glp1",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly Q2 2026: ricavi sotto le attese ma gli analisti confermano la tesi strutturale sui GLP-1",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=2a95ccbe932da85654f698434dbda479e6ea5234b46e5b8331db3e1fa5e7e1c7",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "sndk-upgrade-nand-analyst-day",
+      "ticker": "SNDK",
+      "titolo": "SanDisk promossa da un analista dopo l'Investor Day: i contratti NAND pluriennali cambiano la valutazione",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=262ca602619ecd7e0d35d6d1465e395207cd7dadee9f43be2c897a39317e128e",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "wdc-rally-sndk-outlook",
+      "ticker": "WDC",
+      "titolo": "Western Digital balza in pre-mercato sull'outlook di SanDisk: il settore storage AI in rally",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=5003d41ee96efe6d31f696cf45645bc8c16cc060df48b72193541d16415a423a",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "tsm-softbank-stake-reduction-72pct",
+      "ticker": "TSM",
+      "titolo": "SoftBank taglia del 72% la sua posizione in TSMC: restano solo 565.000 azioni",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=1d02131466f50f2e6b33c7e0dcb2d90bcc84adf7cc7b31b5bf413dba8a21d65a",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "ssnlf-chipflation-ai-memory",
+      "ticker": "SSNLF",
+      "titolo": "La carenza di memoria AI genera «chipflation»: prezzi dei dispositivi consumer potrebbero salire",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=0183d89d17d5f2c42678bbc3c6543aa819091c0e5e532dae6be93e4738762bdd",
+      "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "aapl-mac-mini-texas-600b",
+      "ticker": "AAPL",
+      "titolo": "Apple avvia la produzione dei Mac Mini in Texas: Tim Cook sigla l'impegno manifatturiero USA da 600 miliardi",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=7bd02435632b5e2e750fc020928b90d16676c1f4c9bd0b381641f8d22f4fe3ce",
+      "data_invio": "2026-08-14T17:12:52+00:00"
     }
   ]
 }
