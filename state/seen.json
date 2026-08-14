@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "lly-fda-selpercatinib-2026-07-15",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly ottiene l'approvazione definitiva FDA per selpercatinib nei tumori solidi",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=85a7dde379b55c28caed39928be7f2f662379741b95f70f30eb6804a9b58aabe",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "jnj-guidance-100b-2026-07-15",
-      "ticker": "JNJ",
-      "titolo": "Johnson & Johnson alza le previsioni annuali verso il traguardo storico di 100 miliardi di ricavi",
-      "tipo_evento": "revisione guidance",
-      "url": "https://finnhub.io/api/news?id=84094e3225d70c38db6c6d50a9e1c231ea6494cc942138536531dc77bf34a499",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "ny-ban-ai-datacenter-2026-07-15",
-      "ticker": "MSFT",
-      "titolo": "New York vieta i nuovi grandi data center AI: altri 14 stati potrebbero seguire",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=d55adca71d1b424a95d3ea1f5389575ca7ac8749a8b8e00dffd06b67555de9d1",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "meta-ai-layoff-lawsuit-2026-07-15",
-      "ticker": "META",
-      "titolo": "Meta in tribunale: i licenziamenti assistiti dall'AI avrebbero penalizzato i lavoratori in malattia",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=85def294f7da6bbe9575ae9efdf24b7b74eebb551508b8a4df1e975a14958438",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "goog-uk-cma-search-portability-2026-07-15",
-      "ticker": "GOOG",
-      "titolo": "Il regolatore britannico impone a Google nuove regole sulla portabilità dei dati di ricerca",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=7d84fceeee56042318794b76ba72711c9fc1b0138f3785877e2e1d6f52dc3e07",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "orcl-ai-native-builder-2026-07-15",
-      "ticker": "ORCL",
-      "titolo": "Oracle lancia il builder AI nativo per le applicazioni enterprise Fusion",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=05ee5a1403e66f3316561d1a50b95b777245a26fc154d51b3ae13febe3c28649",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "pltr-sba-contract-2026-07-15",
-      "ticker": "PLTR",
-      "titolo": "Il governo USA (SBA) espande il contratto con Palantir per individuare le frodi sui fondi COVID",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=455dfd9b96c4bf71781ebc70d42d0d47e3f4c3d97581893d7f8240cafe2ce73f",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "ko-africa-bottler-deal-2026-07-15",
-      "ticker": "KO",
-      "titolo": "Coca-Cola ottiene il via libera del Sudafrica per acquisire il 75% dell'imbottigliatrice africana",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=38127c6655b2f910c290ef7552af2b53c0ad657275f90181b797e94996757013",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "wdc-skhynix-etf-rally-2026-07-15",
-      "ticker": "WDC",
-      "titolo": "ETF a leva su SK Hynix debuttano negli USA e trascinano al rialzo tutto il comparto memorie",
-      "tipo_evento": "macro tematica",
-      "url": "https://finnhub.io/api/news?id=02cecc4fa136b128253826a66d603820c05b0a4f41b7d88fc0b2154efbcdbe79",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
-      "id": "avgo-hardware-rotation-2026-07-15",
-      "ticker": "AVGO",
-      "titolo": "Broadcom sale nella rotazione dal software all'hardware dopo il crollo storico di IBM",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=66414e686f8839b4987357c7da44237b54356ffcc7ba0001fb0228733828497b",
-      "data_invio": "2026-07-15T05:15:00+00:00"
-    },
-    {
       "id": "tsm-q2-earnings-2026-07-16",
       "ticker": "TSM",
       "titolo": "TSMC: trimestre record con margini al 67,7% e guidance rivista al rialzo",
@@ -2791,6 +2711,86 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=7b47feade36c3f1afb7f5f31c58bf704c74251335928767f8c0213fef99f612e",
       "data_invio": "2026-08-13T17:30:00+00:00"
+    },
+    {
+      "id": "iran-nato-blocco-aug14",
+      "ticker": "NATO",
+      "titolo": "USA dichiarano blocco navale indefinito all'Iran: l'escalation rafforza la tesi difesa europea",
+      "tipo_evento": "macro tematica",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNT2p2QW55Tk9jcjF5Ti1OZmlpMGpLTEg0RU92RVEtMzFobXY2TmtNWjFJaUVZMl9RaWxWM09uV2xjVlQ0dnFHcGlEVi1Zc3ZnRHpFMkZ5VExoeTdzSVE0cmYzMVRFQUExRHA2RHNhZFpFMFZnNnIySjh3RTBRSXVtX3ZqVTJjVWhGSmdpTHVmY19QRE9ieWNmaDdaM2hmOHZfRFE",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "jnj-talco-5b-aug14",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson chiude il contenzioso talco con un accordo da 5,5 miliardi di dollari",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=b37de892ed668dadc063cca94c87fdf98a4674d68db4572b055b93442e76bb04",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "msft-q4-fy26-azure-43-aug14",
+      "ticker": "MSFT",
+      "titolo": "Microsoft chiude l'anno fiscale 2026 con risultati record: ricavi +18% a 90 miliardi, Azure accelera al +43%",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=c937dbfdd1fb1158c86e8c430e19fa9da64edbe9eea2fd85b96d3bbf3cc2ed3e",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "spcx-musk-stake-900b-aug14",
+      "ticker": "SPCX",
+      "titolo": "SpaceX sale overnight: la quota di Musk supera i 900 miliardi, ma i target di compensazione richiedono traguardi «estremamente folli»",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=dc4c75169c3dae8d0d85622e79bd349413ed79e54cf701d59a3ec99267131707",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "jpm-record-jobs-aug14",
+      "ticker": "JPM",
+      "titolo": "JPMorgan tocca nuovi massimi storici sull'onda di un sorprendente dato sul mercato del lavoro USA",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=77318b193693efe5fc63999d948f24f1cc90e9328192a6cb513a6069125201c6",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "asml-analyst-warning-chips-aug14",
+      "ticker": "ASML",
+      "titolo": "Un analista avverte: per i titoli chip, utili solidi da soli non bastano più al mercato",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=6dbbda73d73f975855e9fa5eb6821a18e88a2aa8340fd2c57b2336dbf0715803",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "lly-novo-pill-strategy-aug14",
+      "ticker": "LLY",
+      "titolo": "Novo Nordisk punta su farmaci differenziati nell'obesità: si ridisegna la gara con Eli Lilly",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=0e05c539a1f785acb8a36a1a019417996cc69a1143d96a4a63245b9cd255029e",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "wmt-shipping-crunch-aug14",
+      "ticker": "WMT",
+      "titolo": "La crisi delle spedizioni globali si aggrava: ritardi e costi potrebbero pesare su Walmart prima degli utili del 20 agosto",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=482d348fe2a049aa69dbc768dfc1b42ac98abbe254121a4ffe6cc1f21084bdcf",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "goog-pixel11-aapl-aug14",
+      "ticker": "GOOG",
+      "titolo": "Google lancia i Pixel 11 con Gemini AI avanzato: la prossima sfida iPhone di Apple si complica",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=95fe7aef1fb6fbcf3d9a5e828d0fccf54d2632551988d90ad4940d90d29485ee",
+      "data_invio": "2026-08-14T05:15:00+00:00"
+    },
+    {
+      "id": "tsm-amd-5b-bond-ai-aug14",
+      "ticker": "TSM",
+      "titolo": "AMD prepara un'emissione obbligazionaria record da 5 miliardi per finanziare la sua espansione nell'AI",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=d7829df9bb82f3ae92f4ef79d2e4eff0a0f97b8115b9cdab3e96e886b05dda93",
+      "data_invio": "2026-08-14T05:15:00+00:00"
     }
   ]
 }
