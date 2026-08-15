@@ -345,7 +345,7 @@
   .tel-tabbar { display: flex; }
   .tel-velo, .tel-foglio, .tel-home, .tel-solo { display: block; }
   /* ...tranne quelle che sono griglie o flex: `block` le appiattirebbe. */
-  .tel-conti.tel-solo, .tel-duo.tel-solo { display: grid; }
+  .tel-conti.tel-solo, .tel-duo.tel-solo, .tel-dati.tel-solo { display: grid; }
   .tel-riga.tel-solo, .tel-home-h.tel-solo { display: flex; }
 
   /* `.pc-solo` deve battere il `display` che quegli stessi elementi hanno da

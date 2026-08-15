@@ -309,6 +309,7 @@ STRINGS = {
     "detail.no_data": {"it": "Dati di dettaglio non disponibili al momento (riprova più tardi).", "en": "Detailed data not available right now (try again later).", "es": "Datos detallados no disponibles ahora (inténtalo más tarde).", "fr": "Données détaillées indisponibles pour l'instant (réessaie plus tard).", "de": "Detaildaten derzeit nicht verfügbar (später erneut versuchen).", "uk": "Детальні дані наразі недоступні (спробуй пізніше)."},
     "detail.updated": {"it": "Aggiornato: {when}", "en": "Updated: {when}", "es": "Actualizado: {when}", "fr": "Mis à jour : {when}", "de": "Aktualisiert: {when}", "uk": "Оновлено: {when}"},
     "detail.price_current": {"it": "Prezzo attuale", "en": "Current price", "es": "Precio actual", "fr": "Prix actuel", "de": "Aktueller Kurs", "uk": "Поточна ціна"},
+    "detail.versato": {"it": "Versato", "en": "Invested", "es": "Aportado", "fr": "Versé", "de": "Eingezahlt", "uk": "Внесено"},
     "detail.note": {"it": "Nota", "en": "Note", "es": "Nota", "fr": "Note", "de": "Notiz", "uk": "Примітка"},
     "nav.analisi": {"it": "Analisi", "en": "Analysis", "es": "Análisis", "fr": "Analyse", "de": "Analyse", "uk": "Аналіз"},
     "analisi.title": {"it": "Analisi & rischio", "en": "Analysis & risk", "es": "Análisis y riesgo", "fr": "Analyse et risque", "de": "Analyse & Risiko", "uk": "Аналіз і ризик"},

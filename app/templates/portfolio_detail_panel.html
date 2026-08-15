@@ -17,6 +17,14 @@
       {% if p.isin %}<div class="faint" style="font-family:var(--font-mono);font-size:12px;margin-top:4px;">ISIN {{ p.isin }}</div>{% endif %}
     </div>
     <a href="/portafoglio/{{ p.id }}/modifica" class="btn ghost icon-only" aria-label="{{ t('btn.edit') }}" title="{{ t('btn.edit') }}">{{ icon('edit', 16) }}</a>
+    {# Elimina SOLO sul telefono: sul PC il cestino sta già nella riga della
+       tabella, e due modi di cancellare la stessa cosa nella stessa schermata
+       sono soprattutto un modo in più di sbagliare. Sul telefono quella
+       colonna non esiste più, quindi il cestino deve stare qui. #}
+    <form method="post" action="/portafoglio/{{ p.id }}/elimina" class="js-confirm tel-solo"
+          data-confirm="{{ t('btn.confirm') }}" data-cancel="{{ t('form.cancel') }}" style="margin:0;">
+      <button type="submit" class="btn danger icon-only" aria-label="{{ t('btn.delete') }}" title="{{ t('btn.delete') }}">{{ icon('trash', 16) }}</button>
+    </form>
     <button type="button" class="btn ghost icon-only" data-drawer-close aria-label="{{ t('pf.btn_close') }}">{{ icon('x', 18) }}</button>
   </div>
 </div>

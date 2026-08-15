@@ -45,6 +45,20 @@
   </div>
 </div>
 
+{# ---------- quello che sul telefono è uscito dalla riga -------------------
+   Sul PC queste tre cose stanno nelle colonne della tabella e qui sarebbero
+   una ripetizione; sul telefono la tabella non c'è più, e senza questo blocco
+   sparirebbero davvero. `.tel-solo` le fa esistere solo dove servono. #}
+<div class="tel-solo tel-dati">
+  {{ fact(t('th.qty'), p.quantita | qty) }}
+  {% if p.is_fisso %}
+    {{ fact(t('th.pct_target'), t('pf.fixed_month', eur=(p.importo_fisso | eur))) }}
+  {% else %}
+    {{ fact(t('th.pct_target'), p.pct_target | pct) }}
+  {% endif %}
+  {{ fact(t('detail.versato'), (p.versato_totale | eur) if p.versato_totale else '—') }}
+</div>
+
 {# ---------- grafico 12 mesi ---------- #}
 {% if chart_points %}
 <div class="card" style="margin-top:14px;padding:14px 16px;">

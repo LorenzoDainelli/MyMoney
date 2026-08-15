@@ -287,6 +287,23 @@
   }
   .tel-riga-ch { flex: none; color: var(--muted); }
 
+  /* I bottoni di sola icona (matita, cestino, ✕): 40 punti bastano al mouse,
+     non al pollice. Vale ovunque sul telefono, non solo nel pannello del
+     titolo — sono gli stessi bottoni in tutte le liste. */
+  .btn.icon-only { min-width: var(--tel-tocco); min-height: var(--tel-tocco); }
+  /* E i bottoni normali: erano fra i 39 e i 43 punti, cioè sempre un po'
+     sotto. Un bottone che si manca al primo colpo si preme due volte, e la
+     seconda volta si preme più forte. */
+  .btn { min-height: var(--tel-tocco); }
+
+  /* I dati che sul telefono sono usciti dalla riga del titolo e vivono nel
+     pannello: quantità, quota del piano, versato. Tre riquadri in fila, che a
+     375 punti stanno larghi 105 l'uno — abbastanza per «€ 1.234,56». */
+  .tel-dati {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--tel-sp-2); margin-top: var(--tel-sp-3);
+  }
+
   /* Il contatore dentro una riga: quante notizie nuove, quanti avvisi. Dice
      se vale la pena aprire, senza aprire. */
   .tel-badge {
