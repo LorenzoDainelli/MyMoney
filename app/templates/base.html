@@ -20,6 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/static/styles.css?v={{ V }}">
+  {# Quello che aggiungiamo noi al freeze, fuori dal freeze: `styles.css` e
+     `mymoney.css` si sostituiscono in blocco quando il design cambia, e
+     quarantuno righe scritte dentro se ne andrebbero con loro senza dire
+     niente. Era già successo — vedi l'intestazione di `aggiunte.css`. #}
+  <link rel="stylesheet" href="/static/aggiunte.css?v={{ V }}">
   {# Il guscio del telefono, a parte: styles.css è il design freeze e si
      sostituisce in blocco, quindi non ci si scrive dentro.
 

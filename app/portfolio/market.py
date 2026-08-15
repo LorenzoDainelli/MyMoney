@@ -552,6 +552,10 @@ def refresh_all_fundamentals(max_age_h: int = 24) -> None:
         try:
             _store_fund(**r)
         except Exception:
+            # Un ticker che non si riesce a salvare non deve portarsi dietro
+            # gli altri trentasette: il ciclo prosegue e quel titolo resterà
+            # semplicemente con i dati di prima (o senza). È la stessa regola
+            # dell'intero progetto — se una fonte fallisce, si continua.
             pass
 
 

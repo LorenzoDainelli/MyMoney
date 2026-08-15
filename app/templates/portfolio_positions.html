@@ -166,14 +166,15 @@
     <table>
       <thead>
         <tr>
-          {# `tel-via` = questa colonna sul telefono non si mostra (app.js la
-             copia sulle celle, telefono.css la nasconde). Sette colonne a
-             schede fanno sette righe per titolo: 229 punti l'uno, per 39
-             titoli, cioè novemila punti di scorrimento. Restano le tre che si
-             guardano davvero — che cos'è, quanto vale, come va. Le altre non
-             spariscono: categoria, quantità e PMC stanno nel pannello che si
-             apre toccando la riga; la % target sta nella pagina PAC, che è la
-             pagina di cui quel numero parla. #}
+          {# Questa tabella ADESSO È SOLO DEL PC (`.pc-solo` qui sopra): sul
+             telefono c'è la lista di righe. Le classi `tel-via` restano perché
+             costano niente e perché la stessa tabella, se un domani tornasse
+             visibile su uno schermo stretto, saprebbe già quali colonne
+             lasciare indietro — ma oggi non le vede nessuno.
+
+             (Prima erano loro a fare il lavoro: nascondevano quattro colonne
+             per non trasformare ogni titolo in una scheda da sette righe.
+             Adesso la scheda non c'è proprio più.) #}
           <th class="sortable" data-type="text">{{ t('th.title') }}</th>
           <th class="sortable tel-via" data-type="text">{{ t('th.category') }}</th>
           <th class="num sortable tel-via" data-type="num">{{ t('th.pct_target') }}</th>

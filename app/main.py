@@ -214,7 +214,9 @@ def _dashboard_ctx() -> dict:
     try:
         settori = analytics.look_through(cached_only=True)["settori"][:7]
     except Exception:
-        pass
+        pass  # il look-through è un di più della Home: senza, resta la lista
+              # vuota e il riquadro dei settori non compare. Tutto il resto
+              # della pagina — saldi, movimenti, grafico — non lo riguarda.
 
     ai_read = None
     raw = settings_store.get_setting("dash_ai", "")

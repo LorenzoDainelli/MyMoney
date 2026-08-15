@@ -262,3 +262,44 @@ def test_i_fogli_sono_agganciati_uno_per_uno_con_la_loro_impronta():
         assert atteso in base, f"{nome} non e' agganciato con la sua impronta"
     # e nessuno si affida piu' al vecchio ingresso con gli @import
     assert "/static/telefono.css?v=" not in base
+
+
+# ---------------------------------------------------------------------------
+#  IL DESIGN FREEZE NON SI TOCCA
+#
+#  `styles.css`, `mymoney.css` e i `tokens/` sono copiati verbatim
+#  dall'handoff e si sostituiscono IN BLOCCO quando il design cambia. Quello
+#  che ci viene scritto dentro se ne va con loro: senza un errore, senza un
+#  test rosso, senza che nessuno se ne accorga finche' non guarda la pagina.
+#
+#  Era gia' successo: il 23/07/2026 quarantuno righe per la leggibilita' del
+#  testo dell'agente erano finite dentro `mymoney.css`. Ora stanno in
+#  `aggiunte.css`, che e' nostro. Questo test e' il guardiano.
+# ---------------------------------------------------------------------------
+FOGLI_FREEZE = [
+    ("mymoney.css", ""), ("styles.css", ""),
+    ("colors.css", "tokens"), ("fonts.css", "tokens"), ("glass.css", "tokens"),
+    ("motion.css", "tokens"), ("radii.css", "tokens"), ("scenes.css", "tokens"),
+    ("shadows.css", "tokens"), ("spacing.css", "tokens"), ("typography.css", "tokens"),
+]
+
+
+@pytest.mark.parametrize("nome,sotto", FOGLI_FREEZE)
+def test_il_freeze_e_identico_all_handoff(nome, sotto):
+    radice = Path(__file__).resolve().parent.parent.parent
+    handoff = radice / "design_handoff_mymoney" / "styles" / sotto / nome
+    nostro = radice / "app" / "static" / sotto / nome
+    if not handoff.exists():
+        pytest.skip(f"{nome} non e' nell'handoff")
+    a = handoff.read_text(encoding="utf-8")
+    b = nostro.read_text(encoding="utf-8")
+    assert a == b, (
+        f"{nome} si e' allontanato dall'handoff. Se serve una regola nuova va "
+        f"in app/static/aggiunte.css, non qui dentro: questo file verra' "
+        f"sostituito in blocco e la regola sparirebbe in silenzio."
+    )
+
+
+def test_le_aggiunte_sono_agganciate():
+    base = (Path(__file__).resolve().parent.parent / "templates" / "base.html").read_text(encoding="utf-8")
+    assert "/static/aggiunte.css?v={{ V }}" in base

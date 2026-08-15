@@ -189,6 +189,12 @@ async def analisi_ai(label: str = Form(""), valore: str = Form(""), metric: str 
         contesto = (f"Portafoglio personale diversificato: {lt['n_titoli']} titoli; "
                     f"settori principali: {settori or 'n/d'}.")
     except Exception:
+        # Contesto e scheda sono un CONTORNO: servono a far parlare l'agente
+        # del portafoglio vero invece che in astratto. Se il calcolo non
+        # riesce restano vuoti e la spiegazione della metrica esce lo stesso,
+        # solo più generica. Far fallire il popup sarebbe peggio del popup
+        # generico — e questa è una finestrella che si apre con un dito, non
+        # un posto dove mostrare una schermata di errore.
         pass
     res = ai.spiega_metrica(label, valore, contesto, scheda=scheda)
     if res.get("ok") and metric:
