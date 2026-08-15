@@ -347,6 +347,72 @@
     font-variant-numeric: var(--num);
   }
 
+  /* ── Gruppo di righe attaccate ────────────────────────────────────────
+     Impostazioni, e ogni elenco di cose omogenee. Righe staccate con un buco
+     in mezzo si leggono come tante cose separate; attaccate con un filo di
+     separatore si leggono come UNA cosa con dentro delle voci — che è quello
+     che sono. È il modo in cui iOS elenca le impostazioni, e non è un vezzo:
+     il raggruppamento è informazione. */
+  .tel-gruppo {
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt);
+    overflow: hidden;
+  }
+  .tel-gruppo > * {
+    margin-bottom: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tel-gruppo > *:last-child { border-bottom: 0; }
+
+  /* Una voce con un valore a destra: «Tema · Scuro». Il valore dice già lo
+     stato, quindi non serve una descrizione che lo ripeta. */
+  .tel-fila {
+    display: flex; align-items: center; gap: var(--tel-sp-3);
+    width: 100%; min-height: var(--tel-riga);
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    border: 0; background: none; color: var(--ink);
+    font: inherit; text-align: left; text-decoration: none; cursor: pointer;
+  }
+  .tel-fila:active { background: var(--hover); }
+  .tel-fila-n { flex: 1; min-width: 0; font-size: var(--text-base); }
+  .tel-fila-v {
+    flex: none; color: var(--muted); font-size: var(--text-sm);
+    font-variant-numeric: var(--num);
+    max-width: 55%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ── La notizia ───────────────────────────────────────────────────────
+     La rilevanza a sinistra, come un voto: si scorre la colonna dei numeri e
+     ci si ferma sui due alti, senza leggere trenta titoli. */
+  .tel-notizia {
+    display: grid; grid-template-columns: auto minmax(0, 1fr);
+    gap: 2px var(--tel-sp-3);
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    margin-bottom: var(--tel-sp-1);
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt);
+    color: var(--ink); text-decoration: none;
+  }
+  .tel-notizia:active { background: var(--hover); }
+  .tel-notizia-r {
+    grid-row: 1 / span 2; align-self: start;
+    min-width: 30px; padding: 3px 0;
+    border-radius: var(--tel-r-sm);
+    font-size: var(--text-xs); font-weight: var(--fw-bold);
+    font-variant-numeric: var(--num); text-align: center;
+  }
+  /* Tre gradini, non una rampa: a colpo d'occhio si distinguono tre cose, non
+     dieci sfumature. Contrasti verificati in tutti e due i temi. */
+  .tel-notizia-r.alta  { background: var(--neg-bg);    color: var(--tel-neg); }
+  .tel-notizia-r.media { background: var(--warn-bg);   color: var(--warn-tx); }
+  .tel-notizia-r.bassa { background: var(--surface);   color: var(--muted); }
+  .tel-notizia-t {
+    font-size: var(--text-sm); font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+  }
+  .tel-notizia-m { font-size: var(--text-xs); color: var(--muted); }
+
   /* ── 6. Elenco per giorno ─────────────────────────────────────────────
      La data scritta una volta in testa al giorno, non su ogni riga. Dieci
      righe dello stesso giorno con dieci volte «09/08» sono nove ripetizioni
