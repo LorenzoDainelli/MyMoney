@@ -115,6 +115,12 @@ STRINGS = {
     # la home del telefono
     "dash.conti": {"it": "I tuoi conti", "en": "Your accounts", "es": "Tus cuentas", "fr": "Tes comptes", "de": "Deine Konten", "uk": "Твої рахунки"},
     "dash.ultimi": {"it": "Ultimi movimenti", "en": "Latest movements", "es": "Últimos movimientos", "fr": "Derniers mouvements", "de": "Letzte Bewegungen", "uk": "Останні рухи"},
+    # Il titolo della sezione che, sul telefono, raccoglie i blocchi che sul PC
+    # stanno affiancati in due colonne: grafico, migliori e peggiori, dividendi,
+    # settori, notizie, il punto della settimana. Non sono spariti: sono righe
+    # che si aprono.
+    "tel.approfondisci": {"it": "Approfondisci", "en": "Go deeper", "es": "Profundiza",
+                          "fr": "Approfondir", "de": "Mehr dazu", "uk": "Детальніше"},
     "dash.vedi_tutto": {"it": "Vedi tutto", "en": "See all", "es": "Ver todo", "fr": "Tout voir", "de": "Alle ansehen", "uk": "Показати все"},
     "dash.btn_add_pos": {"it": "Aggiungi posizione", "en": "Add position", "es": "Añadir posición", "fr": "Ajouter une position", "de": "Position hinzufügen", "uk": "Додати позицію"},
     "dash.btn_add_mov": {"it": "Aggiungi movimento", "en": "Add movement", "es": "Añadir movimiento", "fr": "Ajouter un mouvement", "de": "Bewegung hinzufügen", "uk": "Додати рух"},

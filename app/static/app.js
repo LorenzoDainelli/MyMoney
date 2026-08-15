@@ -10,6 +10,72 @@
       la ✕. Trenta righe, nessuna libreria. */
 function mmTelefono() { return window.matchMedia('(max-width: 760px)').matches; }
 
+/* Chi scorre davvero.
+
+   Col guscio del telefono NON è più `body`: `body` ha già `overflow: hidden`,
+   e scorre `.tel-app__corpo`. Bloccare `body` mentre è aperto un pannello
+   quindi non blocca niente — la pagina dietro continuerebbe a scorrere sotto
+   il pannello, e sembrerebbe che sia il pannello a scappare via mentre lo
+   leggi.
+
+   Un solo posto che sa qual è lo scorritore, e i due pannelli lo chiedono a
+   lui. Sul PC (e su qualunque pagina senza guscio) risponde `body`, che è
+   giusto: è ancora lui a scorrere. */
+function mmScorritore() {
+  return document.querySelector('.tel-app__corpo') || document.body;
+}
+
+function mmBloccaScorrimento(si) {
+  mmScorritore().style.overflow = si ? 'hidden' : '';
+}
+
+/* I blocchi di approfondimento partono CHIUSI, ma solo sul telefono.
+
+   Nel markup il corpo e' visibile e basta: nessun attributo, nessuno stato
+   iniziale da ripristinare. Questo codice puo' solo CHIUDERE, e solo dove la
+   regola che chiude esiste — cioe' dentro la media query del telefono.
+
+   E' il rovescio di com'era prima, e la differenza non e' di stile. Prima i
+   blocchi erano `<details open>` e toccava al JavaScript RIAPRIRLI sul PC: se
+   non partiva, o leggeva la larghezza prima che il browser la sapesse, il PC
+   restava chiuso. E' successo davvero — 839 punti di dashboard spariti a 1280.
+   Ora il caso peggiore e' una pagina lunga sul telefono, che si vede subito e
+   non nasconde niente.
+
+   Passando al PC non serve nemmeno ripulire la classe: li' la regola che
+   nasconde non esiste, quindi `.chiusa` non significa piu' niente. */
+(function () {
+  var pieghe = document.querySelectorAll('.tel-piega');
+  if (!pieghe.length) return;
+  var mq = window.matchMedia('(max-width: 760px)');
+
+  function segna(p, chiusa) {
+    p.classList.toggle('chiusa', chiusa);
+    var b = p.querySelector('.tel-piega-riga');
+    if (b) b.setAttribute('aria-expanded', chiusa ? 'false' : 'true');
+  }
+
+  function chiudiQuelleMaiToccate() {
+    if (!mq.matches) return;
+    pieghe.forEach(function (p) {
+      if (p.dataset.tocca !== '1') segna(p, true);
+    });
+  }
+
+  // Quello che apre lui resta aperto: non gli si richiude in mano al primo
+  // cambio di larghezza (la tastiera che si apre ne conta uno).
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.tel-piega-riga');
+    if (!b) return;
+    var p = b.closest('.tel-piega');
+    p.dataset.tocca = '1';
+    segna(p, !p.classList.contains('chiusa'));
+  });
+
+  mq.addEventListener('change', chiudiQuelleMaiToccate);
+  chiudiQuelleMaiToccate();
+})();
+
 // `foglio` è il pannello, `chiudi()` lo chiude davvero, `riposo` è la trasforma
 // che ha da aperto (stringa vuota se gliela dà una classe CSS).
 function mmTrascina(foglio, chiudi, riposo) {
@@ -178,7 +244,7 @@ document.addEventListener('click', function (e) {
     var r = root, a = aside, b = backdrop;
     root = null;
     document.removeEventListener('keydown', onKey);
-    document.body.style.overflow = prevOverflow;
+    mmScorritore().style.overflow = prevOverflow;
     if (reduce()) { r.remove(); return; }
     b.style.opacity = '0';
     a.style.transform = CHIUSO();
@@ -231,8 +297,8 @@ document.addEventListener('click', function (e) {
     root.appendChild(backdrop);
     root.appendChild(aside);
     document.body.appendChild(root);
-    prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    prevOverflow = mmScorritore().style.overflow;
+    mmScorritore().style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);
     requestAnimationFrame(function () { requestAnimationFrame(function () {
       backdrop.style.opacity = '1';
@@ -449,7 +515,7 @@ document.addEventListener('click', function (e) {
     apri.setAttribute('aria-expanded', si ? 'true' : 'false');
     // Senza questo la pagina dietro scorre insieme al pannello, e sembra che
     // il pannello scappi via mentre lo si legge.
-    document.body.style.overflow = si ? 'hidden' : '';
+    mmBloccaScorrimento(si);
   }
 
   apri.addEventListener('click', function () {

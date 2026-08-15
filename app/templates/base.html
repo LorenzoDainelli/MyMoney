@@ -96,6 +96,26 @@
   {% block head %}{% endblock %}
 </head>
 <body>
+  {# ==========================================================================
+     IL GUSCIO DELL'APP.
+
+     Due contenitori, e sul PC non esistono: `telefono/guscio.css` dà loro
+     `display: contents`, che li fa sparire dal layout come se il markup non li
+     avesse mai avuti. Non «quasi uguale» — identico. È il motivo per cui il
+     guscio si può aggiungere senza toccare una sola misura dello schermo
+     grande.
+
+     Sul telefono invece `.tel-app` diventa una griglia alta esattamente
+     `100dvh`: sopra il contenuto, sotto la barra. Da lì in poi la PAGINA non
+     scorre più — scorre `.tel-app__corpo`, e nient'altro. È la differenza fra
+     un'app e un sito aperto col telefono, e sta tutta qui.
+
+     La barra sta DENTRO il guscio, come riga della griglia: prima era
+     `position: fixed` e galleggiava sopra il contenuto, che le passava sotto.
+     I pannelli che salgono dal fondo restano FUORI: sono `position: fixed`, e
+     tenerli qui dentro li legherebbe all'`overflow: hidden` del guscio.
+     ========================================================================== #}
+  <div class="tel-app">
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -136,11 +156,14 @@
     </div>
   </header>
 
-  <main class="wrap">
-    {% block content %}{% endblock %}
-  </main>
+  {# L'unica cosa che scorre, sul telefono. Sul PC questo <div> non esiste. #}
+  <div class="tel-app__corpo">
+    <main class="wrap">
+      {% block content %}{% endblock %}
+    </main>
 
-  <footer class="disclaimer">{{ t('disclaimer.text') }}</footer>
+    <footer class="disclaimer">{{ t('disclaimer.text') }}</footer>
+  </div>
 
   {# ==========================================================================
      Il guscio del telefono. Sul PC questo blocco è invisibile (telefono.css lo
@@ -172,6 +195,7 @@
             aria-controls="tel-foglio-altro">
       {{ icon('altro', 22) }}<span>Altro</span></button>
   </nav>
+  </div>{# /.tel-app — il guscio finisce qui: sotto restano solo i pannelli #}
 
   <div class="tel-velo" id="tel-velo"></div>
   <div class="tel-foglio" id="tel-foglio-altro" role="dialog" aria-modal="true"

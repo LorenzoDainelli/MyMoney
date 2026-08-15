@@ -28,18 +28,18 @@
      Scorre via col contenuto, come le grandi intestazioni di iOS. Non è una
      testata fissa: una barra che ti ripete dove sei mentre lo stai guardando
      costa quarantaquattro punti a ogni schermata e non dice niente. */
-  .tel-titolo {
-    margin: 0 0 var(--tel-sp-4);
+  /* `.page-title` è il titolo che i template scrivono già, per tutti e due gli
+     schermi: non se ne aggiunge un secondo solo per il telefono. Un titolo
+     duplicato è un titolo che un giorno dirà due cose diverse. */
+  .tel-titolo, .page-title {
+    margin: 0 0 var(--tel-sp-2);
     font-size: var(--text-2xl);
     font-weight: var(--fw-extrabold);
     letter-spacing: var(--ls-tight);
     line-height: var(--lh-tight);
     color: var(--ink);
   }
-  /* Il titolo che i template scrivono per il PC: sul telefono è un doppione
-     del titolo qui sopra, e due titoli uno sull'altro sono la firma di una
-     pagina web adattata. */
-  .tel-app .page-title.pc-solo { display: none; }
+  .page-sub { margin: 0 0 var(--tel-sp-4); font-size: var(--text-xs); }
 
   /* ── 2. Il blocco protagonista ────────────────────────────────────────
      Un numero, grande, su fondo pieno. È la ragione per cui l'app si apre: il
@@ -162,6 +162,66 @@
     height: var(--tel-tocco);
     transform: translateY(-50%);
   }
+
+  /* ── Il blocco che si apre da una riga ────────────────────────────────
+     Grafico, migliori e peggiori, dividendi, settori, notizie, il punto della
+     settimana: sul PC stanno affiancati in due colonne e si guardano tutti
+     insieme, e va bene così. In fila indiana su 375 punti erano tre schermate
+     di scorrimento per arrivare in fondo a cose che si guardano una volta a
+     settimana — mentre i conti e gli ultimi movimenti, che si guardano dieci
+     volte al giorno, finivano sotto.
+
+     Qui diventano righe che si aprono. Il contenuto è LO STESSO, lo stesso
+     markup: non è un doppione da tenere allineato a mano. Niente è sparito e
+     niente è stato spostato in una pagina nuova.
+
+     La regola che CHIUDE è una sola, ed è qui dentro: `.chiusa`, che mette il
+     JavaScript. Vuol dire che senza JavaScript resta tutto aperto — lungo ma
+     completo, che è l'unico caso peggiore accettabile — e che sul PC, dove
+     questa media query non vale, non si può chiudere niente nemmeno per
+     sbaglio. */
+  .tel-piega { display: block; margin-bottom: var(--tel-sp-1); }
+
+  .tel-piega-riga {
+    display: flex; align-items: center; gap: var(--tel-sp-3);
+    width: 100%; min-height: var(--tel-riga);
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    border: 0; border-radius: var(--tel-r-md);
+    background: var(--surface-alt); color: var(--ink);
+    font: inherit; text-align: left; cursor: pointer;
+  }
+  .tel-piega-riga:active { background: var(--hover); }
+
+  /* Aperto, la riga si aggancia al contenuto che ha scoperto: stessa
+     superficie, angoli in basso squadrati. Staccati sembrerebbe che il
+     contenuto appartenga alla riga sotto. */
+  .tel-piega:not(.chiusa) > .tel-piega-riga {
+    border-end-start-radius: 0; border-end-end-radius: 0;
+  }
+  .tel-piega-riga .tel-riga-ch {
+    transform: rotate(90deg);
+    transition: transform var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  .tel-piega.chiusa > .tel-piega-riga .tel-riga-ch { transform: none; }
+
+  /* **L'unica regola che nasconde qualcosa**, e vive solo qui. */
+  .tel-piega.chiusa > .tel-piega-corpo { display: none; }
+
+  /* Il contenuto vero, che è il blocco del PC così com'è. Gli si toglie il
+     riquadro: dentro una riga già disegnata, una card col suo bordo e il suo
+     sfondo diventa una scatola dentro una scatola. */
+  .tel-piega-corpo { display: block; }
+  .tel-piega-corpo > * {
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 0 var(--tel-r-md) var(--tel-r-md) !important;
+    background: var(--surface-alt) !important;
+    padding: var(--tel-sp-1) var(--tel-sp-4) var(--tel-sp-4) !important;
+    box-shadow: none !important;
+  }
+  /* L'occhiello della card ripete quello che c'è già scritto nella riga sopra. */
+  .tel-piega-corpo > * > .card-h,
+  .tel-piega-corpo > * > .card-title { display: none; }
 
   /* ── 4. I conti ───────────────────────────────────────────────────────
      Otto card da 177 punti l'una fanno 1.584 punti — due schermate intere per

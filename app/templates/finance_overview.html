@@ -8,13 +8,43 @@
    ============================================================================ #}
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
+{# La riga che, sul telefono, apre uno dei blocchi del PC.
+
+   NON e' un <details>. Con <details open> nel markup, il PC dipendeva dal
+   JavaScript per RIAPRIRE i blocchi, e se quello non partiva — o partiva prima
+   che il browser sapesse quanto e' largo lo schermo — il PC restava chiuso.
+   L'ho visto succedere: 839 punti di dashboard spariti a 1280.
+
+   Qui l'onere e' rovesciato. Il corpo e' visibile SEMPRE, e solo il telefono
+   ha la regola che lo nasconde, dentro la media query e solo quando il JS ha
+   messo la classe `.chiusa`. Sul PC quella regola non esiste proprio: nessuna
+   riga di JavaScript puo' piu' chiudere niente li'. E senza JavaScript, sul
+   telefono, resta tutto aperto — lungo ma completo.
+
+   La freccia e' un SVG scritto qui e non `icon('chevron')` con una trasforma
+   inline: quella vincerebbe sulla regola che la ruota all'apertura, perche'
+   uno stile inline batte sempre un foglio. #}
+{% macro riassunto(titolo, sotto='', valore='', classe='') %}
+  <button type="button" class="tel-piega-riga" aria-expanded="true">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">{{ titolo }}</span>
+      {% if sotto %}<span class="tel-riga-s">{{ sotto }}</span>{% endif %}
+    </span>
+    {% if valore %}<span class="tel-riga-v {{ classe }}">{{ valore }}</span>{% endif %}
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <div class="tel-piega-corpo">
+{% endmacro %}
 {% block title %}{{ t('nav.finance') }} — {{ t('app.name') }}{% endblock %}
 {% block content %}
   <div class="page-title">{{ t('nav.finance') }}</div>
   <p class="page-sub">{{ t('fin.subtitle') }}</p>
 
-  {# ---------- riga hero ---------- #}
-  <div class="grid mm-stats4">
+  {# ---------- riga hero — SOLO PC ----------
+     Sul telefono la sostituisce il blocco protagonista qui sotto. #}
+  <div class="grid mm-stats4 pc-solo">
     <div class="stat hero">
       <div class="k">{{ t('fin.patrimonio_liq') }}</div>
       {# il totale include il conto PAC (col valore vivo del Portafoglio) #}
@@ -44,6 +74,31 @@
      sarebbe la stessa riga vuota con una scusa in più.
      Un saldo NEGATIVO non è zero e resta: è la cosa che si deve vedere per
      prima. #}
+  {# ---------- il blocco protagonista del telefono ----------
+     Un numero solo, grande: quanto c'e'. Sotto, le due facce del mese.
+     Dentro la hero il verde e il rosso non si usano — sul lime non reggono il
+     contrasto: il segno lo porta il segno. #}
+  <div class="tel-hero tel-solo">
+    <div class="tel-hero-top">
+      <span class="tel-hero-k">{{ t('fin.patrimonio_liq') }}</span>
+    </div>
+    <span class="tel-hero-v">{{ saldi.totale | eur }}</span>
+    <div class="tel-hero-sub">
+      {{ t('fin.n_wallets', n=(saldi.righe | length)) }}{% if saldi.totale != saldi.liquido %} · di cui liquidi <b>{{ saldi.liquido | eur }}</b>{% endif %}
+    </div>
+  </div>
+
+  <div class="tel-duo tel-solo">
+    <div>
+      <span class="k">{{ t('fin.month_income') }}</span>
+      <span class="v pos">{{ riep.entrate | eur }}</span>
+    </div>
+    <div>
+      <span class="k">{{ t('fin.month_expense') }}</span>
+      <span class="v neg">{{ riep.uscite | eur }}</span>
+    </div>
+  </div>
+
   {% if conti_visti %}
   <div class="tel-conti tel-solo" style="margin-top:14px;">
     {% for r in conti_visti %}
@@ -192,8 +247,16 @@
   </div>
   {% include "finance_effetto_dati.html" %}
 
+  {# Il titolo di cio' che viene dopo, solo sul telefono: sul PC i tre riquadri
+     sono affiancati e si guardano tutti insieme, non serve annunciarli. #}
+  <div class="tel-home-h tel-solo">
+    <h2>{{ t('tel.approfondisci') }}</h2>
+  </div>
+
   {# ---------- spese · il mese in numeri · lettura AI ---------- #}
   <div class="mm-grid-3" style="margin-top:18px;align-items:stretch;">
+    <div class="tel-piega">
+    {{ riassunto(t('fin.expenses_by_cat'), (riep.spese_categoria[0].nome ~ ' ' ~ (riep.spese_categoria[0].perc | round(0) | pct(0))) if riep.spese_categoria else '') }}
     <div class="card" style="margin:0;">
       <div class="card-h">{{ t('fin.expenses_by_cat') }}</div>
       {% for s in riep.spese_categoria %}
@@ -232,7 +295,10 @@
         </div>
       </div>
     </div>
+    </div></div>
 
+    <div class="tel-piega">
+    {{ riassunto(t('fin.month_numbers'), t('fin.month_balance'), ('+' if riep.saldo >= 0 else '−') ~ (riep.saldo | abs | eur), 'pos' if riep.saldo >= 0 else 'neg') }}
     <div class="card" style="margin:0;">
       <div class="card-h">{{ t('fin.month_numbers') }}</div>
       {% set rate = (riep.saldo / riep.entrate * 100) if riep.entrate else 0 %}
@@ -288,7 +354,10 @@
         {% endif %}
       </div>
     </div>
+    </div></div>
 
+    <div class="tel-piega">
+    {{ riassunto(t('fin.ai_read'), (t('dash.conf') ~ ': ' ~ t('conf.' ~ lettura_ai.conf)) if lettura_ai else '') }}
     <div style="position:relative;overflow:hidden;background:var(--ai-bg);border:1px solid var(--ai-bd);border-left:3px solid var(--ai);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;box-shadow:0 12px 40px -14px color-mix(in oklab, var(--ai) 60%, transparent), var(--sheen-top);">
       <div style="position:absolute;inset:0 0 auto 0;height:2px;background-image:linear-gradient(90deg, transparent, var(--ai), var(--accent), transparent);background-size:200% 100%;animation:mm-sheen 4s var(--ease-in-out) infinite;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -313,6 +382,7 @@
       </form>
       {% endif %}
     </div>
+    </div></div>
   </div>
 
   {# ---------- tutti i movimenti (header ordinabili, default: data desc) ---------- #}
