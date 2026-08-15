@@ -1,8 +1,8 @@
 # MyMoney sul telefono — il contratto
 
 > Documento di lavoro, sul modello di `shift-hours/BRIEFING-DESIGN.md`.
-> Chi lavora al telefono legge **questo** e guarda `reference-telefono.html`,
-> e non ha bisogno d'altro.
+> Chi lavora al telefono legge **questo** e guarda la pagina di riferimento
+> (`/static/riferimento/index.html`, servita dall'app), e non ha bisogno d'altro.
 >
 > Data: 15 agosto 2026 · backup della versione precedente: tag `ui-telefono-prima`
 
@@ -87,7 +87,7 @@ app/static/telefono/guscio.css       il contenitore, la barra, i pannelli
 app/static/telefono/componenti.css   hero, righe, liste, pillole, stati vuoti
 app/static/telefono.css              solo il punto d'ingresso (@import)
 app/templates/*.html                 SOLO dentro i blocchi marcati telefono
-docs/reference-telefono.html         la pagina di approvazione
+app/static/riferimento/*.html        la pagina di approvazione
 ```
 
 ### File che NON si toccano mai
@@ -196,9 +196,18 @@ un'entrata.
 ## 6. Cosa si consegna
 
 1. I tre fogli in `app/static/telefono/`.
-2. `docs/reference-telefono.html`: **tutti** i componenti e **le schermate
-   intere** alla larghezza di un iPhone, nei due temi, con dati inventati. È il
-   documento su cui si approva il lavoro **prima** di guardarlo sul telefono.
+2. La pagina di riferimento in `app/static/riferimento/`: **tutti** i
+   componenti e **le schermate intere** alla larghezza di un iPhone, nei due
+   temi, con dati inventati. È il documento su cui si approva il lavoro
+   **prima** di guardarlo sul telefono.
+
+   Sta sotto `static/` e non in `docs/` per un motivo preciso: **deve essere
+   servita dall'app**, allo stesso indirizzo da cui arrivano i fogli veri. Le
+   cornici dei telefoni sono iframe — l'unico modo di dare a ogni schermata il
+   suo contesto da 375 punti dentro una finestra grande — e Chrome rifiuta di
+   caricare un iframe `file://` dentro una pagina `file://`, lasciando il
+   riquadro vuoto **senza dire niente**. Aperta con doppio clic mostrerebbe sei
+   rettangoli neri e farebbe pensare che il lavoro sia rotto.
 3. I template, solo dopo l'approvazione della pagina di riferimento.
 
 ## 7. Lista di controllo prima di dire «fatto»

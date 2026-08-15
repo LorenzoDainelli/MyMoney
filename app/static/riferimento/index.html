@@ -67,6 +67,7 @@
     border-radius: 10px; padding: 14px 16px; margin: 16px 0; max-width: 68ch;
   }
   .avviso p:last-child { margin-bottom: 0; }
+  .avviso.rosso { background: #fce9e9; border-color: #f3c7c7; border-left-color: #a41f22; }
   ul { max-width: 68ch; padding-left: 22px; }
   li { margin-bottom: 6px; }
 </style>
@@ -85,6 +86,26 @@
   Il contratto completo sta in <code>docs/BRIEFING-TELEFONO.md</code>. La
   versione precedente è al sicuro sul tag <code>ui-telefono-prima</code>.
 </p>
+
+<!-- Se la pagina è stata aperta con doppio clic dal disco, le cornici dei
+     telefoni restano VUOTE: Chrome rifiuta di caricare un iframe `file://`
+     dentro una pagina `file://`, e non lo dice. È già successo una volta. Un
+     riquadro nero senza spiegazione fa pensare che il lavoro sia rotto, quando
+     è rotto solo il modo di guardarlo — quindi la spiegazione la mette la
+     pagina stessa, e si accende da sola solo nel caso in cui serve. -->
+<div class="avviso rosso" id="avviso-file" hidden>
+  <p><b>Questa pagina va aperta dall'app, non dal disco.</b></p>
+  <p>L'hai aperta con un doppio clic (<code>file://</code>). In questo caso
+  Chrome si rifiuta di caricare le schermate dentro le cornici e le lascia
+  vuote, senza dirlo. Non è il lavoro a essere rotto: è il modo di guardarlo.</p>
+  <p style="margin-bottom:0;">Avvia MyMoney sul PC e apri
+  <code>/static/riferimento/index.html</code> sul suo indirizzo. Oppure lo
+  stesso percorso sull'indirizzo del cloud, dal telefono — così la guardi
+  proprio sullo schermo per cui è fatta.</p>
+</div>
+<script>
+  if (location.protocol === 'file:') document.getElementById('avviso-file').hidden = false;
+</script>
 
 <div class="avviso">
   <p><b>Tutti i dati qui dentro sono inventati.</b> Nel repo non entra mai un
@@ -140,17 +161,17 @@
 <div class="telefoni">
   <figure>
     <figcaption>Home <span class="pastiglia">chiaro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=home&t=light"
+    <div class="schermo"><iframe src="schermata.html?s=home&t=light"
       title="Home, tema chiaro"></iframe></div>
   </figure>
   <figure>
     <figcaption>Home <span class="pastiglia scuro">scuro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=home&t=dark"
+    <div class="schermo"><iframe src="schermata.html?s=home&t=dark"
       title="Home, tema scuro"></iframe></div>
   </figure>
   <figure>
     <figcaption>Finanze <span class="pastiglia">chiaro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=finanze&t=light"
+    <div class="schermo"><iframe src="schermata.html?s=finanze&t=light"
       title="Finanze, tema chiaro"></iframe></div>
   </figure>
 </div>
@@ -183,17 +204,17 @@
 <div class="telefoni">
   <figure>
     <figcaption>Componenti <span class="pastiglia">chiaro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=componenti&t=light"
+    <div class="schermo"><iframe src="schermata.html?s=componenti&t=light"
       title="Componenti, tema chiaro"></iframe></div>
   </figure>
   <figure>
     <figcaption>Componenti <span class="pastiglia scuro">scuro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=componenti&t=dark"
+    <div class="schermo"><iframe src="schermata.html?s=componenti&t=dark"
       title="Componenti, tema scuro"></iframe></div>
   </figure>
   <figure>
     <figcaption>Finanze <span class="pastiglia scuro">scuro</span></figcaption>
-    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=finanze&t=dark"
+    <div class="schermo"><iframe src="schermata.html?s=finanze&t=dark"
       title="Finanze, tema scuro"></iframe></div>
   </figure>
 </div>

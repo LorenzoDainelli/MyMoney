@@ -5,9 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MyMoney — schermata di riferimento</title>
 <!-- I FOGLI VERI, non una copia: se una regola qui si vede bene e nell'app no,
-     il difetto è nel markup, non nel foglio. -->
-<link rel="stylesheet" href="../../app/static/styles.css">
-<link rel="stylesheet" href="../../app/static/telefono.css">
+     il difetto è nel markup, non nel foglio.
+
+     Per questo la pagina sta dentro `app/static/` e non in `docs/`: deve essere
+     SERVITA dall'app, allo stesso indirizzo da cui arrivano i fogli veri.
+     Aperta con doppio clic dal disco non funziona, e non per un dettaglio:
+     Chrome rifiuta di caricare un iframe `file://` dentro una pagina `file://`
+     e lascia il riquadro vuoto senza dire niente. Le cornici dei telefoni QUI
+     sono iframe — servono a dare a ogni schermata il suo contesto da 375 punti,
+     che è l'unico modo di far scattare la media query dentro una finestra
+     grande. -->
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="stylesheet" href="/static/telefono.css">
 <style>
   /* Il blocco <style> di base.html non c'è, ma le poche regole che il telefono
      deve saper battere sì: senza, la pagina di riferimento non proverebbe la
