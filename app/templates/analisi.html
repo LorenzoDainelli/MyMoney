@@ -215,9 +215,13 @@
      quali dati, che limite) è già calcolata in Python e viene mostrata subito.
      Solo se la chiave AI c'è, sotto arriva anche la spiegazione a parole. #}
   <script type="application/json" id="mm-schede">{{ schede | tojson }}</script>
-  <div id="ai-modal" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;z-index:70;padding:20px;">
+  {# Le misure stanno nelle classi `mm-aimodal` / `mm-aischeda` e non nel tag:
+     lì vincerebbero sempre, e sul telefono questa scheda deve poter salire dal
+     fondo come tutti gli altri pannelli dell'app. `display:none` resta scritto
+     qui perché è il JavaScript ad accenderlo e spegnerlo. #}
+  <div id="ai-modal" class="mm-aimodal" role="dialog" aria-modal="true" style="display:none;">
     <div id="ai-modal-bg" style="position:absolute;inset:0;background:rgba(20,26,12,.4);backdrop-filter:blur(2px);"></div>
-    <div style="position:relative;width:min(460px,96vw);margin:10vh auto 0;max-height:80vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:20px;">
+    <div class="mm-aischeda">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <span class="ai-label">{{ ('✨ ' ~ t('an.ai_title')) if ai_on else t('an.scheda_title') }}</span>
         <button type="button" id="ai-modal-x" aria-label="×" style="display:grid;place-items:center;width:30px;height:30px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;">×</button>

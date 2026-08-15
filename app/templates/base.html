@@ -21,8 +21,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/static/styles.css?v={{ V }}">
   {# Il guscio del telefono, a parte: styles.css è il design freeze e si
-     sostituisce in blocco, quindi non ci si scrive dentro. #}
-  <link rel="stylesheet" href="/static/telefono.css?v={{ V }}">
+     sostituisce in blocco, quindi non ci si scrive dentro.
+
+     I cinque fogli sono AGGANCIATI UNO PER UNO, ognuno con la sua impronta.
+     Prima c'era un solo `telefono.css` che li tirava dentro con degli
+     `@import`: quel file cambiava impronta a ogni deploy, ma gli indirizzi
+     che importava restavano identici, e il browser continuava a servire dalla
+     cache le versioni vecchie. Markup nuovo e stile vecchio, sullo stesso
+     telefono, senza nessun errore da nessuna parte.
+
+     L'ordine conta: token → guscio → componenti → modulo → agente. Un
+     componente che usa un token non ancora dichiarato non è un errore che il
+     browser segnala: è una regola che semplicemente non fa niente. #}
+  <link rel="stylesheet" href="/static/telefono/token.css?v={{ V }}">
+  <link rel="stylesheet" href="/static/telefono/guscio.css?v={{ V }}">
+  <link rel="stylesheet" href="/static/telefono/componenti.css?v={{ V }}">
+  <link rel="stylesheet" href="/static/telefono/modulo.css?v={{ V }}">
+  <link rel="stylesheet" href="/static/telefono/agente.css?v={{ V }}">
   <style>
     /* interactive affordances for the new click targets (tokens only) — dal freeze */
     .mm-rowbtn, .mm-titlebtn { transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }

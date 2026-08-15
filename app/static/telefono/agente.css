@@ -1,0 +1,75 @@
+/* =========================================================================
+   L'AGENTE AI SUL TELEFONO
+   -------------------------------------------------------------------------
+   Non era un problema di stile: il testo dell'agente sul telefono era alto
+   ZERO PUNTI e non si vedeva affatto. Novecentottantasei caratteri sulla
+   Home, seicentoventicinque su Finanze, generati, salvati, e invisibili.
+
+   Il perché: `flex: 1 1 0` con `min-height: 0`. Sul PC quel riquadro sta in
+   una colonna che un'altezza ce l'ha — gliela dà il grafico accanto — e
+   «prendi lo spazio che resta» significa qualcosa. Sul telefono la colonna
+   non esiste, lo spazio che resta è zero, e il riquadro obbedisce.
+
+   Una regola giusta su uno schermo può essere sbagliata su un altro: non
+   perché sia scritta male, ma perché parla di uno spazio che di là non c'è.
+   ========================================================================= */
+
+/* I due valori tolti dai tag, con gli STESSI numeri: sul PC non cambia una
+   virgola. Fuori dalla media query, come sempre. */
+.mm-aibox { flex: 1 1 0; min-height: 0; }
+.mm-aitesto { flex: 1 1 0; min-height: 0; }
+
+/* Idem per la scheda dell'Analisi: valori identici a quelli che stavano
+   scritti nei tag, spostati qui perché il telefono possa dire la sua. */
+.mm-aimodal { position: fixed; inset: 0; z-index: 70; padding: 20px; }
+.mm-aischeda {
+  position: relative; width: min(460px, 96vw); margin: 10vh auto 0;
+  max-height: 80vh; overflow: auto;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-lg); padding: 20px;
+}
+
+@media (max-width: 760px) {
+
+  /* Sul telefono il testo è alto quanto è lungo, e a scorrere è la pagina.
+     Un riquadro che scorre dentro un altro che scorre è la cosa che sul
+     telefono si rompe sempre: spingi e non si muove niente, o si muove
+     quello sbagliato. Qui non serve — sotto non c'è nessuna colonna da
+     tenere in riga. */
+  .mm-aibox, .mm-aitesto {
+    flex: none; min-height: auto;
+    max-height: none; height: auto; overflow: visible;
+  }
+  /* La sfumatura che diceva «c'è dell'altro sotto» non ha più niente da
+     annunciare, e resterebbe come una macchia in mezzo alla frase. */
+  .ai-scroll.has-more { -webkit-mask-image: none; mask-image: none; }
+
+  /* -----------------------------------------------------------------------
+     I bersagli. Le 17 pillole ✨ dell'Analisi sono 24x24 e la ✕ della
+     finestrella è 30x30. Ingrandirle davvero vorrebbe dire stravolgere le
+     righe dei numeri, quindi restano piccole DA VEDERE e diventano grandi DA
+     PREMERE: un rettangolo trasparente da 44, centrato, come già fatto per
+     le pillole della Home.
+     ----------------------------------------------------------------------- */
+  .mm-aibtn, #ai-modal-x { position: relative; }
+  .mm-aibtn::after,
+  #ai-modal-x::after {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: var(--tel-tocco); height: var(--tel-tocco);
+    transform: translate(-50%, -50%);
+  }
+  /* «Rigenera» invece è un vero bottone e può permettersi la sua altezza. */
+  form .mm-aibtn { min-height: var(--tel-tocco); padding-inline: var(--tel-sp-3); }
+  form .mm-aibtn::after { content: none; }
+
+  /* La finestrella della scheda: sale dal fondo come tutti gli altri
+     pannelli, invece di galleggiare al centro. Sul telefono un riquadro
+     centrato lascia il pollice a metà schermo. */
+  .mm-aimodal { padding: 0; }
+  .mm-aischeda {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    width: auto; margin: 0; max-height: 86dvh;
+    border-width: 1px 0 0; border-radius: 22px 22px 0 0;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+}

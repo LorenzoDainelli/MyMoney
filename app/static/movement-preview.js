@@ -302,8 +302,12 @@ function mmCollegaModulo(form) {
    app.js quando il pannello e' arrivato. Chiamarla dove il modulo non c'e' non
    costa niente — esce subito alla prima riga. */
 window.mmCollegaModulo = mmCollegaModulo;
+/* La funzione NON va passata dritta all'ascoltatore: `DOMContentLoaded` le
+   consegnerebbe l'evento come primo argomento, cioe' al posto del modulo, e
+   ora che quel primo argomento significa qualcosa la funzione partirebbe
+   credendo di avere un form. */
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mmCollegaModulo);
+  document.addEventListener('DOMContentLoaded', function () { mmCollegaModulo(); });
 } else {
   mmCollegaModulo();
 }

@@ -368,7 +368,9 @@
       {# come nella dashboard: il testo prende lo spazio che resta e scorre lì
          dentro. Prima bastava una lettura AI lunga per stirare la riga e
          lasciare mezze vuote le due card accanto. #}
-      <div class="ai-prosa ai-scroll" lang="it" style="flex:1 1 0;min-height:0;">{{ lettura_ai.text | ai_text }}</div>
+      {# `flex:1 1 0` e `min-height:0` sono in `mm-aitesto`, identici: nel tag
+         vincevano sul foglio del telefono e il riquadro restava alto zero #}
+      <div class="ai-prosa ai-scroll mm-aitesto" lang="it">{{ lettura_ai.text | ai_text }}</div>
       <p class="faint" style="font-size:12px;margin:8px 0 0;">{{ t('fin.ai_disc') }}</p>
       {% elif ai_on %}
       <p class="muted" style="margin:10px 0 0;font-size:14px;">{{ t('fin.ai_analysis_intro') }}</p>

@@ -394,7 +394,7 @@ function mmUnSegmento(box) {
 }
 window.mmSegmentiTipo = mmSegmentiTipo;
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mmSegmentiTipo);
+  document.addEventListener('DOMContentLoaded', function () { mmSegmentiTipo(); });
 } else {
   mmSegmentiTipo();
 }

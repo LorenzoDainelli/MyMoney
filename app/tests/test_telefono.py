@@ -220,3 +220,45 @@ def test_un_saldo_mancante_conta_come_zero():
     visti, vuoti = rotte._conti_da_mostrare([{"w": type("W", (), {"nome": "X"})(), "saldo": None}])
     assert visti == []
     assert len(vuoti) == 1
+
+
+# ---------------------------------------------------------------------------
+#  I FOGLI DI STILE DEL TELEFONO
+#
+#  Un CSS rotto non e' un errore: il browser scarta in SILENZIO tutto quello
+#  che viene dopo il punto in cui si e' perso. E' successo davvero — una riga
+#  di prosa finita fuori dal commento ha buttato via meta' di `modulo.css`, e
+#  dal browser sembrava semplicemente che la regola «non ci fosse».
+#
+#  E vanno agganciati UNO PER UNO con la loro impronta: quando erano tirati
+#  dentro da `@import` il file che li importava cambiava indirizzo a ogni
+#  deploy ma loro no, e il browser continuava a servire i vecchi.
+# ---------------------------------------------------------------------------
+FOGLI_TEL = ["token.css", "guscio.css", "componenti.css", "modulo.css", "agente.css"]
+
+
+def _static(*p):
+    return Path(__file__).resolve().parent.parent / "static" / Path(*p)
+
+
+@pytest.mark.parametrize("nome", FOGLI_TEL)
+def test_i_fogli_del_telefono_sono_sani(nome):
+    testo = _static("telefono", nome).read_text(encoding="utf-8")
+    # commenti aperti e chiusi in pari: e' cosi' che si e' rotto
+    assert testo.count("/*") == testo.count("*/"), f"{nome}: commenti sbilanciati"
+    # niente prosa fuori dai commenti: tolgo i commenti e non devono restare
+    # frasi con l'accento o la chiusura orfana
+    import re
+    senza = re.sub(r"/\*.*?\*/", "", testo, flags=re.S)
+    assert "*/" not in senza, f"{nome}: c'e' una chiusura di commento orfana"
+    # graffe in pari
+    assert senza.count("{") == senza.count("}"), f"{nome}: graffe sbilanciate"
+
+
+def test_i_fogli_sono_agganciati_uno_per_uno_con_la_loro_impronta():
+    base = (Path(__file__).resolve().parent.parent / "templates" / "base.html").read_text(encoding="utf-8")
+    for nome in FOGLI_TEL:
+        atteso = f'/static/telefono/{nome}?v={{{{ V }}}}'
+        assert atteso in base, f"{nome} non e' agganciato con la sua impronta"
+    # e nessuno si affida piu' al vecchio ingresso con gli @import
+    assert "/static/telefono.css?v=" not in base

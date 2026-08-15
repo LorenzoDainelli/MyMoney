@@ -324,7 +324,11 @@
       {# ---- il punto della settimana (AI) — sempre presente, come nel design ---- #}
       <div class="tel-piega">
 {{ riassunto(t('dash.ai_punto'), (t('dash.conf') ~ ': ' ~ t('conf.' ~ d.ai.conf)) if d.ai else '') }}
-<div style="position:relative;overflow:hidden;background:var(--ai-bg);border:1px solid var(--ai-bd);border-left:3px solid var(--ai);border-radius:var(--r-lg);padding:16px;flex:1 1 0;min-height:0;display:flex;flex-direction:column;box-shadow:0 12px 40px -14px color-mix(in oklab, var(--ai) 60%, transparent), var(--sheen-top);">
+{# `flex:1 1 0` e `min-height:0` sono passati alla classe `mm-aibox`, con gli
+   stessi identici valori: scritti nel tag vincevano su qualunque foglio, e sul
+   telefono — dove la colonna che dava l'altezza non esiste — questo riquadro
+   si afflosciava a ZERO punti. Il testo dell'agente non si vedeva proprio. #}
+<div class="mm-aibox" style="position:relative;overflow:hidden;background:var(--ai-bg);border:1px solid var(--ai-bd);border-left:3px solid var(--ai);border-radius:var(--r-lg);padding:16px;display:flex;flex-direction:column;box-shadow:0 12px 40px -14px color-mix(in oklab, var(--ai) 60%, transparent), var(--sheen-top);">
         <div style="position:absolute;inset:0 0 auto 0;height:2px;background-image:linear-gradient(90deg, transparent, var(--ai), var(--accent), transparent);background-size:200% 100%;animation:mm-sheen 4s var(--ease-in-out) infinite;"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
           <span class="ai-label">{{ icon('sparkles', 13) }} {{ t('dash.ai_punto') }}</span>
@@ -333,7 +337,7 @@
         {% if d.ai %}
         {# il testo prende lo spazio che resta: il box non allunga la colonna.
            Se e' piu' lungo scorre qui dentro, con una sfumatura che lo segnala. #}
-        <div class="ai-prosa ai-scroll" lang="it" style="flex:1 1 0;min-height:0;font-size:15px;">{{ d.ai.text | ai_text }}</div>
+        <div class="ai-prosa ai-scroll mm-aitesto" lang="it" style="font-size:15px;">{{ d.ai.text | ai_text }}</div>
         {% elif not d.ai_on %}
         <p class="muted" style="margin:10px 0 0;font-size:14px;line-height:var(--lh-relaxed);">{{ t('fin.ai_box_off') }} <a href="/impostazioni">{{ t('fin.ai_box_off_link') }}</a></p>
         {% endif %}

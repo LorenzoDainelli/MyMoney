@@ -36,13 +36,23 @@
 
      Non si vede sul PC, non si vede in nessun simulatore che non sia Safari,
      e non è un dettaglio estetico: è metà della sensazione di «fatto male».
+
+     Vale per OGNI campo dell'app, non solo per quelli del «＋»: il modulo del
+     movimento era il caso peggiore (sedici campi), ma la stessa scritta da
+     15px sta anche in Portafoglio, in Impostazioni e nelle ricerche, e iPhone
+     ingrandisce esattamente allo stesso modo.
+
+     Il `:not(...)` non serve a escludere niente di importante: serve a pesare
+     quanto `input[type=text]` del foglio del freeze, che altrimenti vince di
+     un punto di specificità e i 16px resterebbero scritti senza fare niente.
      ----------------------------------------------------------------------- */
-  .tel-modulo input,
-  .tel-modulo select,
-  .tel-modulo textarea,
-  .mm-nuovo input,
-  .mm-nuovo select,
-  .mm-nuovo textarea { font-size: 16px; }
+  input:not([type="checkbox"]):not([type="radio"]),
+  select, textarea { font-size: 16px; }
+  /* Gli ultimi due, che hanno una regola tutta loro e più pesante: la
+     tendina della lingua (13px) e la casella della chiave Vertex (12px,
+     scritta nel tag). Anche loro fanno ingrandire lo schermo. */
+  select.lang-select { font-size: 16px; }
+  textarea[name="vertex_service_account_json"] { font-size: 16px !important; }
 
   /* -----------------------------------------------------------------------
      I BORDI ANNIDATI. Il pannello mette 16 punti per lato, e il modulo ne

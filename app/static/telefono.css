@@ -1,14 +1,22 @@
 /* =========================================================================
-   MyMoney — il telefono. Punto d'ingresso: SOLO @import.
+   MyMoney — il telefono. QUESTO FILE NON È PIÙ IL PUNTO D'INGRESSO.
 
-   Foglio separato di proposito. `styles.css` e `mymoney.css` sono il design
-   freeze v1.0, copiati verbatim dall'handoff: si sostituiscono in blocco
-   quando il design cambia, e metterci dentro roba nostra vorrebbe dire
-   perderla al primo aggiornamento — in silenzio, che è il modo peggiore.
+   I cinque fogli di `telefono/` vengono agganciati uno per uno da
+   `base.html`, ognuno con la sua impronta `?v=`. Qui restano gli `@import`
+   solo per la pagina di riferimento (`/static/riferimento/`), che è una
+   pagina statica e non passa da Jinja.
 
-   L'ordine conta: token → guscio → componenti. Un componente che usa un token
-   non ancora dichiarato non è un errore che il browser segnala, è una regola
-   che semplicemente non fa niente.
+   Perché non è più l'ingresso: un solo file importato cambiava impronta a
+   ogni deploy, ma gli indirizzi che importava restavano gli stessi. Il
+   browser rivalidava il primo e serviva dalla cache gli altri cinque —
+   markup nuovo e stile vecchio, senza un errore da nessuna parte. È costato
+   mezz'ora di misure che dicevano «la regola non c'è» mentre sul server
+   c'era.
+
+   `styles.css` e `mymoney.css` sono il design freeze v1.0, copiati verbatim
+   dall'handoff: si sostituiscono in blocco quando il design cambia, e
+   metterci dentro roba nostra vorrebbe dire perderla al primo aggiornamento,
+   in silenzio, che è il modo peggiore.
 
    Il contratto di questo lavoro sta in `docs/BRIEFING-TELEFONO.md`.
    ========================================================================= */
@@ -16,3 +24,4 @@
 @import url('telefono/guscio.css');
 @import url('telefono/componenti.css');
 @import url('telefono/modulo.css');
+@import url('telefono/agente.css');
