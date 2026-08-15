@@ -1,0 +1,156 @@
+/* =========================================================================
+   MyMoney telefono — TOKEN
+   -------------------------------------------------------------------------
+   Qui stanno SOLO le misure del telefono: altezze, tocchi, raggi, durate.
+
+   I colori NON stanno qui. Arrivano da `tokens/colors.css` del design freeze,
+   che ha già i due temi. Scriverne uno a mano vorrebbe dire romperne uno dei
+   due, e scoprirlo settimane dopo aprendo l'app di sera.
+
+   La tipografia NON sta qui. Arriva da `tokens/typography.css`. L'unica cosa
+   che il telefono cambia sono i CAMPI, che devono stare a 16px o iPhone
+   ingrandisce la pagina: e quella è una regola, non un token, e sta nel guscio.
+
+   Se serve un valore che non c'è, si aggiunge QUI. Mai un numero scritto a
+   mano dentro un componente.
+   ========================================================================= */
+
+:root {
+  /* ---- Tocco: i minimi di iOS, mai scendere sotto ----------------------- */
+  --tel-tocco: 44px;          /* area minima di un bersaglio */
+  --tel-riga: 60px;           /* altezza di una riga di elenco */
+  --tel-riga-alta: 68px;      /* riga con due testi sovrapposti */
+
+  /* ---- Il guscio -------------------------------------------------------- */
+  /* Come Shift Hours: sopra i 440 punti il contenuto non si allarga, si
+     centra. Su un telefono in orizzontale, o su un tablet stretto, una riga
+     larga 900 punti con un numero a sinistra e uno a destra non si legge —
+     l'occhio deve attraversare tutto lo schermo per accoppiarli. */
+  --tel-largh-max: 440px;
+  --tel-lato: 18px;           /* margine laterale del contenuto */
+  --tel-barra-h: 62px;        /* altezza della barra in basso, senza safe area */
+
+  /* ---- Ritmo verticale --------------------------------------------------
+     Una scala corta apposta. Sul PC il design freeze ha dodici gradini di
+     spaziatura; su 375 punti servono quattro distanze e basta, o il ritmo
+     della pagina non si legge più come ritmo. */
+  --tel-sp-1: 4px;
+  --tel-sp-2: 8px;
+  --tel-sp-3: 12px;
+  --tel-sp-4: 16px;
+  --tel-sp-5: 22px;           /* fra due sezioni diverse */
+
+  /* ---- Raggi ------------------------------------------------------------
+     Generosi: è quello che distingue una card da un riquadro. Più stretti di
+     così le righe tornano a sembrare celle di una tabella. */
+  --tel-r-sm: 12px;
+  --tel-r-md: 18px;           /* righe di elenco */
+  --tel-r-lg: 24px;           /* blocco protagonista, pannelli */
+  --tel-r-pill: 999px;
+
+  /* ---- Ombre ------------------------------------------------------------
+     Quasi invisibili: servono solo a staccare ciò che sta SOPRA. Un'ombra che
+     si nota è un'ombra sbagliata.
+
+     In HSL e non in RGB perché il tema scuro le ridefinisce cambiando solo la
+     tinta di base qui sotto, e tutte le ombre seguono. */
+  --tel-ombra-tinta: 90 20% 12%;
+  --tel-ombra-sm: 0 1px 2px hsl(var(--tel-ombra-tinta) / 0.05);
+  --tel-ombra-md: 0 6px 20px -6px hsl(var(--tel-ombra-tinta) / 0.18);
+  --tel-ombra-hero: 0 12px 28px -12px hsl(var(--tel-ombra-tinta) / 0.40);
+  --tel-ombra-barra: 0 -8px 24px -12px hsl(var(--tel-ombra-tinta) / 0.22);
+  --tel-ombra-foglio: 0 -12px 40px -16px hsl(var(--tel-ombra-tinta) / 0.55);
+
+  /* ---- Il blocco protagonista ------------------------------------------
+     La sfumatura del numero grande in cima. Il lime pieno con sopra
+     `--on-accent` (#1B2A05) fa 8.9:1: passa AA con margine.
+
+     Non è un colore nuovo — sono i due gradini della scala lime che il design
+     freeze ha già, messi in sfumatura. */
+  --tel-hero-da: var(--lime-400);
+  --tel-hero-a: var(--lime-300);
+  --tel-hero-ink: var(--on-accent);
+  /* Sul lime chiaro serve un inchiostro secondario che regga: il verde scuro
+     al 62% di opacità fa 4.6:1, appena sopra la soglia. Misurato. */
+  --tel-hero-ink-2: color-mix(in oklab, var(--on-accent) 62%, transparent);
+
+  /* ---- L'inchiostro dell'azione ------------------------------------------
+     MISURATO, non scelto. `--accent-strong` (lime-600 #6FA31C) su fondo chiaro
+     fa 2,65–3,03:1 — sotto la soglia AA di 4,5 per il testo, di parecchio. Sul
+     PC quel colore si legge lo stesso perché lo si guarda da mezzo metro su uno
+     schermo grande; in mano, a 12px, alla luce del sole, no.
+
+     Il gradino sotto, lime-700, arriva a 4,50 esatti su `--bg` — passa, ma di
+     zero. Un valore che sta sulla soglia è un valore che al prossimo ritocco
+     dello sfondo scende sotto senza che nessuno se ne accorga. Si prende
+     lime-800: 6,47 sul fondo peggiore, 7,40 sul migliore. Sicuro per
+     costruzione, non per fortuna.
+
+     La regola generale, che vale oltre questo token:
+     **il lime è un riempimento, non un inchiostro.** L'identità della marca si
+     vede dov'è uno SFONDO — il «＋», i bottoni, il blocco protagonista — con
+     sopra l'inchiostro scuro. Come testo su fondo chiaro non ce la fa, e
+     nessuna gradazione che sembri ancora «pistacchio elettrico» ce la fa.
+
+     Contrasti su fondo chiaro: 6,79 su --bg · 7,40 su --surface · 6,47 su
+     --surface-alt. */
+  --tel-azione: var(--lime-800);
+
+  /* ---- Verde e rosso, cioè i numeri dei soldi ---------------------------
+     Il caso più serio trovato misurando, perché colpisce esattamente la cosa
+     che si guarda per prima: l'importo.
+
+     `--pos` (#1E9E5A) fa 3,01–3,45:1 e `--neg` (#E2474A) fa 3,51–4,01:1 su
+     fondo chiaro. Sono verdi e rossi accesi, scelti per stare accanto al lime
+     su uno schermo grande, e lì funzionano. A 16px in mano non si leggono.
+
+     Il design freeze ha già i due colori giusti — `--ok-tx` e `--err-tx`, che
+     usa per il testo dentro gli avvisi: 5,82–7,51:1. Sono lo STESSO verde e lo
+     STESSO rosso, due gradini più scuri. Non si inventa niente e non si perde
+     la convenzione: il verde resta verde, il rosso resta rosso.
+
+     Nel tema scuro il problema non esiste: `--pos` e `--neg` fanno già
+     5,71–10,08:1. Restano quelli. */
+  --tel-pos: var(--ok-tx);      /* 6,12 su --bg · 6,67 su --surface · 5,82 su --surface-alt */
+  --tel-neg: var(--err-tx);     /* 6,89 · 7,51 · 6,56 */
+
+  /* ---- Movimento --------------------------------------------------------
+     Breve, mai vistoso. La curva è quella di iOS: parte decisa e si posa. */
+  --tel-mov-veloce: 140ms;
+  --tel-mov-normale: 240ms;
+  --tel-mov-curva: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Nel tema scuro le ombre non possono essere «nero più trasparente»: su uno
+   sfondo già scuro non si vedono e basta. Si scuriscono e si allargano. */
+[data-theme="dark"] {
+  --tel-ombra-tinta: 90 30% 3%;
+  --tel-ombra-sm: 0 1px 2px hsl(var(--tel-ombra-tinta) / 0.40);
+  --tel-ombra-md: 0 6px 20px -6px hsl(var(--tel-ombra-tinta) / 0.70);
+  --tel-ombra-hero: 0 12px 28px -12px hsl(var(--tel-ombra-tinta) / 0.80);
+  --tel-ombra-barra: 0 -8px 24px -12px hsl(var(--tel-ombra-tinta) / 0.75);
+  --tel-ombra-foglio: 0 -12px 40px -16px hsl(var(--tel-ombra-tinta) / 0.85);
+
+  /* Il lime resta lime anche di notte — è l'identità e non cambia. Ma la
+     sfumatura vira ai gradini più bassi: il 300 acceso su uno schermo al buio
+     alle undici di sera è una lampada. */
+  --tel-hero-da: var(--lime-500);
+  --tel-hero-a: var(--lime-400);
+
+  /* Di notte il problema si rovescia: il lime scuro sparisce sul fondo nero e
+     quello chiaro si legge benissimo. lime-300 fa 10,92–13,10:1. */
+  --tel-azione: var(--lime-300);
+
+  /* Qui verde e rosso vanno già bene come sono: 8,40–10,08 e 5,71–6,85. */
+  --tel-pos: var(--pos);
+  --tel-neg: var(--neg);
+}
+
+/* Chi ha chiesto al sistema di ridurre le animazioni le ha ridotte per un
+   motivo, e il motivo non era «tranne in questa app». */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tel-mov-veloce: 0ms;
+    --tel-mov-normale: 0ms;
+  }
+}

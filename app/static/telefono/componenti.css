@@ -1,0 +1,455 @@
+/* =========================================================================
+   MyMoney telefono — I COMPONENTI
+
+   Impianto visivo, in quattro righe:
+     - superfici piene, non bordi: le righe si distinguono per riempimento
+     - UN solo blocco protagonista in cima, con dentro UN numero
+     - righe alte e raggi larghi, ritmo verticale regolare
+     - i numeri sono il contenuto: grandi, tabellari, in evidenza
+
+   Solo token. Nessun colore, misura o durata scritti a mano: se manca un
+   valore si aggiunge un token in `token.css`, non un numero qui.
+
+   Indice
+     1. Titolo della schermata
+     2. Il blocco protagonista
+     3. Intestazione di sezione
+     4. I conti
+     5. Righe di elenco e movimenti
+     6. Elenco per giorno
+     7. Bottoni, pillole, stati vuoti
+     8. Le tabelle che restano tabelle (le schermate non ancora rifatte)
+     9. Blocchi del PC che sul telefono non servono
+   ========================================================================= */
+
+@media (max-width: 760px) {
+
+  /* ── 1. Titolo della schermata ────────────────────────────────────────
+     Scorre via col contenuto, come le grandi intestazioni di iOS. Non è una
+     testata fissa: una barra che ti ripete dove sei mentre lo stai guardando
+     costa quarantaquattro punti a ogni schermata e non dice niente. */
+  .tel-titolo {
+    margin: 0 0 var(--tel-sp-4);
+    font-size: var(--text-2xl);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+  /* Il titolo che i template scrivono per il PC: sul telefono è un doppione
+     del titolo qui sopra, e due titoli uno sull'altro sono la firma di una
+     pagina web adattata. */
+  .tel-app .page-title.pc-solo { display: none; }
+
+  /* ── 2. Il blocco protagonista ────────────────────────────────────────
+     Un numero, grande, su fondo pieno. È la ragione per cui l'app si apre: il
+     patrimonio sulla Home, la liquidità su Finanze. Uno per schermata — due
+     numeri protagonisti sono zero numeri protagonisti. */
+  .tel-hero {
+    position: relative;
+    padding: var(--tel-sp-4) var(--tel-sp-5);
+    border-radius: var(--tel-r-lg);
+    background: linear-gradient(140deg, var(--tel-hero-da), var(--tel-hero-a));
+    color: var(--tel-hero-ink);
+    box-shadow: var(--tel-ombra-hero);
+  }
+
+  .tel-hero-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--tel-sp-3); margin-bottom: var(--tel-sp-3);
+  }
+
+  .tel-hero-k {
+    font-size: var(--text-2xs); font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps); text-transform: uppercase;
+    color: var(--tel-hero-ink-2);
+  }
+
+  .tel-hero-v {
+    display: block;
+    font-size: var(--text-3xl); font-weight: var(--fw-extrabold);
+    letter-spacing: var(--ls-tighter); line-height: var(--lh-tight);
+    font-variant-numeric: var(--num);
+  }
+
+  .tel-hero-sub {
+    margin-top: var(--tel-sp-2);
+    font-size: var(--text-sm); color: var(--tel-hero-ink-2);
+    font-variant-numeric: var(--num);
+  }
+  /* Il risultato dentro la hero: sul lime né il verde né il rosso dei token
+     reggono il contrasto — sono pensati per fondo chiaro neutro. Qui il segno
+     lo porta il segno (+/−), e il peso fa il resto. È una perdita voluta: un
+     rosso illeggibile sarebbe una perdita più grande. */
+  .tel-hero-sub b { color: var(--tel-hero-ink); font-weight: var(--fw-bold); }
+
+  /* La pillola dentro la hero: non ruba una riga. */
+  .tel-hero-pill {
+    position: relative;
+    display: inline-flex; align-items: center; gap: var(--tel-sp-1);
+    min-height: 32px; padding: 0 var(--tel-sp-3);
+    border-radius: var(--tel-r-pill);
+    background: hsl(0 0% 100% / .30);
+    color: var(--tel-hero-ink);
+    font-size: var(--text-xs); font-weight: var(--fw-semibold);
+    white-space: nowrap; text-decoration: none;
+  }
+  .tel-hero-pill:active { background: hsl(0 0% 100% / .45); }
+
+  /* Due numeri di supporto sotto la hero: corti, affiancati. Uno sotto
+     l'altro costavano mezza schermata per dire due cose. */
+  .tel-duo {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--tel-sp-2); margin-top: var(--tel-sp-2);
+  }
+  .tel-duo > div {
+    padding: var(--tel-sp-3);
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt);
+  }
+  .tel-duo .k {
+    display: block;
+    font-size: var(--text-2xs); font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps); text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tel-duo .v {
+    display: block; margin-top: 2px;
+    font-size: var(--text-lg); font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-tight); font-variant-numeric: var(--num);
+    color: var(--ink);
+  }
+
+  /* ── 3. Intestazione di sezione ───────────────────────────────────────
+     Il nome della sezione a sinistra, la via d'uscita a destra. */
+  .tel-home { margin-top: var(--tel-sp-2); }
+  .tel-home-h {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--tel-sp-3); margin: var(--tel-sp-5) 2px var(--tel-sp-2);
+  }
+  .tel-home-h:first-child { margin-top: var(--tel-sp-4); }
+  .tel-home-h h2 {
+    margin: 0; font-size: var(--text-2xs); font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps); text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tel-home-h a {
+    position: relative;
+    font-size: var(--text-xs); font-weight: var(--fw-semibold);
+    color: var(--tel-azione); text-decoration: none; white-space: nowrap;
+    padding-left: var(--tel-sp-3);
+  }
+
+  /* ── Il bersaglio più grande del disegno ──────────────────────────────
+     Due comandi hanno un corpo volutamente piccolo — la pillola dentro il
+     blocco protagonista e il «Vedi tutto ›» accanto al nome della sezione.
+     Ingrossarli fino a 44 punti li farebbe diventare bottoni, e non sono
+     bottoni: sono scorciatoie che devono stare in disparte.
+
+     Quindi si allarga l'AREA SENSIBILE, non il disegno: un rettangolo
+     trasparente alto 44 punti, centrato sulla scritta, che fa parte del
+     collegamento stesso. Il dito trova il bersaglio, l'occhio vede la
+     scorciatoia. È il minimo iOS rispettato per davvero, non aggirato.
+
+     `pointer-events` resta quello di default: il rettangolo è dentro il link,
+     quindi premere lì è premere il link. */
+  .tel-hero-pill::after,
+  .tel-home-h a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: var(--tel-tocco);
+    transform: translateY(-50%);
+  }
+
+  /* ── 4. I conti ───────────────────────────────────────────────────────
+     Otto card da 177 punti l'una fanno 1.584 punti — due schermate intere per
+     leggere otto numeri. Qui il conto è il suo nome, il suo saldo e la riga di
+     colore che lo fa riconoscere senza leggerlo. */
+  .tel-conti {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--tel-sp-2);
+  }
+  .tel-conto {
+    position: relative; overflow: hidden; display: block;
+    min-height: var(--tel-tocco);
+    padding: var(--tel-sp-3);
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt);
+    text-decoration: none;
+    transition: background var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  /* La riga di colore, la stessa delle card del PC: è così che si riconosce
+     Hype da Revolut senza leggere il nome. */
+  .tel-conto::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--acc, var(--accent));
+  }
+  .tel-conto:active { background: var(--hover); }
+  .tel-conto-n {
+    display: block; color: var(--muted); font-size: var(--text-xs);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tel-conto-s {
+    display: block; margin-top: 2px; color: var(--ink);
+    font-size: var(--text-lg); font-weight: var(--fw-bold);
+    font-variant-numeric: var(--num); letter-spacing: var(--ls-tight);
+  }
+
+  /* ── 5. Righe di elenco e movimenti ───────────────────────────────────
+     Superficie piena, niente bordo. Un bordo grigio attorno a ogni riga fa
+     l'effetto tabella; il riempimento fa l'effetto elenco. */
+  .tel-riga {
+    display: flex; align-items: center; gap: var(--tel-sp-3);
+    width: 100%; min-height: var(--tel-riga);
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    margin-bottom: var(--tel-sp-1);
+    border: 0; border-radius: var(--tel-r-md);
+    background: var(--surface-alt); color: var(--ink);
+    font: inherit; text-align: left; text-decoration: none;
+    transition: background var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  .tel-riga:active { background: var(--hover); }
+  .tel-riga-main { flex: 1; min-width: 0; }
+  .tel-riga-t {
+    display: block; font-size: var(--text-base); font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-tight);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tel-riga-s {
+    display: block; margin-top: 1px;
+    font-size: var(--text-xs); color: var(--muted);
+  }
+  .tel-riga-v {
+    flex: none; font-size: var(--text-md); font-weight: var(--fw-bold);
+    font-variant-numeric: var(--num); letter-spacing: var(--ls-tight);
+  }
+  .tel-riga-ch { flex: none; color: var(--muted); }
+
+  /* Il contatore dentro una riga: quante notizie nuove, quanti avvisi. Dice
+     se vale la pena aprire, senza aprire. */
+  .tel-badge {
+    flex: none; min-width: 22px; padding: 2px 7px;
+    border-radius: var(--tel-r-pill);
+    background: var(--accent-soft); color: var(--tel-azione);
+    font-size: var(--text-2xs); font-weight: var(--fw-bold);
+    text-align: center; font-variant-numeric: var(--num);
+  }
+  /* Il contatore che chiede attenzione. `--neg-bg` con sopra `--tel-neg` fa
+     6,1:1 nel chiaro e 5,4:1 nello scuro. */
+  .tel-badge.avviso { background: var(--neg-bg); color: var(--tel-neg); }
+
+  /* La riga dell'agente: si distingue per la striscia gialla a sinistra, non
+     per un colore di sfondo diverso — una riga gialla in mezzo a righe grigie
+     si legge come un errore. */
+  .tel-riga.ai {
+    background: var(--ai-bg);
+    box-shadow: inset 3px 0 0 var(--ai);
+  }
+
+  /* Il movimento: cosa, quando e dove, e l'importo a destra centrato sulle due
+     righe. Le posizioni sono dichiarate una per una perché in griglia l'ordine
+     automatico metterebbe il «quando» nella colonna dell'importo. */
+  .tel-mov {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1px var(--tel-sp-3);
+    min-height: var(--tel-tocco);
+    align-content: center;
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    margin-bottom: var(--tel-sp-1);
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt);
+    text-decoration: none;
+    /* La riga è un LINK, e un link senza colore prende quello dei link — il
+       lime del tema. Le due righe di testo se lo dichiarano da sole, l'importo
+       no: un trasferimento, che non è né entrata né uscita e quindi non ha
+       classe di colore, veniva scritto in verde e si leggeva come un incasso.
+       Il colore giusto lo si dice UNA volta qui; `.pos`, `.neg` e `.muted`
+       stanno sull'importo e continuano a vincere sull'eredità. */
+    color: var(--ink);
+    transition: background var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  .tel-mov:active { background: var(--hover); }
+  .tel-mov-d {
+    grid-column: 1; grid-row: 1;
+    color: var(--ink); font-size: var(--text-sm); font-weight: var(--fw-medium);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tel-mov-q {
+    grid-column: 1; grid-row: 2;
+    color: var(--muted); font-size: var(--text-xs);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tel-mov-i {
+    grid-column: 2; grid-row: 1 / span 2; align-self: center;
+    font-size: var(--text-md); font-weight: var(--fw-bold);
+    font-variant-numeric: var(--num);
+  }
+
+  /* ── 6. Elenco per giorno ─────────────────────────────────────────────
+     La data scritta una volta in testa al giorno, non su ogni riga. Dieci
+     righe dello stesso giorno con dieci volte «09/08» sono nove ripetizioni
+     che l'occhio deve scartare da solo. */
+  .tel-giorno { margin-top: var(--tel-sp-4); }
+  .tel-giorno:first-child { margin-top: var(--tel-sp-2); }
+  .tel-giorno-h {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--tel-sp-3); margin: 0 2px var(--tel-sp-2);
+  }
+  .tel-giorno-d {
+    color: var(--muted); font-size: var(--text-2xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase; letter-spacing: var(--ls-caps);
+  }
+  .tel-giorno-t {
+    font-size: var(--text-xs); font-weight: var(--fw-bold);
+    font-variant-numeric: var(--num);
+  }
+
+  /* ── 7. Bottoni, pillole, stati vuoti ─────────────────────────────────── */
+
+  /* Il pulsante che allunga la lista. Lo scrive il JS: senza JS la lista resta
+     intera, che è il caso peggiore accettabile — lunga, ma completa. */
+  .tel-altri {
+    display: block; width: 100%;
+    margin: var(--tel-sp-3) 0 0;
+    min-height: var(--tel-tocco); padding: var(--tel-sp-3);
+    border: 0; border-radius: var(--tel-r-md);
+    background: var(--surface-alt); color: var(--muted);
+    font: inherit; font-size: var(--text-sm); font-weight: var(--fw-semibold);
+    text-align: center; cursor: pointer;
+  }
+  .tel-altri:active { background: var(--hover); }
+
+  /* Bottone a tutta larghezza: sul telefono un bottone stretto in mezzo a una
+     riga vuota è un bersaglio da centrare. */
+  .tel-btn {
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--tel-sp-2);
+    width: 100%; min-height: 52px; padding: 0 var(--tel-sp-5);
+    border: 0; border-radius: var(--tel-r-pill);
+    background: var(--accent); color: var(--on-accent);
+    font: inherit; font-size: var(--text-base); font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-tight); text-decoration: none;
+    box-shadow: var(--tel-ombra-md); cursor: pointer;
+  }
+  .tel-btn:active { background: var(--accent-hover); }
+  .tel-btn.secondario {
+    background: var(--surface-alt); color: var(--tel-azione);
+    box-shadow: none;
+  }
+  .tel-btn.secondario:active { background: var(--hover); }
+
+  /* Lo stato vuoto: dire «non c'è niente» in un riquadro è meglio che lasciare
+     un buco, perché un buco si legge come un errore di caricamento. */
+  .tel-vuoto {
+    margin: 0; padding: var(--tel-sp-4);
+    border-radius: var(--tel-r-md);
+    background: var(--surface-alt); color: var(--muted);
+    font-size: var(--text-sm); text-align: center;
+  }
+
+  /* ── 8. Le tabelle che restano tabelle ────────────────────────────────
+     Portafoglio, PAC, Analisi, Notizie, Impostazioni non sono ancora state
+     rifatte: continuano a passare da qui, dove ogni riga diventa una scheda e
+     ogni cella una riga «etichetta · valore». L'etichetta la copia app.js
+     dall'intestazione della colonna (`data-etichetta`), così vale per tutte le
+     tabelle senza doverlo ricordare template per template.
+
+     Questo blocco se ne andrà quando quelle cinque schermate avranno il loro
+     elenco vero. Finché c'è, non si tocca: è quello che le tiene leggibili. */
+  .table-wrap { border: 0; background: transparent; padding: 0; overflow: visible; }
+  .table-wrap table { display: block; width: 100%; }
+  .table-wrap thead { display: none; }
+  .table-wrap tbody { display: block; }
+  /* Anche il piede, o resta l'unico pezzo con la larghezza della tabella vera
+     e trascina di lato tutta la pagina. */
+  .table-wrap tfoot { display: block; }
+  .table-wrap tfoot tr {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+    padding: var(--tel-sp-3); border-top: 1px solid var(--border);
+  }
+  .table-wrap tfoot td { display: inline; border: 0; padding: 0; text-align: left; }
+
+  .table-wrap tbody tr {
+    display: block; position: relative;
+    background: var(--surface-alt); border: 0;
+    border-radius: var(--tel-r-md);
+    padding: var(--tel-sp-3); margin-bottom: var(--tel-sp-1);
+  }
+  .table-wrap tbody tr:active { background: var(--hover); }
+
+  .table-wrap tbody td {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 14px; padding: 2px 0; border: 0; white-space: normal;
+    font-size: var(--text-sm); text-align: right;
+  }
+  .table-wrap tbody td::before {
+    content: attr(data-etichetta);
+    flex: none; color: var(--muted); font-size: var(--text-xs);
+    font-weight: var(--fw-medium); text-align: left;
+  }
+  /* La PRIMA cella è l'identità della riga — la data, il nome del titolo. Non
+     è il dato più importante: è quello che dice DI CHE COSA si parla, quindi
+     sta in cima e in piccolo, come la data sopra un messaggio. */
+  .table-wrap tbody td:first-child {
+    display: block; text-align: left; padding-right: 44px; padding-bottom: 4px;
+    color: var(--muted); font-size: var(--text-xs); font-weight: var(--fw-medium);
+  }
+  .table-wrap tbody td:first-child::before { content: none; }
+  /* Celle senza dati: su un foglio largo sono una casella bianca che non
+     disturba, in una scheda diventano una riga intera che dice «Categoria —».
+     Le marca app.js, perché il trattino è testo e la CSS non lo può leggere. */
+  .table-wrap tbody td:empty,
+  .table-wrap tbody td[data-vuota] { display: none; }
+  /* Colonne che l'intestazione ha dichiarato inutili sul telefono
+     (`th.tel-via`). Non è un dato in meno: è un dato spostato nel pannello del
+     dettaglio, dove c'è lo spazio per spiegarlo. */
+  .table-wrap tbody td.tel-via { display: none; }
+  .table-wrap tbody td:not([data-etichetta])::before { content: none; }
+  /* L'importo è il numero che si cerca per primo: che si veda per primo. */
+  .table-wrap tbody td.num {
+    font-variant-numeric: var(--num); font-weight: var(--fw-bold);
+    font-size: var(--text-md); color: var(--ink);
+  }
+  /* L'ultima cella tiene i comandi (il cestino). Senza intestazione non è un
+     dato: è un'azione, e un'azione non merita una riga tutta sua in fondo alla
+     scheda. Va nell'angolo in alto a destra, dove sta in ogni lista di ogni
+     app. */
+  .table-wrap tbody td:last-child:not([data-etichetta]) {
+    position: absolute; top: 6px; right: 8px;
+    padding: 0; justify-content: flex-end;
+  }
+  /* Le righe di messaggio («nessun movimento») non sono schede. */
+  .table-wrap tbody tr td[colspan] { display: block; text-align: center; }
+
+  /* ── 9. Blocchi del PC che sul telefono non servono ───────────────────── */
+
+  /* Le scorciatoie della dashboard vanno dove vanno già la barra in basso e il
+     «＋». Costavano 93 punti prima del primo numero. */
+  .dash-scorciatoie { display: none; }
+
+  /* Il calendario delle spese: quarantatré quadratini da premere col pollice
+     su una griglia larga 339 punti, e quello che dicono si legge solo
+     passandoci sopra col mouse. Su schermo grande è un colpo d'occhio; qui è
+     una decorazione che costa mezza schermata e non si riesce a toccare. I
+     numeri che racconta stanno tutti nelle due card accanto.
+
+     Via il riquadro INTERO, non solo la griglia: dentro c'è anche il titolo
+     «il mese giorno per giorno», e un titolo che annuncia una cosa invisibile
+     è peggio della cosa.
+
+     `.card .mm-cal-box` e non `.mm-cal-box`: il `display` di questi elementi
+     arriva dal blocco <style> di base.html, che nel documento viene DOPO
+     questo foglio e a parità di specificità vincerebbe. */
+  .card .mm-cal-box { display: none; }
+
+  /* La riga dei tre numeri del PC, dove è rimasta: il primo a tutta larghezza,
+     gli altri due affiancati. Doppia classe per la stessa ragione di sopra. */
+  .grid.mm-stats4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--tel-sp-2);
+  }
+  .grid.mm-stats4 > .stat.hero { grid-column: 1 / -1; }
+}

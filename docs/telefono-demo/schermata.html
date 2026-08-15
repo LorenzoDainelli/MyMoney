@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="it" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyMoney — schermata di riferimento</title>
+<!-- I FOGLI VERI, non una copia: se una regola qui si vede bene e nell'app no,
+     il difetto è nel markup, non nel foglio. -->
+<link rel="stylesheet" href="../../app/static/styles.css">
+<link rel="stylesheet" href="../../app/static/telefono.css">
+<style>
+  /* Il blocco <style> di base.html non c'è, ma le poche regole che il telefono
+     deve saper battere sì: senza, la pagina di riferimento non proverebbe la
+     cosa che deve provare. */
+  @media (max-width: 760px) {
+    .mm-add { display: grid; grid-template-columns: minmax(0,1fr) minmax(240px,330px); }
+  }
+</style>
+</head>
+<body>
+<!-- ==========================================================================
+     DATI TUTTI INVENTATI. Nel repo non entra mai un saldo vero: questa pagina
+     sta su GitHub e i conti di una persona no.
+     ========================================================================== -->
+<div class="tel-app">
+<div class="tel-app__corpo">
+<main class="wrap">
+
+<!-- ─── HOME ─────────────────────────────────────────────────────────────── -->
+<section data-schermata="home">
+
+  <h1 class="tel-titolo">Ciao</h1>
+
+  <div class="tel-hero">
+    <div class="tel-hero-top">
+      <span class="tel-hero-k">Patrimonio</span>
+      <a class="tel-hero-pill" href="#">agosto ›</a>
+    </div>
+    <span class="tel-hero-v">€ 14.208,60</span>
+    <div class="tel-hero-sub">Risultato <b>+€ 412,17 (+2,9%)</b> su € 13.796,43 versati</div>
+  </div>
+
+  <div class="tel-duo">
+    <div>
+      <span class="k">Spesa media</span>
+      <span class="v">€ 28,40</span>
+    </div>
+    <div>
+      <span class="k">Saldo del mese</span>
+      <span class="v pos">+€ 305,20</span>
+    </div>
+  </div>
+
+  <div class="tel-home-h">
+    <h2>Conti</h2>
+    <a href="#">Vedi tutto ›</a>
+  </div>
+  <div class="tel-conti">
+    <a class="tel-conto" href="#" style="--acc:#7C5CFF;">
+      <span class="tel-conto-n">Hype</span><span class="tel-conto-s">€ 842,10</span></a>
+    <a class="tel-conto" href="#" style="--acc:#0B7DDA;">
+      <span class="tel-conto-n">Revolut</span><span class="tel-conto-s">€ 316,88</span></a>
+    <a class="tel-conto" href="#" style="--acc:#111111;">
+      <span class="tel-conto-n">Trade Republic</span><span class="tel-conto-s">€ 74,25</span></a>
+    <a class="tel-conto" href="#" style="--acc:#A6DA47;">
+      <span class="tel-conto-n">PAC investimenti</span><span class="tel-conto-s">€ 12.975,37</span></a>
+  </div>
+  <p class="faint" style="margin:8px 2px 0;font-size:12px;">
+    2 conti a zero non sono mostrati <span class="muted">Contanti · Buoni pasto</span>
+  </p>
+
+  <div class="tel-home-h">
+    <h2>Ultimi movimenti</h2>
+    <a href="#">Vedi tutto ›</a>
+  </div>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Spesa Lidl</span>
+    <span class="tel-mov-q">oggi · Hype</span>
+    <span class="tel-mov-i neg">−€ 34,12</span></a>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Stipendio</span>
+    <span class="tel-mov-q">ieri · Revolut</span>
+    <span class="tel-mov-i pos">+€ 1.450,00</span></a>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Giroconto</span>
+    <span class="tel-mov-q">ieri · Revolut → Hype</span>
+    <span class="tel-mov-i muted">€ 0,00</span></a>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Caffè</span>
+    <span class="tel-mov-q">12/08 · Contanti</span>
+    <span class="tel-mov-i neg">−€ 1,40</span></a>
+
+  <!-- Tutto il resto della Home del PC — grafico, migliori e peggiori,
+       dividendi, settori, notizie, il punto della settimana — non è sparito:
+       è dietro queste righe. Sul PC ci sta tutto affiancato in due colonne;
+       qui, uno sotto l'altro, erano tre schermate di scorrimento per arrivare
+       in fondo a una cosa che si guarda una volta a settimana. -->
+  <div class="tel-home-h">
+    <h2>Approfondisci</h2>
+  </div>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Andamento del patrimonio</span>
+      <span class="tel-riga-s">Il grafico, da 1 giorno a tutta la storia</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Migliori e peggiori</span>
+      <span class="tel-riga-s">IWDA +4,1% · NVDA −2,8%</span>
+    </span>
+    <span class="tel-riga-v pos">+4,1%</span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Dividendi stimati</span>
+      <span class="tel-riga-s">~€ 12,40 al mese</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Esposizione per settore</span>
+      <span class="tel-riga-s">Tecnologia 31,4%</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Notizie dal monitor</span>
+      <span class="tel-riga-s">3 nuove · rilevanza max 74</span>
+    </span>
+    <span class="tel-badge avviso">3</span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga ai" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Il punto della settimana</span>
+      <span class="tel-riga-s">Generato mercoledì · confidenza media</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+</section>
+
+<!-- ─── FINANZE ──────────────────────────────────────────────────────────── -->
+<section data-schermata="finanze" hidden>
+
+  <h1 class="tel-titolo">Finanze</h1>
+
+  <div class="tel-hero">
+    <div class="tel-hero-top">
+      <span class="tel-hero-k">Patrimonio liquido</span>
+    </div>
+    <span class="tel-hero-v">€ 14.208,60</span>
+    <div class="tel-hero-sub">6 portafogli · di cui liquidi <b>€ 1.233,23</b></div>
+  </div>
+
+  <div class="tel-duo">
+    <div>
+      <span class="k">Entrate</span>
+      <span class="v pos">€ 1.450,00</span>
+    </div>
+    <div>
+      <span class="k">Uscite</span>
+      <span class="v neg">€ 1.144,80</span>
+    </div>
+  </div>
+
+  <div class="tel-home-h">
+    <h2>Conti</h2>
+  </div>
+  <div class="tel-conti">
+    <div class="tel-conto" style="--acc:#7C5CFF;">
+      <span class="tel-conto-n">Hype</span><span class="tel-conto-s">€ 842,10</span></div>
+    <div class="tel-conto" style="--acc:#0B7DDA;">
+      <span class="tel-conto-n">Revolut</span><span class="tel-conto-s">€ 316,88</span></div>
+    <div class="tel-conto" style="--acc:#111111;">
+      <span class="tel-conto-n">Trade Republic</span><span class="tel-conto-s">€ 74,25</span></div>
+    <div class="tel-conto" style="--acc:#F0975B;">
+      <span class="tel-conto-n">Nascosti</span><span class="tel-conto-s">€ 12,40</span></div>
+  </div>
+
+  <div class="tel-home-h">
+    <h2>Approfondisci</h2>
+  </div>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Spese per categoria</span>
+      <span class="tel-riga-s">Casa 41% · Spesa 22% · Trasporti 11%</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Dove è finito il mese</span>
+      <span class="tel-riga-s">Il mese in numeri, giorno per giorno</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <div class="tel-home-h">
+    <h2>Movimenti</h2>
+  </div>
+
+  <div class="tel-giorno">
+    <div class="tel-giorno-h">
+      <span class="tel-giorno-d">Oggi</span>
+      <span class="tel-giorno-t neg">−€ 35,52</span>
+    </div>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Spesa Lidl</span>
+      <span class="tel-mov-q">Hype · Spesa</span>
+      <span class="tel-mov-i neg">−€ 34,12</span></a>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Caffè</span>
+      <span class="tel-mov-q">Contanti · Bar</span>
+      <span class="tel-mov-i neg">−€ 1,40</span></a>
+  </div>
+
+  <div class="tel-giorno">
+    <div class="tel-giorno-h">
+      <span class="tel-giorno-d">Ieri</span>
+      <span class="tel-giorno-t pos">+€ 1.450,00</span>
+    </div>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Stipendio</span>
+      <span class="tel-mov-q">Revolut · Lavoro</span>
+      <span class="tel-mov-i pos">+€ 1.450,00</span></a>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Giroconto</span>
+      <span class="tel-mov-q">Revolut → Hype</span>
+      <span class="tel-mov-i muted">€ 0,00</span></a>
+  </div>
+
+  <div class="tel-giorno">
+    <div class="tel-giorno-h">
+      <span class="tel-giorno-d">Mercoledì 12 agosto</span>
+      <span class="tel-giorno-t neg">−€ 62,90</span>
+    </div>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Benzina</span>
+      <span class="tel-mov-q">Hype · Trasporti</span>
+      <span class="tel-mov-i neg">−€ 52,00</span></a>
+    <a class="tel-mov" href="#">
+      <span class="tel-mov-d">Abbonamento</span>
+      <span class="tel-mov-q">Revolut · Servizi</span>
+      <span class="tel-mov-i neg">−€ 10,90</span></a>
+  </div>
+
+  <button class="tel-altri" type="button">Mostra altri 14 movimenti</button>
+
+</section>
+
+<!-- ─── I COMPONENTI, UNO PER UNO ────────────────────────────────────────── -->
+<section data-schermata="componenti" hidden>
+
+  <h1 class="tel-titolo">Componenti</h1>
+
+  <div class="tel-home-h"><h2>Blocco protagonista</h2></div>
+  <div class="tel-hero">
+    <div class="tel-hero-top">
+      <span class="tel-hero-k">Etichetta</span>
+      <a class="tel-hero-pill" href="#">pillola ›</a>
+    </div>
+    <span class="tel-hero-v">€ 14.208,60</span>
+    <div class="tel-hero-sub">riga di contesto con <b>un numero in evidenza</b></div>
+  </div>
+  <p class="faint" style="font-size:12px;margin:8px 2px 0;">
+    Uno per schermata. Due numeri protagonisti sono zero numeri protagonisti.
+  </p>
+
+  <div class="tel-home-h"><h2>Due numeri di supporto</h2></div>
+  <div class="tel-duo">
+    <div><span class="k">Positivo</span><span class="v pos">+€ 305,20</span></div>
+    <div><span class="k">Negativo</span><span class="v neg">−€ 144,80</span></div>
+  </div>
+
+  <div class="tel-home-h"><h2>Conti</h2></div>
+  <div class="tel-conti">
+    <div class="tel-conto" style="--acc:#7C5CFF;">
+      <span class="tel-conto-n">Con colore</span><span class="tel-conto-s">€ 842,10</span></div>
+    <div class="tel-conto">
+      <span class="tel-conto-n">Senza colore</span><span class="tel-conto-s">€ 12,40</span></div>
+    <div class="tel-conto" style="--acc:#E2474A;">
+      <span class="tel-conto-n">Saldo negativo</span><span class="tel-conto-s">−€ 40,00</span></div>
+    <div class="tel-conto" style="--acc:#0B7DDA;">
+      <span class="tel-conto-n">Nome molto lungo che non ci sta</span>
+      <span class="tel-conto-s">€ 316,88</span></div>
+  </div>
+
+  <div class="tel-home-h"><h2>Riga di elenco</h2></div>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Solo titolo</span>
+    </span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Titolo e sottotitolo</span>
+      <span class="tel-riga-s">la riga che spiega</span>
+    </span>
+    <span class="tel-riga-v pos">+4,1%</span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <div class="tel-home-h"><h2>Riga con contatore, e riga dell'agente</h2></div>
+  <a class="tel-riga" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Notizie dal monitor</span>
+      <span class="tel-riga-s">3 nuove &middot; rilevanza max 74</span>
+    </span>
+    <span class="tel-badge avviso">3</span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+  <a class="tel-riga ai" href="#">
+    <span class="tel-riga-main">
+      <span class="tel-riga-t">Il punto della settimana</span>
+      <span class="tel-riga-s">confidenza media</span>
+    </span>
+    <span class="tel-badge">1</span>
+    <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+         stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <div class="tel-home-h"><h2>Movimenti — i tre segni</h2></div>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Entrata</span><span class="tel-mov-q">ieri · Revolut</span>
+    <span class="tel-mov-i pos">+€ 1.450,00</span></a>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Uscita</span><span class="tel-mov-q">oggi · Hype</span>
+    <span class="tel-mov-i neg">−€ 34,12</span></a>
+  <a class="tel-mov" href="#">
+    <span class="tel-mov-d">Partita di giro</span><span class="tel-mov-q">Revolut → Hype</span>
+    <span class="tel-mov-i muted">€ 0,00</span></a>
+  <p class="faint" style="font-size:12px;margin:8px 2px 0;">
+    Il giro resta <b>neutro</b>: non è un'entrata né un'uscita finché non si
+    chiude. È già costato un bug — l'importo ereditava il lime dei link e si
+    leggeva come un incasso.
+  </p>
+
+  <div class="tel-home-h"><h2>Bottoni</h2></div>
+  <a class="tel-btn" href="#" style="margin-bottom:8px;">Azione principale</a>
+  <a class="tel-btn secondario" href="#" style="margin-bottom:8px;">Azione secondaria</a>
+  <button class="tel-altri" type="button">Mostra altri 14</button>
+
+  <div class="tel-home-h"><h2>Stato vuoto</h2></div>
+  <p class="tel-vuoto">Nessun movimento in questo mese.</p>
+
+  <div class="tel-home-h"><h2>Avvisi</h2></div>
+  <div class="note warn" style="margin:0 0 8px;">I prezzi sono fermi da 3 giorni.</div>
+  <div class="note info" style="margin:0 0 8px;">Il PAC di agosto non è ancora registrato.</div>
+  <div class="note" style="margin:0;">Nota neutra.</div>
+
+  <div class="tel-home-h"><h2>Bersagli di tocco</h2></div>
+  <p class="tel-vuoto" style="text-align:left;">
+    Ogni cosa premibile in questa pagina è alta almeno <b>44 punti</b>: righe,
+    conti, movimenti, bottoni, voci della barra. Il riquadro qui sotto è la
+    misura minima, per confronto.
+  </p>
+  <div style="height:44px;margin-top:8px;border-radius:12px;
+       background:repeating-linear-gradient(45deg,var(--accent-soft) 0 8px,transparent 8px 16px);
+       display:grid;place-items:center;font-size:12px;color:var(--muted);">44 punti</div>
+
+</section>
+
+</main>
+
+<footer class="disclaimer">
+  Dati inventati. Strumento personale: aiuta a capire, non dice cosa fare.
+</footer>
+</div>
+
+<!-- ─── LA BARRA, riga della griglia e non adesivo ───────────────────────── -->
+<nav class="tel-tabbar">
+  <a class="tel-tab on" href="#"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+     <path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
+  <a class="tel-tab" href="#"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+     <rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16.5 14.5h.01"/></svg><span>Finanze</span></a>
+  <a class="tel-fab" href="#" aria-label="Nuovo movimento"><svg width="26" height="26"
+     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+     stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></a>
+  <a class="tel-tab" href="#"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+     <path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span>Titoli</span></a>
+  <button type="button" class="tel-tab"><svg width="22" height="22" viewBox="0 0 24 24"
+     fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/>
+     <circle cx="19" cy="12" r="1.9"/></svg><span>Altro</span></button>
+</nav>
+</div>
+
+<script>
+  /* Quale schermata e quale tema: `?s=home|finanze|componenti&t=light|dark`.
+     Un file solo per sei riquadri — sei copie dello stesso markup si
+     sfaserebbero alla prima correzione, e la pagina di riferimento mentirebbe
+     proprio dove serve che dica la verità. */
+  (function () {
+    var p = new URLSearchParams(location.search);
+    var s = p.get('s') || 'home';
+    document.documentElement.dataset.theme = p.get('t') === 'dark' ? 'dark' : 'light';
+    document.querySelectorAll('[data-schermata]').forEach(function (el) {
+      el.hidden = el.dataset.schermata !== s;
+    });
+  })();
+</script>
+</body>
+</html>

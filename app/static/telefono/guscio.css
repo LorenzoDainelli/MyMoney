@@ -1,0 +1,368 @@
+/* =========================================================================
+   MyMoney telefono — IL GUSCIO
+   -------------------------------------------------------------------------
+   Questo è il file che fa la differenza fra un sito e un'app, e sta tutto in
+   un'idea sola:
+
+       il contenuto scorre DENTRO una cornice che non si muove.
+
+   Oggi (prima di questo foglio) scorre l'intero documento, e la barra in basso
+   è `position: fixed` che galleggia sopra. Sembra la stessa cosa e non lo è:
+   con un documento che scorre, la barra è un adesivo appiccicato allo schermo
+   e il contenuto le passa sotto; il browser mobile fa comparire e sparire la
+   sua barra degli indirizzi in base allo scorrimento, l'altezza dello schermo
+   cambia sotto i piedi, e `100vh` mente. Con un guscio a `100dvh` niente di
+   tutto questo succede: c'è una griglia di due righe, la seconda è la barra, e
+   la prima è l'unica cosa al mondo che scorre.
+
+   ── COME NON ROMPERE IL PC ──────────────────────────────────────────────
+   Il guscio è fatto di due `<div>` che sul PC hanno `display: contents`:
+   spariscono dal layout come se il markup non li avesse mai avuti. Non è
+   «quasi uguale», è identico — il PC non vede nessun contenitore in più.
+   Questo è il motivo per cui il guscio si può aggiungere senza toccare una
+   sola misura dello schermo grande.
+   ========================================================================= */
+
+/* Fuori da ogni media query: sul PC i due contenitori non esistono. */
+.tel-app,
+.tel-app__corpo { display: contents; }
+
+
+@media (max-width: 760px) {
+
+  /* ======================================================================
+     1. LE FONDAMENTA — i dettagli che si notano solo quando mancano
+     ====================================================================== */
+
+  /* **Il più importante di tutti.** Sotto i 16px iPhone INGRANDISCE la pagina
+     quando tocchi un campo, e poi te la lascia ingrandita: scrivi una cifra e
+     ti ritrovi l'app a metà schermo. Il design freeze usa 15px, che sul PC è
+     giusto; qui non si può. */
+  input, select, textarea { font-size: 16px; }
+  /* `1fr` ha un minimo automatico pari alla larghezza del CONTENUTO: una
+     casella con dentro un testo lungo allarga la colonna oltre lo schermo.
+     Lo zero le dà il permesso di stringersi. */
+  input, select, textarea { min-width: 0; max-width: 100%; }
+
+  /* Il lampo grigio che il browser disegna su ogni tocco lento: su un sito
+     dice «sto premendo un collegamento», dentro un'app è un difetto. */
+  * { -webkit-tap-highlight-color: transparent; }
+
+  /* Il doppio tocco che ingrandisce è eredità dei siti da desktop. Toglierlo
+     rende anche i tocchi singoli più pronti: niente attesa dei 300ms per
+     capire se ne arriva un secondo. */
+  a, button, .btn, .tel-tab, .tel-voce, summary, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Tenere premuta la barra non deve selezionarne il testo. I numeri e le
+     descrizioni restano selezionabili: da lì si copia, e toglierlo sarebbe
+     una perdita vera. */
+  .tel-tabbar, .tel-foglio, .tel-hero, .btn, button, .pill {
+    user-select: none; -webkit-user-select: none;
+  }
+
+  /* Quello che si tocca deve rispondere subito: senza il passaggio del mouse,
+     il tocco è l'unico modo che ha l'interfaccia di dire «ti ho sentito». */
+  .btn:active, .tel-voce:active, a.mm-rowbtn:active { opacity: .82; }
+
+  :focus-visible {
+    outline: 2px solid var(--tel-azione);
+    outline-offset: 2px;
+    border-radius: var(--tel-r-sm);
+  }
+
+  /* `--faint` non è leggibile in mano. Misurato: 2,89–3,31:1 nel tema chiaro,
+     3,53–4,24:1 in quello scuro — sotto la soglia AA di 4,5 in TUTTI e sei i
+     casi. Sul PC regge lo stesso, perché uno schermo grande lo si guarda da
+     mezzo metro in una stanza; un telefono lo si guarda in mano, a 12px, spesso
+     al sole.
+
+     Non si tocca il token — è del design freeze e sul PC va bene. Si dirotta
+     la CLASSE, qui, dove comanda il telefono: `--muted` fa 5,86–7,73:1 ovunque.
+     Una riga sola sistema ogni «.faint» di tutti e sette i template, comprese
+     le cinque schermate non ancora rifatte. */
+  .faint { color: var(--muted); }
+
+  /* Stessa medicina per il verde e il rosso, che è il caso più serio: colpisce
+     l'importo, cioè la cosa che si guarda per prima. Vedi `token.css`. Si
+     dirottano le CLASSI, non i token: sul PC `--pos` e `--neg` restano quelli
+     che sono, perché lì il problema non c'è. */
+  .pos { color: var(--tel-pos); }
+  .neg { color: var(--tel-neg); }
+
+  /* Il disclaimer in fondo: 3,04:1. È un testo di legge scritto piccolo, ed è
+     esattamente il genere di testo che qualcuno un giorno deve poter leggere. */
+  .disclaimer { color: var(--muted); }
+
+  /* ======================================================================
+     2. IL GUSCIO
+     ====================================================================== */
+
+  /* `overflow: hidden` sul documento: da qui in poi la pagina NON scorre.
+     Scorre `.tel-app__corpo`, e nient'altro. È la riga che cambia tutto.
+
+     `:has(.tel-app)` non è un vezzo, è una sicurezza. Questa regola toglie al
+     documento la capacità di scorrere, e ha senso solo se dentro c'è qualcuno
+     che scorre al posto suo. Su una pagina senza guscio — una schermata non
+     ancora convertita, un errore del server, il login — bloccherebbe tutto e
+     basta: il contenuto oltre la prima schermata diventerebbe irraggiungibile,
+     e non c'è modo di accorgersene guardando la prima schermata.
+
+     Legata così, la serratura arriva **insieme** alla sua chiave o non arriva. */
+  html:has(.tel-app), html:has(.tel-app) body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  .tel-app {
+    display: grid;
+    /* Due righe: il contenuto prende quello che c'è, la barra quello che
+       vuole. Nessuna testata fissa — sul telefono il titolo scorre via
+       insieme al contenuto, come le grandi intestazioni di iOS. Ripetere il
+       nome dell'app in cima a ogni schermata è la cosa che più di ogni altra
+       fa dire «questo è un sito». */
+    grid-template-rows: minmax(0, 1fr) auto;
+    /* `height` e non `min-height`: l'altezza è ESATTA, o la barra esce dallo
+       schermo. `dvh` e non `vh`: `vh` è l'altezza con la barra degli
+       indirizzi nascosta, cioè quella che il telefono ha per metà del tempo. */
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    max-width: var(--tel-largh-max);
+    margin-inline: auto;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .tel-app__corpo {
+    display: block;
+    /* Senza questo il contenuto non si comprime e spinge la barra fuori dalla
+       griglia. È l'errore che riporta il problema di partenza, travestito. */
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Arrivato in fondo, il gesto non deve passare al documento sotto: è il
+       rimbalzo che scopre lo sfondo grigio del browser. */
+    overscroll-behavior: contain;
+  }
+
+  /* Via l'intestazione da sito: la navigazione è in basso, dov'è il pollice.
+     Quarantaquattro punti di schermo per dirti dove sei mentre lo stai già
+     guardando. */
+  .topbar { display: none; }
+
+  .wrap {
+    /* In cima lo scalino del sistema: con `viewport-fit=cover` la pagina
+       arriva davvero al bordo, e installata sulla schermata Home il titolo
+       finirebbe sotto l'orologio. Nel browser l'inset vale 0 e non cambia
+       niente — si vede solo dove sarebbe il problema.
+
+       In fondo NON c'è più il cuscinetto per la barra: la barra è una riga
+       della griglia, non galleggia più sopra il contenuto. Erano 88 punti di
+       vuoto in fondo a ogni schermata, e servivano solo a non farci finire
+       sotto qualcosa. */
+    max-width: none;
+    padding: calc(var(--tel-sp-4) + env(safe-area-inset-top, 0px))
+             var(--tel-lato) var(--tel-sp-5);
+  }
+
+  .disclaimer {
+    padding: 0 var(--tel-lato) var(--tel-sp-5);
+    font-size: var(--text-2xs);
+    text-align: center;
+  }
+
+  /* Rete di sicurezza: se qualcosa resta più largo dello schermo (un grafico,
+     un blocco non ancora sistemato) scorre DENTRO la sua card invece di
+     allargare tutto. È il difetto che si vede come «sito schiacciato». */
+  .card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ======================================================================
+     3. LA BARRA IN BASSO — ora è una riga della griglia
+     ====================================================================== */
+
+  /* Dove il guscio C'È la barra è una riga della griglia e basta. Dove NON c'è
+     — una schermata non ancora convertita, la pagina di accesso, che ha un
+     guscio suo — deve tornare l'adesivo di prima, o si mette in fondo al
+     documento e scorre via: la navigazione sparirebbe dalla prima schermata di
+     cinque pagine su sette, e il contenuto le finirebbe sotto.
+
+     Non è un ripiego elegante, è la stessa idea della serratura qui sopra: un
+     pezzo nuovo non deve rompere quello che non l'ha ancora ricevuto. Queste
+     quattro righe se ne andranno quando tutte e sette avranno il guscio. */
+  body:not(:has(.tel-app)) .tel-tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  }
+  body:not(:has(.tel-app)) .wrap {
+    padding-bottom: calc(var(--tel-barra-h) + env(safe-area-inset-bottom, 0px) + 26px);
+  }
+
+  .tel-tabbar {
+    /* Col guscio: nessun `position: fixed`, nessuno `z-index`. Sta nella
+       griglia, in fondo, e niente le può passare sotto perché sotto non c'è
+       spazio. */
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: var(--tel-sp-2) var(--tel-sp-1)
+             calc(env(safe-area-inset-bottom, 0px) + var(--tel-sp-2));
+    box-shadow: var(--tel-ombra-barra);
+  }
+
+  .tel-tab {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    /* 44 punti pieni anche se l'icona e la scritta ne occupano meno: il
+       bersaglio è l'area, non il disegno. */
+    min-height: var(--tel-tocco);
+    justify-content: center;
+    background: none; border: 0; padding: var(--tel-sp-1) 0;
+    font: inherit; font-size: 11px; font-weight: var(--fw-semibold);
+    color: var(--muted); text-decoration: none; cursor: pointer;
+  }
+  .tel-tab span { line-height: 1; }
+  .tel-tab.on { color: var(--tel-azione); }
+  .tel-tab:active { opacity: .7; }
+
+  /* Il «＋» sporge dalla barra: è l'azione che si fa dieci volte al giorno e
+     deve trovarsi senza guardare. */
+  .tel-fab {
+    flex: 0 0 auto;
+    width: 54px; height: 54px; margin-top: -22px;
+    border-radius: var(--tel-r-pill);
+    background: var(--accent); color: var(--on-accent);
+    border: 4px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--tel-ombra-md); text-decoration: none;
+    transition: transform var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  .tel-fab:active { transform: scale(.94); }
+
+  /* ======================================================================
+     4. I PANNELLI CHE SALGONO DAL FONDO
+     ====================================================================== */
+
+  .tel-velo {
+    position: fixed; inset: 0; z-index: 70;
+    background: hsl(var(--tel-ombra-tinta) / .55);
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--tel-mov-veloce) var(--tel-mov-curva);
+  }
+  .tel-velo.aperto { opacity: 1; pointer-events: auto; }
+
+  .tel-foglio {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    width: 100%; max-width: var(--tel-largh-max); margin-inline: auto;
+    background: var(--surface); color: var(--ink);
+    border-start-start-radius: var(--tel-r-lg);
+    border-start-end-radius: var(--tel-r-lg);
+    padding: var(--tel-sp-2) var(--tel-lato)
+             calc(env(safe-area-inset-bottom, 0px) + var(--tel-sp-4));
+    max-height: 88dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateY(101%);
+    /* `visibility` e non l'attributo `hidden`: quello lo sovrascriverebbe la
+       regola qui sotto, e il pannello resterebbe raggiungibile col tasto TAB
+       pur essendo fuori schermo — invisibile ma non assente. */
+    visibility: hidden;
+    transition: transform var(--tel-mov-normale) var(--tel-mov-curva),
+                visibility var(--tel-mov-normale);
+    box-shadow: var(--tel-ombra-foglio);
+  }
+  .tel-foglio.aperto { transform: translateY(0); visibility: visible; }
+
+  .tel-presa {
+    width: 40px; height: 5px; border-radius: var(--tel-r-pill);
+    background: var(--border-strong); margin: var(--tel-sp-1) auto var(--tel-sp-3);
+  }
+
+  .tel-foglio h2 {
+    margin: 0 0 var(--tel-sp-3);
+    font-size: var(--text-lg); font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-tight);
+  }
+
+  /* Voci grandi: si premono col pollice, non col mouse. */
+  .tel-voce {
+    display: flex; align-items: center; gap: var(--tel-sp-3);
+    min-height: var(--tel-tocco);
+    padding: var(--tel-sp-3) var(--tel-sp-1);
+    border: 0; border-bottom: 1px solid var(--border);
+    background: none; width: 100%;
+    color: var(--ink); text-decoration: none; text-align: left;
+    font-family: inherit; font-size: var(--text-base);
+    font-weight: var(--fw-medium); cursor: pointer;
+  }
+  .tel-voce:last-child { border-bottom: 0; }
+  .tel-voce:active { background: var(--hover); }
+  .tel-voce svg { flex: none; color: var(--muted); }
+  .tel-voce.esci { color: var(--neg); }
+  .tel-voce.esci svg { color: var(--neg); }
+  .tel-foglio form { margin: 0; }
+
+  /* Il modulo del «＋» dentro il pannello: il «che cosa cambia» resta
+     INCOLLATO al bordo basso mentre si scorrono i campi. In fondo al pannello
+     non lo leggerebbe nessuno — tanto varrebbe non averlo. Appiccicato invece
+     risponde mentre scrivi, che è il momento in cui serve: è lì che si sceglie
+     il conto sbagliato. */
+  .tel-modulo { display: flex; flex-direction: column; }
+  .tel-modulo .tel-effetto {
+    position: sticky; bottom: 0; z-index: 3;
+    margin-top: var(--tel-sp-3) !important;
+    padding: var(--tel-sp-3) var(--tel-sp-4);
+    background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: var(--tel-r-sm);
+    box-shadow: 0 -8px 22px -18px hsl(var(--tel-ombra-tinta) / .6);
+  }
+  .tel-modulo .tel-effetto .card-h {
+    margin-bottom: var(--tel-sp-1); font-size: var(--text-2xs);
+  }
+
+  /* Moduli: campi affiancati non stanno in 339 punti. Due colonne vogliono
+     dire caselle da centosessanta, in cui una data non ci sta. */
+  .row2, .row3 { grid-template-columns: minmax(0, 1fr); }
+  .mm-add { grid-template-columns: 1fr; }
+  .mm-add-side { position: static; }
+}
+
+
+/* =========================================================================
+   LE DUE ETICHETTE, fuori da ogni media query
+   -------------------------------------------------------------------------
+   `.tel-solo` = si vede solo sul telefono · `.pc-solo` = solo sullo schermo
+   grande. Il `display:none` di partenza sta QUI e non dentro la media query,
+   così non esiste nessun istante — per esempio mentre il CSS è ancora in
+   caricamento — in cui la barra del telefono comparirebbe sul PC.
+   ========================================================================= */
+.tel-tabbar, .tel-velo, .tel-foglio, .tel-home, .tel-solo { display: none; }
+
+@media (max-width: 760px) {
+  .tel-tabbar { display: flex; }
+  .tel-velo, .tel-foglio, .tel-home, .tel-solo { display: block; }
+  /* ...tranne quelle che sono griglie o flex: `block` le appiattirebbe. */
+  .tel-conti.tel-solo { display: grid; }
+  .tel-riga.tel-solo, .tel-fila.tel-solo { display: flex; }
+
+  /* `.pc-solo` deve battere il `display` che quegli stessi elementi hanno da
+     altrove. Per `.mm-wallets` basta la cascata (il `.grid` sta in
+     mymoney.css, che viene prima). Per `.mm-add` no: il suo `display:grid`
+     sta nel blocco <style> di base.html, che nel documento viene DOPO questo
+     foglio, e a parità di specificità vincerebbe. Un punto di specificità in
+     più risolve senza spostare l'ordine dei fogli. */
+  .pc-solo, .mm-add.pc-solo, .grid.pc-solo { display: none; }
+}
+
+/* Il modulo del «＋» vive in due posti: dentro il pannello e come pagina
+   intera (`/finanze/nuovo`, per chi non ha JS). I margini glieli dà il
+   pannello, perché la pagina i suoi ce li ha già dal `.wrap`. Fuori dalla
+   media query: il pannello esiste anche sul PC. */
+.mm-drawer .mm-nuovo { padding: 0 16px 16px; }
+.mm-drawer .mm-nuovo > h2 {
+  margin: 4px 0 12px; font-size: var(--text-lg);
+  font-weight: var(--fw-bold); letter-spacing: var(--ls-tight);
+}

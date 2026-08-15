@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MyMoney telefono — pagina di riferimento</title>
+<style>
+  :root {
+    --carta: #ffffff;
+    --sfondo: #eef0ea;
+    --inchiostro: #181b14;
+    --spento: #585e4f;
+    --tenue: #8a9079;
+    --linea: #d7dccb;
+    --segno: #6fa31c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 20px 80px;
+    background: var(--sfondo); color: var(--inchiostro);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .foglio { max-width: 1180px; margin-inline: auto; }
+  h1 { font-size: 30px; letter-spacing: -.02em; margin: 0 0 6px; }
+  h2 {
+    font-size: 20px; letter-spacing: -.01em;
+    margin: 48px 0 4px; padding-top: 20px; border-top: 1px solid var(--linea);
+  }
+  .occhiello {
+    font-size: 12px; font-weight: 700; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--segno); margin: 0 0 4px;
+  }
+  p { margin: 0 0 12px; max-width: 68ch; }
+  .spento { color: var(--spento); }
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: .88em; background: #e3e7d8; padding: 1px 5px; border-radius: 5px;
+  }
+  table { border-collapse: collapse; margin: 12px 0 4px; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 14px 7px 0; border-bottom: 1px solid var(--linea); }
+  th { color: var(--spento); font-weight: 600; }
+
+  /* La griglia dei telefoni. 375×812 è l'iPhone 15 in punti CSS: la cornice
+     misura quello e non un pixel di più, o la pagina di riferimento
+     mostrerebbe una cosa che sul telefono non esiste. */
+  .telefoni { display: flex; flex-wrap: wrap; gap: 26px; margin-top: 18px; }
+  figure { margin: 0; }
+  figcaption {
+    font-size: 13px; font-weight: 600; color: var(--spento);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .pastiglia {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px; background: #e3e7d8; color: var(--spento);
+  }
+  .pastiglia.scuro { background: #262a20; color: #eef1e5; }
+  .schermo {
+    width: 375px; height: 812px;
+    border: 10px solid #21251b; border-radius: 42px;
+    overflow: hidden; background: #21251b;
+    box-shadow: 0 24px 60px -24px rgba(24,27,20,.55);
+  }
+  .schermo iframe { width: 375px; height: 792px; border: 0; display: block; }
+
+  .avviso {
+    background: #fffbe8; border: 1px solid #fce992; border-left: 4px solid #d3a416;
+    border-radius: 10px; padding: 14px 16px; margin: 16px 0; max-width: 68ch;
+  }
+  .avviso p:last-child { margin-bottom: 0; }
+  ul { max-width: 68ch; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="foglio">
+
+<p class="occhiello">Documento di approvazione · 15 agosto 2026</p>
+<h1>MyMoney sul telefono</h1>
+<p class="spento">
+  Questa pagina esiste per una ragione sola: <b>guardarla e dire sì o no, prima
+  che la grafica finisca sul telefono</b>. È lo stesso documento che in Shift
+  Hours ha fatto venire il lavoro giusto al primo colpo.
+</p>
+<p class="spento">
+  Il contratto completo sta in <code>docs/BRIEFING-TELEFONO.md</code>. La
+  versione precedente è al sicuro sul tag <code>ui-telefono-prima</code>.
+</p>
+
+<div class="avviso">
+  <p><b>Tutti i dati qui dentro sono inventati.</b> Nel repo non entra mai un
+  saldo vero: questa pagina sta su GitHub, i tuoi conti no.</p>
+</div>
+
+<h2>Il problema, misurato</h2>
+<p>
+  Altezza di ogni schermata a 375 punti, com'era prima di questo lavoro. Non è
+  un'impressione: è quanto dito serve per arrivare in fondo.
+</p>
+<table>
+  <tr><th>pagina</th><th>altezza</th><th>schermate da scorrere</th></tr>
+  <tr><td>Home</td><td>3250px</td><td>4,0</td></tr>
+  <tr><td>Finanze</td><td>3194px</td><td>3,9</td></tr>
+  <tr><td><b>Portafoglio</b></td><td><b>6209px</b></td><td><b>7,6</b></td></tr>
+  <tr><td><b>PAC</b></td><td><b>5467px</b></td><td><b>6,7</b></td></tr>
+  <tr><td>Impostazioni</td><td>4695px</td><td>5,8</td></tr>
+  <tr><td>Analisi</td><td>4519px</td><td>5,6</td></tr>
+  <tr><td>Notizie</td><td>2826px</td><td>3,5</td></tr>
+</table>
+
+<h2>Che cosa cambia davvero</h2>
+<p>
+  Non i colori e non le spaziature. Cambia <b>l'impianto</b>, e sta in una riga:
+</p>
+<p style="font-size:19px;font-weight:600;max-width:none;">
+  il contenuto scorre <i>dentro</i> una cornice che non si muove.
+</p>
+<table>
+  <tr><th></th><th>Shift Hours</th><th>MyMoney prima</th><th>MyMoney ora</th></tr>
+  <tr><td>il guscio</td><td><code>100dvh</code></td><td>nessuno</td><td><code>100dvh</code></td></tr>
+  <tr><td>che cosa scorre</td><td>una sola area</td><td>tutto il documento</td><td>una sola area</td></tr>
+  <tr><td>la barra in basso</td><td>riga della griglia</td><td><code>position: fixed</code></td><td>riga della griglia</td></tr>
+  <tr><td>il markup</td><td>scritto per il telefono</td><td>quello del PC strizzato</td><td>scritto per il telefono</td></tr>
+  <tr><td>in cima</td><td>un numero</td><td>tre riquadri</td><td>un numero</td></tr>
+</table>
+<p>
+  L'ultima riga è la radice di tutte le altre. Finché il telefono è «la pagina
+  del PC con addosso una media query», ogni blocco pensato per una finestra da
+  1280 punti si mette in colonna e allunga la pagina: nessuna correzione di
+  spaziature lo può disfare.
+</p>
+
+<h2>Le due schermate, intere</h2>
+<p>
+  Sono alte esattamente quanto un iPhone 15. Quello che vedi senza scorrere è
+  quello che vedrai senza scorrere. La barra in basso non galleggia sopra il
+  contenuto: <b>è dentro la cornice</b>, e sotto di lei non c'è spazio in cui
+  qualcosa possa scomparire.
+</p>
+
+<div class="telefoni">
+  <figure>
+    <figcaption>Home <span class="pastiglia">chiaro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=home&t=light"
+      title="Home, tema chiaro"></iframe></div>
+  </figure>
+  <figure>
+    <figcaption>Home <span class="pastiglia scuro">scuro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=home&t=dark"
+      title="Home, tema scuro"></iframe></div>
+  </figure>
+  <figure>
+    <figcaption>Finanze <span class="pastiglia">chiaro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=finanze&t=light"
+      title="Finanze, tema chiaro"></iframe></div>
+  </figure>
+</div>
+
+<h2>Che fine fa il resto della Home</h2>
+<p>
+  Niente sparisce. Il grafico del patrimonio, migliori e peggiori, i dividendi,
+  i settori, le notizie e il punto della settimana <b>sono ancora tutti lì</b>,
+  dietro le righe della sezione «Approfondisci».
+</p>
+<p>
+  Sul PC quei sei blocchi stanno affiancati in due colonne e si guardano tutti
+  insieme: ha senso. Su un telefono si mettono in fila indiana e diventano tre
+  schermate di scorrimento per arrivare in fondo a cose che si guardano una
+  volta a settimana — mentre i conti e gli ultimi movimenti, che si guardano
+  dieci volte al giorno, finiscono sotto.
+</p>
+<p>
+  <b>Non è una funzione tolta: è una funzione messa dove si raggiunge.</b> Ogni
+  riga porta il suo numero addosso, così si sa se vale la pena aprirla.
+</p>
+
+<h2>I componenti, uno per uno</h2>
+<p>
+  Il vocabolario: da qui in poi ogni schermata si costruisce con questi pezzi e
+  non con altri. Il riquadro a righe in fondo è la misura minima di un bersaglio
+  di tocco — 44 punti, il minimo di iOS, sotto il quale il dito manca.
+</p>
+
+<div class="telefoni">
+  <figure>
+    <figcaption>Componenti <span class="pastiglia">chiaro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=componenti&t=light"
+      title="Componenti, tema chiaro"></iframe></div>
+  </figure>
+  <figure>
+    <figcaption>Componenti <span class="pastiglia scuro">scuro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=componenti&t=dark"
+      title="Componenti, tema scuro"></iframe></div>
+  </figure>
+  <figure>
+    <figcaption>Finanze <span class="pastiglia scuro">scuro</span></figcaption>
+    <div class="schermo"><iframe src="telefono-demo/schermata.html?s=finanze&t=dark"
+      title="Finanze, tema scuro"></iframe></div>
+  </figure>
+</div>
+
+<h2>Le regole che sembrano estetiche e non lo sono</h2>
+<p>
+  Sono correzioni di bug reali, già pagate una volta. Se un giorno questi fogli
+  si riscrivono da zero, vanno riportate — se no i difetti tornano identici.
+</p>
+<table>
+  <tr><th>regola</th><th>dove</th><th>cosa succede senza</th></tr>
+  <tr><td><code>font-size: 16px</code></td><td>campi</td>
+      <td>iPhone <b>ingrandisce la pagina</b> al tocco e te la lascia ingrandita</td></tr>
+  <tr><td><code>height: 100dvh</code></td><td>il guscio</td>
+      <td>la barra in basso finisce fuori schermo</td></tr>
+  <tr><td><code>min-height: 0</code></td><td>il corpo</td>
+      <td>il contenuto spinge la barra fuori dalla griglia</td></tr>
+  <tr><td><code>overscroll-behavior</code></td><td>corpo e pannelli</td>
+      <td>il rimbalzo scopre lo sfondo grigio del browser</td></tr>
+  <tr><td><code>env(safe-area-inset-*)</code></td><td>testata e barra</td>
+      <td>titolo sotto il notch, barra sotto l'indicatore di sistema</td></tr>
+  <tr><td><code>minmax(0, 1fr)</code></td><td>ogni griglia</td>
+      <td>una casella larga sfonda la colonna e la riga esce di lato</td></tr>
+  <tr><td>doppia classe</td><td>dove serve battere <code>base.html</code></td>
+      <td>la regola si vede scritta e non fa niente</td></tr>
+</table>
+
+<h2>Perché il PC non può cambiare</h2>
+<p>
+  Non è una promessa, è una proprietà del codice. Il guscio è fatto di due
+  <code>&lt;div&gt;</code> che sopra i 760 punti hanno <code>display:
+  contents</code>: <b>spariscono dal layout come se il markup non li avesse mai
+  avuti</b>. Il PC non vede nessun contenitore in più — non «quasi uguale»,
+  identico.
+</p>
+<p>
+  E i blocchi telefono sono blocchi <i>diversi</i>, marcati
+  <code>.tel-solo</code>, che sul PC hanno <code>display: none</code>. Un blocco
+  che sul PC non esiste non può romperlo.
+</p>
+
+<h2>Che cosa manca ancora</h2>
+<ul>
+  <li>Portafoglio, PAC, Analisi, Notizie e Impostazioni <b>non sono ancora
+      rifatte</b>: passano dal vecchio meccanismo che trasforma le tabelle in
+      schede. Restano leggibili, ma restano lunghe.</li>
+  <li>Il guscio invece vale <b>da subito su tutte e sette</b>: la barra smette
+      di galleggiare ovunque, non solo sulle due rifatte.</li>
+  <li>I pannelli di «Approfondisci» vanno collegati ai contenuti veri.</li>
+</ul>
+
+<h2>Se dici sì</h2>
+<p>
+  Porto questo impianto nei template veri di Home e Finanze, controllo che il PC
+  a 1280 punti sia identico a prima, faccio girare i test, e pubblico.
+  Poi si guarda sul telefono vero, e solo dopo si passa alle altre cinque.
+</p>
+
+</div>
+</body>
+</html>
