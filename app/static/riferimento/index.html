@@ -20,7 +20,9 @@
     background: var(--sfondo); color: var(--inchiostro);
     font: 16px/1.6 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
-  .foglio { max-width: 1180px; margin-inline: auto; }
+  /* 1260 e non 1180: tre telefoni veri sono 3×395 + 2×26 di spazio = 1237.
+     Con la colonna più stretta il terzo andava a capo da solo. */
+  .foglio { max-width: 1260px; margin-inline: auto; }
   h1 { font-size: 30px; letter-spacing: -.02em; margin: 0 0 6px; }
   h2 {
     font-size: 20px; letter-spacing: -.01em;
@@ -40,10 +42,16 @@
   th, td { text-align: left; padding: 7px 14px 7px 0; border-bottom: 1px solid var(--linea); }
   th { color: var(--spento); font-weight: 600; }
 
-  /* La griglia dei telefoni. 375×812 è l'iPhone 15 in punti CSS: la cornice
-     misura quello e non un pixel di più, o la pagina di riferimento
+  /* La griglia dei telefoni. 375×812 è l'iPhone 15 in punti CSS: lo SCHERMO
+     deve misurare quello e non un pixel di meno, o la pagina di riferimento
      mostrerebbe una cosa che sul telefono non esiste. */
-  .telefoni { display: flex; flex-wrap: wrap; gap: 26px; margin-top: 18px; }
+  .telefoni {
+    display: flex; flex-wrap: wrap; gap: 26px; margin-top: 18px;
+    /* Centrata come tutto il resto: quando i telefoni non riempiono la riga
+       intera, l'avanzo si divide in parti uguali invece di ammucchiarsi
+       tutto a destra. */
+    justify-content: center;
+  }
   figure { margin: 0; }
   figcaption {
     font-size: 13px; font-weight: 600; color: var(--spento);
@@ -54,8 +62,22 @@
     padding: 2px 8px; border-radius: 999px; background: #e3e7d8; color: var(--spento);
   }
   .pastiglia.scuro { background: #262a20; color: #eef1e5; }
+  /* `content-box`, contro il reset `* { box-sizing: border-box }` in cima.
+     Con `border-box` i 375px INCLUDONO i 10 di bordo per lato: l'area interna
+     resta 355, l'iframe dentro ne chiede 375, e `overflow: hidden` gli taglia
+     via **venti punti sulla destra** — cioè la colonna degli importi.
+
+     Non era un difetto estetico: la pagina di riferimento mostrava schermate
+     mutilate, e le mostrava sbilanciate (18 punti di margine a sinistra, zero
+     a destra), che è esattamente com'era stata descritta — «leggermente a
+     destra». Un documento di approvazione che deforma quel che deve far
+     approvare è peggio che non averlo.
+
+     Qui la larghezza deve essere quella dello SCHERMO, e il bordo è la
+     scocca che ci sta intorno. */
   .schermo {
-    width: 375px; height: 812px;
+    box-sizing: content-box;
+    width: 375px; height: 792px;
     border: 10px solid #21251b; border-radius: 42px;
     overflow: hidden; background: #21251b;
     box-shadow: 0 24px 60px -24px rgba(24,27,20,.55);

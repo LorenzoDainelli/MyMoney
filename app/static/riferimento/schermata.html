@@ -23,6 +23,17 @@
      cosa che deve provare. */
   @media (max-width: 760px) {
     .mm-add { display: grid; grid-template-columns: minmax(0,1fr) minmax(240px,330px); }
+
+    /* La barra di scorrimento, SOLO qui dentro e solo per la simulazione.
+       Su un browser da PC è un nastro grigio largo 15 punti che mangia spazio
+       al contenuto: il riquadro finiva 33 punti dal bordo destro e 18 da
+       quello sinistro, e la schermata sembrava storta senza esserlo.
+
+       Su iOS la barra è una sovrapposizione che compare mentre scorri e non
+       occupa niente. Toglierla qui non abbellisce la simulazione: la rende
+       ONESTA, perché è la barra del PC a non esserci sul telefono. */
+    .tel-app__corpo { scrollbar-width: none; }
+    .tel-app__corpo::-webkit-scrollbar { width: 0; height: 0; }
   }
 </style>
 </head>
