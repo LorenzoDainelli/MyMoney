@@ -7,12 +7,31 @@
    Nessun calcolo nuovo: i saldi e le uscite per categoria arrivano già
    calcolati dal server (finance/routes.py), il JS fa solo la somma dell'unico
    movimento in corso. */
-function mmCollegaModulo() {
-  var host = document.getElementById('mov-effetto');
-  var form = document.getElementById('mov-form');
-  var elD = document.getElementById('mov-effetto-dati');
-  var elT = document.getElementById('mov-effetto-testi');
-  if (!host || !form || !elD || !elT) return;
+/* Senza argomenti: aggancia OGNI modulo presente. Sulla pagina Finanze ce ne
+   sono due — quello della pagina e quello che il «＋» cala nel pannello — e
+   hanno gli stessi id, perche' sono lo stesso template incluso due volte.
+   `getElementById` risponde sempre col primo: l'anteprima del pannello leggeva
+   l'importo della pagina dietro, e i campi della carta che arrotonda nel
+   pannello non comparivano mai. Da qui in giu' non si cerca piu' nel
+   documento, si cerca dentro il proprio modulo. */
+function mmCollegaModulo(form) {
+  if (!form) {
+    Array.prototype.forEach.call(document.querySelectorAll('[id="mov-form"]'),
+      function (f) { mmCollegaModulo(f); });
+    return;
+  }
+  if (form.dataset.collegato === '1') return;
+  var scope = form.closest('.tel-modulo, .mm-add') || document;
+  function q(id) {
+    return scope.querySelector('[id="' + id + '"]') ||
+           document.querySelector('[id="' + id + '"]');
+  }
+  var host = q('mov-effetto');
+  // i due <script> coi dati sono identici in tutte le copie: basta il primo
+  var elD = document.querySelector('[id="mov-effetto-dati"]');
+  var elT = document.querySelector('[id="mov-effetto-testi"]');
+  if (!host || !elD || !elT) return;
+  form.dataset.collegato = '1';
   var D, T;
   try { D = JSON.parse(elD.textContent); T = JSON.parse(elT.textContent); } catch (e) { return; }
 
@@ -55,9 +74,10 @@ function mmCollegaModulo() {
   // verificate sulla carta: arrotondamento il 30/07/2026, saveback all'1% esatto
   // (non troncato) l'08/08/2026. Qui è solo l'anteprima: al salvataggio il server
   // rifà i conti, e se scrivi un importo a mano vince il tuo.
-  var boxCarta = document.getElementById('mov-carta');
-  var inArr = document.getElementById('mov-arr'), onArr = document.getElementById('mov-arr-on');
-  var inSav = document.getElementById('mov-sav'), onSav = document.getElementById('mov-sav-on');
+  // dentro il PROPRIO modulo: questi campi stanno nel form
+  var boxCarta = form.querySelector('[id="mov-carta"]');
+  var inArr = form.querySelector('[id="mov-arr"]'), onArr = form.querySelector('[id="mov-arr-on"]');
+  var inSav = form.querySelector('[id="mov-sav"]'), onSav = form.querySelector('[id="mov-sav-on"]');
   // «manuale» = quell'importo l'hai scritto tu, quindi il calcolo non lo tocca.
   // In modifica arriva già segnato dal server (data-mio), così riaprire un
   // movimento corretto a mano non te lo fa perdere alla prima lettera digitata.
@@ -101,11 +121,11 @@ function mmCollegaModulo() {
     inSav.disabled = !onSav.checked;
     var a = onArr.checked ? num(inArr.value) : 0, s = onSav.checked ? num(inSav.value) : 0;
     boxCarta.style.display = '';
-    document.getElementById('mov-carta-tit').textContent =
+    form.querySelector('[id="mov-carta-tit"]').textContent =
       imp ? fill(T.ctit, { w: c.w.nome, tot: eur(imp + a) }) : '';
-    document.getElementById('mov-sav-lbl').textContent = fill(T.csav, { pct: c.r.pct });
+    form.querySelector('[id="mov-sav-lbl"]').textContent = fill(T.csav, { pct: c.r.pct });
     var pieno = c.r.tetto > 0 && savGia >= c.r.tetto;
-    document.getElementById('mov-carta-nota').textContent =
+    form.querySelector('[id="mov-carta-nota"]').textContent =
       pieno ? T.ctetto : fill(T.cnota, { w: D.salvadanaio });
     return { arr: a, sav: s, nome: D.salvadanaio, conto: c.w };
   }

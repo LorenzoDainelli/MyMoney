@@ -1,0 +1,161 @@
+/* =========================================================================
+   IL MODULO DEL «＋» SUL TELEFONO
+   -------------------------------------------------------------------------
+   Registrare una spesa è la cosa che si fa più spesso in tutta l'app, quasi
+   sempre in piedi e con una mano sola. Qui dentro il modulo smette di essere
+   un modulo da scrivania rimpicciolito.
+
+   Tutto vive dentro `.tel-modulo` e dentro la media query: sul PC nemmeno una
+   di queste righe esiste, e il modulo lì è lo stesso di prima, campo per
+   campo. La pagina intera `/finanze/nuovo` — quella per chi non ha il
+   JavaScript — riceve le stesse misure, perché il problema del pollice non
+   dipende da come sei arrivato al modulo.
+   ========================================================================= */
+
+/* Il margine che prima stava scritto nel tag (`style="margin:14px 0 0"`).
+   Lì vinceva su qualunque foglio, e sul telefono la barra di Salva non
+   poteva arrivare ai bordi del pannello. Fuori dalla media query: sul PC
+   deve valere identico a prima. */
+.mm-azioni { margin: 14px 0 0; }
+
+/* I segmenti non esistono sullo schermo grande, e il `display:none` sta QUI
+   e non dentro la media query: come per `.tel-solo`, non deve esserci nessun
+   istante — per esempio mentre il CSS è in caricamento — in cui sul PC
+   comparirebbe una riga di bottoni sopra la tendina. */
+.tel-segmenti { display: none; }
+
+@media (max-width: 760px) {
+
+  /* -----------------------------------------------------------------------
+     LA REGOLA PIÙ IMPORTANTE DI QUESTO FOGLIO, ed è una riga sola.
+
+     Safari su iPhone INGRANDISCE la pagina quando prendi un campo scritto
+     sotto i 16px — e non torna più indietro da solo. Erano 15px: tutti e
+     sedici i campi del modulo. Ogni volta che toccavi l'importo il pannello
+     usciva dallo schermo e toccava rimetterlo a posto a due dita.
+
+     Non si vede sul PC, non si vede in nessun simulatore che non sia Safari,
+     e non è un dettaglio estetico: è metà della sensazione di «fatto male».
+     ----------------------------------------------------------------------- */
+  .tel-modulo input,
+  .tel-modulo select,
+  .tel-modulo textarea,
+  .mm-nuovo input,
+  .mm-nuovo select,
+  .mm-nuovo textarea { font-size: 16px; }
+
+  /* -----------------------------------------------------------------------
+     I BORDI ANNIDATI. Il pannello mette 16 punti per lato, e il modulo ne
+     aggiungeva altri 24 suoi: ottanta punti dei trecentosettantacinque, il
+     21% dello schermo, spesi in aria ai lati. Le caselle restavano larghe
+     293 su 375. Il margine lo dà il pannello, uno solo e basta.
+     ----------------------------------------------------------------------- */
+  .tel-modulo .form { padding-left: 0; padding-right: 0; }
+
+  /* Il pollice non è il mouse: nessun bersaglio sotto i 44. */
+  .tel-modulo input:not([type="checkbox"]),
+  .tel-modulo select,
+  .mm-nuovo input:not([type="checkbox"]),
+  .mm-nuovo select {
+    min-height: var(--tel-tocco);
+    padding: 10px var(--tel-sp-3);
+    border-radius: var(--tel-r-sm);
+  }
+  .tel-modulo input[type="checkbox"],
+  .mm-nuovo input[type="checkbox"] { width: 22px; height: 22px; }
+  /* La casella è piccola ma la sua etichetta è tutta premibile. */
+  .tel-modulo label:has(input[type="checkbox"]),
+  .mm-nuovo label:has(input[type="checkbox"]) { min-height: var(--tel-tocco); }
+
+  /* Un campo costava 86 punti: etichetta sopra, casella, margine. Per sei
+     campi sono cinquecento punti, cioè due terzi di schermo spesi in aria. */
+  .tel-modulo .field { margin-bottom: var(--tel-sp-3); }
+  .tel-modulo .field > label {
+    display: block; margin-bottom: 4px;
+    font-size: var(--text-2xs); font-weight: var(--fw-medium);
+    color: var(--muted); letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+  }
+
+  /* -----------------------------------------------------------------------
+     L'IMPORTO È IL MOTIVO PER CUI HAI APERTO IL PANNELLO.
+     Prima era il quarto campo, della stessa taglia di «Descrizione».
+     ----------------------------------------------------------------------- */
+  .tel-modulo .tel-importo input {
+    font-family: var(--font-num, inherit);
+    font-size: var(--text-2xl); font-weight: var(--fw-bold);
+    letter-spacing: var(--ls-tight);
+    min-height: 60px; text-align: left;
+  }
+
+  /* -----------------------------------------------------------------------
+     IL TIPO: quattro scelte che si vedono tutte, non una tendina.
+     La tendina resta nel DOM ed è LEI che viene spedita: questi bottoni la
+     pilotano. Se il JavaScript non parte, sul telefono ricompare la tendina
+     e il modulo funziona lo stesso — solo con un tocco in più.
+     ----------------------------------------------------------------------- */
+  .tel-segmenti {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px; margin-bottom: var(--tel-sp-3);
+  }
+  .tel-segmenti button {
+    min-height: var(--tel-tocco);
+    padding: 8px var(--tel-sp-2);
+    border: 1px solid var(--border); border-radius: var(--tel-r-sm);
+    background: var(--surface); color: var(--ink);
+    font-family: inherit; font-size: var(--text-sm);
+    font-weight: var(--fw-medium); cursor: pointer;
+    transition: background var(--tel-mov-svelto), border-color var(--tel-mov-svelto);
+  }
+  .tel-segmenti button:active { background: var(--hover); }
+  /* Il pieno è il posto giusto per il lime: su uno sfondo si legge, come
+     inchiostro no (vedi il perché in token.css). */
+  .tel-segmenti button[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent);
+    color: var(--accent-ink, var(--ink)); font-weight: var(--fw-bold);
+  }
+  /* Finché il JS non l'ha acceso, comanda la tendina. */
+  .tel-modulo .tel-segmenti { display: none; }
+  .tel-modulo.segmenti-on .tel-segmenti { display: grid; }
+  .tel-modulo.segmenti-on .tel-tipo-tendina { display: none; }
+
+  /* -----------------------------------------------------------------------
+     «Scrivilo a parole» era la prima cosa del pannello e costava 283 punti
+     prima ancora di arrivare all'importo. È una scorciatoia, non la strada
+     principale: adesso è una riga che si apre. Sul PC resta com'era, perché
+     `.tel-piega` lì è `display: contents`.
+     ----------------------------------------------------------------------- */
+  .tel-modulo .ai-box { margin: 0; }
+
+  /* -----------------------------------------------------------------------
+     SALVA, appiccicato in fondo e largo quanto il pannello.
+     Era un bottone da 106 punti in fondo a 790 punti di scorrimento: per
+     salvare un caffè bisognava andarlo a cercare.
+     Sopra ci sta «che cosa cambia», che si legge mentre scrivi — è lì che ci
+     si accorge di aver scelto il conto sbagliato.
+     ----------------------------------------------------------------------- */
+  .tel-modulo .actions,
+  .tel-modulo .mm-azioni {
+    position: sticky; bottom: 0; z-index: 4;
+    /* Il fondo deve arrivare ai bordi del pannello, non fermarsi al testo: i
+       16 punti di margine sono trasparenti, e il modulo si vedrebbe scorrere
+       nelle due strisce ai lati del tasto. */
+    margin: 0 -16px; padding: var(--tel-sp-2) 16px calc(var(--tel-sp-2) + env(safe-area-inset-bottom, 0px));
+    background: var(--surface);
+    box-shadow: 0 -10px 24px -20px hsl(var(--tel-ombra-tinta) / .7);
+  }
+  .tel-modulo .actions .btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; min-height: 52px;
+    font-size: var(--text-base); font-weight: var(--fw-bold);
+  }
+  /* «Che cosa cambia» si ferma appena sopra il tasto, non sotto di lui. */
+  .tel-modulo .tel-effetto { bottom: 68px; }
+
+  /* Le righe della partita di giro: la ✕ è un bersaglio, non un apice. */
+  .tel-modulo .giro-rm {
+    top: 4px; right: 4px;
+    min-width: var(--tel-tocco); min-height: var(--tel-tocco);
+  }
+  .tel-modulo .giro-row { padding-top: var(--tel-sp-4); }
+}

@@ -13,7 +13,20 @@
 <h2>{{ t('fin.add_movement') }}</h2>
 
 <div class="tel-modulo">
-  {% include "finance_ai_box.html" %}
+  {# Scriverlo a parole è una scorciatoia, non la strada principale: costava
+     283 punti prima ancora di far vedere l'importo. Sul telefono è una riga
+     che si apre; sul PC `.tel-piega` è `display: contents` e la scatola resta
+     dov'era, aperta, esattamente come prima. #}
+  <div class="tel-piega chiusa">
+    <button type="button" class="tel-piega-riga" aria-expanded="false">
+      <span class="tel-riga-main"><span class="tel-riga-t">✨ {{ t('fin.ai_box_title') }}</span></span>
+      <svg class="tel-riga-ch" width="18" height="18" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+           stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="tel-piega-corpo">{% include "finance_ai_box.html" %}</div>
+  </div>
+
   {% include "finance_movement_form.html" %}
 
   {# «Che cosa cambia»: appiccicato al bordo basso del pannello mentre scorri i

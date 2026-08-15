@@ -314,6 +314,7 @@ document.addEventListener('click', function (e) {
         // elementi precisi, e quegli elementi sono arrivati ADESSO: senza questa
         // riga il riquadro resterebbe sulla frase d'attesa mentre scrivi.
         if (window.mmCollegaModulo) window.mmCollegaModulo();
+        if (window.mmSegmentiTipo) window.mmSegmentiTipo();
         // Sul telefono la prima casella NON prende il fuoco da sola: aprirebbe
         // la tastiera coprendo i due terzi del pannello prima ancora di aver
         // visto cosa c'è dentro.
@@ -337,18 +338,90 @@ document.addEventListener('click', function (e) {
 //      ("+ Aggiungi spesa/rientro" clonano un modello <template>, la ✕ rimuove
 //      la riga tenendone sempre almeno una) e la casella "il rimborso arriverà
 //      dopo" che nasconde i rientri (partita aperta).
+// 6bis) Il tipo, sul telefono, come quattro segmenti invece che una tendina.
+//
+//   La tendina NON viene sostituita: resta nel DOM ed è sempre lei l'unico
+//   controllo che parte col modulo. I segmenti le scrivono il valore e le
+//   mandano un `change`, così il codice qui sotto — quello che mostra la
+//   partita di giro o il campo «A (portafoglio)» — continua a essere l'unico
+//   posto che sa cosa comporta un cambio di tipo.
+//
+//   Se questa funzione non gira (JS lento, errore, browser vecchio) sul
+//   telefono ricompare semplicemente la tendina: il modulo funziona lo stesso,
+//   con un tocco in più. Le opzioni le legge dalla tendina, quindi una scelta
+//   aggiunta domani in Jinja arriva qui da sola.
+//   Niente `getElementById` qui dentro: sulla pagina Finanze il modulo esiste
+//   DUE volte — quello della pagina e quello che il «＋» cala nel pannello —
+//   e `getElementById` restituisce il primo. I segmenti finivano sulla copia
+//   sbagliata e il pannello restava con la riga vuota. Si parte dai segmenti e
+//   si cerca la tendina dentro il LORO modulo.
+function mmSegmentiTipo() {
+  if (!mmTelefono()) return;
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.tel-segmenti'), mmUnSegmento);
+}
+
+function mmUnSegmento(box) {
+  if (box.dataset.pronto === '1') return;    // il pannello puo' richiamarci
+  var form = box.closest('form');
+  var sel = form && form.querySelector('select[name="tipo"]');
+  if (!sel) return;
+  box.dataset.pronto = '1';
+  var mod = box.closest('.tel-modulo');
+  box.innerHTML = '';
+  Array.prototype.forEach.call(sel.options, function (o) {
+    var b = document.createElement('button');
+    b.type = 'button';                     // dentro un <form>: senza questo salva
+    b.textContent = o.textContent;
+    b.dataset.val = o.value;
+    b.setAttribute('aria-pressed', o.value === sel.value ? 'true' : 'false');
+    box.appendChild(b);
+  });
+  // Una scelta sola non è una scelta: in modifica la tendina ha un'opzione e
+  // basta, e quattro sesti di riga vuota non servono a nessuno.
+  if (sel.options.length < 2) return;
+  if (mod) mod.classList.add('segmenti-on');
+
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-val]');
+    if (!b) return;
+    sel.value = b.dataset.val;
+    Array.prototype.forEach.call(box.children, function (x) {
+      x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+    });
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+}
+window.mmSegmentiTipo = mmSegmentiTipo;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mmSegmentiTipo);
+} else {
+  mmSegmentiTipo();
+}
+
+// Sulla pagina Finanze il modulo c'e' DUE volte: quello della pagina e quello
+// che il «＋» cala nel pannello. Gli id sono gli stessi in tutti e due, e
+// `getElementById` risponde sempre col primo — cioe' con quello della pagina.
+// Cambiare tipo dentro il pannello non cambiava il pannello: apriva la partita
+// di giro nella pagina dietro, dove non la vedevi. Si cerca dentro il modulo
+// da cui e' partito l'evento, non nel documento.
+function mmNelModulo(el, id) {
+  var f = el.closest('form');
+  return f ? f.querySelector('#' + id + ', [id="' + id + '"]') : null;
+}
+
 document.addEventListener('change', function (e) {
   if (e.target && e.target.id === 'mov-tipo') {
     var v = e.target.value, giro = v === 'giro';
-    var gen = document.getElementById('mov-generic');
-    var box = document.getElementById('mov-giro');
-    var to = document.getElementById('mov-wallet-to');
+    var gen = mmNelModulo(e.target, 'mov-generic');
+    var box = mmNelModulo(e.target, 'mov-giro');
+    var to = mmNelModulo(e.target, 'mov-wallet-to');
     if (gen) gen.style.display = giro ? 'none' : '';
     if (box) box.style.display = giro ? '' : 'none';
     if (to) to.style.display = v === 'trasferimento' ? '' : 'none';
   }
   if (e.target && e.target.id === 'mov-giro-dopo') {
-    var wrap = document.getElementById('giro-rientri-wrap');
+    var wrap = mmNelModulo(e.target, 'giro-rientri-wrap');
     if (wrap) wrap.style.display = e.target.checked ? 'none' : '';
   }
 });
@@ -358,8 +431,10 @@ document.addEventListener('click', function (e) {
   var add = e.target.closest('#giro-add-spesa, #giro-add-rientro');
   if (add) {
     var isSpesa = add.id === 'giro-add-spesa';
-    var tpl = document.getElementById(isSpesa ? 'tpl-spesa' : 'tpl-rientro');
-    var list = document.getElementById(isSpesa ? 'giro-spese' : 'giro-rientri');
+    // Stesso motivo di `mmNelModulo`: nel pannello queste liste sono le
+    // seconde con quell'id, e la riga nuova finirebbe nel modulo della pagina.
+    var tpl = mmNelModulo(add, isSpesa ? 'tpl-spesa' : 'tpl-rientro');
+    var list = mmNelModulo(add, isSpesa ? 'giro-spese' : 'giro-rientri');
     if (tpl && list) {
       var node = tpl.content.firstElementChild.cloneNode(true);
       list.appendChild(node);
