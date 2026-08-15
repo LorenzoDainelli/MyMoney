@@ -133,6 +133,44 @@ def test_normalize_regge_una_risposta_vuota():
     assert d["sectors"] == [] and d["holdings"] == []
 
 
+def test_div_yield_assurdo_viene_scartato_e_dichiarato():
+    """Il caso vero: SSNLF (Samsung sull'OTC) quota 65,21 USD ma Yahoo divide
+    un dividendo in WON per quel prezzo, e pubblica 14,35 — cioè il 1435%.
+    Nessun campo affidabile lo copre, quindi la vecchia catena di `or` ci
+    scivolava sopra e il numero finiva in euro nel box dividendi."""
+    d = M._normalize({
+        "price": {"longName": "Samsung Electronics Co., Ltd.", "currency": "USD"},
+        "summaryDetail": {"trailingAnnualDividendYield": {"raw": 14.353627},
+                          "trailingAnnualDividendRate": {"raw": 936.0}},
+    })
+    assert d["div_yield"] is None          # fuori dal calcolo
+    assert "14.35" in d["div_yield_scartato"]   # e detto, non tolto in silenzio
+
+
+def test_div_yield_plausibile_resta():
+    """Il tetto è generoso di proposito: un REIT al 12% è un fatto, non un errore."""
+    d = M._normalize({"summaryDetail": {"dividendYield": {"raw": 0.12}}})
+    assert d["div_yield"] == 0.12 and d["div_yield_scartato"] is None
+
+
+def test_div_yield_zero_prova_il_campo_dopo():
+    """Un campo a zero significa «qui non lo so», non «non paga dividendi»:
+    la vecchia catena di `or` si comportava così e va conservato."""
+    d = M._normalize({"summaryDetail": {"yield": {"raw": 0.0},
+                                        "dividendYield": {"raw": 0.0242}}})
+    assert d["div_yield"] == 0.0242
+
+
+def test_cache_gia_avvelenata_smette_di_contare_subito():
+    """Il valore assurdo è già SALVATO. Deve sparire alla rilettura, senza
+    aspettare le 24 ore di scadenza della cache."""
+    class Finta:
+        data = '{"div_yield": 14.353627, "name": "Samsung"}'
+        fetched_at = None
+    d = M._rileggi(Finta())
+    assert d["div_yield"] is None and d["div_yield_scartato"]
+
+
 # ------------------------- fuso orario -------------------------
 def test_ora_legale_e_solare_sono_diverse(monkeypatch):
     """L'ora mostrata segue l'ora legale. Prima l'offset era +2 fisso: da fine

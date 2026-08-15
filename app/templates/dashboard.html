@@ -301,6 +301,10 @@
         {% if d.dividendi.coperto is not none %}
         <div class="faint" style="font-size:12px;margin-top:6px;">{{ t('dash.div_cov', cop=(d.dividendi.coperto ~ '%')) }}</div>
         {% endif %}
+        {# un titolo tolto in silenzio è comunque un titolo che manca #}
+        {% if d.dividendi.scartati %}
+        <div class="faint" style="font-size:12px;margin-top:4px;">{{ t('dash.div_scartati', tk=d.dividendi.scartati | join(', ')) }}</div>
+        {% endif %}
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
           <div class="muted" style="font-size:12px;margin-bottom:4px;">{{ t('dash.div_top') }}</div>
           {% for r in d.dividendi.top %}

@@ -377,6 +377,44 @@ def _rawv(x):
     return x.get("raw") if isinstance(x, dict) else x
 
 
+# Oltre questo, un «rendimento da dividendo» non è un fatto: è un dato rotto.
+# Generoso di proposito — i REIT ipotecari e certi fondi chiusi arrivano
+# davvero al 15-20% — ma sufficiente a fermare gli assurdi.
+DIV_YIELD_MAX = 0.30
+
+
+def _div_yield(sd: dict) -> tuple[float | None, str]:
+    """Il rendimento da dividendo, in FRAZIONE (0,0242 = 2,42%), o None.
+
+    Yahoo lo pubblica in tre campi che NON si equivalgono: `yield` (fondi) e
+    `dividendYield` (azioni) vengono dalla fonte, mentre
+    `trailingAnnualDividendYield` se lo calcola Yahoo dividendo il dividendo
+    per il prezzo — e se i due sono in valute diverse esce un numero senza
+    senso. È il caso di SSNLF (Samsung sul mercato OTC): prezzo 65,21 USD,
+    `trailingAnnualDividendRate` 936,0 che sono WON, risultato 14,35 cioè un
+    rendimento del 1435% che finiva dritto in euro nel box dividendi.
+
+    Il valore fuori scala viene SCARTATO e il motivo restituito, perché un
+    numero assurdo tolto in silenzio è comunque un numero che manca.
+    """
+    visto = False
+    for campo in ("yield", "dividendYield", "trailingAnnualDividendYield"):
+        v = _rawv(sd.get(campo))
+        if v is None:
+            continue
+        try:
+            v = float(v)
+        except (TypeError, ValueError):
+            continue
+        visto = True
+        if v <= 0:
+            continue                      # non paga: prova il campo dopo
+        if v > DIV_YIELD_MAX:
+            return None, f"{campo}={v:.4g} (oltre il {DIV_YIELD_MAX:.0%})"
+        return v, ""
+    return (0.0, "") if visto else (None, "")
+
+
 def _normalize(r: dict) -> dict:
     price = r.get("price", {}) or {}
     sd = r.get("summaryDetail", {}) or {}
@@ -384,6 +422,7 @@ def _normalize(r: dict) -> dict:
     ap = r.get("assetProfile", {}) or {}
     th = r.get("topHoldings", {}) or {}
     fees = fp.get("feesExpensesInvestment", {}) or {}
+    dy, dy_scarto = _div_yield(sd)
     holdings = [{"symbol": h.get("symbol"), "name": h.get("holdingName"),
                  "weight": round((_rawv(h.get("holdingPercent")) or 0) * 100, 2)}
                 for h in th.get("holdings", []) if _rawv(h.get("holdingPercent"))]
@@ -400,7 +439,8 @@ def _normalize(r: dict) -> dict:
         "category": fp.get("categoryName"),
         "total_assets": _rawv(sd.get("totalAssets")),
         "expense_ratio": _rawv(fees.get("annualReportExpenseRatio")),
-        "div_yield": _rawv(sd.get("yield")) or _rawv(sd.get("dividendYield")) or _rawv(sd.get("trailingAnnualDividendYield")),
+        "div_yield": dy,
+        "div_yield_scartato": dy_scarto or None,
         "beta": _rawv(sd.get("beta")) or _rawv(sd.get("beta3Year")),
         "pe": _rawv(sd.get("trailingPE")),
         "sector": ap.get("sector"),
@@ -445,6 +485,20 @@ def fetch_fundamentals(ticker: str, tipo: str = "") -> None:
     _store_fund(**r)
 
 
+def _rileggi(f) -> dict:
+    """I fondamentali salvati, ricontrollati. Il tetto sul rendimento vale
+    anche in LETTURA: le righe scritte prima di questo controllo hanno ancora
+    dentro il valore assurdo, e devono smettere di contare subito, senza
+    aspettare che la cache scada."""
+    d = json.loads(f.data)
+    v = d.get("div_yield")
+    if v is not None and (v > DIV_YIELD_MAX or v < 0):
+        d["div_yield"] = None
+        d["div_yield_scartato"] = f"in cache {v:.4g} (oltre il {DIV_YIELD_MAX:.0%})"
+    d["_fetched"] = fmt_ts(f.fetched_at)
+    return d
+
+
 def get_fundamentals(ticker: str, max_age_h: int = 24, tipo: str = "") -> dict | None:
     """Ritorna i fondamentali dalla cache; li scarica se mancanti o vecchi.
     Ritorna None se non reperibili (cosi' la pagina mostra 'non disponibile')."""
@@ -460,9 +514,7 @@ def get_fundamentals(ticker: str, max_age_h: int = 24, tipo: str = "") -> dict |
         with SessionLocal() as db:
             f = db.get(Fundamentals, key)
     if f and f.ok and f.data:
-        d = json.loads(f.data)
-        d["_fetched"] = fmt_ts(f.fetched_at)
-        return d
+        return _rileggi(f)
     return None
 
 
@@ -475,9 +527,7 @@ def get_fundamentals_cached(ticker: str) -> dict | None:
     with SessionLocal() as db:
         f = db.get(Fundamentals, key)
     if f and f.ok and f.data:
-        d = json.loads(f.data)
-        d["_fetched"] = fmt_ts(f.fetched_at)
-        return d
+        return _rileggi(f)
     return None
 
 

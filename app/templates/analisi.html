@@ -57,6 +57,7 @@
       {{ metric(t('an.eff'), (lt.eff_holdings | qty) if lt.eff_holdings else '—', t('an.eff_sub'), '', 'eff') }}
     </div>
     {% if an.esclusi %}<p class="faint" style="font-size:12px;margin-top:10px;">{{ t('an.esclusi_note', tk=(an.esclusi | join(', '))) }}</p>{% endif %}
+    {% if an.div_scartati %}<p class="faint" style="font-size:12px;margin-top:6px;">{{ t('an.div_scartati', tk=(an.div_scartati | join(', '))) }}</p>{% endif %}
   </div>
 
   {# ---------- Il tuo risultato nel tempo (archivio giornaliero) ----------

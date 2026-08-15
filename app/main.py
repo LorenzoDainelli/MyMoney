@@ -180,12 +180,19 @@ def _dashboard_ctx() -> dict:
     dividendi = None
     if vista["ha_totale"]:
         div_rows, div_tot, val_paganti = [], 0.0, 0.0
+        scartati = []
         for r in vista["righe"]:
             p = r["p"]
             if not r["valore"] or not (p.ticker or "").strip():
                 continue
             f = market.get_fundamentals_cached(p.ticker)
-            if f and f.get("div_yield"):
+            if not f:
+                continue
+            # un rendimento fuori scala è un dato rotto della fonte, non una
+            # cedola: resta fuori dal totale e viene DETTO (vedi market._div_yield)
+            if f.get("div_yield_scartato"):
+                scartati.append(p.ticker)
+            elif f.get("div_yield"):
                 annuo = r["valore"] * f["div_yield"]
                 div_tot += annuo
                 val_paganti += r["valore"]
@@ -199,6 +206,7 @@ def _dashboard_ctx() -> dict:
                 "coperto": round(val_paganti / inv_tot * 100) if inv_tot else None,
                 "top": div_rows[:3],
                 "top_max": div_rows[0]["annuo"] if div_rows else 1.0,
+                "scartati": scartati,
             }
 
     # esposizione per settore: look-through dalla sola cache (mai HTTP qui)

@@ -157,6 +157,7 @@ def analisi_completa(cached_only: bool = False) -> dict:
 
     perf_n = perf_d = 0.0
     div_n = div_d = reddito = 0.0
+    div_scartati: list[str] = []
     ter_n = ter_d = 0.0
     n_etf = n_etf_ter = 0
     etf_w = 0.0
@@ -174,7 +175,9 @@ def analisi_completa(cached_only: bool = False) -> dict:
             etf_w += w
             n_etf += 1
         if f:
-            if f.get("div_yield"):
+            if f.get("div_yield_scartato"):
+                div_scartati.append(p.ticker)     # dato rotto della fonte, dichiarato
+            elif f.get("div_yield"):
                 div_n += w * f["div_yield"]
                 div_d += w
                 if usa_valori:
@@ -241,6 +244,8 @@ def analisi_completa(cached_only: bool = False) -> dict:
         # quindi la media vale solo sui titoli che lo dichiarano
         "div_coverage": round(div_d / somma * 100) if (div_d and somma) else None,
         "div_income": round(reddito, 2) if (usa_valori and reddito) else None,
+        # titoli lasciati fuori perché la fonte dà un rendimento impossibile
+        "div_scartati": div_scartati,
         "ter": round(ter_n / ter_d * 100, 2) if ter_d else None,
         "ter_n_etf": n_etf,
         "ter_n_con": n_etf_ter,
