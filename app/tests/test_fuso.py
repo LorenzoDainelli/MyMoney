@@ -74,15 +74,29 @@ def test_l_etichetta_e_leggibile():
 
 # ── il giorno, che è la cosa che conta ──────────────────────────────────────
 
+def in_ora_locale(epoch):
+    """Un istante universale letto nell'ora del fuso scelto, come fa l'app.
+
+    Prima esisteva `tempo.da_epoch` che faceva questo; l'unico posto che la
+    usava — il prezzo orario del PAC — adesso confronta istanti universali fra
+    loro, senza convertirli a metà strada, e la funzione è rimasta senza
+    chiamanti. Quello che va difeso però resta: che `fuso()` porti davvero
+    l'ora giusta, ora legale compresa. Quindi la conversione la fa il test.
+    """
+    return datetime.fromtimestamp(float(epoch), tz=timezone.utc).astimezone(
+        tempo.fuso()).replace(tzinfo=None)
+
+
+
 def test_a_mezzanotte_e_mezza_italiana_a_dublino_e_ancora_ieri(fuso_vero):
     """Il cuore della faccenda. Lo stesso istante, due Paesi, due GIORNI diversi:
     è il motivo per cui il fuso non può restare quello dell'orologio di turno."""
     istante = datetime(2026, 8, 20, 22, 30, tzinfo=timezone.utc).timestamp()
 
     tempo.imposta("Europe/Rome")
-    a_roma = tempo.da_epoch(istante)
+    a_roma = in_ora_locale(istante)
     tempo.imposta("Europe/Dublin")
-    a_dublino = tempo.da_epoch(istante)
+    a_dublino = in_ora_locale(istante)
 
     assert (a_roma.day, a_roma.hour) == (21, 0)      # già il 21, mezzanotte e mezza
     assert (a_dublino.day, a_dublino.hour) == (20, 23)   # ancora il 20, le 23:30
@@ -99,7 +113,7 @@ def test_le_date_restano_senza_fuso_attaccato(fuso_vero):
     """Tutto il database è naive. Una data «con fuso» che ci finisse dentro non
     darebbe un risultato sbagliato: farebbe esplodere ogni confronto."""
     assert tempo.adesso().tzinfo is None
-    assert tempo.da_epoch(1_786_093_200).tzinfo is None
+    assert in_ora_locale(1_786_093_200).tzinfo is None
 
 
 # ── il miscuglio: date scritte da orologi diversi ───────────────────────────
@@ -141,12 +155,12 @@ def test_l_ora_legale_la_conosce_il_sistema(fuso_vero):
     tempo.imposta("Europe/Rome")
     luglio = datetime(2026, 7, 15, 12, 0, tzinfo=timezone.utc).timestamp()
     dicembre = datetime(2026, 12, 15, 12, 0, tzinfo=timezone.utc).timestamp()
-    assert tempo.da_epoch(luglio).hour == 14
-    assert tempo.da_epoch(dicembre).hour == 13
+    assert in_ora_locale(luglio).hour == 14
+    assert in_ora_locale(dicembre).hour == 13
 
     tempo.imposta("America/New_York")
-    assert tempo.da_epoch(luglio).hour == 8       # EDT, -4
-    assert tempo.da_epoch(dicembre).hour == 7     # EST, -5
+    assert in_ora_locale(luglio).hour == 8       # EDT, -4
+    assert in_ora_locale(dicembre).hour == 7     # EST, -5
 
 
 # ── dal modulo all'app vera ─────────────────────────────────────────────────

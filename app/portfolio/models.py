@@ -67,7 +67,13 @@ class Versamento(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     data: Mapped[date] = mapped_column(Date)
-    ora: Mapped[str] = mapped_column(String(5), default="")      # "HH:MM" locale, facoltativa
+    ora: Mapped[str] = mapped_column(String(5), default="")      # "HH:MM", del primo ordine eseguito
+    # In che fuso sono scritti gli orari di questo versamento. Vuoto = quello
+    # dell'app. Non è un doppione dell'impostazione: gli orari di esecuzione si
+    # leggono nell'app della banca, che può mostrarli nell'ora di un altro
+    # Paese, e restano quelli anche se poi cambi Paese tu. È un dato del fatto,
+    # non del momento in cui lo guardi — per questo va salvato con lui.
+    fuso: Mapped[str] = mapped_column(String(64), default="")
     importo: Mapped[float] = mapped_column(Float, default=0.0)   # totale investito (€)
     conto: Mapped[str] = mapped_column(String(80), default="")   # conto di provenienza (informativo)
     note: Mapped[str] = mapped_column(Text, default="")
@@ -102,8 +108,9 @@ class VersamentoRiga(Base):
     # giorno, ma Trade Republic non esegue i trentotto ordini nello stesso
     # istante: li sgrana nell'arco della giornata. Un'ora sola per tutto il
     # versamento costringeva a prendere per tutti il prezzo di un momento in cui
-    # quasi nessuno era stato davvero comprato. Se resta vuota vale l'ora del
-    # versamento (`Versamento.ora`), che è il comportamento di prima.
+    # quasi nessuno era stato davvero comprato. Se resta vuota, quel titolo
+    # prende il prezzo del giorno. `Versamento.ora` non si chiede più: è la più
+    # presto fra queste, cioè il primo ordine eseguito.
     ora: Mapped[str] = mapped_column(String(5), default="")
     euro: Mapped[float] = mapped_column(Float, default=0.0)        # € destinati a questo titolo
     qta: Mapped[float | None] = mapped_column(Float, nullable=True)  # quote aggiunte (None se prezzo n/d)

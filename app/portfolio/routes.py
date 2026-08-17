@@ -282,11 +282,14 @@ def versamento_form(request: Request, vid: int = 0):
         "active": "portafoglio", "posizioni": posizioni, "conti": conti,
         "importo": (pre["importo"] if pre else 100.0),
         "data": (pre["data"] if pre else tempo.oggi()).isoformat(),
-        "ora": (pre["ora"] if pre else ""),
         "conto": (pre["conto"] if pre else _default_conto(conti)),
         "inclusi_ids": (pre["inclusi_ids"] if pre else {p.id for p in posizioni}),
         "orari": (pre["orari"] if pre else {}),
         "orari_scorsi": versamenti.ultimi_orari(escludi_vid=vid or None),
+        # Il fuso di un PAC già registrato è quello con cui è stato scritto e
+        # non si tocca; per uno nuovo si propone l'ultimo usato.
+        "fuso": (pre["fuso"] if pre else versamenti.ultimo_fuso()),
+        "fusi": tempo.FUSI, "fuso_app": tempo.etichetta(),
         "vid": str(vid) if vid else "", "anteprima": None,
     })
 
@@ -312,8 +315,8 @@ async def versamento_post(
     azione: str = Form("anteprima"),
     importo: str = Form("0"),
     data: str = Form(""),
-    ora: str = Form(""),
     conto: str = Form(""),
+    fuso: str = Form(""),
     vid: str = Form(""),
     incl: list[str] = Form(default=[]),
 ):
@@ -328,23 +331,24 @@ async def versamento_post(
     orari = _orari_dal_modulo(await request.form())
 
     if azione == "conferma":
-        versamenti.salva(imp, d, conto, esclusi, vid=vid_i, ora=ora, orari=orari)
+        versamenti.salva(imp, d, conto, esclusi, vid=vid_i, orari=orari, fuso=fuso)
         return RedirectResponse("/portafoglio?pac=1", status_code=303)
 
     conti = [w.nome for w in fin_service.wallets()]
     return templates.TemplateResponse(request, "portfolio_versamento.html", {
         "active": "portafoglio", "posizioni": posizioni, "conti": conti,
-        "importo": imp, "data": d.isoformat(), "ora": ora,
+        "importo": imp, "data": d.isoformat(),
         "conto": conto or _default_conto(conti),
         "inclusi_ids": incl_ids, "vid": vid,
         # Riscritti come li ha capiti il server ("0935" torna indietro "09:35"),
         # così il modulo mostra l'ora che verrà davvero usata. Quello che NON si
         # capisce torna indietro tale e quale: cancellarlo nasconderebbe lo
-        # sbaglio, e il titolo verrebbe comprato all'ora del versamento senza
-        # che nessuno se ne accorga.
+        # sbaglio, e quel titolo prenderebbe il prezzo del giorno invece di
+        # quello del suo momento, senza che nessuno se ne accorga.
         "orari": {pid: (versamenti.normalizza_ora(v) or v) for pid, v in orari.items()},
         "orari_scorsi": versamenti.ultimi_orari(escludi_vid=vid_i),
-        "anteprima": versamenti.anteprima(imp, d, esclusi, ora, orari),
+        "fuso": fuso, "fusi": tempo.FUSI, "fuso_app": tempo.etichetta(),
+        "anteprima": versamenti.anteprima(imp, d, esclusi, orari, fuso),
     })
 
 

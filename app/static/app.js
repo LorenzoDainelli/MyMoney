@@ -752,8 +752,8 @@ document.addEventListener('click', function (e) {
    dita per andare a cercare i due punti.
 
    Quello che non è un'ora vera resta scritto com'è, in rosso: cancellarlo
-   sarebbe nascondere lo sbaglio, e quel titolo verrebbe comprato all'ora del
-   versamento senza che nessuno se ne accorga. Le stesse regole valgono sul
+   sarebbe nascondere lo sbaglio, e quel titolo prenderebbe il prezzo del
+   giorno invece di quello del suo momento. Le stesse regole valgono sul
    server (portfolio/versamenti.py::normalizza_ora): questo file rende il
    modulo comodo, non decide niente.
    ========================================================================== */
@@ -776,7 +776,7 @@ document.addEventListener('click', function (e) {
   }
 
   function segna(campo) {
-    // vuota va bene (vale l'ora del versamento); scritta e non capita, no
+    // vuota va bene (vale il prezzo del giorno); scritta e non capita, no
     var buona = !campo.value.trim() || normalizza(campo.value) !== '';
     campo.setAttribute('aria-invalid', buona ? 'false' : 'true');
   }
@@ -833,15 +833,6 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* L'ora in cima è quella di partenza: le caselle vuote la mostrano in grigio,
-     perché «vuoto» non dica «nessuna ora» quando invece un'ora ce l'ha. */
-  var base = document.querySelector('[data-pac-ora-base]');
-  if (base) {
-    base.addEventListener('input', function () {
-      var testo = this.value || '--:--';
-      for (var k = 0; k < caselle.length; k++) caselle[k].placeholder = testo;
-    });
-  }
 })();
 
 

@@ -50,6 +50,9 @@ def migra_schema():
             # I versamenti già registrati sono tutti il PAC vero: partire da
             # False è la risposta giusta per la storia che c'è.
             ("fuori_piano", Boolean(), False),
+            # Fuso degli orari: vuoto sui versamenti già registrati, che infatti
+            # sono stati letti nell'ora dell'app.
+            ("fuso", String(64), ""),
         ))
         aggiungi_colonne(c, "portfolio_versamento_righe", (
             # Ora del singolo titolo: vuota sulle righe già registrate, che

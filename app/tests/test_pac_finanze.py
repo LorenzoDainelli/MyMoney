@@ -40,7 +40,7 @@ def test_db(tmp_path, monkeypatch):
         monkeypatch.setattr(mod, "SessionLocal", TestSession)
     monkeypatch.setattr(versamenti.market, "quotes_map", lambda: {})
     monkeypatch.setattr(versamenti, "_prezzo_eur_alla_data",
-                        lambda p, data, qmap, oggi, ora="": (10.0, "test"))
+                        lambda p, data, qmap, oggi, ora="", fuso="": (10.0, "test"))
 
     with TestSession() as db:
         db.add_all([
@@ -215,8 +215,8 @@ def test_niente_doppio_conteggio_nel_patrimonio(test_db, monkeypatch):
 
 def test_il_trasferimento_parte_col_primo_ordine_eseguito(test_db):
     """Il movimento in Finanze è UNO, ma i titoli vengono eseguiti a ore
-    diverse. Senza un'ora del versamento, i soldi hanno lasciato il conto
-    quando è partito il primo ordine: è l'unico istante che i dati conoscono.
+    diverse. I soldi hanno lasciato il conto quando è partito il primo
+    ordine: è l'unico istante che i dati conoscono davvero.
     Inventarne un altro (mezzanotte) metterebbe il trasferimento in un momento
     in cui non era ancora successo niente."""
     Session = test_db
@@ -229,14 +229,51 @@ def test_il_trasferimento_parte_col_primo_ordine_eseguito(test_db):
     assert (t.data.hour, t.data.minute) == (9, 12)
 
 
-def test_l_ora_del_versamento_batte_quella_dei_titoli(test_db):
-    """Se l'ora del versamento c'è, comanda lei: è quella che hai scritto tu
-    pensando al bonifico, non una dedotta dagli ordini."""
+# ── l'oro comprato coi saveback: i soldi escono dai «Nascosti» ────────────────
+def test_il_pac_dell_oro_fa_scendere_i_nascosti(test_db, monkeypatch):
+    """La banca compra l'ETC oro con gli arrotondamenti e i saveback, che stanno
+    nel salvadanaio «Nascosti». Registrare quell'acquisto indicando «Nascosti»
+    come conto di provenienza deve SVUOTARE il salvadanaio di quella cifra: se
+    non scendesse, gli stessi centesimi risulterebbero insieme messi da parte e
+    già diventati oro, e il patrimonio li conterebbe due volte."""
     Session = test_db
     with Session() as db:
-        ids = {p.ticker: p.id for p in db.execute(select(Position)).scalars()}
+        db.add(Wallet(nome=fin_service.NOME_WALLET_NASCOSTI, tipo="altro",
+                      saldo_iniziale=0.0, ordine=2))
+        db.add(Position(nome="Oro", ticker="EGLN", isin="IE00B4ND3602",
+                        pct_target=0.0, ordine=2))
+        tr = db.execute(select(Wallet).where(
+            Wallet.nome == "Trade Republic")).scalars().one()
+        tr.arrotonda, tr.saveback_pct, tr.saveback_tetto = True, 1.0, 15.0
+        tr_id = tr.id
+        db.commit()
 
-    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set(),
-                     ora="08:00", orari={ids["A"]: "17:40"})
-    t = _movimenti(Session)[0]
-    assert (t.data.hour, t.data.minute) == (8, 0)
+    # una spesa di 7,60 € con la carta: 0,40 di arrotondamento + 0,076 di saveback
+    fin_service.crea_uscita_carta(data=tempo.adesso(), importo=7.60,
+                                  wallet_id=tr_id, categoria_nome="Spesa")
+    monkeypatch.setattr(pf_service, "vista_portafoglio",
+                        lambda: {"righe": [], "totale": 0.0, "ha_totale": False})
+
+    def nascosti():
+        return next(r for r in fin_service.saldi()["righe"]
+                    if r["w"].nome == fin_service.NOME_WALLET_NASCOSTI)
+
+    assert nascosti()["saldo"] == 0.48          # 0,40 + 0,076
+    assert fin_service.saldi()["bloccato"] == 0.48
+
+    with Session() as db:
+        posizioni = {p.ticker: p.id for p in db.execute(select(Position)).scalars()}
+    altri = {pid for tk, pid in posizioni.items() if tk != "EGLN"}
+    vid = versamenti.salva(0.48, tempo.oggi(), fin_service.NOME_WALLET_NASCOSTI,
+                           esclusi=altri)
+    assert vid is not None, "il versamento sul solo oro deve poter essere registrato"
+
+    # il salvadanaio è sceso di esattamente quello che è diventato oro
+    assert round(nascosti()["saldo"], 2) == 0.0
+    assert fin_service.saldi()["bloccato"] == 0.0
+    # e quei soldi ora stanno nella posizione, non nel conto
+    with Session() as db:
+        oro = db.get(Position, posizioni["EGLN"])
+        assert oro.versato_totale == 0.48
+    # non è la rata mensile: non deve spegnere il promemoria del PAC
+    assert versamenti.lista()[0]["fuori_piano"] is True

@@ -87,7 +87,11 @@ def storico_pac() -> dict:
         # `ora_span`, non `ora`: i titoli di un PAC non vengono eseguiti tutti
         # nello stesso istante, e all'agente va detto l'arco vero
         # («09:12–17:40»), non un minuto in cui quasi niente era stato comprato.
+        # `ora` senza il fuso è un numero senza significato: gli orari di un PAC
+        # possono essere scritti nell'ora di un altro Paese, e l'agente che li
+        # riporta deve poter dire quale.
         "versamenti": [{"data": v["data"].strftime("%d/%m/%Y"), "ora": v["ora_span"],
+                        "ora_di": v["fuso_etichetta"],
                         "importo": v["importo"], "conto": v["conto"],
                         "titoli": v["n_titoli"]} for v in lista[:MAX_RIGHE]],
         "quanti": len(lista),

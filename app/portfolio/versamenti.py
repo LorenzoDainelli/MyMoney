@@ -13,7 +13,7 @@ quantità si SOMMANO e il prezzo medio di carico si ricalcola da solo. Ogni PAC:
 Tutto OFFLINE/locale, nessun segnale operativo: registra ciò che l'utente ha già
 fatto, non suggerisce acquisti.
 """
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 from sqlalchemy import select, func
 
@@ -60,24 +60,38 @@ def parse_ora(s: str):
 GIORNI_INTRADAY = 25
 
 
-def _prezzo_intraday(tk: str, quando: datetime):
-    """Prezzo alla ORA indicata, dalle candele orarie. None se non c'è.
+def istante(data: date, t, fuso: str = "") -> float:
+    """L'orario che hai scritto, nel fuso in cui l'hai letto, come istante
+    universale (secondi epoch).
 
-    I timestamp di Yahoo sono istanti universali: vanno letti nello STESSO fuso
-    in cui l'utente ha scritto l'orario, cioè quello scelto nelle impostazioni.
-    Prima si usava l'orologio della macchina: sul server, che gira in UTC,
-    l'app sarebbe andata a cercare la candela di due ore prima — un altro
-    prezzo, non un dettaglio di visualizzazione.
+    È qui che «09:35» smette di essere ambiguo. Le nove e trentacinque di dove?
+    Gli orari di esecuzione li leggi nell'app della banca, che può mostrarli
+    nell'ora di un altro Paese — e in Irlanda le 09:35 sono un'ora dopo che a
+    Roma, cioè un'altra candela e un altro prezzo. `fuso` vuoto vuol dire
+    «l'ora dell'app», che è il comportamento di prima.
+    """
+    return datetime.combine(data, t, tzinfo=tempo.fuso_di(fuso)).timestamp()
+
+
+def _prezzo_intraday(tk: str, quando: float):
+    """Prezzo all'ISTANTE indicato, dalle candele orarie. None se non c'è.
+
+    I timestamp di Yahoo sono istanti universali e qui si confrontano con un
+    istante universale: nessuna conversione a metà strada, nessun modo di
+    sbagliare fuso. Prima il confronto passava per l'orologio della macchina, e
+    sul server — che gira in UTC — l'app andava a prendere la candela di due
+    ore prima, cioè un altro prezzo.
     """
     serie = market.history_series(market._yahoo_symbol(tk), "1mo", "1h")
     best = None
     for epoch, close in serie:
-        if close and tempo.da_epoch(epoch) <= quando:
+        if close and float(epoch) <= quando:
             best = close
     return best
 
 
-def _prezzo_eur_alla_data(p: Position, data: date, qmap: dict, oggi: date, ora=None):
+def _prezzo_eur_alla_data(p: Position, data: date, qmap: dict, oggi: date,
+                          ora=None, fuso: str = ""):
     """Prezzo in € del titolo alla data (e all'ora, se indicata).
     Ritorna (prezzo, fonte). fonte: 'live' (prezzo corrente), 'orario' (candela
     dell'ora indicata), 'storico' (chiusura di quel giorno), 'live~' (ripiego sul
@@ -99,8 +113,8 @@ def _prezzo_eur_alla_data(p: Position, data: date, qmap: dict, oggi: date, ora=N
     # con l'ora: provo la candela oraria (solo per il periodo recente)
     t = parse_ora(ora) if isinstance(ora, str) else ora
     if t is not None and 0 <= (oggi - data).days <= GIORNI_INTRADAY:
-        quando = datetime.combine(data, t)
-        if quando <= tempo.adesso():
+        quando = istante(data, t, fuso)
+        if quando <= datetime.now(timezone.utc).timestamp():
             val = _prezzo_intraday(tk, quando)
             if val is not None:
                 prezzo = in_euro(val)
@@ -179,19 +193,20 @@ def _riparti(posizioni, importo: float, esclusi: set):
     return inclusi, euros
 
 
-def ora_del_titolo(pid: int, orari: dict | None, ora: str) -> str:
-    """L'ora da usare per QUESTO titolo: la sua, se c'è, altrimenti quella del
-    versamento. Un posto solo, così anteprima e salvataggio non possono
-    scegliere due orari diversi per la stessa riga."""
-    return normalizza_ora((orari or {}).get(pid) or ora)
+def ora_del_titolo(pid: int, orari: dict | None) -> str:
+    """L'ora di esecuzione di QUESTO titolo, scritta bene. Un posto solo, così
+    anteprima e salvataggio non possono leggere due orari diversi per la stessa
+    riga."""
+    return normalizza_ora((orari or {}).get(pid))
 
 
-def anteprima(importo: float, data: date, esclusi: set, ora: str = "",
-              orari: dict | None = None) -> dict:
+def anteprima(importo: float, data: date, esclusi: set,
+              orari: dict | None = None, fuso: str = "") -> dict:
     """Calcola (senza salvare nulla) come verrebbe distribuito il versamento.
 
     `orari` è {id_posizione: "HH:MM"}: l'ora di esecuzione titolo per titolo.
-    Chi non ce l'ha usa `ora`, l'ora del versamento."""
+    Chi non ce l'ha prende il prezzo del giorno. `fuso` dice in che ora sono
+    scritti quegli orari (vuoto = quella dell'app)."""
     qmap = market.quotes_map()
     oggi = tempo.oggi()
     posizioni = service.lista_posizioni()
@@ -200,8 +215,8 @@ def anteprima(importo: float, data: date, esclusi: set, ora: str = "",
     for p in inclusi:
         euro = euros[p.id]
         tot += euro
-        ora_p = ora_del_titolo(p.id, orari, ora)
-        prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p)
+        ora_p = ora_del_titolo(p.id, orari)
+        prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p, fuso)
         qta = round(euro / prezzo, 6) if (prezzo and prezzo > 0) else None
         if qta is None:
             avvisi.append(p.ticker or p.nome_vista)
@@ -215,14 +230,15 @@ def anteprima(importo: float, data: date, esclusi: set, ora: str = "",
                       "euro": euro, "prezzo": prezzo, "ora": ora_p,
                       "qta": qta, "fonte": fonte})
     return {"righe": righe, "totale": round(tot, 2), "n_inclusi": len(inclusi),
-            "avvisi": avvisi, "data": data, "importo": round(importo, 2)}
+            "avvisi": avvisi, "data": data, "importo": round(importo, 2),
+            "fuso": fuso, "fuso_etichetta": tempo.etichetta(fuso)}
 
 
 DESCRIZIONE_MOVIMENTO = "Versamento PAC"
 
 
 def _sync_finanze(vid: int, importo: float, data: date, conto: str,
-                  ora: str = "") -> None:
+                  ora: str = "", fuso: str = "") -> None:
     """Riflette il PAC in Finanze: UN trasferimento dal conto di provenienza al
     portafoglio 'PAC investimenti'.
 
@@ -253,8 +269,18 @@ def _sync_finanze(vid: int, importo: float, data: date, conto: str,
                     db.commit()
         return
 
-    # il movimento porta l'ora del versamento, se l'hai indicata
-    quando = datetime.combine(data, parse_ora(ora) or datetime.min.time())
+    # Il movimento porta l'ora del primo ordine eseguito, se c'è, riportata
+    # nell'ora dell'app: in Finanze gli orari sono tutti quelli, e un'ora
+    # tedesca in mezzo a ore irlandesi non si distinguerebbe da un errore.
+    # Il GIORNO resta quello del versamento anche quando la conversione lo
+    # sposterebbe: Finanze e Portafoglio non devono mai raccontare due date
+    # diverse per lo stesso acquisto.
+    t = parse_ora(ora)
+    if t is None:
+        quando = datetime.combine(data, datetime.min.time())
+    else:
+        locale = datetime.fromtimestamp(istante(data, t, fuso), tz=timezone.utc)
+        quando = datetime.combine(data, locale.astimezone(tempo.fuso()).time())
     if tx_id and fin.aggiorna_movimento(tx_id, TIPO_TRASFERIMENTO, quando, importo,
                                         src.id, dest.id,
                                         descrizione=DESCRIZIONE_MOVIMENTO):
@@ -285,12 +311,14 @@ def _reverse(db, vid: int, posmap: dict) -> None:
 
 
 def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
-          ora: str = "", orari: dict | None = None) -> int | None:
+          orari: dict | None = None, fuso: str = "") -> int | None:
     """Registra un nuovo versamento (vid=None) o ne modifica uno esistente.
     Applica le quote alle posizioni (PMC) e memorizza i delta. Ritorna l'id.
 
     `orari` è {id_posizione: "HH:MM"}: l'ora di esecuzione di ogni singolo
-    titolo. Chi non ce l'ha usa `ora`."""
+    titolo. L'ora del versamento non si chiede più: è il primo ordine eseguito,
+    e la si ricava da qui — un'ora scritta a parte sarebbe una seconda verità
+    accanto a queste, e prima o poi le due si contraddicono."""
     qmap = market.quotes_map()
     oggi = tempo.oggi()
     with SessionLocal() as db:
@@ -309,7 +337,9 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
             v = Versamento()
             db.add(v)
         v.data, v.importo, v.conto = data, round(importo, 2), (conto or "").strip()
-        v.ora = normalizza_ora(ora)
+        # Il fuso si salva col versamento e non si rilegge dalle impostazioni:
+        # gli orari restano quelli letti allora, anche se poi cambi Paese tu.
+        v.fuso = (fuso or "").strip() if tempo.valido(fuso) else ""
         # È il PAC del mese, o un acquisto a parte? Lo dicono i titoli: se
         # nessuno di quelli comprati ha una quota nel piano, questo versamento
         # nel piano non c'è — è l'oro comprato dalla banca coi saveback. Serve
@@ -320,10 +350,10 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
         ore_usate = []
         for p in inclusi:
             euro = euros[p.id]
-            ora_p = ora_del_titolo(p.id, orari, ora)
+            ora_p = ora_del_titolo(p.id, orari)
             if ora_p:
                 ore_usate.append(ora_p)
-            prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p)
+            prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p, fuso)
             qta = round(euro / prezzo, 6) if (prezzo and prezzo > 0) else None
             if qta is not None:
                 p.quantita = round((p.quantita or 0) + qta, 8)
@@ -335,13 +365,16 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
             db.add(VersamentoRiga(versamento_id=v.id, position_id=p.id, isin=p.isin,
                                   ticker=p.ticker, euro=euro, qta=qta, ora=ora_p,
                                   prezzo_eur=prezzo, fonte=fonte))
+        # L'ora del versamento non si chiede: è quella del primo ordine
+        # eseguito. Chiederla a parte voleva dire tenere due orari per lo stesso
+        # fatto — uno scritto in cima al modulo e uno sulle righe — e prima o
+        # poi i due si contraddicono.
+        v.ora = min(ore_usate) if ore_usate else ""
         db.commit()
-        nuovo_id = v.id
-    # Il trasferimento in Finanze è UNO: se non hai dato un'ora al versamento
-    # ma l'hai data ai titoli, i soldi hanno lasciato il conto quando è partito
-    # il primo ordine. È l'unico istante che i dati conoscono davvero.
-    _sync_finanze(nuovo_id, round(importo, 2), data, conto,
-                  normalizza_ora(ora) or (min(ore_usate) if ore_usate else ""))
+        nuovo_id, ora_giro, fuso_giro = v.id, v.ora, v.fuso
+    # Il trasferimento in Finanze è UNO: i soldi hanno lasciato il conto quando
+    # è partito il primo ordine, l'unico istante che i dati conoscono davvero.
+    _sync_finanze(nuovo_id, round(importo, 2), data, conto, ora_giro, fuso_giro)
     return nuovo_id
 
 
@@ -372,7 +405,8 @@ def dettaglio(vid: int) -> dict | None:
             select(VersamentoRiga).where(VersamentoRiga.versamento_id == vid)
         ).scalars().all()
         return {"id": v.id, "data": v.data, "ora": v.ora or "", "importo": v.importo,
-                "conto": v.conto, "inclusi_ids": {r.position_id for r in righe},
+                "conto": v.conto, "fuso": v.fuso or "",
+                "inclusi_ids": {r.position_id for r in righe},
                 # gli orari per titolo tornano nel modulo così come sono stati
                 # salvati: modificare il PAC del mese scorso vuol dire ritrovarli
                 # tutti al loro posto e correggerne due, non riscriverne trentotto.
@@ -399,6 +433,21 @@ def ultimi_orari(escludi_vid=None) -> dict:
             if orari:
                 return orari
     return {}
+
+
+def ultimo_fuso(escludi_vid=None) -> str:
+    """Il fuso dell'ultimo versamento che ne aveva uno. Serve solo a proporlo
+    già scelto nel modulo: chi legge gli orari nell'app della banca li legge
+    ogni mese nella stessa ora, e ricordarselo è compito dell'app."""
+    with SessionLocal() as db:
+        vs = db.execute(select(Versamento).order_by(
+            Versamento.data.desc(), Versamento.id.desc())).scalars().all()
+        for v in vs:
+            if escludi_vid and v.id == escludi_vid:
+                continue
+            if v.fuso:
+                return v.fuso
+    return ""
 
 
 GIORNI_PREAVVISO = 2      # quanti giorni prima del solito iniziare a ricordarlo
@@ -503,6 +552,8 @@ def lista() -> list:
                 ore[0] if len(ore) == 1 else f"{ore[0]}–{ore[-1]}")
             out.append({"id": v.id, "data": v.data, "ora": v.ora or "",
                         "ora_span": span, "n_orari": len(ore),
+                        "fuso": v.fuso or "",
+                        "fuso_etichetta": tempo.etichetta(v.fuso or ""),
                         "importo": v.importo, "conto": v.conto, "n_titoli": n or 0,
                         "fuori_piano": bool(v.fuori_piano)})
         return out

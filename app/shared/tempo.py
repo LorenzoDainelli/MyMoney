@@ -112,6 +112,18 @@ def fuso() -> ZoneInfo:
         return ZoneInfo("UTC")     # meglio un'ora sbagliata che una pagina rotta
 
 
+def fuso_di(nome: str) -> ZoneInfo:
+    """Il fuso con questo nome, o quello dell'app se il nome non dice niente.
+
+    Serve dove un orario NON è nell'ora dell'app: gli orari di esecuzione di un
+    PAC li leggi nell'app della banca, che può mostrarli nell'ora di un altro
+    Paese. Lì il fuso è un dato del fatto, non un'impostazione di chi guarda."""
+    nome = (nome or "").strip()
+    if not nome or not valido(nome):
+        return fuso()
+    return ZoneInfo(nome)
+
+
 def imposta(nome: str) -> bool:
     """Cambia il fuso. Falso (e non cambia niente) se il nome non esiste."""
     nome = (nome or "").strip()
@@ -168,17 +180,6 @@ def etichetta_giorno(quando) -> str | None:
     if giorni == 1:
         return "dash.yesterday"
     return None
-
-
-def da_epoch(epoch) -> datetime:
-    """Un istante universale (i timestamp di Yahoo) letto nell'ora del fuso scelto.
-
-    Serve al PAC: se indichi l'ora di un acquisto, l'app cerca la candela di
-    quell'ora. Convertirla con l'orologio della macchina vorrebbe dire, sul
-    server, cercarla due ore prima — cioè un prezzo diverso.
-    """
-    return datetime.fromtimestamp(float(epoch), tz=timezone.utc).astimezone(
-        fuso()).replace(tzinfo=None)
 
 
 def a_naive(dt: datetime) -> datetime:

@@ -38,7 +38,7 @@ def test_db(tmp_path, monkeypatch):
     # niente rete: prezzo fisso 10€ per tutti, e nessuna quotazione in cache
     monkeypatch.setattr(versamenti.market, "quotes_map", lambda: {})
     monkeypatch.setattr(versamenti, "_prezzo_eur_alla_data",
-                        lambda p, data, qmap, oggi, ora="": (10.0, "test"))
+                        lambda p, data, qmap, oggi, ora="", fuso="": (10.0, "test"))
     yield TestSession
 
 
@@ -133,10 +133,13 @@ def test_parse_ora():
     assert versamenti.parse_ora("boh") is None
 
 
-def test_ora_salvata_sul_versamento(test_db):
+def test_l_ora_del_versamento_e_il_primo_ordine_eseguito(test_db):
+    """L'ora del versamento non si chiede più a parte: sarebbe una seconda
+    verità accanto a quelle dei titoli. È la più presto fra loro."""
     Session = test_db
-    _seed(Session)
-    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:30")
+    ids = _seed(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
+                           orari={ids["A"]: "17:40", ids["B"]: "09:30"})
     with Session() as db:
         assert db.get(Versamento, vid).ora == "09:30"
     assert versamenti.dettaglio(vid)["ora"] == "09:30"
@@ -187,15 +190,15 @@ def test_normalizza_ora_prende_le_cifre():
 def test_ogni_titolo_tiene_la_sua_ora(test_db):
     Session = test_db
     ids = _seed(Session)
-    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
                            orari={ids["A"]: "0912", ids["B"]: "17:40"})
     with Session() as db:
         ore = {r.ticker: r.ora for r in db.execute(select(VersamentoRiga)).scalars()}
-    # A e B la loro, C quella del versamento — e "0912" è diventato "09:12"
-    assert ore == {"A": "09:12", "B": "17:40", "C": "09:00"}
+    # ognuno la sua, C nessuna — e "0912" è diventato "09:12"
+    assert ore == {"A": "09:12", "B": "17:40", "C": ""}
     # modificare il PAC del mese scorso li ritrova tutti al loro posto
     assert versamenti.dettaglio(vid)["orari"] == {
-        ids["A"]: "09:12", ids["B"]: "17:40", ids["C"]: "09:00"}
+        ids["A"]: "09:12", ids["B"]: "17:40"}
 
 
 def test_il_prezzo_di_ogni_titolo_e_quello_della_sua_ora(test_db, monkeypatch):
@@ -205,38 +208,41 @@ def test_il_prezzo_di_ogni_titolo_e_quello_della_sua_ora(test_db, monkeypatch):
     ids = _seed(Session)
     chiamate = {}
 
-    def registra(p, data, qmap, oggi, ora=""):
+    def registra(p, data, qmap, oggi, ora="", fuso=""):
         chiamate[p.ticker] = ora
         return 10.0, "test"
 
     monkeypatch.setattr(versamenti, "_prezzo_eur_alla_data", registra)
-    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
                      orari={ids["A"]: "0912", ids["B"]: "17:40"})
-    assert chiamate == {"A": "09:12", "B": "17:40", "C": "09:00"}
+    assert chiamate == {"A": "09:12", "B": "17:40", "C": ""}
 
 
 def test_l_anteprima_mostra_l_ora_che_userà(test_db):
     Session = test_db
     ids = _seed(Session)
-    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set(), ora="09:00",
-                             orari={ids["A"]: "935"})
+    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set(),
+                             orari={ids["A"]: "935", ids["B"]: "2599"})
     ore = {r["ticker"]: r["ora"] for r in a["righe"]}
-    assert ore == {"A": "09:35", "B": "09:00", "C": "09:00"}
+    # "935" letto bene; "2599" non è un'ora e non se ne inventa un'altra
+    assert ore == {"A": "09:35", "B": "", "C": ""}
 
 
 def test_lo_storico_dice_dal_primo_all_ultimo(test_db):
     Session = test_db
     ids = _seed(Session)
-    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
-                     orari={ids["A"]: "09:12", ids["B"]: "17:40"})
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
+                     orari={ids["A"]: "09:12", ids["B"]: "17:40",
+                            ids["C"]: "12:00"})
     v = versamenti.lista()[0]
-    assert v["ora_span"] == "09:00–17:40" and v["n_orari"] == 3
+    assert v["ora_span"] == "09:12–17:40" and v["n_orari"] == 3
 
 
 def test_lo_storico_dice_una_sola_ora_se_e_una_sola(test_db):
     Session = test_db
-    _seed(Session)
-    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:30")
+    ids = _seed(Session)
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
+                     orari={p: "09:30" for p in ids.values()})
     v = versamenti.lista()[0]
     assert v["ora_span"] == "09:30" and v["n_orari"] == 1
 
@@ -453,3 +459,57 @@ def test_la_casella_dell_ora_sta_fuori_dall_etichetta():
     assert dentro_le_etichette, "il modulo non ha più etichette: controlla il template"
     assert not any("pac-ora" in blocco for blocco in dentro_le_etichette)
     assert 'class="pac-ora"' in testo
+
+
+# ─────────── in che ora sono scritti gli orari (il fuso del versamento) ───────
+def test_lo_stesso_orario_in_due_fusi_prende_due_candele(monkeypatch):
+    """«09:35» di dove? Gli orari di esecuzione si leggono nell'app della banca,
+    che può mostrarli nell'ora di un altro Paese — e le 10:30 di Londra sono le
+    11:30 di Roma, cioè un'altra candela e un altro prezzo. Senza il fuso, un
+    orario è un numero senza significato."""
+    from datetime import timedelta
+    from zoneinfo import ZoneInfo
+    import portfolio.versamenti as v
+
+    roma = ZoneInfo("Europe/Rome")
+    ieri = tempo.oggi() - timedelta(days=1)
+    candele = [(datetime.combine(ieri, datetime.min.time().replace(hour=h),
+                                 tzinfo=roma).timestamp(), 10.0 + h)
+               for h in (9, 10, 11, 12)]
+    monkeypatch.setattr(v.market, "history_series", lambda sym, r, i: candele)
+    monkeypatch.setattr(v.market, "_yahoo_symbol", lambda tk: tk)
+    monkeypatch.setattr(v.market, "_fx_to_eur_rate", lambda cur: 1.0)
+
+    p = Position(nome="Alpha", ticker="A", pct_target=100.0)
+    oggi = tempo.oggi()
+    # le 10:30 di Roma: l'ultima candela fino a lì è quella delle 10
+    assert _PREZZO_REALE(p, ieri, {}, oggi, "10:30", "Europe/Rome")[0] == 20.0
+    # le 10:30 di Londra sono le 11:30 di Roma: la candela è quella delle 11
+    assert _PREZZO_REALE(p, ieri, {}, oggi, "10:30", "Europe/London")[0] == 21.0
+
+
+def test_il_fuso_resta_scritto_sul_versamento(test_db):
+    """Salvato col versamento, non riletto dalle impostazioni: gli orari sono
+    quelli letti allora e non cambiano significato se poi cambi Paese tu."""
+    Session = test_db
+    ids = _seed(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
+                           orari={ids["A"]: "09:12"}, fuso="Europe/Dublin")
+    with Session() as db:
+        assert db.get(Versamento, vid).fuso == "Europe/Dublin"
+    assert versamenti.dettaglio(vid)["fuso"] == "Europe/Dublin"
+    assert versamenti.lista()[0]["fuso_etichetta"] == "Irlanda"
+    # e il modulo lo ripropone già scelto al versamento dopo
+    assert versamenti.ultimo_fuso() == "Europe/Dublin"
+
+
+def test_un_fuso_che_non_esiste_non_viene_salvato(test_db):
+    """Meglio l'ora dell'app, dichiarata, che un nome di fuso inventato che poi
+    nessuno sa più come leggere."""
+    Session = test_db
+    ids = _seed(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(),
+                           orari={ids["A"]: "09:12"}, fuso="Marte/Olympus")
+    with Session() as db:
+        assert db.get(Versamento, vid).fuso == ""
+    assert versamenti.ultimo_fuso() == ""

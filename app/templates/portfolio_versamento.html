@@ -32,8 +32,8 @@
     .pac-ora { flex: 0 0 5.5em; width: 5.5em; min-width: 0; padding: 4px 6px;
       text-align: center; font-variant-numeric: tabular-nums; }
     .pac-tog:has(input[type=checkbox]:not(:checked)) { opacity: .55; }
-    /* Scritto e non capito: resta lì, ma si vede. Il titolo verrebbe comprato
-       all'ora del versamento, ed è una cosa da sapere prima di confermare. */
+    /* Scritto e non capito: resta lì, ma si vede. Quel titolo prenderebbe il
+       prezzo del giorno, ed è una cosa da sapere prima di confermare. */
     .pac-ora[aria-invalid="true"] { border-color: var(--neg); color: var(--neg); }
     /* La riga sopra la griglia: etichetta a sinistra, contatore e bottone a
        destra. Va a capo da sola sul telefono, dove i tre pezzi affiancati
@@ -50,19 +50,40 @@
   <form method="post" action="/portafoglio/versamento" class="form" style="margin-bottom:16px;">
     <input type="hidden" name="azione" value="anteprima">
     <input type="hidden" name="vid" value="{{ vid }}">
-    <div class="row3">
+    {# Quattro campi: `row2` e non `row3`, o l'ultimo resterebbe da solo su una
+       riga sua, spaiato. Sul telefono tutt'e due diventano una colonna. #}
+    <div class="row2">
+      {# Qui c'era anche l'ora del versamento. Con un'ora per ogni titolo era
+         diventata una seconda verità sullo stesso fatto — e con due orari
+         scritti in due posti, prima o poi si contraddicono. L'ora del
+         versamento adesso non si chiede: è quella del primo ordine eseguito,
+         e la si ricava dalle caselle qui sotto. #}
       <div class="field">
-        <label>Data e ora esecuzione</label>
-        <div style="display:flex;gap:8px;">
-          <input type="date" name="data" value="{{ data }}" style="flex:1;">
-          <input type="time" name="ora" value="{{ ora }}" style="width:110px;flex:none;" data-pac-ora-base>
-        </div>
-        <div class="hint">La data vale per tutti. L'ora qui è quella di partenza:
-          vale per i titoli a cui non ne dai una loro, qui sotto.</div>
+        <label>Data esecuzione</label>
+        <input type="date" name="data" value="{{ data }}">
+        <div class="hint">Vale per tutti i titoli. L'ora, che invece cambia da
+          titolo a titolo, si scrive qui sotto.</div>
       </div>
       <div class="field">
         <label>Importo (€)</label>
         <input type="text" name="importo" inputmode="decimal" value="{{ importo }}">
+      </div>
+      {# In che ora sono scritti gli orari qui sotto. Non è un doppione di
+         Impostazioni: gli orari di esecuzione li leggi nell'app della banca,
+         che può mostrarli nell'ora di un altro Paese — e «09:35» in Irlanda è
+         un'ora dopo che a Roma, cioè un'altra candela e un altro prezzo. Il
+         fuso resta salvato col versamento, quindi non cambia significato se
+         poi cambi Paese tu. #}
+      <div class="field">
+        <label>Gli orari sono nell'ora di</label>
+        <select name="fuso">
+          <option value="" {{ '' if fuso else 'selected' }}>Quella dell'app ({{ fuso_app }})</option>
+          {% for id_, testo in fusi %}
+          <option value="{{ id_ }}" {{ 'selected' if id_ == fuso else '' }}>{{ testo }}</option>
+          {% endfor %}
+        </select>
+        <div class="hint">Quella che vedi sugli ordini in Trade Republic. Resta
+          scritta su questo versamento.</div>
       </div>
       <div class="field">
         <label>Conto di provenienza</label>
@@ -109,7 +130,7 @@
           </label>
           <input class="pac-ora" type="text" name="ora_{{ p.id }}"
                  value="{{ orari.get(p.id, '') }}" inputmode="numeric" maxlength="5"
-                 placeholder="{{ ora or '--:--' }}"
+                 placeholder="--:--"
                  data-scorsa="{{ orari_scorsi.get(p.id, '') }}"
                  aria-label="Ora di esecuzione di {{ p.ticker or p.nome_vista }}">
         </div>
@@ -118,7 +139,7 @@
       <div class="hint">Di default sono tutti inclusi. Togli la spunta per escludere un titolo da questo versamento.
         Le quote dei titoli esclusi si ridistribuiscono sugli altri.
         L'ora accanto a ogni titolo è facoltativa: basta scriverne le cifre («0935»).
-        Chi resta vuoto usa l'ora del versamento.</div>
+        Chi resta vuoto prende il prezzo del giorno.</div>
     </div>
 
     <div class="actions" style="margin-bottom:0;">
@@ -129,6 +150,10 @@
 
   {% if anteprima %}
     <div class="page-title" style="font-size:18px;margin-top:8px;">Anteprima</div>
+    {# Detto qui e non solo nel modulo: l'ora è la metà del prezzo, e prima di
+       confermare devi poter leggere in che ora l'ho letta. #}
+    <p class="page-sub" style="margin-top:-4px;">Gli orari sono letti nell'ora di
+      <b>{{ anteprima.fuso_etichetta }}</b>.</p>
     {% if anteprima.n_inclusi == 0 %}
       <div class="note warn">Nessun titolo incluso (o percentuali a zero): niente da registrare.</div>
     {% else %}
@@ -173,8 +198,8 @@
         <input type="hidden" name="vid" value="{{ vid }}">
         <input type="hidden" name="importo" value="{{ importo }}">
         <input type="hidden" name="data" value="{{ data }}">
-        <input type="hidden" name="ora" value="{{ ora }}">
         <input type="hidden" name="conto" value="{{ conto }}">
+        <input type="hidden" name="fuso" value="{{ fuso }}">
         {# ogni titolo si porta dietro l'ora che vedi nella tabella qui sopra:
            quello che confermi è esattamente quello che hai appena letto #}
         {% for r in anteprima.righe %}<input type="hidden" name="incl" value="{{ r.id }}"><input type="hidden" name="ora_{{ r.id }}" value="{{ r.ora }}">{% endfor %}
