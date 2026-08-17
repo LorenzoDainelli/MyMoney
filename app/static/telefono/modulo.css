@@ -291,14 +291,24 @@
      larga con la scritta in mezzo — e tutte e due le volte si vedeva che era
      diversa dalle altre. Il punto è quello: le altre caselle sono tutte
      uguali, e qualunque cosa faccia questa la fa sembrare fuori posto.
-     Quindi non fa niente di diverso. Prende la larghezza, il bordo, il bordo
-     interno e l'allineamento delle altre, dalla regola che vale per tutte —
-     l'unica cosa che le serve è `min-width: 0`, perché una casella di sistema
-     ha una sua larghezza naturale e senza questo si rifiuterebbe di stringere
-     quando la colonna è più stretta di lei.
+     Quindi non fa niente di diverso: larghezza, bordo, bordo interno e
+     allineamento sono quelli di tutte le altre.
+
+     Ma per ottenerlo su iPhone non basta dirlo. Una casella di data lì non è
+     una casella: è un controllo di sistema, e Safari gli tiene la SUA misura
+     naturale ignorando il `width: 100%` che vale per tutte le altre. Ecco
+     perché continuava a sembrare sbagliata mentre ogni misura che potevo fare
+     qui diceva 343 come le sue vicine: il difetto non esiste su questo
+     browser. `appearance: none` è la riga che toglie a Safari il controllo di
+     sistema e gli fa trattare la casella come una casella; `min-width: 100%`
+     serve perché anche così tende a rimpicciolirsi da sola.
      ----------------------------------------------------------------------- */
   #mov-form input[type="datetime-local"],
-  #mov-form input[type="date"] { min-width: 0; }
+  #mov-form input[type="date"] {
+    -webkit-appearance: none; appearance: none;
+    display: block; width: 100%; min-width: 100%; max-width: 100%;
+    text-align: left;
+  }
 
   /* La tendina del tipo era l'unico campo largo 280 dove tutti gli altri
      stanno a 337: si leggeva come un errore di allineamento. */
