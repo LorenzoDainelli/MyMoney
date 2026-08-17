@@ -10160,6 +10160,159 @@
       "inviata": true,
       "titolo": "SanDisk: utile trimestrale da 6,9 miliardi grazie ai prezzi NAND in rialzo — il memory trade non si ferma",
       "url": "https://finnhub.io/api/news?id=7e153e573c69bdd2cb9c654693ee1500452d5a9097a3a3ca79a3a3be924b79f2"
+    },
+    {
+      "id": "aapl-us-urges-no-chinese-memory",
+      "ticker": "AAPL",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 78,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Washington chiede ad Apple di non comprare chip di memoria cinesi",
+      "url": "https://finnhub.io/api/news?id=3f1f3b1240ac77d3ef87bdbd138f90663f59c18390fabd717b1636fa448d46b0"
+    },
+    {
+      "id": "nvda-100b-openai-data-center-ohio",
+      "ticker": "NVDA",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 73,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Nvidia finanzia un data center OpenAI da 100 miliardi di dollari in Ohio",
+      "url": "https://finnhub.io/api/news?id=a61be4a88dc83eb9d7328dd61e0babe1e3ad51fda3fc5bf0c1cd3412137ac961"
+    },
+    {
+      "id": "tsm-q2-record-results",
+      "ticker": "TSM",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "TSMC: risultati record nel Q2 con margini al 67,7% e guidance solida",
+      "url": "https://finnhub.io/api/news?id=0c469fff48076acea82245b8221bb51903ce1499076d8e9fc4e576cf3d0bb386"
+    },
+    {
+      "id": "goog-external-tpu-sales-game-changer",
+      "ticker": "GOOG",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Alphabet punta a vendere i chip TPU a terzi: un potenziale 'momento Nvidia' nel 2027",
+      "url": "https://finnhub.io/api/news?id=d01dcdae8d000cd86d48f526d9174a7ad486c9b7b999af04d3ac6860a79f4e81"
+    },
+    {
+      "id": "intc-ceo-insider-buy-druckenmiller-exits",
+      "ticker": "INTC",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Intel: il CEO acquista azioni per 10 milioni, ma Druckenmiller ha liquidato tutta la sua posizione nel Q2",
+      "url": "https://finnhub.io/api/news?id=eaf8dbf4ecefeb09afdb023fcf528ca85469446f769dd0f6dec3306941b6a49f"
+    },
+    {
+      "id": "spcx-harvard-22b-viking-etf-demand",
+      "ticker": "SPCX",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Harvard rivela una posizione SpaceX da 2,2 miliardi; Viking Global entra nel titolo e cresce la domanda da ETF",
+      "url": "https://finnhub.io/api/news?id=9742b277d7848162f1c7f1ef48c56a3199028e7d5af96ceb58227c218eb3783a"
+    },
+    {
+      "id": "nukl-bigtech-nuclear-deals-uranium-up",
+      "ticker": "NUKL",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "macro tematica",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Big tech firma accordi per energia nucleare AI; uranio +20% su base annua e l'Italia studia il ritorno al nucleare",
+      "url": "https://www.benzinga.com/etfs/sector-etfs/26/08/60887995/quick-spark-nuclear-company-behind-americas-largest-conventional-uranium-deposit-joins-5-billion-uranium-etf"
+    },
+    {
+      "id": "sndk-wdc-memory-valuation-divide-micron",
+      "ticker": "SNDK",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Memorie: prima degli utili Micron emerge una divisione di valutazione — NAND economico, HDD caro",
+      "url": "https://finnhub.io/api/news?id=466059b7c3c10abacc2eeadc272c4b7806b5db9716a5c909ef5e070a77355697"
+    },
+    {
+      "id": "nflx-falling-buy-or-value-trap",
+      "ticker": "NFLX",
+      "data": "2026-08-17T17:11:06Z",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Netflix in calo del 35% nel 2026: opportunità di acquisto o trappola di valore?",
+      "url": "https://finnhub.io/api/news?id=39c259b9d1f0e69d175643f58eb1608fb4c713bd169e888b9217105e552"
     }
   ]
 }
