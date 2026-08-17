@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "spcx-starship-abort-0717",
-      "ticker": "SPCX",
-      "titolo": "SpaceX annulla il lancio di Starship per un guasto ai motori: titolo in forte calo",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=c85d85bdb3eb2cd672acf4af47df6411c29c9bdb4f66e65afc9d16bf3b065d3b",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "chip-selloff-ai-rotation-0717",
-      "ticker": "NVDA",
-      "titolo": "Ondata di vendite sui semiconduttori: AMD -5%, Intel -4%, Nvidia -3% per timori sulla tenuta del capex AI",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=9407d1b497759944a531828e00873f50c88db18bfcf8ac31ae2aff4eee55d7a7",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "aapl-upgrade-most-valuable-0717",
-      "ticker": "AAPL",
-      "titolo": "Apple promossa dagli analisti per la strategia AI wait & see e torna l'azienda più capitalizzata al mondo",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=50df664f3e1a9de7e954dfd874704b6b3c1ed3b680b2413ae2d1d9f38bd2e186",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "amgn-pcsk9-oral-fda-0717",
-      "ticker": "AMGN",
-      "titolo": "FDA approva il primo inibitore orale del colesterolo PCSK9: rischio competitivo per Amgen",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=78e5e8f079a9163c9983b838a804c3a1454e950919ff3b711da86ab6186281b7",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "lly-glp1-ubs-generici-0717",
-      "ticker": "LLY",
-      "titolo": "UBS: il franchise GLP-1 di Eli Lilly affronta un rischio generico limitato nel lungo periodo",
-      "tipo_evento": "sentiment_analisti",
-      "url": "https://finnhub.io/api/news?id=3d625afa6233dfda8012435905aba1d5df3aa390512caadad743af8838c21959",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "intc-downgrade-tech-lag-0717",
-      "ticker": "INTC",
-      "titolo": "Downgrade su Intel: la ripresa finanziaria non basta — il ritardo tecnologico resta strutturale",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=622ca08f619f64875ae82ec4ae33312f0d3e7151828e6727fd493c6893d7bc41",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "aapl-q3-preview-ubs-0717",
-      "ticker": "AAPL",
-      "titolo": "UBS prevede un Q3 di Apple in linea con le attese: iPhone guadagna quota, Servizi stabili",
-      "tipo_evento": "sentiment_analisti",
-      "url": "https://finnhub.io/api/news?id=9364719876587039270ce2de51e708fc5e626ffd3aab33fced01f044895a92fd",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "nvda-japan-ai-factory-0717",
-      "ticker": "NVDA",
-      "titolo": "Jensen Huang annuncia un AI factory di Nvidia in Giappone",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=65034592547b14201e57f06a000e14584f0a9fe03fad267ac91bafef8cd86216",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "meta-compute-launch-0717",
-      "ticker": "META",
-      "titolo": "Meta lancia Meta Compute come servizio cloud AI per terzi: CoreWeave crolla del 35%",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=d0a93d3e05ef218ffa6e6e4db2c2159976839444cce322cd15fe5f5feab6b55a",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
-      "id": "wdc-sndk-ai-data-growth-0717",
-      "ticker": "WDC",
-      "titolo": "L'esplosione dei dati AI alimenta la domanda di storage: Western Digital punta su nuove tecnologie",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=1bff065367e5ce63ffe3b46c7679a33c91ac8ebb5fd6d86f8dd7d16ff1a262e3",
-      "data_invio": "2026-07-17T17:15:00+00:00"
-    },
-    {
       "id": "ibm-q2-crollo-25pct",
       "ticker": "IBM",
       "titolo": "IBM crolla del 25% in un solo giorno: i risultati preliminari Q2 deludono e si teme un taglio della guidance annuale",
@@ -2719,6 +2639,38 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=7bd02435632b5e2e750fc020928b90d16676c1f4c9bd0b381641f8d22f4fe3ce",
       "data_invio": "2026-08-14T17:12:52+00:00"
+    },
+    {
+      "id": "shel-hormuz-golfo-20260817",
+      "ticker": "SHEL",
+      "titolo": "Attacchi alle petroliere rallentano lo Stretto di Hormuz: petrolio in rialzo mentre la guerra del Golfo si intensifica",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPNmNqanA3WXVHU3JvRVRoZnVBQUpwUmRGbkxCYTNHLW9EeTFhbTdFcjFqM2JtZVctcTd6TzhEYnJUekhXQURDRXkzUXNNRlF4OEN3S2VQZ1ZIZ0c5OHo0d3RWdG01Z1o1amVMZFk0cGdUOGV1enVQYVVzTWtQVl9rTHhyM1RaeGxOd0RUNEM1NWJCMW91WFpITmp6TmlKOWF4RUYtMTRBQVpYX0pqZ0Q3UjNKVHIzZGc",
+      "data_invio": "2026-08-17T05:10:00+00:00"
+    },
+    {
+      "id": "avgo-vmware-ai-50pct-20260817",
+      "ticker": "AVGO",
+      "titolo": "Broadcom in calo per preoccupazioni VMware, ma i semiconduttori AI raggiungono il 50% dei ricavi: target 100 miliardi nel 2027",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=3633dd624fc71e6850a1895cf8cc637613891fcc1f03b8b9e866f84934244b5a",
+      "data_invio": "2026-08-17T05:10:00+00:00"
+    },
+    {
+      "id": "wmt-earnings-h2-headwinds-20260817",
+      "ticker": "WMT",
+      "titolo": "Walmart agli utili del 20 agosto: analisti avvertono di venti contrari sui consumi nella seconda metà del 2026",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=3e93a969c8c9a2d82420fd142c2e28fe4d2e3f4207c80569a3f75564dda5861b",
+      "data_invio": "2026-08-17T05:10:00+00:00"
+    },
+    {
+      "id": "sndk-utile-69b-20260817",
+      "ticker": "SNDK",
+      "titolo": "SanDisk: utile trimestrale da 6,9 miliardi grazie ai prezzi NAND in rialzo — il memory trade non si ferma",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=7e153e573c69bdd2cb9c654693ee1500452d5a9097a3a3ca79a3a3be924b79f2",
+      "data_invio": "2026-08-17T05:10:00+00:00"
     }
   ]
 }

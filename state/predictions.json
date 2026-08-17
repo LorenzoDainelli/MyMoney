@@ -10092,6 +10092,74 @@
       "inviata": true,
       "titolo": "Apple avvia la produzione dei Mac Mini in Texas: Tim Cook sigla l'impegno manifatturiero USA da 600 miliardi",
       "url": "https://finnhub.io/api/news?id=7bd02435632b5e2e750fc020928b90d16676c1f4c9bd0b381641f8d22f4fe3ce"
+    },
+    {
+      "id": "shel-hormuz-golfo-20260817",
+      "ticker": "SHEL",
+      "data": "2026-08-17",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Attacchi alle petroliere rallentano lo Stretto di Hormuz: petrolio in rialzo mentre la guerra del Golfo si intensifica",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPNmNqanA3WXVHU3JvRVRoZnVBQUpwUmRGbkxCYTNHLW9EeTFhbTdFcjFqM2JtZVctcTd6TzhEYnJUekhXQURDRXkzUXNNRlF4OEN3S2VQZ1ZIZ0c5OHo0d3RWdG01Z1o1amVMZFk0cGdUOGV1enVQYVVzTWtQVl9rTHhyM1RaeGxOd0RUNEM1NWJCMW91WFpITmp6TmlKOWF4RUYtMTRBQVpYX0pqZ0Q3UjNKVHIzZGc"
+    },
+    {
+      "id": "avgo-vmware-ai-50pct-20260817",
+      "ticker": "AVGO",
+      "data": "2026-08-17",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Broadcom in calo per preoccupazioni VMware, ma i semiconduttori AI raggiungono il 50% dei ricavi: target 100 miliardi nel 2027",
+      "url": "https://finnhub.io/api/news?id=3633dd624fc71e6850a1895cf8cc637613891fcc1f03b8b9e866f84934244b5a"
+    },
+    {
+      "id": "wmt-earnings-h2-headwinds-20260817",
+      "ticker": "WMT",
+      "data": "2026-08-17",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Walmart agli utili del 20 agosto: analisti avvertono di venti contrari sui consumi nella seconda metà del 2026",
+      "url": "https://finnhub.io/api/news?id=3e93a969c8c9a2d82420fd142c2e28fe4d2e3f4207c80569a3f75564dda5861b"
+    },
+    {
+      "id": "sndk-utile-69b-20260817",
+      "ticker": "SNDK",
+      "data": "2026-08-17",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SanDisk: utile trimestrale da 6,9 miliardi grazie ai prezzi NAND in rialzo — il memory trade non si ferma",
+      "url": "https://finnhub.io/api/news?id=7e153e573c69bdd2cb9c654693ee1500452d5a9097a3a3ca79a3a3be924b79f2"
     }
   ]
 }
