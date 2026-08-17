@@ -422,6 +422,11 @@
    `overflow-y: auto` è quello che serve — `overflow: auto` accendeva anche
    l'altro asse, e bastava un elemento un po' troppo largo per sbloccarlo. */
 .mm-drawer { overflow-x: hidden; }
+
+/* Lo spazio per la tacca del telefono, tolto dal pannello e messo qui: il
+   pannello è anche quello che scorre, e lì sotto il contenuto ci passava
+   dentro in bella vista. Questo invece è il contenuto, e non scorre da sé. */
+.mm-drawer-corpo { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .mm-drawer .mm-nuovo > h2 {
   margin: 4px 0 12px; font-size: var(--text-lg);
   font-weight: var(--fw-bold); letter-spacing: var(--ls-tight);

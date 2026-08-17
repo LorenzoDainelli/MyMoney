@@ -220,6 +220,10 @@
      Sta qui e non in guscio.css perché là la regola di partenza viene dopo
      la media query, e a parità di peso vince l'ultima scritta. */
   .mm-drawer .mm-nuovo { padding-bottom: 0; }
+  /* ...e lo spazio per la tacca lo mette il tasto, che ce l'ha già nel suo
+     `padding-bottom`. Messo due volte sarebbe una fascia vuota sotto la
+     barra, cioè la stessa fessura di prima con un altro nome. */
+  .mm-drawer-corpo:has(.mm-nuovo) { padding-bottom: 0; }
   .tel-modulo .actions .btn {
     display: flex; align-items: center; justify-content: center;
     width: 100%; min-height: 52px;
@@ -282,18 +286,19 @@
   .giro-griglia { grid-template-columns: minmax(0, 1fr); }
 
   /* -----------------------------------------------------------------------
-     DATA E ORA È LARGA QUANTO UNA DATA E UN'ORA.
-     Era tirata a tutta riga come «Descrizione»: 337 punti per contenere
-     «17/08/2026 13:21», che ne occupa 131. Duecentosei punti di vuoto dentro
-     un bordo — e un riquadro grande il triplo di quello che ci sta dentro si
-     legge come un errore anche da chi non saprebbe dire perché.
-     La casella però resta larga come le altre: una colonna di riquadri tutti
-     uguali con uno più corto in mezzo si nota più del vuoto. È il CONTENUTO
-     che va messo in mezzo — così i 206 punti non stanno tutti da una parte e
-     la riga non sembra più sbilanciata.
+     DATA E ORA: NESSUNA REGOLA SUA.
+     Ci ho provato due volte — prima stretta quanto il suo contenuto, poi
+     larga con la scritta in mezzo — e tutte e due le volte si vedeva che era
+     diversa dalle altre. Il punto è quello: le altre caselle sono tutte
+     uguali, e qualunque cosa faccia questa la fa sembrare fuori posto.
+     Quindi non fa niente di diverso. Prende la larghezza, il bordo, il bordo
+     interno e l'allineamento delle altre, dalla regola che vale per tutte —
+     l'unica cosa che le serve è `min-width: 0`, perché una casella di sistema
+     ha una sua larghezza naturale e senza questo si rifiuterebbe di stringere
+     quando la colonna è più stretta di lei.
      ----------------------------------------------------------------------- */
   #mov-form input[type="datetime-local"],
-  #mov-form input[type="date"] { width: 100%; min-width: 0; text-align: center; }
+  #mov-form input[type="date"] { min-width: 0; }
 
   /* La tendina del tipo era l'unico campo largo 280 dove tutti gli altri
      stanno a 337: si leggeva come un errore di allineamento. */

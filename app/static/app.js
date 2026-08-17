@@ -273,7 +273,14 @@ document.addEventListener('click', function (e) {
       ? 'position:absolute;left:0;right:0;bottom:0;max-height:88vh;' +
         'border-top:1px solid var(--border);border-radius:22px 22px 0 0;' +
         'box-shadow:0 -12px 40px -16px rgba(0,0,0,.55);' +
-        'padding-bottom:env(safe-area-inset-bottom, 0px);transform:translateY(101%);' +
+        // Lo spazio per la tacca del telefono NON sta qui. Questo elemento è
+        // anche quello che scorre, e in un contenitore che scorre il margine
+        // in fondo fa parte della zona scorribile: il contenuto ci passa
+        // dentro, VISIBILE, sotto al tasto Salva che si ferma più in alto.
+        // Era la striscia trasparente sotto «Salva movimento» — invisibile
+        // sul PC, dove la tacca non c'è e quel margine vale zero. Adesso lo
+        // mette il corpo (vedi `.mm-drawer-corpo`), che non scorre da sé.
+        'transform:translateY(101%);' +
         (reduce() ? '' : 'transition:transform var(--dur-slow) cubic-bezier(.32,.72,0,1);')
       : 'position:absolute;top:0;right:0;height:100%;width:min(560px,94vw);' +
         'border-left:1px solid var(--border);box-shadow:var(--shadow-lg);transform:translateX(102%);' +
@@ -289,6 +296,7 @@ document.addEventListener('click', function (e) {
       presa.setAttribute('aria-hidden', 'true');
       aside.appendChild(presa);
       corpo = document.createElement('div');
+      corpo.className = 'mm-drawer-corpo';
       aside.appendChild(corpo);
       mmTrascina(aside, close, 'translateY(0)');
     }
