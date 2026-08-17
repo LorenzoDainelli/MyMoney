@@ -207,12 +207,21 @@ function mmCollegaModulo(form) {
     }
   }
 
+  // Sul telefono «che cosa cambia» sta appiccicato in basso, sopra i campi:
+  // finché non ha niente da dire è una frase di cortesia stampata sopra
+  // l'ultimo campo del modulo. Questo segno dice al CSS di toglierlo di
+  // mezzo, e di rimetterlo appena c'è un numero vero da far vedere.
+  var scatola = host.closest('.tel-effetto');
+  function segnaVuoto(v) { if (scatola) scatola.classList.toggle('effetto-vuoto', v); }
+
   function vuoto() {
     host.innerHTML = '<p class="faint" style="margin:0;font-size:13px;line-height:var(--lh-relaxed);">' +
       esc(T.empty) + '</p>';
+    segnaVuoto(true);
   }
 
   function render() {
+    segnaVuoto(false);
     var tipo = (form.querySelector('#mov-tipo') || {}).value || 'uscita';
     if (tipo === 'giro') {
       aggiornaCarta(); giroCarte();

@@ -108,6 +108,27 @@
   /* Un campo costava 86 punti: etichetta sopra, casella, margine. Per sei
      campi sono cinquecento punti, cioè due terzi di schermo spesi in aria. */
   .tel-modulo .field { margin-bottom: var(--tel-sp-3); }
+
+  /* -----------------------------------------------------------------------
+     UNA SOLA DISTANZA FRA UN CAMPO E L'ALTRO.
+     `.row2` e `.row3` sono griglie da due e tre colonne, e sul telefono
+     diventano una colonna sola — ma il loro `gap` da 16 punti restava, e si
+     sommava al margine del campo. Risultato: 28 punti fra i campi dello
+     stesso gruppo e 11 fra un gruppo e l'altro. Nessuno legge «row3» in una
+     colonna sola: si vedono solo sei caselle spaziate a caso, e sono proprio
+     le distanze irregolari a far sembrare storta una schermata dritta.
+     Una misura sola, `--tel-sp-3`, e la dà sempre la griglia: il margine del
+     campo va a zero perché in diversi punti è scritto nel tag (`margin:0`) e
+     da lì non si può correggere, mentre il `gap` risponde sempre.
+     ----------------------------------------------------------------------- */
+  #mov-form .row2, #mov-form .row3, .giro-griglia {
+    gap: var(--tel-sp-3); margin-bottom: var(--tel-sp-3);
+  }
+  #mov-form .row2 > .field, #mov-form .row3 > .field,
+  .giro-griglia > .field { margin-bottom: 0; }
+  /* dentro la scatola della carta le due caselle chiudono il riquadro: lì il
+     margine in fondo sarebbe un buco */
+  #mov-form .giro-carta .row2, #mov-form #mov-carta .row2 { margin-bottom: 0; }
   .tel-modulo .field > label {
     display: block; margin-bottom: 4px;
     font-size: var(--text-2xs); font-weight: var(--fw-medium);
@@ -175,10 +196,15 @@
   .tel-modulo .actions,
   .tel-modulo .mm-azioni {
     position: sticky; bottom: 0; z-index: 4;
-    /* Il fondo deve arrivare ai bordi del pannello, non fermarsi al testo: i
-       16 punti di margine sono trasparenti, e il modulo si vedrebbe scorrere
-       nelle due strisce ai lati del tasto. */
-    margin: 0 -16px; padding: var(--tel-sp-2) 16px calc(var(--tel-sp-2) + env(safe-area-inset-bottom, 0px));
+    /* QUI NIENTE MARGINI NEGATIVI. C'erano: servivano a portare il fondo del
+       tasto fino ai bordi del pannello, scavalcando i 16 punti di margine.
+       Ma un elemento più largo di chi lo contiene resta più largo anche se
+       nessuno lo vede: il pannello diventava lungo 357 dove ne misura 341, e
+       lo si poteva TRASCINARE DI LATO. Su un telefono quello non è un
+       dettaglio, è la sensazione che l'app sia rotta.
+       Non serve nemmeno: il pannello dietro è già dello stesso colore, quindi
+       le due strisce ai lati si vedono uguali senza sconfinare. */
+    margin: 0; padding: var(--tel-sp-2) 0 calc(var(--tel-sp-2) + env(safe-area-inset-bottom, 0px));
     background: var(--surface);
     box-shadow: 0 -10px 24px -20px hsl(var(--tel-ombra-tinta) / .7);
   }

@@ -142,6 +142,11 @@
        griglia. È l'errore che riporta il problema di partenza, travestito. */
     min-height: 0;
     overflow-y: auto;
+    /* E SOLO in su e in giù. Una pagina che si sposta di lato è il segno più
+       chiaro che una misura è sbagliata da qualche parte; questa riga non
+       nasconde l'errore (i test lo cercano lo stesso), ma impedisce che
+       arrivi al pollice mentre lo si corregge. */
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     /* Arrivato in fondo, il gesto non deve passare al documento sotto: è il
        rimbalzo che scopre lo sfondo grigio del browser. */
@@ -322,6 +327,12 @@
   .tel-modulo .tel-effetto .card-h {
     margin-bottom: var(--tel-sp-1); font-size: var(--text-2xs);
   }
+  /* ...ma finché non ha niente da dire non sta appiccicato a niente: era
+     «Compila il modulo qui accanto» — una frase che sul telefono un accanto
+     non ce l'ha — stampata sopra il campo «Data e ora», che è l'ultimo del
+     modulo. Sessantaquattro punti di schermo occupati per non dire niente.
+     Il segno lo mette movement-preview.js e se ne va al primo numero. */
+  .tel-modulo .tel-effetto.effetto-vuoto { display: none; }
 
   /* Moduli: campi affiancati non stanno in 339 punti. Due colonne vogliono
      dire caselle da centosessanta, in cui una data non ci sta. */
@@ -383,6 +394,13 @@
    pannello, perché la pagina i suoi ce li ha già dal `.wrap`. Fuori dalla
    media query: il pannello esiste anche sul PC. */
 .mm-drawer .mm-nuovo { padding: 0 16px 16px; }
+
+/* UN PANNELLO NON SI TRASCINA DI LATO. Mai, per nessun motivo, qualunque cosa
+   ci sia dentro. Il pannello sale dal fondo e si muove solo in su e in giù:
+   se lo si può spostare a destra e a sinistra, non sembra più un'app.
+   `overflow-y: auto` è quello che serve — `overflow: auto` accendeva anche
+   l'altro asse, e bastava un elemento un po' troppo largo per sbloccarlo. */
+.mm-drawer { overflow-x: hidden; }
 .mm-drawer .mm-nuovo > h2 {
   margin: 4px 0 12px; font-size: var(--text-lg);
   font-weight: var(--fw-bold); letter-spacing: var(--ls-tight);

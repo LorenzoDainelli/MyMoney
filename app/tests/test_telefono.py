@@ -333,3 +333,25 @@ def test_il_foglio_del_modulo_le_definisce():
            / "modulo.css").read_text(encoding="utf-8")
     for classe in (".giro-row", ".giro-rm", ".giro-griglia", ".tel-tipo-tendina"):
         assert classe in css, f"{classe} non e' definita da nessuna parte"
+
+
+# ---------------------------------------------------------------------------
+#  UN PANNELLO NON SI TRASCINA DI LATO
+#  La barra di Salva usava margini negativi per arrivare ai bordi: il pannello
+#  diventava largo 357 dove ne misura 341, e lo si poteva spostare a destra.
+#  Su un telefono non e' un dettaglio, e' la sensazione che l'app sia rotta.
+# ---------------------------------------------------------------------------
+def test_la_barra_salva_non_sconfina():
+    css = _static("telefono", "modulo.css").read_text(encoding="utf-8")
+    blocco = css[css.index(".tel-modulo .actions"):]
+    blocco = blocco[:blocco.index("}")]
+    assert "-16px" not in blocco, (
+        "margini negativi nella barra di Salva: il pannello torna piu' largo "
+        "di se stesso e si trascina di lato"
+    )
+
+
+def test_il_pannello_non_scorre_in_orizzontale():
+    css = _static("telefono", "guscio.css").read_text(encoding="utf-8")
+    assert ".mm-drawer { overflow-x: hidden; }" in css
+    assert "overflow-x: hidden;" in css[css.index(".tel-app__corpo {"):]
