@@ -211,3 +211,32 @@ def test_niente_doppio_conteggio_nel_patrimonio(test_db, monkeypatch):
     assert res["totale"] == 0.42                # liquidità + valore investito
     # patrimonio come lo calcola la dashboard: liquido + portafoglio, non totale
     assert round(res["liquido"] + 100.42, 2) == 0.42
+
+
+def test_il_trasferimento_parte_col_primo_ordine_eseguito(test_db):
+    """Il movimento in Finanze è UNO, ma i titoli vengono eseguiti a ore
+    diverse. Senza un'ora del versamento, i soldi hanno lasciato il conto
+    quando è partito il primo ordine: è l'unico istante che i dati conoscono.
+    Inventarne un altro (mezzanotte) metterebbe il trasferimento in un momento
+    in cui non era ancora successo niente."""
+    Session = test_db
+    with Session() as db:
+        ids = {p.ticker: p.id for p in db.execute(select(Position)).scalars()}
+
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set(),
+                     orari={ids["A"]: "17:40", ids["B"]: "09:12"})
+    t = _movimenti(Session)[0]
+    assert (t.data.hour, t.data.minute) == (9, 12)
+
+
+def test_l_ora_del_versamento_batte_quella_dei_titoli(test_db):
+    """Se l'ora del versamento c'è, comanda lei: è quella che hai scritto tu
+    pensando al bonifico, non una dedotta dagli ordini."""
+    Session = test_db
+    with Session() as db:
+        ids = {p.ticker: p.id for p in db.execute(select(Position)).scalars()}
+
+    versamenti.salva(100.0, tempo.oggi(), "Trade Republic", esclusi=set(),
+                     ora="08:00", orari={ids["A"]: "17:40"})
+    t = _movimenti(Session)[0]
+    assert (t.data.hour, t.data.minute) == (8, 0)

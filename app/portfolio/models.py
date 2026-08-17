@@ -98,6 +98,13 @@ class VersamentoRiga(Base):
     position_id: Mapped[int] = mapped_column(Integer, index=True)
     isin: Mapped[str] = mapped_column(String(20), default="")
     ticker: Mapped[str] = mapped_column(String(30), default="")
+    # L'ora di QUESTO titolo, "HH:MM", facoltativa. Il PAC parte tutto lo stesso
+    # giorno, ma Trade Republic non esegue i trentotto ordini nello stesso
+    # istante: li sgrana nell'arco della giornata. Un'ora sola per tutto il
+    # versamento costringeva a prendere per tutti il prezzo di un momento in cui
+    # quasi nessuno era stato davvero comprato. Se resta vuota vale l'ora del
+    # versamento (`Versamento.ora`), che è il comportamento di prima.
+    ora: Mapped[str] = mapped_column(String(5), default="")
     euro: Mapped[float] = mapped_column(Float, default=0.0)        # € destinati a questo titolo
     qta: Mapped[float | None] = mapped_column(Float, nullable=True)  # quote aggiunte (None se prezzo n/d)
     prezzo_eur: Mapped[float | None] = mapped_column(Float, nullable=True)

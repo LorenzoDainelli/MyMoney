@@ -170,6 +170,104 @@ def test_prezzo_usa_la_candela_dell_ora(monkeypatch):
     assert (prezzo, fonte) == (20.0, "orario")     # candela delle 10, non delle 11
 
 
+# ─────────────── l'ora di OGNI titolo (TR non esegue tutto insieme) ───────────
+def test_normalizza_ora_prende_le_cifre():
+    """Trentotto orari si battono solo se battere i due punti non serve."""
+    n = versamenti.normalizza_ora
+    assert n("0935") == "09:35"
+    assert n("935") == "09:35"          # tre cifre: manca lo zero davanti
+    assert n("09:35") == "09:35"
+    assert n("9") == "09:00"            # ora tonda
+    assert n("17") == "17:00"
+    assert n("") == "" and n(None) == ""
+    assert n("boh") == ""
+    assert n("2599") == "" and n("9999") == ""   # non è un'ora: non si inventa
+
+
+def test_ogni_titolo_tiene_la_sua_ora(test_db):
+    Session = test_db
+    ids = _seed(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
+                           orari={ids["A"]: "0912", ids["B"]: "17:40"})
+    with Session() as db:
+        ore = {r.ticker: r.ora for r in db.execute(select(VersamentoRiga)).scalars()}
+    # A e B la loro, C quella del versamento — e "0912" è diventato "09:12"
+    assert ore == {"A": "09:12", "B": "17:40", "C": "09:00"}
+    # modificare il PAC del mese scorso li ritrova tutti al loro posto
+    assert versamenti.dettaglio(vid)["orari"] == {
+        ids["A"]: "09:12", ids["B"]: "17:40", ids["C"]: "09:00"}
+
+
+def test_il_prezzo_di_ogni_titolo_e_quello_della_sua_ora(test_db, monkeypatch):
+    """Il punto di tutta la funzione: se le ore per titolo non arrivassero fino
+    al prezzo, si comprerebbe tutto al prezzo di un istante solo."""
+    Session = test_db
+    ids = _seed(Session)
+    chiamate = {}
+
+    def registra(p, data, qmap, oggi, ora=""):
+        chiamate[p.ticker] = ora
+        return 10.0, "test"
+
+    monkeypatch.setattr(versamenti, "_prezzo_eur_alla_data", registra)
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
+                     orari={ids["A"]: "0912", ids["B"]: "17:40"})
+    assert chiamate == {"A": "09:12", "B": "17:40", "C": "09:00"}
+
+
+def test_l_anteprima_mostra_l_ora_che_userà(test_db):
+    Session = test_db
+    ids = _seed(Session)
+    a = versamenti.anteprima(100.0, tempo.oggi(), esclusi=set(), ora="09:00",
+                             orari={ids["A"]: "935"})
+    ore = {r["ticker"]: r["ora"] for r in a["righe"]}
+    assert ore == {"A": "09:35", "B": "09:00", "C": "09:00"}
+
+
+def test_lo_storico_dice_dal_primo_all_ultimo(test_db):
+    Session = test_db
+    ids = _seed(Session)
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:00",
+                     orari={ids["A"]: "09:12", ids["B"]: "17:40"})
+    v = versamenti.lista()[0]
+    assert v["ora_span"] == "09:00–17:40" and v["n_orari"] == 3
+
+
+def test_lo_storico_dice_una_sola_ora_se_e_una_sola(test_db):
+    Session = test_db
+    _seed(Session)
+    versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set(), ora="09:30")
+    v = versamenti.lista()[0]
+    assert v["ora_span"] == "09:30" and v["n_orari"] == 1
+
+
+def test_riprendi_gli_orari_dal_pac_precedente(test_db):
+    """TR esegue più o meno negli stessi momenti ogni mese: il mese dopo si
+    parte da quelli invece di ribattere trentotto orari."""
+    Session = test_db
+    ids = _seed(Session)
+    versamenti.salva(100.0, date(2026, 7, 16), "TR", esclusi=set(),
+                     orari={ids["A"]: "09:12", ids["B"]: "17:40"})
+    vid2 = versamenti.salva(100.0, date(2026, 8, 16), "TR", esclusi=set())
+    # il PAC di agosto non ha orari: «l'ultimo che ne aveva» è quello di luglio
+    assert versamenti.ultimi_orari()[ids["A"]] == "09:12"
+    # e modificando quello di luglio non si propone sé stesso
+    vid_luglio = [v["id"] for v in versamenti.lista() if v["id"] != vid2][0]
+    assert versamenti.ultimi_orari(escludi_vid=vid_luglio) == {}
+
+
+def test_senza_orari_niente_cambia(test_db):
+    """La strada di prima resta identica: nessun'ora sulle righe, e il
+    versamento tiene la sua."""
+    Session = test_db
+    _seed(Session)
+    vid = versamenti.salva(100.0, tempo.oggi(), "TR", esclusi=set())
+    with Session() as db:
+        assert {r.ora for r in db.execute(select(VersamentoRiga)).scalars()} == {""}
+    assert versamenti.dettaglio(vid)["orari"] == {}
+    assert versamenti.lista()[0]["ora_span"] == ""
+
+
 # ------------------- il titolo a target 0 (l'ETC oro) -------------------
 def test_un_titolo_a_target_zero_non_prende_niente_dal_pac(test_db):
     """L'oro riceve solo gli arrotondamenti della carta, mai il PAC mensile.
@@ -328,3 +426,30 @@ def test_col_pac_del_mese_registrato_il_promemoria_tace(test_db):
         versamenti.salva(100.0, date(2026, mese, 16), "TR", esclusi=set())
     versamenti.salva(100.0, date(2026, 8, 16), "TR", esclusi=set())
     assert versamenti.promemoria(oggi=date(2026, 8, 20)) is None
+
+
+# ── il modulo: le caselle dell'ora si chiamano con l'id del titolo ────────────
+def test_gli_orari_arrivano_dal_modulo():
+    """I campi sono tanti quanti i titoli e i loro nomi dipendono dal database,
+    quindi non si possono dichiarare come parametri: si leggono dal form."""
+    from starlette.datastructures import FormData
+    from portfolio.routes import _orari_dal_modulo
+
+    form = FormData([("importo", "100"), ("incl", "3"), ("incl", "7"),
+                     ("ora_3", "0912"), ("ora_7", "  "), ("ora_x", "10:00"),
+                     ("ora", "09:00")])
+    # solo i campi `ora_<numero>` e non vuoti; `ora` da sola è quella generale
+    assert _orari_dal_modulo(form) == {3: "0912"}
+
+
+def test_la_casella_dell_ora_sta_fuori_dall_etichetta():
+    """Un `<label>` gira i clic sulla sua casella di spunta: con dentro anche la
+    casella dell'ora, toccarla per scrivere spegnerebbe il titolo. Sono due
+    cose separate nel modulo, e devono restarci."""
+    import re
+    testo = (Path(__file__).resolve().parent.parent / "templates"
+             / "portfolio_versamento.html").read_text(encoding="utf-8")
+    dentro_le_etichette = re.findall(r"<label>(.*?)</label>", testo, re.S)
+    assert dentro_le_etichette, "il modulo non ha più etichette: controlla il template"
+    assert not any("pac-ora" in blocco for blocco in dentro_le_etichette)
+    assert 'class="pac-ora"' in testo

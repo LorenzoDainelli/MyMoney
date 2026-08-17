@@ -51,6 +51,11 @@ def migra_schema():
             # False è la risposta giusta per la storia che c'è.
             ("fuori_piano", Boolean(), False),
         ))
+        aggiungi_colonne(c, "portfolio_versamento_righe", (
+            # Ora del singolo titolo: vuota sulle righe già registrate, che
+            # infatti sono state calcolate con l'ora del versamento.
+            ("ora", String(5), ""),
+        ))
 
 
 # (nome, tipo, categoria, ticker, isin, pct_target, importo_fisso, note)

@@ -737,6 +737,115 @@ document.addEventListener('click', function (e) {
 
 
 /* ==========================================================================
+   Registra PAC: l'ora di ogni singolo titolo, battuta in fretta.
+
+   Il PAC parte tutto lo stesso giorno, ma Trade Republic non esegue i
+   trentotto ordini nello stesso istante: li sgrana nell'arco della giornata,
+   e ogni titolo ha il prezzo del suo momento. Un'ora sola per tutto il
+   versamento significava prendere per tutti il prezzo di un minuto in cui
+   quasi nessuno era stato davvero comprato.
+
+   Quindi: una casella per titolo. Ma trentotto caselle si compilano solo se
+   compilarne una costa quattro tasti, non sei più un cambio di tastiera —
+   allora qui si battono le CIFRE e basta: «0935» diventa 09:35 da solo e il
+   fuoco salta al titolo dopo, così si va giù di fila senza mai staccare le
+   dita per andare a cercare i due punti.
+
+   Quello che non è un'ora vera resta scritto com'è, in rosso: cancellarlo
+   sarebbe nascondere lo sbaglio, e quel titolo verrebbe comprato all'ora del
+   versamento senza che nessuno se ne accorga. Le stesse regole valgono sul
+   server (portfolio/versamenti.py::normalizza_ora): questo file rende il
+   modulo comodo, non decide niente.
+   ========================================================================== */
+(function () {
+  var caselle = document.querySelectorAll('.pac-titoli .pac-ora');
+  if (!caselle.length) return;
+
+  function cifre(v) { return (v || '').replace(/\D/g, ''); }
+
+  /* La stessa lettura del server: cifre -> "HH:MM", oppure '' se non è un'ora. */
+  function normalizza(v) {
+    var d = cifre(v);
+    if (!d) return '';
+    if (d.length <= 2) d = ('0' + d).slice(-2) + '00';
+    else if (d.length === 3) d = '0' + d;
+    d = d.slice(0, 4);
+    var h = parseInt(d.slice(0, 2), 10), m = parseInt(d.slice(2), 10);
+    if (h > 23 || m > 59) return '';
+    return ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2);
+  }
+
+  function segna(campo) {
+    // vuota va bene (vale l'ora del versamento); scritta e non capita, no
+    var buona = !campo.value.trim() || normalizza(campo.value) !== '';
+    campo.setAttribute('aria-invalid', buona ? 'false' : 'true');
+  }
+
+  function dopo(campo) {
+    for (var i = 0; i < caselle.length - 1; i++) {
+      if (caselle[i] === campo) return caselle[i + 1];
+    }
+    return null;
+  }
+
+  for (var i = 0; i < caselle.length; i++) {
+    segna(caselle[i]);
+
+    caselle[i].addEventListener('input', function () {
+      var d = cifre(this.value).slice(0, 4);
+      // i due punti li mette lui, mentre scrivi; cancellare funziona ancora
+      // perché si riparte sempre dalle cifre rimaste
+      this.value = d.length > 2 ? d.slice(0, 2) + ':' + d.slice(2) : d;
+      if (d.length === 4) {
+        var pulita = normalizza(this.value);
+        if (pulita) {
+          this.value = pulita;
+          var prossima = dopo(this);
+          // il salto al titolo dopo è il motivo per cui trentotto orari si
+          // battono di fila: sul telefono la tastiera non si chiude nemmeno
+          if (prossima) { prossima.focus(); prossima.select(); }
+        }
+      }
+      segna(this);
+    });
+
+    // chi si ferma a metà («9», «17») intende l'ora tonda: lo scrive per esteso
+    // al momento di uscire dalla casella, così quello che vedi è quello che vale
+    caselle[i].addEventListener('blur', function () {
+      var pulita = normalizza(this.value);
+      if (pulita) this.value = pulita;
+      segna(this);
+    });
+  }
+
+  /* «Riprendi gli orari»: quelli dell'ultimo PAC, che il server ha già messo
+     su ogni casella. Trade Republic esegue più o meno negli stessi momenti
+     ogni mese: si parte da lì e se ne correggono due, invece di ribatterne
+     trentotto. Restano una PROPOSTA — i prezzi si calcolano su ciò che resta
+     scritto qui, cioè su quello che hai confermato tu. */
+  var riprendi = document.querySelector('[data-pac-orari-scorsi]');
+  if (riprendi) {
+    riprendi.addEventListener('click', function () {
+      for (var k = 0; k < caselle.length; k++) {
+        var scorsa = caselle[k].getAttribute('data-scorsa') || '';
+        if (scorsa) { caselle[k].value = scorsa; segna(caselle[k]); }
+      }
+    });
+  }
+
+  /* L'ora in cima è quella di partenza: le caselle vuote la mostrano in grigio,
+     perché «vuoto» non dica «nessuna ora» quando invece un'ora ce l'ha. */
+  var base = document.querySelector('[data-pac-ora-base]');
+  if (base) {
+    base.addEventListener('input', function () {
+      var testo = this.value || '--:--';
+      for (var k = 0; k < caselle.length; k++) caselle[k].placeholder = testo;
+    });
+  }
+})();
+
+
+/* ==========================================================================
    Telefono: le etichette delle tabelle.
 
    Una tabella da sette colonne su uno schermo da 375 punti non si legge: o si

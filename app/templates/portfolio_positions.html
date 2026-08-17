@@ -258,7 +258,12 @@
              detto, o questo elenco sembrerebbe dire che il PAC lo fai cinque
              volte al mese da sette centesimi. Sono anche gli unici che il
              promemoria del PAC non conta. #}
-          <td>{{ v.data.strftime('%d/%m/%Y') }}{% if v.ora %} <span class="muted">{{ v.ora }}</span>{% endif %}
+          {# L'ora è quella delle righe, non del versamento: TR non esegue i
+             titoli tutti insieme, quindi qui compare il primo e l'ultimo
+             («09:12–17:40»). Mostrarne una sola sarebbe l'istante in cui quasi
+             niente era stato comprato. #}
+          <td>{{ v.data.strftime('%d/%m/%Y') }}{% if v.ora_span %} <span class="muted"
+              {% if v.n_orari > 1 %}title="Dal primo all'ultimo titolo eseguito"{% endif %}>{{ v.ora_span }}</span>{% endif %}
             {% if v.fuori_piano %}<span class="pill gray" style="text-transform:none;" title="Acquisto fuori dal piano mensile (es. l'oro comprato con i saveback): non conta come rata del PAC.">fuori piano</span>{% endif %}</td>
           <td class="num">{{ v.importo | eur }}</td>
           <td><span class="muted">{{ v.conto or '—' }}</span></td>

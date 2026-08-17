@@ -9,11 +9,32 @@
 {% block title %}Registra PAC — {{ t('app.name') }}{% endblock %}
 {% block content %}
   <style>
-    .pac-titoli { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; }
-    .pac-tog { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; cursor: pointer; }
-    .pac-tog input { width: auto; flex: 0 0 auto; }
+    .pac-titoli { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-top: 8px; }
+    .pac-tog { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; }
+    /* Solo la parte con la spunta è cliccabile come etichetta: se lo fosse
+       tutta la scatola, toccare la casella dell'ora spegnerebbe il titolo. */
+    .pac-tog > label { display: flex; align-items: center; gap: 8px; flex: 1 1 auto;
+      min-width: 0; margin: 0; cursor: pointer; }
+    .pac-tog input[type=checkbox] { width: auto; flex: 0 0 auto; }
     .pac-tog .t { font-weight: 700; }
     .pac-tog .muted { margin-left: auto; }
+    /* L'ora del singolo titolo. Stretta, cifre a larghezza fissa: trentotto di
+       queste una sotto l'altra devono leggersi in colonna.
+       `min-width: 0` non è decorazione. Dentro un contenitore flessibile la
+       misura minima di una casella di testo è la sua larghezza naturale — una
+       ventina di caratteri, più di duecento punti — e quella fa da pavimento
+       anche a un `width` scritto a chiare lettere: la casella restava larga
+       tutta la riga e il titolo accanto si schiacciava a zero. */
+    /* La larghezza è in `em`, non in punti: sul telefono i caratteri delle
+       caselle sono più grandi (16px, o iOS ingrandisce la pagina a ogni tocco)
+       e «09:35» in una casella tagliata su misura per il computer non ci
+       starebbe — resterebbe scritto a metà proprio dove serve rileggerlo. */
+    .pac-ora { flex: 0 0 5.5em; width: 5.5em; min-width: 0; padding: 4px 6px;
+      text-align: center; font-variant-numeric: tabular-nums; }
+    .pac-tog:has(input[type=checkbox]:not(:checked)) { opacity: .55; }
+    /* Scritto e non capito: resta lì, ma si vede. Il titolo verrebbe comprato
+       all'ora del versamento, ed è una cosa da sapere prima di confermare. */
+    .pac-ora[aria-invalid="true"] { border-color: var(--neg); color: var(--neg); }
     /* La riga sopra la griglia: etichetta a sinistra, contatore e bottone a
        destra. Va a capo da sola sul telefono, dove i tre pezzi affiancati
        starebbero in centoventi punti l'uno. */
@@ -34,9 +55,10 @@
         <label>Data e ora esecuzione</label>
         <div style="display:flex;gap:8px;">
           <input type="date" name="data" value="{{ data }}" style="flex:1;">
-          <input type="time" name="ora" value="{{ ora }}" style="width:110px;flex:none;">
+          <input type="time" name="ora" value="{{ ora }}" style="width:110px;flex:none;" data-pac-ora-base>
         </div>
-        <div class="hint">L'ora è facoltativa: se la metti uso il prezzo di quell'ora.</div>
+        <div class="hint">La data vale per tutti. L'ora qui è quella di partenza:
+          vale per i titoli a cui non ne dai una loro, qui sotto.</div>
       </div>
       <div class="field">
         <label>Importo (€)</label>
@@ -66,20 +88,37 @@
       <div class="pac-cap">
         <label style="margin:0;">Titoli inclusi in questo PAC</label>
         <span class="pac-conta num" data-pac-conta aria-live="polite"></span>
+        {% if orari_scorsi %}
+        <button type="button" class="btn sm ghost" data-pac-orari-scorsi>Riprendi gli orari</button>
+        {% endif %}
         <button type="button" class="btn sm ghost" data-pac-tutti
                 data-nessuno="Deseleziona tutto" data-tutti="Seleziona tutto"></button>
       </div>
       <div class="pac-titoli">
+        {# Il PAC parte tutto lo stesso giorno, ma Trade Republic non esegue i
+           trentotto ordini insieme: ognuno ha la sua ora, e ognuno il prezzo di
+           quel momento. La casella accanto al titolo prende le cifre e basta —
+           «0935» diventa 09:35 e il fuoco salta al titolo dopo — perché questo
+           è un modulo che si compila trentotto volte di fila. #}
         {% for p in posizioni %}
-        <label class="pac-tog">
-          <input type="checkbox" name="incl" value="{{ p.id }}" {{ 'checked' if p.id in inclusi_ids else '' }}>
-          <span class="t">{{ p.ticker or p.nome_vista }}</span>
-          <span class="muted">{{ p.pct_target | pct }}</span>
-        </label>
+        <div class="pac-tog">
+          <label>
+            <input type="checkbox" name="incl" value="{{ p.id }}" {{ 'checked' if p.id in inclusi_ids else '' }}>
+            <span class="t">{{ p.ticker or p.nome_vista }}</span>
+            <span class="muted">{{ p.pct_target | pct }}</span>
+          </label>
+          <input class="pac-ora" type="text" name="ora_{{ p.id }}"
+                 value="{{ orari.get(p.id, '') }}" inputmode="numeric" maxlength="5"
+                 placeholder="{{ ora or '--:--' }}"
+                 data-scorsa="{{ orari_scorsi.get(p.id, '') }}"
+                 aria-label="Ora di esecuzione di {{ p.ticker or p.nome_vista }}">
+        </div>
         {% endfor %}
       </div>
       <div class="hint">Di default sono tutti inclusi. Togli la spunta per escludere un titolo da questo versamento.
-        Le quote dei titoli esclusi si ridistribuiscono sugli altri.</div>
+        Le quote dei titoli esclusi si ridistribuiscono sugli altri.
+        L'ora accanto a ogni titolo è facoltativa: basta scriverne le cifre («0935»).
+        Chi resta vuoto usa l'ora del versamento.</div>
     </div>
 
     <div class="actions" style="margin-bottom:0;">
@@ -100,13 +139,16 @@
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Titolo</th><th class="num">%</th><th class="num">€</th>
+            <tr><th>Titolo</th><th class="num">Ora</th><th class="num">%</th><th class="num">€</th>
                 <th class="num">Prezzo</th><th class="num">Quote</th><th>Prezzo da</th></tr>
           </thead>
           <tbody>
             {% for r in anteprima.righe %}
             <tr>
               <td><span class="t-ticker">{{ r.ticker or r.nome }}</span></td>
+              {# l'ora che verrà usata davvero per questo titolo: se sopra hai
+                 scritto le cifre di fretta, qui le rileggi come le ho capite #}
+              <td class="num">{{ r.ora or '—' }}</td>
               <td class="num">{{ r.pct | pct }}</td>
               <td class="num">{{ r.euro | eur }}</td>
               <td class="num">{{ r.prezzo | eur if r.prezzo else '—' }}</td>
@@ -120,7 +162,7 @@
             {% endfor %}
           </tbody>
           <tfoot>
-            <tr><td><b>Totale</b></td><td></td><td class="num"><b>{{ anteprima.totale | eur }}</b></td>
+            <tr><td><b>Totale</b></td><td></td><td></td><td class="num"><b>{{ anteprima.totale | eur }}</b></td>
                 <td></td><td></td><td></td></tr>
           </tfoot>
         </table>
@@ -133,7 +175,9 @@
         <input type="hidden" name="data" value="{{ data }}">
         <input type="hidden" name="ora" value="{{ ora }}">
         <input type="hidden" name="conto" value="{{ conto }}">
-        {% for r in anteprima.righe %}<input type="hidden" name="incl" value="{{ r.id }}">{% endfor %}
+        {# ogni titolo si porta dietro l'ora che vedi nella tabella qui sopra:
+           quello che confermi è esattamente quello che hai appena letto #}
+        {% for r in anteprima.righe %}<input type="hidden" name="incl" value="{{ r.id }}"><input type="hidden" name="ora_{{ r.id }}" value="{{ r.ora }}">{% endfor %}
         <button type="submit" class="btn primary">{{ icon('check', 16) }} Conferma e registra</button>
       </form>
     {% endif %}

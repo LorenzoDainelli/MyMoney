@@ -23,15 +23,36 @@ from portfolio.models import Position, Versamento, VersamentoRiga
 from portfolio import service, market
 
 
+def normalizza_ora(s: str) -> str:
+    """Come l'hai scritta di fretta -> "HH:MM". Stringa vuota se non è un'ora.
+
+    I due punti, sul telefono, vogliono un cambio di tastiera: trentotto volte
+    sono trentotto cambi di tastiera. Qui si accettano le cifre e basta —
+    "0935", "935", "9:35" sono tutte le nove e trentacinque — perché quello che
+    deve essere vero è l'orario, non il modo in cui l'hai battuto.
+
+    Una o due cifre sole valgono l'ora tonda ("9" -> 09:00). Non è un indovinare:
+    l'anteprima mostra sempre l'ora che verrà usata per ogni titolo, quindi una
+    lettura sbagliata la vedi prima di confermare, non dopo.
+    """
+    cifre = "".join(ch for ch in (s or "") if ch.isdigit())
+    if not cifre:
+        return ""
+    if len(cifre) <= 2:                  # "9" / "17" -> ora tonda
+        cifre = cifre.rjust(2, "0") + "00"
+    elif len(cifre) == 3:                # "935" -> 09:35
+        cifre = "0" + cifre
+    cifre = cifre[:4]                    # "17:05:33" resta le 17:05, come prima
+    h, m = int(cifre[:2]), int(cifre[2:])
+    if h > 23 or m > 59:
+        return ""
+    return f"{h:02d}:{m:02d}"
+
+
 def parse_ora(s: str):
     """'HH:MM' -> time, oppure None se vuota/non valida. Nessun orario inventato."""
-    s = (s or "").strip()
-    if not s:
-        return None
-    try:
-        return datetime.strptime(s[:5], "%H:%M").time()
-    except ValueError:
-        return None
+    n = normalizza_ora(s)
+    return datetime.strptime(n, "%H:%M").time() if n else None
 
 
 # Yahoo tiene le candele orarie solo per il periodo recente: oltre, si usa la
@@ -158,8 +179,19 @@ def _riparti(posizioni, importo: float, esclusi: set):
     return inclusi, euros
 
 
-def anteprima(importo: float, data: date, esclusi: set, ora: str = "") -> dict:
-    """Calcola (senza salvare nulla) come verrebbe distribuito il versamento."""
+def ora_del_titolo(pid: int, orari: dict | None, ora: str) -> str:
+    """L'ora da usare per QUESTO titolo: la sua, se c'è, altrimenti quella del
+    versamento. Un posto solo, così anteprima e salvataggio non possono
+    scegliere due orari diversi per la stessa riga."""
+    return normalizza_ora((orari or {}).get(pid) or ora)
+
+
+def anteprima(importo: float, data: date, esclusi: set, ora: str = "",
+              orari: dict | None = None) -> dict:
+    """Calcola (senza salvare nulla) come verrebbe distribuito il versamento.
+
+    `orari` è {id_posizione: "HH:MM"}: l'ora di esecuzione titolo per titolo.
+    Chi non ce l'ha usa `ora`, l'ora del versamento."""
     qmap = market.quotes_map()
     oggi = tempo.oggi()
     posizioni = service.lista_posizioni()
@@ -168,7 +200,8 @@ def anteprima(importo: float, data: date, esclusi: set, ora: str = "") -> dict:
     for p in inclusi:
         euro = euros[p.id]
         tot += euro
-        prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora)
+        ora_p = ora_del_titolo(p.id, orari, ora)
+        prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p)
         qta = round(euro / prezzo, 6) if (prezzo and prezzo > 0) else None
         if qta is None:
             avvisi.append(p.ticker or p.nome_vista)
@@ -179,7 +212,7 @@ def anteprima(importo: float, data: date, esclusi: set, ora: str = "") -> dict:
         # ha zero, direbbe «0%» accanto a tutti i soldi del versamento.
         righe.append({"id": p.id, "ticker": p.ticker, "nome": p.nome_vista,
                       "pct": round(euro / importo * 100, 2) if importo else 0.0,
-                      "euro": euro, "prezzo": prezzo,
+                      "euro": euro, "prezzo": prezzo, "ora": ora_p,
                       "qta": qta, "fonte": fonte})
     return {"righe": righe, "totale": round(tot, 2), "n_inclusi": len(inclusi),
             "avvisi": avvisi, "data": data, "importo": round(importo, 2)}
@@ -252,9 +285,12 @@ def _reverse(db, vid: int, posmap: dict) -> None:
 
 
 def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
-          ora: str = "") -> int | None:
+          ora: str = "", orari: dict | None = None) -> int | None:
     """Registra un nuovo versamento (vid=None) o ne modifica uno esistente.
-    Applica le quote alle posizioni (PMC) e memorizza i delta. Ritorna l'id."""
+    Applica le quote alle posizioni (PMC) e memorizza i delta. Ritorna l'id.
+
+    `orari` è {id_posizione: "HH:MM"}: l'ora di esecuzione di ogni singolo
+    titolo. Chi non ce l'ha usa `ora`."""
     qmap = market.quotes_map()
     oggi = tempo.oggi()
     with SessionLocal() as db:
@@ -273,7 +309,7 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
             v = Versamento()
             db.add(v)
         v.data, v.importo, v.conto = data, round(importo, 2), (conto or "").strip()
-        v.ora = (ora or "").strip()[:5]
+        v.ora = normalizza_ora(ora)
         # È il PAC del mese, o un acquisto a parte? Lo dicono i titoli: se
         # nessuno di quelli comprati ha una quota nel piano, questo versamento
         # nel piano non c'è — è l'oro comprato dalla banca coi saveback. Serve
@@ -281,9 +317,13 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
         # «la rata di agosto è fatta».
         v.fuori_piano = not any((p.pct_target or 0) > 0 for p in inclusi)
         db.flush()                                # per avere v.id
+        ore_usate = []
         for p in inclusi:
             euro = euros[p.id]
-            prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora)
+            ora_p = ora_del_titolo(p.id, orari, ora)
+            if ora_p:
+                ore_usate.append(ora_p)
+            prezzo, fonte = _prezzo_eur_alla_data(p, data, qmap, oggi, ora_p)
             qta = round(euro / prezzo, 6) if (prezzo and prezzo > 0) else None
             if qta is not None:
                 p.quantita = round((p.quantita or 0) + qta, 8)
@@ -293,11 +333,15 @@ def salva(importo: float, data: date, conto: str, esclusi: set, vid=None,
             if p.data_ultimo_acquisto is None or data > p.data_ultimo_acquisto:
                 p.data_ultimo_acquisto = data
             db.add(VersamentoRiga(versamento_id=v.id, position_id=p.id, isin=p.isin,
-                                  ticker=p.ticker, euro=euro, qta=qta,
+                                  ticker=p.ticker, euro=euro, qta=qta, ora=ora_p,
                                   prezzo_eur=prezzo, fonte=fonte))
         db.commit()
         nuovo_id = v.id
-    _sync_finanze(nuovo_id, round(importo, 2), data, conto, ora)
+    # Il trasferimento in Finanze è UNO: se non hai dato un'ora al versamento
+    # ma l'hai data ai titoli, i soldi hanno lasciato il conto quando è partito
+    # il primo ordine. È l'unico istante che i dati conoscono davvero.
+    _sync_finanze(nuovo_id, round(importo, 2), data, conto,
+                  normalizza_ora(ora) or (min(ore_usate) if ore_usate else ""))
     return nuovo_id
 
 
@@ -324,11 +368,37 @@ def dettaglio(vid: int) -> dict | None:
         v = db.get(Versamento, vid)
         if v is None:
             return None
-        ids = [r.position_id for r in db.execute(
+        righe = db.execute(
             select(VersamentoRiga).where(VersamentoRiga.versamento_id == vid)
-        ).scalars().all()]
+        ).scalars().all()
         return {"id": v.id, "data": v.data, "ora": v.ora or "", "importo": v.importo,
-                "conto": v.conto, "inclusi_ids": set(ids)}
+                "conto": v.conto, "inclusi_ids": {r.position_id for r in righe},
+                # gli orari per titolo tornano nel modulo così come sono stati
+                # salvati: modificare il PAC del mese scorso vuol dire ritrovarli
+                # tutti al loro posto e correggerne due, non riscriverne trentotto.
+                "orari": {r.position_id: (r.ora or "") for r in righe if r.ora}}
+
+
+def ultimi_orari(escludi_vid=None) -> dict:
+    """Gli orari per titolo dell'ultimo PAC che ne aveva: {id_posizione: "HH:MM"}.
+
+    Trade Republic sgrana gli ordini più o meno negli stessi momenti ogni mese.
+    Serve al bottone «Riprendi gli orari»: il mese dopo si parte da quelli e se
+    ne correggono due, invece di ribatterne trentotto. Sono un PUNTO DI
+    PARTENZA da controllare, non un dato: i prezzi si calcolano su quello che
+    resta scritto nel modulo, cioè su ciò che hai confermato tu."""
+    with SessionLocal() as db:
+        vs = db.execute(select(Versamento).order_by(
+            Versamento.data.desc(), Versamento.id.desc())).scalars().all()
+        for v in vs:
+            if escludi_vid and v.id == escludi_vid:
+                continue        # modificando un PAC, «l'ultimo» non è sé stesso
+            orari = {r.position_id: r.ora for r in db.execute(
+                select(VersamentoRiga).where(VersamentoRiga.versamento_id == v.id)
+            ).scalars().all() if r.ora}
+            if orari:
+                return orari
+    return {}
 
 
 GIORNI_PREAVVISO = 2      # quanti giorni prima del solito iniziare a ricordarlo
@@ -410,15 +480,29 @@ def storico_quantita() -> dict:
 
 
 def lista() -> list:
-    """Storico dei versamenti (più recenti in cima), con numero di titoli."""
+    """Storico dei versamenti (più recenti in cima), con numero di titoli.
+
+    `ora_span` è l'ora da mostrare: una sola se i titoli sono stati eseguiti
+    tutti nello stesso momento, altrimenti il primo e l'ultimo ("09:12–17:40").
+    Mostrare solo l'ora del versamento, quando le righe ne hanno una ciascuna,
+    racconterebbe di un istante in cui quasi niente è stato comprato."""
     with SessionLocal() as db:
         vs = db.execute(select(Versamento).order_by(
             Versamento.data.desc(), Versamento.id.desc())).scalars().all()
+        ore_per_v = {}
+        for vid_, o in db.execute(select(VersamentoRiga.versamento_id,
+                                         VersamentoRiga.ora)).all():
+            if o:
+                ore_per_v.setdefault(vid_, set()).add(o)
         out = []
         for v in vs:
             n = db.execute(select(func.count()).select_from(VersamentoRiga)
                            .where(VersamentoRiga.versamento_id == v.id)).scalar()
+            ore = sorted(ore_per_v.get(v.id, ()))
+            span = (v.ora or "") if not ore else (
+                ore[0] if len(ore) == 1 else f"{ore[0]}–{ore[-1]}")
             out.append({"id": v.id, "data": v.data, "ora": v.ora or "",
+                        "ora_span": span, "n_orari": len(ore),
                         "importo": v.importo, "conto": v.conto, "n_titoli": n or 0,
                         "fuori_piano": bool(v.fuori_piano)})
         return out

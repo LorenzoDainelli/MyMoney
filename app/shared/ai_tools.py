@@ -84,7 +84,10 @@ def storico_pac() -> dict:
     lista = versamenti.lista()
     pac = fin.valore_pac_live()
     return {
-        "versamenti": [{"data": v["data"].strftime("%d/%m/%Y"), "ora": v["ora"],
+        # `ora_span`, non `ora`: i titoli di un PAC non vengono eseguiti tutti
+        # nello stesso istante, e all'agente va detto l'arco vero
+        # («09:12–17:40»), non un minuto in cui quasi niente era stato comprato.
+        "versamenti": [{"data": v["data"].strftime("%d/%m/%Y"), "ora": v["ora_span"],
                         "importo": v["importo"], "conto": v["conto"],
                         "titoli": v["n_titoli"]} for v in lista[:MAX_RIGHE]],
         "quanti": len(lista),

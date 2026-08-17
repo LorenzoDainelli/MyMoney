@@ -285,12 +285,29 @@ def versamento_form(request: Request, vid: int = 0):
         "ora": (pre["ora"] if pre else ""),
         "conto": (pre["conto"] if pre else _default_conto(conti)),
         "inclusi_ids": (pre["inclusi_ids"] if pre else {p.id for p in posizioni}),
+        "orari": (pre["orari"] if pre else {}),
+        "orari_scorsi": versamenti.ultimi_orari(escludi_vid=vid or None),
         "vid": str(vid) if vid else "", "anteprima": None,
     })
 
 
+def _orari_dal_modulo(form) -> dict:
+    """Gli orari per titolo mandati dal modulo: campi `ora_<id_posizione>`.
+
+    Sono tanti quanti i titoli e i loro nomi dipendono dal database, quindi non
+    si possono dichiarare come parametri: si leggono dal form intero."""
+    fuori = {}
+    for chiave, valore in form.multi_items():
+        if not chiave.startswith("ora_"):
+            continue
+        pid = chiave[4:]
+        if pid.isdigit() and str(valore).strip():
+            fuori[int(pid)] = str(valore).strip()
+    return fuori
+
+
 @router.post("/portafoglio/versamento", response_class=HTMLResponse)
-def versamento_post(
+async def versamento_post(
     request: Request,
     azione: str = Form("anteprima"),
     importo: str = Form("0"),
@@ -308,9 +325,10 @@ def versamento_post(
     posizioni = service.lista_posizioni()
     esclusi = {p.id for p in posizioni if p.id not in incl_ids}
     vid_i = int(vid) if vid.strip().isdigit() else None
+    orari = _orari_dal_modulo(await request.form())
 
     if azione == "conferma":
-        versamenti.salva(imp, d, conto, esclusi, vid=vid_i, ora=ora)
+        versamenti.salva(imp, d, conto, esclusi, vid=vid_i, ora=ora, orari=orari)
         return RedirectResponse("/portafoglio?pac=1", status_code=303)
 
     conti = [w.nome for w in fin_service.wallets()]
@@ -319,7 +337,14 @@ def versamento_post(
         "importo": imp, "data": d.isoformat(), "ora": ora,
         "conto": conto or _default_conto(conti),
         "inclusi_ids": incl_ids, "vid": vid,
-        "anteprima": versamenti.anteprima(imp, d, esclusi, ora),
+        # Riscritti come li ha capiti il server ("0935" torna indietro "09:35"),
+        # così il modulo mostra l'ora che verrà davvero usata. Quello che NON si
+        # capisce torna indietro tale e quale: cancellarlo nasconderebbe lo
+        # sbaglio, e il titolo verrebbe comprato all'ora del versamento senza
+        # che nessuno se ne accorga.
+        "orari": {pid: (versamenti.normalizza_ora(v) or v) for pid, v in orari.items()},
+        "orari_scorsi": versamenti.ultimi_orari(escludi_vid=vid_i),
+        "anteprima": versamenti.anteprima(imp, d, esclusi, ora, orari),
     })
 
 
