@@ -29,7 +29,10 @@
 
 {# --- una riga SPESA della partita di giro (usata sia iniziale sia come modello da clonare) --- #}
 {% macro spesa_row(imp='', wid=None, cat='', desc='', dt=None, arr='', sav='', arr_mio=False, sav_mio=False) %}
-<div class="giro-row giro-spesa-row" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--surface);position:relative;margin-top:8px;">
+{# I bordi e la spaziatura stanno in `.giro-row` (telefono/modulo.css) e non
+   qui: scritti nel tag vincerebbero su qualunque foglio, e sul telefono
+   questa scatola deve poter stringere i fianchi e far posto alla ✕. #}
+<div class="giro-row giro-spesa-row">
   <div class="row3">
     <div class="field"><label>{{ t('fin.amount') }}</label><input type="text" name="spesa_importo" placeholder="0,00" inputmode="decimal" value="{{ imp }}"></div>
     <div class="field"><label>{{ t('fin.wallet') }}</label><select name="spesa_wallet">{{ wallet_opts(wid) }}</select></div>
@@ -62,20 +65,23 @@
       </div>
     </div>
   </div>
-  <button type="button" class="btn sm ghost giro-rm" aria-label="{{ t('fin.giro_remove') }}" style="position:absolute;top:8px;right:8px;">✕</button>
+  <button type="button" class="btn sm ghost giro-rm" aria-label="{{ t('fin.giro_remove') }}">✕</button>
 </div>
 {% endmacro %}
 
 {# --- una riga RIENTRO (chi · quanto · quando · dove) --- #}
 {% macro rientro_row(chi='', imp='', dt=None, wid=None) %}
-<div class="giro-row giro-rientro-row" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--surface);position:relative;margin-top:8px;">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+<div class="giro-row giro-rientro-row">
+  {# Quattro campi in una griglia che si adatta: sullo schermo grande stanno
+     in fila, sul telefono `auto-fit` li metteva a due a due da 150 punti —
+     e in 150 punti «quando» non ci sta: la data si vedeva a metà. #}
+  <div class="giro-griglia">
     <div class="field" style="margin:0;"><label>{{ t('fin.giro_da_chi') }}</label><input type="text" name="rientro_chi" list="giro-da-chi" autocomplete="off" placeholder="{{ t('fin.giro_da_chi_ph') }}" value="{{ chi }}"></div>
     <div class="field" style="margin:0;"><label>{{ t('fin.giro_quanto') }}</label><input type="text" name="rientro_importo" placeholder="0,00" inputmode="decimal" value="{{ imp }}"></div>
     <div class="field" style="margin:0;"><label>{{ t('fin.giro_quando') }}</label><input type="datetime-local" name="rientro_data" value="{{ dt or oggi }}"></div>
     <div class="field" style="margin:0;"><label>{{ t('fin.giro_dove') }}</label><select name="rientro_wallet">{{ wallet_opts(wid) }}</select></div>
   </div>
-  <button type="button" class="btn sm ghost giro-rm" aria-label="{{ t('fin.giro_remove') }}" style="position:absolute;top:8px;right:8px;">✕</button>
+  <button type="button" class="btn sm ghost giro-rm" aria-label="{{ t('fin.giro_remove') }}">✕</button>
 </div>
 {% endmacro %}
 
@@ -97,7 +103,7 @@
      i segmenti non compaiono e la tendina fa il suo lavoro come sempre. #}
   <div class="tel-segmenti" id="mov-tipo-segmenti" role="group" aria-label="{{ t('fin.type') }}"></div>
 
-  <div class="field tel-tipo-tendina" style="max-width:280px;">
+  <div class="field tel-tipo-tendina">
     <label>{{ t('fin.type') }}</label>
     <select name="tipo" id="mov-tipo">
       {% if ed_giro %}

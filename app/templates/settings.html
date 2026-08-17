@@ -239,8 +239,14 @@
         </select>
       </div>
       {# Ricerca sul web: solo sui titoli, mai sulle finanze personali — lì il
-         mondo esterno non c'entra e aggiungerebbe soltanto rumore. #}
+         mondo esterno non c'entra e aggiungerebbe soltanto rumore.
+
+         Il campo nascosto non è un vezzo: una casella NON spuntata non manda
+         niente, quindi dal solo `web` il server non distingue «spenta» da
+         «questo modulo non parla di web». Il segnaposto dice che la domanda è
+         stata posta; la risposta è la presenza o l'assenza di `web`. #}
       <div class="field" style="margin-top:14px;margin-bottom:0;">
+        <input type="hidden" name="web_presente" value="1">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
           <input type="checkbox" name="web" value="1" {{ 'checked' if ai_web else '' }} style="width:auto;margin:0;">
           <span>Cerca sul web (solo sui titoli)</span>

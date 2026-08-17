@@ -303,3 +303,33 @@ def test_il_freeze_e_identico_all_handoff(nome, sotto):
 def test_le_aggiunte_sono_agganciate():
     base = (Path(__file__).resolve().parent.parent / "templates" / "base.html").read_text(encoding="utf-8")
     assert "/static/aggiunte.css?v={{ V }}" in base
+
+
+# ---------------------------------------------------------------------------
+#  LO STILE SCRITTO NEL TAG NON SI PUO' CORREGGERE
+#  Terza volta che costa tempo: un `style="..."` vince su qualunque foglio,
+#  sempre, e le regole del telefono restano scritte senza fare niente. Nella
+#  partita di giro era la ✕ appoggiata sopra il primo campo — una regola
+#  esisteva dal 14/08 e non ha mai avuto effetto.
+# ---------------------------------------------------------------------------
+def _modulo_movimento() -> str:
+    return (Path(__file__).resolve().parent.parent / "templates"
+            / "finance_movement_form.html").read_text(encoding="utf-8")
+
+
+def test_le_scatole_del_giro_non_hanno_stile_nel_tag():
+    html = _modulo_movimento()
+    for riga in html.splitlines():
+        if "giro-row" in riga or "giro-rm" in riga or "giro-griglia" in riga:
+            assert "style=" not in riga, (
+                "Le misure di questa scatola vanno in app/static/telefono/"
+                "modulo.css: scritte qui il telefono non puo' cambiarle.\n"
+                + riga.strip()
+            )
+
+
+def test_il_foglio_del_modulo_le_definisce():
+    css = (Path(__file__).resolve().parent.parent / "static" / "telefono"
+           / "modulo.css").read_text(encoding="utf-8")
+    for classe in (".giro-row", ".giro-rm", ".giro-griglia", ".tel-tipo-tendina"):
+        assert classe in css, f"{classe} non e' definita da nessuna parte"

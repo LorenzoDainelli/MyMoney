@@ -96,12 +96,12 @@ def memoria_svuota(tipo: str = Form("")):
     return RedirectResponse("/impostazioni#memoria", status_code=303)
 
 
-@router.post("/impostazioni/ai")
-def salva_ai(modello: str = Form(""), modalita: str = Form(""), web: str = Form("")):
-    ai.set_model(modello)
-    ai.set_mode(modalita)
-    ai.set_usa_web(bool(web))
-    return RedirectResponse("/impostazioni?salvato=1", status_code=303)
+# Qui c'era `POST /impostazioni/ai`, che salvava modello, modalità e ricerca
+# sul web. Nessun modulo lo chiamava più — la card dell'agente manda tutto a
+# `POST /impostazioni` — ma leggendo il codice sembrava il posto giusto, e
+# infatti era: leggeva `web`. Il salvataggio vero, quello che gira, no. Un
+# doppione morto che parla al posto del vivo nasconde il difetto invece di
+# mostrarlo, quindi se ne va.
 
 
 def _esito_test(ok: bool, detail: str) -> str:
@@ -207,6 +207,13 @@ async def salva(request: Request):
         ai.set_model((form.get("modello") or "").strip())
     if "modalita" in form:
         ai.set_mode((form.get("modalita") or "").strip())
+    # ...e anche la ricerca sul web, che invece qui non arrivava: la casella
+    # stava in questo modulo ma nessuno la leggeva, così accenderla e salvare
+    # la rimetteva a zero. Una casella spenta non manda niente, quindi non si
+    # può guardare `web`: si guarda il segnaposto, che dice che la domanda è
+    # stata posta, e solo allora `web` presente/assente vale acceso/spento.
+    if "web_presente" in form:
+        ai.set_usa_web(bool(form.get("web")))
     # provider dell'agente + configurazione Vertex (progetto/regione non segreti):
     # il service account è già gestito sopra dal ciclo su KNOWN_SETTINGS.
     if "ai_provider" in form:

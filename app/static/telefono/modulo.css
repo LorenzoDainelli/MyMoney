@@ -24,6 +24,27 @@
    comparirebbe una riga di bottoni sopra la tendina. */
 .tel-segmenti { display: none; }
 
+/* -------------------------------------------------------------------------
+   QUELLO CHE STAVA SCRITTO NEI TAG (e quindi non si poteva correggere).
+   Le scatole della partita di giro avevano bordi, spaziatura e posizione
+   della ✕ scritti nell'attributo `style`. Uno stile scritto lì vince su
+   qualunque foglio, sempre: la regola che dal 14/08 doveva far posto alla ✕
+   sul telefono non ha mai fatto niente, e la ✕ è rimasta appoggiata sopra il
+   primo campo. Gli stessi numeri, virgola per virgola, ora stanno qui — dove
+   la media query può cambiarli.
+   ------------------------------------------------------------------------- */
+.giro-row {
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  padding: 10px 12px; background: var(--surface);
+  position: relative; margin-top: 8px;
+}
+.giro-rm { position: absolute; top: 8px; right: 8px; }
+.giro-griglia {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.tel-tipo-tendina { max-width: 280px; }
+
 @media (max-width: 760px) {
 
   /* -----------------------------------------------------------------------
@@ -71,11 +92,18 @@
     padding: 10px var(--tel-sp-3);
     border-radius: var(--tel-r-sm);
   }
+  /* `width:auto` è scritto nei tag delle caselle, e da lì vince: per questo
+     qui c'è `!important`, ed è l'unico del foglio. Senza, «il rimborso
+     arriverà dopo» e i due interruttori della carta restano bersagli da 13
+     punti. `#mov-form` c'è perché la pagina intera `/finanze/nuovo` non è
+     dentro `.tel-modulo` e ha le stesse caselle. */
   .tel-modulo input[type="checkbox"],
-  .mm-nuovo input[type="checkbox"] { width: 22px; height: 22px; }
+  .mm-nuovo input[type="checkbox"],
+  #mov-form input[type="checkbox"] { width: 22px !important; height: 22px; }
   /* La casella è piccola ma la sua etichetta è tutta premibile. */
   .tel-modulo label:has(input[type="checkbox"]),
-  .mm-nuovo label:has(input[type="checkbox"]) { min-height: var(--tel-tocco); }
+  .mm-nuovo label:has(input[type="checkbox"]),
+  #mov-form label:has(input[type="checkbox"]) { min-height: var(--tel-tocco); }
 
   /* Un campo costava 86 punti: etichetta sopra, casella, margine. Per sei
      campi sono cinquecento punti, cioè due terzi di schermo spesi in aria. */
@@ -162,10 +190,35 @@
   /* «Che cosa cambia» si ferma appena sopra il tasto, non sotto di lui. */
   .tel-modulo .tel-effetto { bottom: 68px; }
 
-  /* Le righe della partita di giro: la ✕ è un bersaglio, non un apice. */
-  .tel-modulo .giro-rm {
-    top: 4px; right: 4px;
+  /* -----------------------------------------------------------------------
+     LA PARTITA DI GIRO. Qui niente è scritto con `.tel-modulo` davanti: la
+     pagina intera `/finanze/nuovo` ha le stesse scatole e lo stesso pollice.
+
+     LA ✕ NON STA PIÙ SOPRA UN CAMPO. In colonna sola il primo campo prende
+     tutta la larghezza, e la ✕ — appoggiata in alto a destra — gli finiva
+     sopra: premere «Importo» dalla parte sbagliata cancellava la spesa. Ora
+     la scatola è una colonna e la ✕ è il suo primo elemento, in una riga
+     tutta sua: nessuna sovrapposizione, e nessun buco da 44 punti lasciato
+     vuoto per evitarla.
+     ----------------------------------------------------------------------- */
+  .giro-row {
+    display: flex; flex-direction: column;
+    padding: 8px 10px 10px;                 /* i fianchi stretti: 2 punti in più per i campi */
+  }
+  .giro-rm {
+    position: static; order: -1; align-self: flex-end; margin-bottom: 2px;
     min-width: var(--tel-tocco); min-height: var(--tel-tocco);
   }
-  .tel-modulo .giro-row { padding-top: var(--tel-sp-4); }
+
+  /* I quattro campi del rientro andavano a due a due, 150 punti l'uno: in
+     150 punti «quando» si vedeva mozzato. Una colonna, come `.row2/.row3`. */
+  .giro-griglia { grid-template-columns: minmax(0, 1fr); }
+
+  /* Data e ora hanno una larghezza loro, decisa dal browser e non dal
+     riquadro che le contiene: senza questo escono dai bordi o si tagliano. */
+  input[type="datetime-local"], input[type="date"] { width: 100%; min-width: 0; }
+
+  /* La tendina del tipo era l'unico campo largo 280 dove tutti gli altri
+     stanno a 337: si leggeva come un errore di allineamento. */
+  .tel-tipo-tendina { max-width: none; }
 }
