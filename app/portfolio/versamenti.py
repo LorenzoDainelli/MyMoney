@@ -413,8 +413,22 @@ def dettaglio(vid: int) -> dict | None:
                 "orari": {r.position_id: (r.ora or "") for r in righe if r.ora}}
 
 
+def _pac_del_piano(db, escludi_vid=None):
+    """I versamenti dal più recente, SOLO quelli del piano mensile.
+
+    «L'ultimo PAC» da cui riprendere qualcosa è la rata mensile, non l'oro che
+    la banca compra coi saveback: quello sono pochi centesimi su un titolo
+    solo, a un'ora qualunque, e come punto di partenza per i trentotto orari
+    del mese dopo non serve a niente — anzi, si mette in mezzo, perché è il più
+    recente quasi sempre."""
+    vs = db.execute(select(Versamento).order_by(
+        Versamento.data.desc(), Versamento.id.desc())).scalars().all()
+    return [v for v in vs
+            if not v.fuori_piano and not (escludi_vid and v.id == escludi_vid)]
+
+
 def ultimi_orari(escludi_vid=None) -> dict:
-    """Gli orari per titolo dell'ultimo PAC che ne aveva: {id_posizione: "HH:MM"}.
+    """Gli orari per titolo dell'ultimo PAC del piano: {id_posizione: "HH:MM"}.
 
     Trade Republic sgrana gli ordini più o meno negli stessi momenti ogni mese.
     Serve al bottone «Riprendi gli orari»: il mese dopo si parte da quelli e se
@@ -422,11 +436,8 @@ def ultimi_orari(escludi_vid=None) -> dict:
     PARTENZA da controllare, non un dato: i prezzi si calcolano su quello che
     resta scritto nel modulo, cioè su ciò che hai confermato tu."""
     with SessionLocal() as db:
-        vs = db.execute(select(Versamento).order_by(
-            Versamento.data.desc(), Versamento.id.desc())).scalars().all()
-        for v in vs:
-            if escludi_vid and v.id == escludi_vid:
-                continue        # modificando un PAC, «l'ultimo» non è sé stesso
+        # `escludi_vid`: modificando un PAC, «l'ultimo» non è sé stesso
+        for v in _pac_del_piano(db, escludi_vid):
             orari = {r.position_id: r.ora for r in db.execute(
                 select(VersamentoRiga).where(VersamentoRiga.versamento_id == v.id)
             ).scalars().all() if r.ora}
@@ -436,15 +447,15 @@ def ultimi_orari(escludi_vid=None) -> dict:
 
 
 def ultimo_fuso(escludi_vid=None) -> str:
-    """Il fuso dell'ultimo versamento che ne aveva uno. Serve solo a proporlo
+    """Il fuso dell'ultimo PAC del piano che ne aveva uno. Serve solo a proporlo
     già scelto nel modulo: chi legge gli orari nell'app della banca li legge
-    ogni mese nella stessa ora, e ricordarselo è compito dell'app."""
+    ogni mese nella stessa ora, e ricordarselo è compito dell'app.
+
+    Stessa regola degli orari, e per lo stesso motivo: «l'ultimo PAC» è la rata
+    mensile. Due regole diverse per due cose che si propongono insieme sarebbero
+    una sorpresa."""
     with SessionLocal() as db:
-        vs = db.execute(select(Versamento).order_by(
-            Versamento.data.desc(), Versamento.id.desc())).scalars().all()
-        for v in vs:
-            if escludi_vid and v.id == escludi_vid:
-                continue
+        for v in _pac_del_piano(db, escludi_vid):
             if v.fuso:
                 return v.fuso
     return ""

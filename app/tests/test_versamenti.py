@@ -262,6 +262,32 @@ def test_riprendi_gli_orari_dal_pac_precedente(test_db):
     assert versamenti.ultimi_orari(escludi_vid=vid_luglio) == {}
 
 
+def test_l_oro_non_detta_gli_orari_del_pac(test_db):
+    """«L'ultimo PAC» è la rata mensile, non l'oro che la banca compra coi
+    saveback: pochi centesimi su un titolo solo, a un'ora qualunque. Siccome
+    quegli acquisti capitano spesso ed è quasi sempre il più recente, si
+    metteva in mezzo e proponeva un orario solo al posto dei trentotto."""
+    Session = test_db
+    ids = _seed(Session)
+    with Session() as db:
+        db.add(Position(nome="Oro", ticker="EGLN", isin="IE00B4ND3602",
+                        pct_target=0.0, ordine=3))
+        db.commit()
+        oro = db.execute(select(Position).where(
+            Position.ticker == "EGLN")).scalars().one().id
+
+    versamenti.salva(100.0, date(2026, 7, 16), "TR", esclusi={oro},
+                     orari={ids["A"]: "09:12"}, fuso="Europe/Rome")
+    # dopo, e quindi «più recente»: l'oro comprato dalla banca a fine mese
+    altri = set(ids.values())
+    versamenti.salva(0.07, date(2026, 7, 30), "Nascosti", esclusi=altri,
+                     orari={oro: "23:05"}, fuso="Asia/Tokyo")
+    assert versamenti.lista()[0]["fuori_piano"] is True   # è davvero il più recente
+
+    assert versamenti.ultimi_orari() == {ids["A"]: "09:12"}
+    assert versamenti.ultimo_fuso() == "Europe/Rome"
+
+
 def test_senza_orari_niente_cambia(test_db):
     """La strada di prima resta identica: nessun'ora sulle righe, e il
     versamento tiene la sua."""

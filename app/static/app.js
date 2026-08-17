@@ -781,15 +781,34 @@ document.addEventListener('click', function (e) {
     campo.setAttribute('aria-invalid', buona ? 'false' : 'true');
   }
 
-  function dopo(campo) {
-    for (var i = 0; i < caselle.length - 1; i++) {
-      if (caselle[i] === campo) return caselle[i + 1];
+  /* Un titolo con l'ora scende in fondo al gruppo.
+
+     Trentotto scatole tutte uguali, e a metà lista non sai più quali hai già
+     fatto: le devi rileggere una per una. Facendo sprofondare quelle finite,
+     quello che resta in alto è esattamente l'elenco di quelle che mancano —
+     non c'è niente da cercare, e non c'è modo di dimenticarne una.
+
+     È solo `order`: la griglia le dispone in un altro ordine, ma nella pagina
+     restano dove sono. Quindi non cambia niente per chi invia il modulo, e
+     nessuno deve ricordarsi di rimetterle a posto. */
+  function ordina(campo) {
+    var scatola = campo.closest('.pac-tog');
+    if (scatola) scatola.style.order = normalizza(campo.value) ? '1' : '0';
+  }
+
+  /* Il fuoco va alla prima casella ancora vuota. Che è anche la prima in
+     alto, visto che le piene sono appena scese: «la prossima» e «quella che
+     manca» sono la stessa scatola, e la mano non deve inseguire niente. */
+  function primaVuota(tranne) {
+    for (var i = 0; i < caselle.length; i++) {
+      if (caselle[i] !== tranne && !caselle[i].value.trim()) return caselle[i];
     }
     return null;
   }
 
   for (var i = 0; i < caselle.length; i++) {
     segna(caselle[i]);
+    ordina(caselle[i]);        // riaprendo un PAC a metà, le fatte sono già giù
 
     caselle[i].addEventListener('input', function () {
       var d = cifre(this.value).slice(0, 4);
@@ -800,7 +819,11 @@ document.addEventListener('click', function (e) {
         var pulita = normalizza(this.value);
         if (pulita) {
           this.value = pulita;
-          var prossima = dopo(this);
+          // Si riordina QUI e non a ogni tasto: con una cifra sola «0» sarebbe
+          // già un'ora buona (le 00:00) e la scatola scapperebbe via mentre
+          // scrivi. Si muove quando hai finito di scriverci.
+          var prossima = primaVuota(this);
+          ordina(this);
           // il salto al titolo dopo è il motivo per cui trentotto orari si
           // battono di fila: sul telefono la tastiera non si chiude nemmeno
           if (prossima) { prossima.focus(); prossima.select(); }
@@ -815,21 +838,27 @@ document.addEventListener('click', function (e) {
       var pulita = normalizza(this.value);
       if (pulita) this.value = pulita;
       segna(this);
+      ordina(this);            // svuotata a mano, la scatola risale fra le mancanti
     });
   }
 
-  /* «Riprendi gli orari»: quelli dell'ultimo PAC, che il server ha già messo
-     su ogni casella. Trade Republic esegue più o meno negli stessi momenti
-     ogni mese: si parte da lì e se ne correggono due, invece di ribatterne
-     trentotto. Restano una PROPOSTA — i prezzi si calcolano su ciò che resta
-     scritto qui, cioè su quello che hai confermato tu. */
+  /* «Riprendi gli orari»: quelli dell'ultimo PAC DEL PIANO, che il server ha
+     già messo su ogni casella. Trade Republic esegue più o meno negli stessi
+     momenti ogni mese: si parte da lì e se ne correggono due, invece di
+     ribatterne trentotto. Restano una PROPOSTA — i prezzi si calcolano su ciò
+     che resta scritto qui, cioè su quello che hai confermato tu. */
   var riprendi = document.querySelector('[data-pac-orari-scorsi]');
   if (riprendi) {
     riprendi.addEventListener('click', function () {
       for (var k = 0; k < caselle.length; k++) {
         var scorsa = caselle[k].getAttribute('data-scorsa') || '';
         if (scorsa) { caselle[k].value = scorsa; segna(caselle[k]); }
+        ordina(caselle[k]);
       }
+      // in alto restano i titoli che il mese scorso non c'erano: sono
+      // esattamente quelli da guardare
+      var manca = primaVuota(null);
+      if (manca) manca.focus();
     });
   }
 
