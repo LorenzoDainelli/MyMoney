@@ -310,19 +310,40 @@
   .tel-voce.esci svg { color: var(--neg); }
   .tel-foglio form { margin: 0; }
 
-  /* Il modulo del «＋» dentro il pannello: il «che cosa cambia» resta
-     INCOLLATO al bordo basso mentre si scorrono i campi. In fondo al pannello
-     non lo leggerebbe nessuno — tanto varrebbe non averlo. Appiccicato invece
-     risponde mentre scrivi, che è il momento in cui serve: è lì che si sceglie
-     il conto sbagliato. */
+  /* Il modulo del «＋» dentro il pannello. Il «che cosa cambia» qui era
+     appiccicato al bordo basso, per rispondere mentre scrivi. Sul telefono
+     non funziona: galleggiava a mezza altezza sopra i campi mentre si
+     scorreva, e arrivati in fondo finiva schiacciato contro il tasto Salva.
+     Sta fermo in fila, subito prima del tasto — che è dove lo si guarda
+     davvero, un attimo prima di salvare. */
   .tel-modulo { display: flex; flex-direction: column; }
+
+  /* -----------------------------------------------------------------------
+     L'ORDINE VERO E L'ORDINE CHE SI VEDE DEVONO COINCIDERE.
+     «Che cosa cambia» sta scritto DOPO il modulo, e il tasto Salva sta
+     DENTRO il modulo, in fondo. Tutti e due appiccicati in basso: mentre si
+     scorre il riquadro galleggiava sopra i campi, e arrivati in fondo si
+     ritrovava schiacciato SOTTO il tasto, perché in fila viene dopo. Due
+     posizioni diverse per la stessa cosa a seconda di dove sei arrivato.
+
+     `display: contents` scioglie la scatola del modulo — i suoi campi
+     diventano figli diretti del pannello — e così il tasto Salva può essere
+     mandato in fondo con `order`. Il modulo resta un modulo: si compila e si
+     spedisce esattamente come prima, è solo la scatola a non disegnarsi.
+     ----------------------------------------------------------------------- */
+  .tel-modulo #mov-form { display: contents; }
+  .tel-modulo .actions, .tel-modulo .mm-azioni { order: 9; }
+
   .tel-modulo .tel-effetto {
-    position: sticky; bottom: 0; z-index: 3;
-    margin-top: var(--tel-sp-3) !important;
+    /* `static`, non `sticky`: vedi sopra. Il `!important` sui margini c'è
+       perché nel tag c'è scritto `margin:0`, e da lì vincerebbe. */
+    position: static;
+    margin: var(--tel-sp-3) 0 var(--tel-sp-3) !important;
     padding: var(--tel-sp-3) var(--tel-sp-4);
     background: var(--surface-alt); border: 1px solid var(--border);
     border-radius: var(--tel-r-sm);
-    box-shadow: 0 -8px 22px -18px hsl(var(--tel-ombra-tinta) / .6);
+    /* niente ombra: serviva a staccarlo dal contenuto su cui galleggiava,
+       e adesso non galleggia più su niente */
   }
   .tel-modulo .tel-effetto .card-h {
     margin-bottom: var(--tel-sp-1); font-size: var(--text-2xs);

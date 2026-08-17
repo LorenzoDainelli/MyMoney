@@ -204,8 +204,12 @@
        dettaglio, è la sensazione che l'app sia rotta.
        Non serve nemmeno: il pannello dietro è già dello stesso colore, quindi
        le due strisce ai lati si vedono uguali senza sconfinare. */
-    margin: 0; padding: var(--tel-sp-2) 0 calc(var(--tel-sp-2) + env(safe-area-inset-bottom, 0px));
+    margin: 0; padding: var(--tel-sp-3) 0 calc(var(--tel-sp-3) + env(safe-area-inset-bottom, 0px));
     background: var(--surface);
+    /* Una riga sottile sopra: arrivati in fondo, «che cosa cambia» finisce
+       proprio qui sotto, e due riquadri che si toccano senza niente in mezzo
+       sembrano uno incastrato nell'altro. */
+    border-top: 1px solid var(--border);
     box-shadow: 0 -10px 24px -20px hsl(var(--tel-ombra-tinta) / .7);
   }
   .tel-modulo .actions .btn {
@@ -213,8 +217,10 @@
     width: 100%; min-height: 52px;
     font-size: var(--text-base); font-weight: var(--fw-bold);
   }
-  /* «Che cosa cambia» si ferma appena sopra il tasto, non sotto di lui. */
-  .tel-modulo .tel-effetto { bottom: 68px; }
+  /* Qui c'era `bottom: 68px` per fermare «che cosa cambia» appena sopra il
+     tasto mentre galleggiava. Ora non galleggia: sta in fila subito prima
+     del tasto (vedi guscio.css), e un `bottom` su una cosa ferma non vuol
+     dire niente. */
 
   /* -----------------------------------------------------------------------
      LA PARTITA DI GIRO. Qui niente è scritto con `.tel-modulo` davanti: la
@@ -240,9 +246,17 @@
      150 punti «quando» si vedeva mozzato. Una colonna, come `.row2/.row3`. */
   .giro-griglia { grid-template-columns: minmax(0, 1fr); }
 
-  /* Data e ora hanno una larghezza loro, decisa dal browser e non dal
-     riquadro che le contiene: senza questo escono dai bordi o si tagliano. */
-  input[type="datetime-local"], input[type="date"] { width: 100%; min-width: 0; }
+  /* -----------------------------------------------------------------------
+     DATA E ORA È LARGA QUANTO UNA DATA E UN'ORA.
+     Era tirata a tutta riga come «Descrizione»: 337 punti per contenere
+     «17/08/2026 13:21», che ne occupa 131. Duecentosei punti di vuoto dentro
+     un bordo — e un riquadro grande il triplo di quello che ci sta dentro si
+     legge come un errore anche da chi non saprebbe dire perché.
+     Non è un campo libero: quello che ci va dentro ha una lunghezza sola e
+     sempre la stessa, quindi la casella la prende da lì.
+     ----------------------------------------------------------------------- */
+  #mov-form input[type="datetime-local"],
+  #mov-form input[type="date"] { width: auto; max-width: 100%; min-width: 0; }
 
   /* La tendina del tipo era l'unico campo largo 280 dove tutti gli altri
      stanno a 337: si leggeva come un errore di allineamento. */
