@@ -212,6 +212,14 @@
     border-top: 1px solid var(--border);
     box-shadow: 0 -10px 24px -20px hsl(var(--tel-ombra-tinta) / .7);
   }
+  /* LA FESSURA SOTTO IL TASTO. Il pannello teneva 16 punti di margine sotto
+     al modulo: il tasto ci si fermava sopra, e in quei 16 punti si vedeva
+     passare il contenuto che scorreva dietro — sia scorrendo in su sia in
+     giù. Il fondo del pannello deve essere fondo, non una fessura. Lo spazio
+     sotto il tasto glielo dà il tasto stesso, insieme alla tacca del telefono.
+     Sta qui e non in guscio.css perché là la regola di partenza viene dopo
+     la media query, e a parità di peso vince l'ultima scritta. */
+  .mm-drawer .mm-nuovo { padding-bottom: 0; }
   .tel-modulo .actions .btn {
     display: flex; align-items: center; justify-content: center;
     width: 100%; min-height: 52px;
@@ -226,21 +234,48 @@
      LA PARTITA DI GIRO. Qui niente è scritto con `.tel-modulo` davanti: la
      pagina intera `/finanze/nuovo` ha le stesse scatole e lo stesso pollice.
 
-     LA ✕ NON STA PIÙ SOPRA UN CAMPO. In colonna sola il primo campo prende
-     tutta la larghezza, e la ✕ — appoggiata in alto a destra — gli finiva
-     sopra: premere «Importo» dalla parte sbagliata cancellava la spesa. Ora
-     la scatola è una colonna e la ✕ è il suo primo elemento, in una riga
-     tutta sua: nessuna sovrapposizione, e nessun buco da 44 punti lasciato
-     vuoto per evitarla.
+     LA ✕ STA ALL'ALTEZZA DELLA PRIMA ETICHETTA, non della prima casella.
+     Prima si appoggiava in alto a destra sopra la casella «Importo»: premerla
+     dalla parte sbagliata cancellava la spesa. Poi le avevo dato una riga
+     tutta sua, che risolveva ma costava 46 punti per scatola e la lasciava
+     sospesa in aria.
+
+     Adesso torna in alto a destra, ma alla quota della SCRITTA: «Importo (€)»
+     e «Da chi» occupano ottanta punti scarsi, quindi lì accanto è vuoto e non
+     c'è niente da coprire. Si legge come «questa scatola» perché è in linea
+     con la prima parola della scatola.
+
+     Il bersaglio resta 44, ma è lo `::after` invisibile a farlo: il tondo che
+     si vede ne misura 30, che è la taglia giusta accanto a una parola.
      ----------------------------------------------------------------------- */
   .giro-row {
-    display: flex; flex-direction: column;
     padding: 8px 10px 10px;                 /* i fianchi stretti: 2 punti in più per i campi */
   }
   .giro-rm {
-    position: static; order: -1; align-self: flex-end; margin-bottom: 2px;
-    min-width: var(--tel-tocco); min-height: var(--tel-tocco);
+    /* `top: 1px` non è un numero a caso: mette il centro del tondo a 435,
+       che è il centro esatto della riga «Importo (€)». */
+    position: absolute; top: 1px; right: 8px;
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; min-width: 0; min-height: 0; padding: 0;
+    border: 0; border-radius: 50%;
+    background: var(--surface-alt); color: var(--muted);
+    font-size: 15px; line-height: 1;
   }
+  /* Il bersaglio vero, invisibile, centrato sul tondo: 44 punti come tutto il
+     resto. Senza, il tondo da 30 sarebbe l'unica cosa dell'app che chiede
+     mira — e per giunta è quella che cancella.
+
+     Cresce verso l'ALTO e non attorno al centro: sotto il tondo, nove punti
+     più giù, comincia la casella dell'importo, e un bersaglio che le finisse
+     sopra riporterebbe il difetto di partenza — il tocco che voleva scrivere
+     e invece cancella. Sopra invece c'è solo lo spazio fra una scatola e
+     l'altra, dove non c'è niente da premere. */
+  .giro-rm::after {
+    content: ""; position: absolute;
+    top: -20px; left: 50%; transform: translateX(-50%);
+    width: var(--tel-tocco); height: var(--tel-tocco);
+  }
+  .giro-rm:active { background: var(--neg); color: #fff; }
 
   /* I quattro campi del rientro andavano a due a due, 150 punti l'uno: in
      150 punti «quando» si vedeva mozzato. Una colonna, come `.row2/.row3`. */
@@ -252,11 +287,13 @@
      «17/08/2026 13:21», che ne occupa 131. Duecentosei punti di vuoto dentro
      un bordo — e un riquadro grande il triplo di quello che ci sta dentro si
      legge come un errore anche da chi non saprebbe dire perché.
-     Non è un campo libero: quello che ci va dentro ha una lunghezza sola e
-     sempre la stessa, quindi la casella la prende da lì.
+     La casella però resta larga come le altre: una colonna di riquadri tutti
+     uguali con uno più corto in mezzo si nota più del vuoto. È il CONTENUTO
+     che va messo in mezzo — così i 206 punti non stanno tutti da una parte e
+     la riga non sembra più sbilanciata.
      ----------------------------------------------------------------------- */
   #mov-form input[type="datetime-local"],
-  #mov-form input[type="date"] { width: auto; max-width: 100%; min-width: 0; }
+  #mov-form input[type="date"] { width: 100%; min-width: 0; text-align: center; }
 
   /* La tendina del tipo era l'unico campo largo 280 dove tutti gli altri
      stanno a 337: si leggeva come un errore di allineamento. */
