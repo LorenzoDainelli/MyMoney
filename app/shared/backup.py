@@ -106,6 +106,10 @@ def _transaction_to_fields(t, session) -> dict:
         # cancellate insieme alla spesa.
         "origine": t.origine or "",
         "parent_uid": _uid_movimento(session, t.parent_tx_id),
+        # pagamento stornato dalla banca: la riga si vede ma non conta. Va nel
+        # sync come tutto il resto, altrimenti sul telefono i saldi sarebbero
+        # diversi da quelli del PC senza che si capisca perché.
+        "annullato": bool(t.annullato),
         "deleted": bool(t.deleted),
         "rev": t.rev, "updated_at": _iso(t.updated_at),
     }
@@ -221,6 +225,7 @@ def _set_fields(obj, entity, fields, uid_to_wallet_id, uid_to_cat_id):
         obj.data_ricevuto = _parse_dt(fields.get("data_ricevuto"))
         obj.controparte = fields.get("controparte", "")
         obj.origine = fields.get("origine", "")
+        obj.annullato = bool(fields.get("annullato", False))
         # Risolvi FK: uid → id locale
         w_uid = fields.get("wallet_uid")
         obj.wallet_id = uid_to_wallet_id.get(w_uid) if w_uid else None

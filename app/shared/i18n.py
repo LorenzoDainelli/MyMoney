@@ -404,6 +404,19 @@ STRINGS = {
     "fin.f_esito": {"it": "{n} movimenti", "en": "{n} movements", "es": "{n} movimientos", "fr": "{n} mouvements", "de": "{n} Bewegungen", "uk": "{n} рухів"},
     "fin.f_effetto": {"it": "su {w}: {v}", "en": "on {w}: {v}", "es": "en {w}: {v}", "fr": "sur {w} : {v}", "de": "auf {w}: {v}", "uk": "на {w}: {v}"},
     "fin.f_niente": {"it": "Nessun movimento con questi filtri.", "en": "No movements match these filters.", "es": "Ningún movimiento con estos filtros.", "fr": "Aucun mouvement avec ces filtres.", "de": "Keine Bewegung mit diesen Filtern.", "uk": "Немає рухів із цими фільтрами."},
+    # Movimento annullato: la banca ha stornato il pagamento. Resta nel registro
+    # barrato, ma fuori da ogni conto.
+    "fin.annullato": {"it": "Annullato", "en": "Cancelled", "es": "Anulado", "fr": "Annulé", "de": "Storniert", "uk": "Скасовано"},
+    "fin.annulla": {"it": "Segna come annullato", "en": "Mark as cancelled", "es": "Marcar como anulado", "fr": "Marquer comme annulé", "de": "Als storniert markieren", "uk": "Позначити як скасоване"},
+    "fin.ripristina": {"it": "Non è annullato", "en": "Not cancelled after all", "es": "No está anulado", "fr": "Finalement pas annulé", "de": "Doch nicht storniert", "uk": "Насправді не скасоване"},
+    "fin.annullato_nota": {
+        "it": "Il pagamento è stato stornato dalla banca: la riga resta qui perché quei soldi sono usciti davvero per qualche giorno, ma non conta in nessun saldo.",
+        "en": "The bank reversed this payment: the row stays here because the money really did leave for a few days, but it counts towards no balance.",
+        "es": "El banco anuló este pago: la fila se queda porque el dinero salió de verdad durante unos días, pero no cuenta en ningún saldo.",
+        "fr": "La banque a annulé ce paiement : la ligne reste ici car l'argent est bien sorti pendant quelques jours, mais elle ne compte dans aucun solde.",
+        "de": "Die Bank hat diese Zahlung storniert: Die Zeile bleibt, weil das Geld ein paar Tage lang wirklich weg war, zählt aber zu keinem Saldo.",
+        "uk": "Банк скасував цей платіж: рядок лишається, бо гроші справді пішли на кілька днів, але він не враховується в жодному балансі.",
+    },
     "fin.f_generata": {"it": "riga generata", "en": "generated row", "es": "fila generada", "fr": "ligne générée", "de": "erzeugte Zeile", "uk": "згенерований рядок"},
     "fin.no_movements": {"it": "Nessun movimento ancora.", "en": "No movements yet.", "es": "Aún no hay movimientos.", "fr": "Aucun mouvement pour l'instant.", "de": "Noch keine Bewegungen.", "uk": "Ще немає рухів."},
     "fin.add_movement": {"it": "Aggiungi movimento", "en": "Add movement", "es": "Añadir movimiento", "fr": "Ajouter un mouvement", "de": "Bewegung hinzufügen", "uk": "Додати рух"},

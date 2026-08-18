@@ -13,9 +13,10 @@
     <div style="flex:1;min-width:0;">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span class="pill {{ 'green' if m.t.tipo=='entrata' else 'red' if m.t.tipo=='uscita' else 'gray' }}">{{ t('fin.' ~ m.t.tipo) }}</span>
+        {% if m.t.annullato %}<span class="pill gray">{{ t('fin.annullato') }}</span>{% endif %}
         <span class="muted" style="font-size:13px;">{{ m.t.data.strftime('%d/%m/%Y') }} · {{ m.t.data.strftime('%H:%M') }}</span>
       </div>
-      <div class="num" style="font-size:var(--text-2xl);font-weight:700;margin-top:6px;">{{ m.t.importo | eur }}</div>
+      <div class="num" style="font-size:var(--text-2xl);font-weight:700;margin-top:6px;{% if m.t.annullato %}text-decoration:line-through;color:var(--muted);{% endif %}">{{ m.t.importo | eur }}</div>
       <div style="color:var(--muted);margin-top:2px;">{{ m.t.descrizione or m.categoria or m.wallet }}</div>
     </div>
     <a href="/finanze/movimenti/{{ m.t.id }}/modifica#mov-form" class="btn ghost icon-only" aria-label="{{ t('btn.edit') }}" title="{{ t('btn.edit') }}">{{ icon('edit', 16) }}</a>
@@ -58,4 +59,20 @@
   </div>
   <div class="hint" style="margin-top:10px;">{{ t('fin.carta_nota', w=salvadanaio) }}</div>
   {% endif %}
+
+  {# Annullare non è cancellare: vedi Transaction.annullato in finance/models.py.
+     Il pulsante sta in fondo e non fra le icone in alto apposta — è un'azione
+     rara, e in alto starebbe sempre a un dito di distanza dal tasto chiudi. #}
+  <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border);">
+    {% if m.t.annullato %}
+    <div class="hint" style="margin-bottom:10px;">{{ t('fin.annullato_nota') }}</div>
+    {% endif %}
+    <form method="post" action="/finanze/movimenti/{{ m.t.id }}/annulla" style="margin:0;">
+      <input type="hidden" name="si" value="{{ 0 if m.t.annullato else 1 }}">
+      <input type="hidden" name="next" value="/finanze">
+      <button type="submit" class="btn ghost sm">
+        {{ t('fin.ripristina') if m.t.annullato else t('fin.annulla') }}
+      </button>
+    </form>
+  </div>
 </div>

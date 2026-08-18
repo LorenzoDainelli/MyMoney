@@ -463,7 +463,7 @@
       {% for m in g.righe %}
       {% set tt = m.t.tipo %}
       {% set gamt_f = m.t.giro_importo_display if tt == 'giro' else None %}
-      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r" {{ filtri_riga(m, tt, gamt_f) }}>
+      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r{% if m.t.annullato %} mov-annullato{% endif %}" {{ filtri_riga(m, tt, gamt_f) }}>
         <span class="tel-mov-d">{{ m.t.descrizione or m.categoria or t('fin.' ~ tt) }}</span>
         <span class="tel-mov-q">{{ m.t.data.strftime('%H:%M') }} · {{ m.wallet }}{% if m.wallet_to and tt != 'giro' %} → {{ m.wallet_to }}{% endif %}{% if m.categoria and m.t.descrizione %} · {{ m.categoria }}{% endif %}</span>
         {% if tt == 'giro' %}{% set gamt = m.t.giro_importo_display %}
@@ -473,7 +473,7 @@
         {% endif %}
       </a>
       {% for f in m.figlie %}
-      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r mov-gen" {{ filtri_riga(f, f.t.tipo, None) }}>
+      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r mov-gen{% if f.t.annullato %} mov-annullato{% endif %}" {{ filtri_riga(f, f.t.tipo, None) }}>
         <span class="tel-mov-d">{{ f.t.descrizione or t('fin.f_generata') }}</span>
         <span class="tel-mov-q">{{ f.t.data.strftime('%H:%M') }} · {{ f.wallet }}{% if f.wallet_to %} → {{ f.wallet_to }}{% endif %}</span>
         <span class="num tel-mov-i {{ 'pos' if f.t.tipo=='entrata' else '' }}">{{ '+' if f.t.tipo=='entrata' else '' }}{{ f.t.importo | eur }}</span>

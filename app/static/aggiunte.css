@@ -121,3 +121,31 @@
 .mov-esito b { color: var(--ink); font-variant-numeric: tabular-nums; }
 .mov-off { display: none !important; }
 .mov-gen:not(.mov-on) { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Movimento annullato — la banca ha autorizzato il pagamento e poi l'ha
+   stornato. La riga resta nel registro perché per qualche giorno quei soldi
+   sono usciti sul serio, ed è l'unica cosa che spiega il buco; ma esce da tutti
+   i conti (vedi conta_nei_totali in finance/service.py).
+
+   La barratura NON è text-decoration sulle singole celle: si spezzerebbe negli
+   spazi fra una colonna e l'altra e sembrerebbero tanti trattini. È una
+   sfumatura che dipinge un filo di 1px a metà altezza, e siccome la tabella ha
+   border-collapse le celle si toccano: la linea attraversa il movimento intero,
+   da un bordo all'altro.
+
+   Il grigio è la seconda metà del messaggio. Barrato e ancora nero si legge
+   come «importante e cancellato»; barrato e grigio si legge come «c'era, non
+   c'è più» — e l'occhio smette di sommarlo agli altri numeri della colonna.
+   --------------------------------------------------------------------------- */
+.mov-annullato > td,
+a.tel-mov.mov-annullato {
+  color: var(--muted);
+  background-image: linear-gradient(to bottom,
+    transparent calc(50% - 1px), var(--muted) calc(50% - 1px),
+    var(--muted) 50%, transparent 50%);
+}
+/* gli importi hanno un colore proprio (verde/rosso): qui non devono gridare */
+.mov-annullato .num,
+.mov-annullato .pos,
+.mov-annullato .neg { color: var(--muted); }

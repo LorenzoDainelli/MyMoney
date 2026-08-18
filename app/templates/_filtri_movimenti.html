@@ -33,5 +33,6 @@ data-f-w="{{ m.wallet or '' }}|{{ m.wallet_to or '' }}"
 data-f-in="{{ entra }}"
 data-f-out="{{ esce }}"
 data-f-imp="{{ '%.4f' | format(imp) }}"
+data-f-ann="{{ '1' if m.t.annullato else '' }}"
 data-f-q="{{ ((m.t.descrizione or '') ~ ' ' ~ (m.categoria or '') ~ ' ' ~ (m.wallet or '') ~ ' ' ~ (m.wallet_to or '') ~ ' ' ~ (m.t.controparte or '')) | lower }}"
 {%- endmacro %}

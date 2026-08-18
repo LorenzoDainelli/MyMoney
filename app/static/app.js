@@ -1110,7 +1110,11 @@ document.addEventListener('click', function (e) {
       if (gen) r.classList.toggle('mov-on', ok);
       if (!ok || daContare.indexOf(r) < 0) return;
       quanti++;
-      if (s.w) {
+      // Un movimento annullato si vede e si conta fra le righe — è ancora un
+      // fatto — ma i suoi soldi sono tornati indietro: sommarli qui farebbe
+      // dire al filtro un numero diverso da quello scritto sulla card del
+      // portafoglio, e due numeri diversi sono peggio di nessun numero.
+      if (s.w && !r.dataset.fAnn) {
         var imp = parseFloat(r.dataset.fImp || '0') || 0;
         if (r.dataset.fIn === s.w) saldo += imp;
         if (r.dataset.fOut === s.w) saldo -= imp;

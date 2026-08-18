@@ -26,7 +26,7 @@
       {# Attributi per «cerca e filtra» (app.js). `in`/`out` dicono su quale
          portafoglio la riga fa salire o scendere il saldo: serve a rispondere
          «quanto è entrato nei Nascosti?» senza sommare a mano. #}
-      <tr class="mov-r" {{ filtri_riga(m, tt, gamt) }}>
+      <tr class="mov-r{% if m.t.annullato %} mov-annullato{% endif %}" {{ filtri_riga(m, tt, gamt) }}>
         <td data-s="{{ m.t.data.isoformat() }}"><span class="muted">{{ m.t.data.strftime('%d/%m') }} · {{ m.t.data.strftime('%H:%M') }}</span></td>
         <td data-s="{{ t('fin.' ~ tt) }}">
           <span class="pill {{ 'green' if tt=='entrata' else 'red' if tt=='uscita' else 'accent' if tt=='giro' else 'gray' }}">{{ t('fin.' ~ tt) }}</span>
@@ -80,7 +80,7 @@
          comparire, altrimenti i «Nascosti» risulterebbero quasi vuoti e il
          filtro racconterebbe una bugia. Nascoste finché non filtri. #}
       {% for f in m.figlie %}
-      <tr class="mov-r mov-gen" {{ filtri_riga(f, f.t.tipo, None) }}>
+      <tr class="mov-r mov-gen{% if f.t.annullato %} mov-annullato{% endif %}" {{ filtri_riga(f, f.t.tipo, None) }}>
         <td data-s="{{ f.t.data.isoformat() }}"><span class="muted">{{ f.t.data.strftime('%d/%m') }} · {{ f.t.data.strftime('%H:%M') }}</span></td>
         <td><span class="pill gray">{{ t('fin.f_generata') }}</span></td>
         <td class="num {{ 'pos' if f.t.tipo=='entrata' else '' }}" style="font-weight:600;">{{ '+' if f.t.tipo=='entrata' else '' }}{{ f.t.importo | eur }}</td>

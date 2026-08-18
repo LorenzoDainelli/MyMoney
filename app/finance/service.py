@@ -15,7 +15,7 @@ import uuid
 from bisect import bisect_left
 from datetime import datetime, timedelta
 
-from sqlalchemy import Boolean, DateTime, Float, Integer, String, func, select, text
+from sqlalchemy import Boolean, DateTime, Float, Integer, String, and_, func, select, text
 
 from shared.db import SessionLocal, engine
 from shared.schema import aggiungi_colonne, crea_indice, colonne_di
@@ -111,6 +111,8 @@ def migra_schema():
             ("giro_aperta", Boolean(), False),
             ("parent_tx_id", Integer(), None),
             ("origine", String(20), ""),
+            # pagamento stornato dalla banca: la riga resta visibile ma non conta
+            ("annullato", Boolean(), False),
         ))
         # sync v2 (multi-dispositivo): identità e versione di ogni record + tombstone
         for tabella in ("finance_wallets", "finance_categories", "finance_transactions"):
@@ -271,11 +273,29 @@ def wallets(include_archived: bool = False):
         return list(db.execute(q).scalars().all())
 
 
+def conta_nei_totali():
+    """La condizione «questa riga pesa sui conti», in un posto solo.
+
+    Due motivi per non contare un movimento, e vogliono dire cose diverse:
+    - `deleted`  -> l'hai cancellato: non è mai esistito (tombstone del sync);
+    - `annullato`-> la banca ha stornato il pagamento: è esistito, si vede ancora
+                    nel registro barrato, ma i soldi sono tornati indietro.
+
+    Sta qui e non ripetuta in ogni query perché le somme dell'app sono una
+    quindicina sparse su mille righe: il giorno che se ne dimentica una, un
+    numero della pagina smette di essere d'accordo con gli altri e non lo scopri
+    finché non fai i conti a mano. Le LISTE invece non usano questo filtro — un
+    movimento annullato si deve vedere.
+    """
+    return and_(Transaction.deleted.is_(False), Transaction.annullato.is_(False))
+
+
 def _saldi_map(db) -> dict:
     """Saldo di ogni wallet, calcolato con poche query aggregate.
     Le partite di giro muovono i saldi con le loro DUE gambe reali: la spesa
     esce da wallet_id, il rimborso (quando c'è) entra in wallet_to_id.
-    I record con deleted=True (tombstone sync) NON contribuiscono ai saldi."""
+    Non contribuiscono ai saldi i record cancellati (tombstone del sync) né
+    quelli annullati (pagamento stornato): vedi conta_nei_totali()."""
     saldi = {w.id: w.saldo_iniziale for w in db.query(Wallet).all()}
 
     def add(query, sign, key="wallet_id"):
@@ -284,7 +304,7 @@ def _saldi_map(db) -> dict:
                 saldi[wid] += sign * tot
 
     T = Transaction
-    _alive = T.deleted.is_(False)
+    _alive = conta_nei_totali()
     add(db.query(T.wallet_id, func.sum(T.importo)).filter(T.tipo == TIPO_ENTRATA, _alive).group_by(T.wallet_id), +1)
     add(db.query(T.wallet_id, func.sum(T.importo)).filter(T.tipo == TIPO_USCITA, _alive).group_by(T.wallet_id), -1)
     add(db.query(T.wallet_id, func.sum(T.importo)).filter(T.tipo == TIPO_TRASFERIMENTO, _alive).group_by(T.wallet_id), -1)
@@ -433,6 +453,39 @@ def elimina_movimento(tid):
         db.commit()
 
 
+def annulla_movimento(tid: int, si: bool = True) -> bool:
+    """Segna un movimento come annullato (o lo rimette buono, con si=False).
+
+    Serve ai pagamenti che la banca autorizza e poi storna: per qualche giorno i
+    soldi sono usciti sul serio, poi sono tornati. Cancellare la riga sarebbe
+    comodo ma falso — non spiegherebbe più perché quei giorni il conto era più
+    basso; e lasciarla com'è tiene i conti sbagliati per sempre. Annullare fa le
+    due cose insieme: la riga resta e si legge, i numeri no.
+
+    Porta con sé quello che il movimento aveva generato:
+    - le righe figlie (arrotondamento e saveback), perché lo storno restituisce
+      anche quelle — è il motivo per cui il salvadanaio non tornava;
+    - tutte le gambe della partita, se è una partita di giro: mezza partita
+      annullata resterebbe un rimborso in attesa di una spesa che non c'è.
+
+    Ritorna False se il movimento non c'è o è cancellato."""
+    with SessionLocal() as db:
+        t = db.get(Transaction, tid)
+        if not t or t.deleted:
+            return False
+        if t.tipo == TIPO_GIRO and (t.giro_id or ""):
+            gambe = db.query(Transaction).filter(Transaction.giro_id == t.giro_id).all()
+        else:
+            gambe = [t]
+        padri = [r.id for r in gambe]
+        for r in gambe:
+            r.annullato = si
+        for f in db.query(Transaction).filter(Transaction.parent_tx_id.in_(padri)).all():
+            f.annullato = si
+        db.commit()
+    return True
+
+
 def aggiorna_movimento(tid, tipo, data, importo, wallet_id, wallet_to_id=None,
                        categoria_nome="", descrizione=""):
     """Modifica IN-PLACE un movimento normale (entrata/uscita/trasferimento):
@@ -510,7 +563,7 @@ def saveback_maturato(anno: int, mese: int) -> float:
     with SessionLocal() as db:
         return round(db.query(func.coalesce(func.sum(Transaction.importo), 0.0)).filter(
             Transaction.origine == ORIGINE_SAVEBACK,
-            Transaction.deleted.is_(False),
+            conta_nei_totali(),
             Transaction.data >= start, Transaction.data < end).scalar() or 0.0,
             DECIMALI_SAVEBACK)
 
@@ -531,7 +584,7 @@ def ricalcola_saveback_troncati() -> int:
     with SessionLocal() as db:
         figlie_sav = db.query(Transaction).filter(
             Transaction.origine == ORIGINE_SAVEBACK,
-            Transaction.deleted.is_(False),
+            conta_nei_totali(),
             Transaction.parent_tx_id.is_not(None)).all()
         if not figlie_sav:
             return 0
@@ -656,7 +709,11 @@ def figlie(parent_id: int) -> list:
 def _crea_figlie(db, parent: Transaction, arr: float, sav: float) -> None:
     """Le due righe che accompagnano la spesa. Il salvadanaio deve esistere: se
     l'hai cancellato non si inventa un portafoglio, semplicemente non si scrive
-    niente — meglio nessuna riga che una riga in un posto sbagliato."""
+    niente — meglio nessuna riga che una riga in un posto sbagliato.
+
+    Le figlie nascono nello stesso stato del padre: se il movimento è annullato
+    e poi lo si modifica, le righe rigenerate non devono tornare a contare da
+    sole — sarebbe un euro che ricompare dal nulla nel salvadanaio."""
     dest = db.query(Wallet).filter(Wallet.deleted.is_(False)).filter(
         func.lower(func.trim(Wallet.nome)) == NOME_WALLET_NASCOSTI.lower()).first()
     if dest is None:
@@ -666,14 +723,14 @@ def _crea_figlie(db, parent: Transaction, arr: float, sav: float) -> None:
             tipo=TIPO_TRASFERIMENTO, data=parent.data, importo=round(arr, 2),
             wallet_id=parent.wallet_id, wallet_to_id=dest.id,
             descrizione=NOME_WALLET_NASCOSTI, parent_tx_id=parent.id,
-            origine=ORIGINE_ARROTONDAMENTO))
+            origine=ORIGINE_ARROTONDAMENTO, annullato=bool(parent.annullato)))
     if sav and sav > 0:
         db.add(Transaction(
             tipo=TIPO_ENTRATA, data=parent.data, importo=round(sav, DECIMALI_SAVEBACK),
             wallet_id=dest.id,
             category_id=_get_or_create_categoria(db, NOME_CATEGORIA_SAVEBACK, "entrata"),
             descrizione=NOME_CATEGORIA_SAVEBACK, parent_tx_id=parent.id,
-            origine=ORIGINE_SAVEBACK))
+            origine=ORIGINE_SAVEBACK, annullato=bool(parent.annullato)))
 
 
 def crea_uscita_carta(data, importo, wallet_id, categoria_nome="", descrizione="",
@@ -1062,7 +1119,7 @@ def _gruppi_giro(db):
     """{giro_id: [righe]} di tutte le partite di giro, ordinate per data."""
     rows = list(db.execute(
         select(Transaction).where(Transaction.tipo == TIPO_GIRO,
-                                  Transaction.deleted.is_(False))
+                                  conta_nei_totali())
         .order_by(Transaction.data, Transaction.id)).scalars().all())
     gruppi = {}
     for t in rows:
@@ -1188,7 +1245,7 @@ def _liquidita_walk():
         base = sum(w.saldo_iniziale or 0.0 for w in db.query(Wallet).filter(
             Wallet.deleted.is_(False)).all() if w.id in attivi)
         effetti = []
-        for t in db.query(Transaction).filter(Transaction.deleted.is_(False)).all():
+        for t in db.query(Transaction).filter(conta_nei_totali()).all():
             imp = t.importo or 0.0
             if t.tipo == TIPO_ENTRATA and t.wallet_id in attivi:
                 effetti.append((t.data, +imp))
@@ -1262,7 +1319,7 @@ def _mesi_indietro_ym(now, k):
 def riepilogo_mese(anno, mese):
     start, end = _range_mese(anno, mese)
     T = Transaction
-    _alive = T.deleted.is_(False)
+    _alive = conta_nei_totali()
     with SessionLocal() as db:
         entrate = db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
             T.tipo == TIPO_ENTRATA, T.data >= start, T.data < end, _alive).scalar() or 0.0
@@ -1321,7 +1378,7 @@ def calendario_spese(anno, mese):
     with SessionLocal() as db:
         righe = db.query(T.data, T.importo).filter(
             T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
-            T.deleted.is_(False)).all()
+            conta_nei_totali()).all()
         gruppi = _gruppi_giro(db)
 
     per_giorno = {}
@@ -1377,7 +1434,7 @@ def accantonato_mese(anno, mese) -> float:
             func.lower(func.trim(Wallet.nome)) == NOME_WALLET_NASCOSTI.lower()).first()
         if w is None:
             return 0.0
-        periodo = (T.deleted.is_(False), T.data >= start, T.data < end)
+        periodo = (conta_nei_totali(), T.data >= start, T.data < end)
         dentro = db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
             *periodo, T.wallet_to_id == w.id, T.tipo == TIPO_TRASFERIMENTO).scalar() or 0.0
         dentro += db.query(func.coalesce(func.sum(T.importo), 0.0)).filter(
@@ -1455,7 +1512,7 @@ def uscite_per_categoria_mese(anno, mese) -> dict:
         rows = db.query(Category.nome, func.count(T.id), func.sum(T.importo)).join(
             Category, Category.id == T.category_id).filter(
             T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
-            T.deleted.is_(False)).group_by(Category.id).all()
+            conta_nei_totali()).group_by(Category.id).all()
     return {(n or "").strip().lower(): {"n": int(c or 0), "tot": round(float(s or 0.0), 2)}
             for n, c, s in rows}
 
@@ -1469,7 +1526,7 @@ def spesa_top(anno, mese):
     with SessionLocal() as db:
         row = db.query(T).filter(
             T.tipo == TIPO_USCITA, T.data >= start, T.data < end,
-            T.deleted.is_(False)).order_by(T.importo.desc()).first()
+            conta_nei_totali()).order_by(T.importo.desc()).first()
         if row is None:
             return None
         cat = db.query(Category.nome).filter(

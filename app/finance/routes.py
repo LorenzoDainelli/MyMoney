@@ -350,6 +350,16 @@ def elimina_movimento(tid: int, next: str = Form("/finanze")):
     return RedirectResponse(dest, status_code=303)
 
 
+@router.post("/finanze/movimenti/{tid}/annulla")
+def annulla_movimento(tid: int, si: int = Form(1), next: str = Form("/finanze")):
+    """Il pagamento è stato stornato dalla banca: la riga resta nel registro,
+    barrata, ma esce da tutti i conti. `si=0` la rimette buona."""
+    service.annulla_movimento(tid, bool(si))
+    _aggiorna_grafico_patrimonio()
+    dest = next if next.startswith("/finanze") else "/finanze"
+    return RedirectResponse(dest, status_code=303)
+
+
 @router.get("/finanze/movimenti/{tid}/dettaglio", response_class=HTMLResponse)
 def dettaglio_movimento(request: Request, tid: int):
     """Cosa c'è dentro un movimento: il pannello che scivola da destra, lo stesso

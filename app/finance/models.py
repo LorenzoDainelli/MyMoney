@@ -116,6 +116,15 @@ class Transaction(Base):
         ForeignKey("finance_transactions.id"), nullable=True, index=True)
     # come è nata la riga figlia: "arrotondamento" | "saveback" ("" per le altre)
     origine: Mapped[str] = mapped_column(String(20), default="")
+    # --- movimento annullato (pagamento stornato dalla banca) ----------------
+    # Diverso da `deleted`, e la differenza è tutto il punto: cancellare vuol
+    # dire «non è mai successo», annullare vuol dire «è successo, e poi è stato
+    # disfatto». La riga resta nel registro, barrata, perché per qualche giorno
+    # quei soldi sono usciti davvero e ritrovarla è l'unico modo di spiegare il
+    # buco; ma non conta in nessun saldo e in nessuna statistica, perché sono
+    # tornati indietro. Si porta dietro le righe generate: se la banca storna il
+    # pagamento restituisce anche l'arrotondamento e il saveback.
+    annullato: Mapped[bool] = mapped_column(Boolean, default=False)
     # --- metadati di sincronizzazione multi-dispositivo (v2, vedi PIANO-V2.md) ---
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # identità stabile tra dispositivi
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)  # ultima modifica (per la fusione)
