@@ -300,12 +300,20 @@
 
     <div class="tel-piega">
     {{ riassunto(t('fin.month_numbers'), t('fin.month_balance'), ('+' if riep.saldo >= 0 else '−') ~ (riep.saldo | abs | eur), 'pos' if riep.saldo >= 0 else 'neg') }}
-    <div class="card" style="margin:0;">
+    {# La card diventa una colonna flex. Prima il corpo qui sotto chiedeva
+       `height:100%`: dentro una card che è un blocco, quel 100% è l'altezza
+       INTERNA della card, misurata però da dove comincia il corpo — cioè 26px
+       più in basso, dopo il titolino. Risultato: il corpo finiva 26px oltre il
+       fondo, si mangiava i 24px di respiro della card e l'ultima riga (la nota
+       «speso più di quanto è entrato») restava appesa fuori dal bordo.
+       Con la colonna flex il corpo prende ciò che AVANZA, che è quello che si
+       voleva dire fin dall'inizio. #}
+    <div class="card" style="margin:0;display:flex;flex-direction:column;">
       <div class="card-h">{{ t('fin.month_numbers') }}</div>
       {% set rate = (riep.saldo / riep.entrate * 100) if riep.entrate else 0 %}
       {# I tre numeri restano compatti in cima, come sono sempre stati: a
          prendersi lo spazio che avanza è il blocco delle destinazioni in fondo. #}
-      <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+      <div style="display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <span class="muted" style="font-size:13px;">{{ t('fin.savings_rate') }}</span>
           <span class="num {{ 'pos' if riep.saldo >= 0 else 'neg' }}" style="font-weight:800;font-size:var(--text-lg);">{{ rate | round(0) | pct(0) }}</span>
@@ -349,7 +357,7 @@
             {% endfor %}
           </div>
           {% if destinazioni.in_rosso %}
-          <div class="faint" style="font-size:11px;margin-top:8px;line-height:var(--lh-relaxed);">{{ t('fin.dest_over') }}</div>
+          <div class="faint" style="font-size:11px;margin-top:12px;line-height:var(--lh-relaxed);">{{ t('fin.dest_over') }}</div>
           {% endif %}
         </div>
         {% endif %}

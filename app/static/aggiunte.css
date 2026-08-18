@@ -63,9 +63,16 @@
    Niente `display` inline dal JavaScript: mostrare e nascondere passa da due
    classi, così l'ordinamento della tabella può spostare le righe senza
    portarsi dietro uno stile appiccicato addosso. */
+/* Il ritmo, sulla griglia da 4px del design: 32px staccano DUE sezioni (il
+   doppio dei 16px che separano due card, così l'occhio capisce che qui
+   finisce una cosa e ne comincia un'altra), 12px tengono insieme il titolo
+   con la sua tabella (meno dei 16px fra le card: sono la stessa cosa). Prima
+   erano 20px sopra e 0 sotto, cioè il contrario: il titolo era incollato alla
+   tabella e quasi appiccicato alle card. */
 .mov-head {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; flex-wrap: wrap; margin-top: 20px;
+  gap: 12px; flex-wrap: wrap;
+  margin: var(--space-7) 0 var(--space-3);
 }
 .mov-ctl { display: flex; align-items: center; gap: 8px; }
 .mov-cerca {
@@ -92,7 +99,7 @@
   color: var(--on-accent); font-size: 11px; font-weight: var(--fw-bold);
 }
 .mov-pannello {
-  margin-top: 10px; padding: 12px;
+  margin: 0 0 var(--space-3); padding: 12px;
   background: var(--surface-2); border: 1px solid var(--border);
   border-radius: var(--r-md);
 }
