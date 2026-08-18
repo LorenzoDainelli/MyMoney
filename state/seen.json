@@ -2743,6 +2743,54 @@
       "tipo_evento": "news aziendale",
       "url": "https://finnhub.io/api/news?id=39c259b9d1f0e69d175643f58eb1608fb4c713bd169e888b9217105e552",
       "data_invio": "2026-08-17T17:11:06Z"
+    },
+    {
+      "id": "meta-trial-federale-aug26",
+      "ticker": "META",
+      "titolo": "Meta sotto processo federale per dipendenza da social media nei minori: azioni -4%",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=fd67d2f211f54f9fcd7229296222afefd1fd6f2e391f9811708c1c86e89669f9",
+      "data_invio": "2026-08-18T05:10:00+00:00"
+    },
+    {
+      "id": "shel-hormuz-ceasefire-aug26",
+      "ticker": "SHEL",
+      "titolo": "Cessate il fuoco USA-Iran scaduto: nave colpita nello Stretto di Hormuz, petrolio oltre i 91 dollari",
+      "tipo_evento": "macro",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOdC1DbUtnYVo3NzVqcVBVR3FXcm1WQXBOWHI2b1d0SG5NOG1wS25jdjJJeUx3NFc0Ym13OTlZTzl5Q1hnR3dVWFpuTkF6cVlic0NNdXJDWHBIcGZlRVRLWUtJclYybUxvNTJ5RWFDZjJOaGR2aGFrS21Ibzg3b1FudnZjVkZTQV9ra2ZmMnNZNGZWWGdDZXpxUmpoMXEybC1oMjd2T3RYVjJwZ3NacE9XcERRWEZhcHZtbVE1VmhsaDNiWkhlV2hyei1QZ3c",
+      "data_invio": "2026-08-18T05:10:00+00:00"
+    },
+    {
+      "id": "orcl-burry-short-aug26",
+      "ticker": "ORCL",
+      "titolo": "Oracle in calo: Michael Burry segnala una posizione ribassista, cash flow negativo per gli investimenti AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=4bd981de367a9847a342d8667102077067ba6f486bf63d7cb9292abe667ab910",
+      "data_invio": "2026-08-18T05:10:00+00:00"
+    },
+    {
+      "id": "aapl-downgrade-memoria-aug26",
+      "ticker": "AAPL",
+      "titolo": "Apple retrocessa a Hold: memoria cara e rischi supply chain pesano sulla valutazione",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=c24b01b3ad196f30a2d939466dd1d4149bfc40127392e077aa0b39895d08c5e9",
+      "data_invio": "2026-08-18T05:10:00+00:00"
+    },
+    {
+      "id": "ukrn-titoli-ucraini-aug26",
+      "ticker": "UKRN",
+      "titolo": "Prime azioni ucraine nell'ETF UKRN: entrano Swarmer, Kyivstar e Ferrexpo",
+      "tipo_evento": "ribilanciamento/cambio indice",
+      "url": "https://www.etfstream.com/articles/first-ukrainian-stocks-added-to-hanetf-s-ukraine-reconstruction-etf",
+      "data_invio": "2026-08-18T05:10:00+00:00"
+    },
+    {
+      "id": "asml-tsm-dan-loeb-13f-aug26",
+      "ticker": "ASML",
+      "titolo": "Dan Loeb (Third Point) esce da Meta, Nvidia e Broadcom nel Q2 e aggiunge ASML e Taiwan Semiconductor",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=39c45bd1c4671c997137747a4ebe9a9e60dd43b31069cf16dab7c70f771b3539",
+      "data_invio": "2026-08-18T05:10:00+00:00"
     }
   ]
 }

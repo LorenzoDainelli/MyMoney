@@ -10313,6 +10313,108 @@
       "inviata": true,
       "titolo": "Netflix in calo del 35% nel 2026: opportunità di acquisto o trappola di valore?",
       "url": "https://finnhub.io/api/news?id=39c259b9d1f0e69d175643f58eb1608fb4c713bd169e888b9217105e552"
+    },
+    {
+      "id": "meta-trial-federale-aug26",
+      "ticker": "META",
+      "data": "2026-08-18",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 76,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Meta sotto processo federale per dipendenza da social media nei minori: azioni -4%",
+      "url": "https://finnhub.io/api/news?id=fd67d2f211f54f9fcd7229296222afefd1fd6f2e391f9811708c1c86e89669f9"
+    },
+    {
+      "id": "shel-hormuz-ceasefire-aug26",
+      "ticker": "SHEL",
+      "data": "2026-08-18",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "negativo",
+        "lungo": "negativo"
+      },
+      "confidenza": "media",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Cessate il fuoco USA-Iran scaduto: nave colpita nello Stretto di Hormuz, petrolio oltre i 91 dollari",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOdC1DbUtnYVo3NzVqcVBVR3FXcm1WQXBOWHI2b1d0SG5NOG1wS25jdjJJeUx3NFc0Ym13OTlZTzl5Q1hnR3dVWFpuTkF6cVlic0NNdXJDWHBIcGZlRVRLWUtJclYybUxvNTJ5RWFDZjJOaGR2aGFrS21Ibzg3b1FudnZjVkZTQV9ra2ZmMnNZNGZWWGdDZXpxUmpoMXEybC1oMjd2T3RYVjJwZ3NacE9XcERRWEZhcHZtbVE1VmhsaDNiWkhlV2hyei1QZ3c"
+    },
+    {
+      "id": "orcl-burry-short-aug26",
+      "ticker": "ORCL",
+      "data": "2026-08-18",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 63,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Oracle in calo: Michael Burry segnala una posizione ribassista, cash flow negativo per gli investimenti AI",
+      "url": "https://finnhub.io/api/news?id=4bd981de367a9847a342d8667102077067ba6f486bf63d7cb9292abe667ab910"
+    },
+    {
+      "id": "aapl-downgrade-memoria-aug26",
+      "ticker": "AAPL",
+      "data": "2026-08-18",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple retrocessa a Hold: memoria cara e rischi supply chain pesano sulla valutazione",
+      "url": "https://finnhub.io/api/news?id=c24b01b3ad196f30a2d939466dd1d4149bfc40127392e077aa0b39895d08c5e9"
+    },
+    {
+      "id": "ukrn-titoli-ucraini-aug26",
+      "ticker": "UKRN",
+      "data": "2026-08-18",
+      "tipo_evento": "ribilanciamento/cambio indice",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Prime azioni ucraine nell'ETF UKRN: entrano Swarmer, Kyivstar e Ferrexpo",
+      "url": "https://www.etfstream.com/articles/first-ukrainian-stocks-added-to-hanetf-s-ukraine-reconstruction-etf"
+    },
+    {
+      "id": "asml-tsm-dan-loeb-13f-aug26",
+      "ticker": "ASML",
+      "data": "2026-08-18",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Dan Loeb (Third Point) esce da Meta, Nvidia e Broadcom nel Q2 e aggiunge ASML e Taiwan Semiconductor",
+      "url": "https://finnhub.io/api/news?id=39c45bd1c4671c997137747a4ebe9a9e60dd43b31069cf16dab7c70f771b3539"
     }
   ]
 }
