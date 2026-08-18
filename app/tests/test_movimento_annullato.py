@@ -210,3 +210,62 @@ def test_il_caso_del_13_luglio():
 
     assert _saldo(1) == prima_tr
     assert _saldo(2) == prima_nascosti
+
+
+# --------------------------------------------------------------------------
+def _figlia(gid, origine):
+    with fin.SessionLocal() as db:
+        padre = _id_gamba(gid)
+        return db.query(Transaction).filter(
+            Transaction.parent_tx_id == padre,
+            Transaction.origine == origine).one().id
+
+
+def test_annullare_solo_l_arrotondamento():
+    """Il caso vero, nella lettura scelta dall'utente (18/08/2026).
+
+    Dentro la partita del 13/07 il «rimborso» di 29,00 € sul conto Trade
+    Republic È lo storno della banca. Ma le due gambe vanno tenute: fra il
+    pagamento e lo storno quei soldi sul conto non c'erano davvero, e annullare
+    tutta la partita farebbe sparire quella buca dal grafico del patrimonio —
+    cioè cancellerebbe un fatto vero per aggiustare un numero.
+
+    L'unica cosa mai esistita è l'arrotondamento: quello si annulla da solo.
+    """
+    prima_tr, prima_nascosti = _saldo(1), _saldo(2)
+    gid = fin.crea_giro(
+        spese=[{"importo": 29.00, "wallet_id": 1, "categoria": "Franchigia", "data": QUANDO}],
+        rientri=[{"importo": 29.00, "wallet_id": 1, "controparte": "storno", "data": QUANDO}])
+    assert _saldo(1) == round(prima_tr - 1.00, 2)
+
+    fin.annulla_movimento(_figlia(gid, fin.ORIGINE_ARROTONDAMENTO))
+    fin.annulla_movimento(_figlia(gid, fin.ORIGINE_SAVEBACK))
+
+    # il conto torna in pari e il salvadanaio si svuota di 1,29
+    assert _saldo(1) == prima_tr
+    assert _saldo(2) == prima_nascosti
+
+    # ma le due gambe della partita sono ancora vive: la buca resta nel grafico
+    with fin.SessionLocal() as db:
+        gambe = db.query(Transaction).filter(
+            Transaction.giro_id == gid, Transaction.parent_tx_id.is_(None)).all()
+        assert len(gambe) == 2
+        assert not any(g.annullato for g in gambe)
+
+
+def test_annullare_una_figlia_non_tocca_il_padre():
+    tid = fin.crea_uscita_carta(data=QUANDO, importo=7.60, wallet_id=1,
+                                categoria_nome="Spesa")
+    with fin.SessionLocal() as db:
+        arr = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_ARROTONDAMENTO).one().id
+        sav = db.query(Transaction).filter(
+            Transaction.parent_tx_id == tid,
+            Transaction.origine == fin.ORIGINE_SAVEBACK).one().id
+    fin.annulla_movimento(arr)
+    with fin.SessionLocal() as db:
+        assert db.get(Transaction, tid).annullato is False
+        assert db.get(Transaction, sav).annullato is False
+    # dal conto sono usciti 7,60, non più 8,00
+    assert fin.movimento(tid)["addebito"] == 7.60

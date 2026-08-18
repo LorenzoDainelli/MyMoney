@@ -462,7 +462,13 @@ def annulla_movimento(tid: int, si: bool = True) -> bool:
     basso; e lasciarla com'è tiene i conti sbagliati per sempre. Annullare fa le
     due cose insieme: la riga resta e si legge, i numeri no.
 
-    Porta con sé quello che il movimento aveva generato:
+    Chiamata su una riga GENERATA (l'arrotondamento, il saveback) annulla solo
+    quella: è il caso di un pagamento stornato dentro una partita di giro dove
+    la spesa e il rimborso sono tutti e due veri — per quei giorni i soldi sul
+    conto non c'erano davvero, e cancellare le due gambe farebbe sparire la buca
+    dal grafico del patrimonio. L'unica cosa mai esistita è l'arrotondamento.
+
+    Chiamata sul movimento porta con sé quello che aveva generato:
     - le righe figlie (arrotondamento e saveback), perché lo storno restituisce
       anche quelle — è il motivo per cui il salvadanaio non tornava;
     - tutte le gambe della partita, se è una partita di giro: mezza partita
@@ -694,7 +700,7 @@ def movimento(tid: int) -> dict | None:
             "figlie": gen,
             "addebito": round((t.importo or 0.0) + sum(
                 f["t"].importo for f in gen
-                if f["t"].origine == ORIGINE_ARROTONDAMENTO), 2),
+                if f["t"].origine == ORIGINE_ARROTONDAMENTO and not f["t"].annullato), 2),
         }
 
 
@@ -1201,10 +1207,12 @@ def lista_movimenti(limit=None, mese=None, anno=None):
         "wallet_to": wn.get(t.wallet_to_id) if t.wallet_to_id else None,
         "categoria": cn.get(t.category_id) if t.category_id else None,
         "figlie": gen.get(t.id, []),
-        # quanto è uscito DAVVERO dal conto: la spesa più l'arrotondamento
+        # quanto è uscito DAVVERO dal conto: la spesa più l'arrotondamento.
+        # Un arrotondamento annullato la banca l'ha restituito: dal conto non è
+        # più uscito, e la riga «€ 30,00 addebitati» tornerebbe a dire 29,00.
         "addebito": round((t.importo or 0.0) + sum(
             f["t"].importo for f in gen.get(t.id, [])
-            if f["t"].origine == ORIGINE_ARROTONDAMENTO), 2),
+            if f["t"].origine == ORIGINE_ARROTONDAMENTO and not f["t"].annullato), 2),
     } for t in rows]
 
 

@@ -409,6 +409,16 @@ STRINGS = {
     "fin.annullato": {"it": "Annullato", "en": "Cancelled", "es": "Anulado", "fr": "Annulé", "de": "Storniert", "uk": "Скасовано"},
     "fin.annulla": {"it": "Segna come annullato", "en": "Mark as cancelled", "es": "Marcar como anulado", "fr": "Marquer comme annulé", "de": "Als storniert markieren", "uk": "Позначити як скасоване"},
     "fin.ripristina": {"it": "Non è annullato", "en": "Not cancelled after all", "es": "No está anulado", "fr": "Finalement pas annulé", "de": "Doch nicht storniert", "uk": "Насправді не скасоване"},
+    "fin.annulla_riga": {"it": "Annulla", "en": "Cancel", "es": "Anular", "fr": "Annuler", "de": "Stornieren", "uk": "Скасувати"},
+    "fin.ripristina_riga": {"it": "Ripristina", "en": "Restore", "es": "Restaurar", "fr": "Rétablir", "de": "Zurücknehmen", "uk": "Відновити"},
+    "fin.annulla_riga_nota": {
+        "it": "Se la banca ha restituito solo l'arrotondamento, annulla la riga qui sotto invece del movimento intero: la spesa e il rimborso restano, così il grafico continua a mostrare i giorni in cui quei soldi non erano disponibili.",
+        "en": "If the bank only gave back the round-up, cancel the row below instead of the whole movement: the expense and the refund stay, so the chart keeps showing the days that money was not available.",
+        "es": "Si el banco solo devolvió el redondeo, anula la fila de abajo en vez del movimiento entero: el gasto y el reembolso se quedan, así el gráfico sigue mostrando los días en que ese dinero no estaba disponible.",
+        "fr": "Si la banque n'a rendu que l'arrondi, annulez la ligne ci-dessous plutôt que le mouvement entier : la dépense et le remboursement restent, et le graphique continue de montrer les jours où cet argent était indisponible.",
+        "de": "Hat die Bank nur die Aufrundung zurückgegeben, storniere die Zeile unten statt der ganzen Buchung: Ausgabe und Erstattung bleiben, damit die Grafik weiter die Tage zeigt, an denen das Geld nicht verfügbar war.",
+        "uk": "Якщо банк повернув лише округлення, скасуй рядок нижче, а не весь рух: витрата і повернення лишаються, тож графік і далі показує дні, коли ці гроші були недоступні.",
+    },
     "fin.annullato_nota": {
         "it": "Il pagamento è stato stornato dalla banca: la riga resta qui perché quei soldi sono usciti davvero per qualche giorno, ma non conta in nessun saldo.",
         "en": "The bank reversed this payment: the row stays here because the money really did leave for a few days, but it counts towards no balance.",

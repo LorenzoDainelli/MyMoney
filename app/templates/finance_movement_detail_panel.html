@@ -41,16 +41,31 @@
     <span>{{ t('fin.' ~ m.t.tipo) }}</span>
     <span class="num neg">−{{ m.t.importo | eur }}</span>
   </div>
+  {# Ogni riga generata si annulla da sé, senza toccare il movimento che l'ha
+     prodotta. Serve al caso in cui la banca storna un pagamento dentro una
+     partita di giro: la spesa e il rimborso sono tutti e due veri — per quei
+     giorni i soldi non erano disponibili — e l'unica cosa mai esistita è
+     l'arrotondamento. Annullare il movimento intero cancellerebbe la buca dal
+     grafico del patrimonio. #}
   {% for f in m.figlie %}
-  <div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
-    <span>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);{% if f.t.annullato %}color:var(--muted);{% endif %}">
+    <span{% if f.t.annullato %} style="text-decoration:line-through;"{% endif %}>
       {{ t('fin.orig_' ~ f.t.origine) }}
       <span class="faint" style="font-size:12px;">
         {% if f.t.origine == 'arrotondamento' %}→ {{ f.wallet_to }}{% else %}→ {{ f.wallet }}{% endif %}
       </span>
     </span>
-    {# il saveback si mostra con tutti i decimali che ha: 0,4045 € non è 0,40 € #}
-    <span class="num {{ 'neg' if f.t.tipo == 'trasferimento' else 'pos' }}">{{ '−' if f.t.tipo == 'trasferimento' else '+' }}{% if f.t.origine == 'saveback' %}{{ f.t.importo | eur_esatto }}{% else %}{{ f.t.importo | eur }}{% endif %}</span>
+    <span style="display:flex;align-items:center;gap:10px;flex:0 0 auto;">
+      {# il saveback si mostra con tutti i decimali che ha: 0,4045 € non è 0,40 € #}
+      <span class="num {{ 'muted' if f.t.annullato else 'neg' if f.t.tipo == 'trasferimento' else 'pos' }}"{% if f.t.annullato %} style="text-decoration:line-through;color:var(--muted);"{% endif %}>{{ '−' if f.t.tipo == 'trasferimento' else '+' }}{% if f.t.origine == 'saveback' %}{{ f.t.importo | eur_esatto }}{% else %}{{ f.t.importo | eur }}{% endif %}</span>
+      <form method="post" action="/finanze/movimenti/{{ f.t.id }}/annulla" style="margin:0;">
+        <input type="hidden" name="si" value="{{ 0 if f.t.annullato else 1 }}">
+        <input type="hidden" name="next" value="/finanze">
+        <button type="submit" class="btn ghost sm" style="font-size:12px;padding:2px 8px;height:auto;">
+          {{ t('fin.ripristina_riga') if f.t.annullato else t('fin.annulla_riga') }}
+        </button>
+      </form>
+    </span>
   </div>
   {% endfor %}
   <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0 0;font-weight:700;">
@@ -58,6 +73,7 @@
     <span class="num">{{ m.addebito | eur }}</span>
   </div>
   <div class="hint" style="margin-top:10px;">{{ t('fin.carta_nota', w=salvadanaio) }}</div>
+  <div class="hint" style="margin-top:8px;">{{ t('fin.annulla_riga_nota') }}</div>
   {% endif %}
 
   {# Annullare non è cancellare: vedi Transaction.annullato in finance/models.py.
