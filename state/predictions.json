@@ -10415,6 +10415,142 @@
       "inviata": true,
       "titolo": "Dan Loeb (Third Point) esce da Meta, Nvidia e Broadcom nel Q2 e aggiunge ASML e Taiwan Semiconductor",
       "url": "https://finnhub.io/api/news?id=39c45bd1c4671c997137747a4ebe9a9e60dd43b31069cf16dab7c70f771b3539"
+    },
+    {
+      "id": "nvda-q2-earnings-preview-20260818",
+      "ticker": "NVDA",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 68,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Nvidia Q2 2026: attese a 92 miliardi di ricavi e crescita del 96% — risultati in arrivo",
+      "url": "https://finnhub.io/api/news?id=9f4c75fd37381175db0576565afbf8a8d220ba7b83f2d6be57bbd0f26eff6015"
+    },
+    {
+      "id": "ibm-mainframe-drop-q2-20260818",
+      "ticker": "IBM",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 62,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "IBM: vendite dei mainframe crollate del 42% nel Q2 2026, ma Red Hat e software tengono",
+      "url": "https://finnhub.io/api/news?id=da9d9e9d7b1e034598215b33fe1e27adb45547a7f4c3a701190aef14b173b15d"
+    },
+    {
+      "id": "amgn-pt-raise-20260818",
+      "ticker": "AMGN",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 60,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Amgen: due case d'analisi alzano il target di prezzo — Mizuho a 352$, Cantor a 400$ — confermano Neutral",
+      "url": "https://finnhub.io/api/news?id=2a087cc3900171a472633fa33c452684082eb42001826f9065e18f976fa29edb"
+    },
+    {
+      "id": "msft-downgrade-20260818",
+      "ticker": "MSFT",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Microsoft retrocessa da Strong Buy: la valutazione è salita troppo in fretta rispetto ai fondamentali",
+      "url": "https://finnhub.io/api/news?id=7e7b2f87e439293f942d48bade83bb37e341a1060b082b8358d80512b3da2f3b"
+    },
+    {
+      "id": "ssnlf-memory-5x-yoy-20260818",
+      "ticker": "SSNLF",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 57,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Samsung: ricavi dalla memoria salgono 5,7 volte su base annua e ora valgono il 70% del fatturato",
+      "url": "https://finnhub.io/api/news?id=8d25376564fce97dfc499e4d80f9a750601eb7177dbe4f86a5ea6cc1e4c5b9dd"
+    },
+    {
+      "id": "lly-canada-retatrutide-20260818",
+      "ticker": "LLY",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "legale/regolatorio",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly Canada avvia un'azione legale contro la produzione e vendita illegale di retatrutide",
+      "url": "https://finnhub.io/api/news?id=a4287291a8dcb84ce3ebc725ad7c31e200a817c55c6d9a5789eca3a2ec933b4f"
+    },
+    {
+      "id": "ssnlf-korea-chip-denial-20260818",
+      "ticker": "SSNLF",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 53,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Seul nega di aver discusso i chip coreani come prima offerta di investimento negli USA",
+      "url": "https://finnhub.io/api/news?id=31743c9b11399e212e9b442ded9994f400acd6f93e2d9f11b162223d4fdec300"
+    },
+    {
+      "id": "intc-macro-selloff-20260818",
+      "ticker": "INTC",
+      "data": "2026-08-18T17:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 52,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Selloff tech: Wall Street ai minimi da due settimane, petrolio sopra i 90$ e Intel giù del 5%",
+      "url": "https://finnhub.io/api/news?id=3a176e26ab5015fc893e0e97c4cbff05ea224917184efc7003daf98949da3bb6"
     }
   ]
 }
