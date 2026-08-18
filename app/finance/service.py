@@ -30,8 +30,8 @@ AIB_COLORE = "#632874"
 PAYPAL_COLORE = "#00457C"
 
 # Conti e carte REALI, mai generici (richiesta utente): nome -> (tipo, accento
-# brand). I colori di Hype/Revolut/Trade Republic sono copiati 1:1 dal design
-# (design_reference/data.js: accent '#12B3A6' / '#5B5BD6' / '#334155').
+# brand). I colori di Hype/Revolut/Trade Republic sono copiati 1:1 dagli accenti
+# del design freeze v1.0.
 WALLET_BRAND = {
     "AIB": ("conto", AIB_COLORE),
     "Hype": ("carta", "#12B3A6"),
@@ -1365,11 +1365,6 @@ def riepilogo_mese(anno, mese):
     }
 
 
-# ============================================================================
-#  API JSON per la PWA e il sync (v2, vedi PIANO-V2.md). SOLA LETTURA in Fase 1;
-#  il canale di scrittura/fusione arriva con la Fase 4. I riferimenti tra record
-#  usano lo `uid` (stabile tra dispositivi), MAI l'id interno (che varia).
-# ============================================================================
 def calendario_spese(anno, mese):
     """Le uscite giorno per giorno del mese: il calendario in pagina.
 

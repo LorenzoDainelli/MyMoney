@@ -53,7 +53,6 @@ Dettagli, struttura e privacy in **`app/README.md`**.
 
 ```
 CLAUDE.md              regole sempre attive (mai segnali operativi, disclaimer, ...)
-CONTESTO-PROGETTO.md   briefing completo per riprendere il lavoro in una chat nuova
 config/
   portfolio.yaml       i 37 titoli monitorati (pesi allineati all'app)
   settings.yaml        destinatario, mittente, soglie, test_mode

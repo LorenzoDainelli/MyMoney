@@ -36,8 +36,9 @@ comodo. Ma la **review** è sempre e solo di Claude Code.
 
 ### Fase 1 — Pianificazione → **Claude Code (cervello)**
 - Decide architettura e approccio.
-- Scrive un **piano-contratto** dettagliato (vedi §4) in un file dedicato,
-  es. `PIANO-FASE-N.md`.
+- Scrive un **piano-contratto** dettagliato (vedi §4) in un file dedicato
+  dentro `docs/`, es. `docs/PIANO-CLOUD.md`. (I vecchi `PIANO-FASE-N.md` nella
+  radice sono stati rimossi il 18/08/2026: i piani stanno in `docs/`.)
 - Il piano deve essere **autosufficiente**: l'esecutore non vede il
   ragionamento che c'è dietro, vede solo il documento. Tutto ciò che serve
   deve stare scritto lì.

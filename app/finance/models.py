@@ -125,7 +125,11 @@ class Transaction(Base):
     # tornati indietro. Si porta dietro le righe generate: se la banca storna il
     # pagamento restituisce anche l'arrotondamento e il saveback.
     annullato: Mapped[bool] = mapped_column(Boolean, default=False)
-    # --- metadati di sincronizzazione multi-dispositivo (v2, vedi PIANO-V2.md) ---
+    # --- identità e versione del record (sync multi-dispositivo) --------------
+    # Nati per la sincronizzazione fra PC e telefono, che oggi non esiste più: i
+    # dati stanno in un solo database sul cloud. Restano perché servono ancora a
+    # due cose vive — il backup/ripristino li usa per riconoscere un record fra
+    # due file diversi, e `deleted` è il soft-delete su cui poggia tutto.
     uid: Mapped[str] = mapped_column(String(32), default="", index=True)          # identità stabile tra dispositivi
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=tempo.adesso)  # ultima modifica (per la fusione)
     rev: Mapped[int] = mapped_column(Integer, default=1)                          # versione del record (sale a ogni modifica)
@@ -160,8 +164,8 @@ class Transaction(Base):
 # ogni riga porta con sé identità e versione a prescindere da CHI la modifica:
 #   - creazione  -> uid (se manca), updated_at, rev=1
 #   - modifica   -> updated_at aggiornato, rev incrementato
-# È il fondamento della sincronizzazione multi-dispositivo (vedi PIANO-V2.md,
-# Fase 4); qui NON cambia nulla di visibile: i dati si comportano come prima.
+# Qui NON cambia nulla di visibile: i dati si comportano come prima. Serve al
+# backup/ripristino, che riconosce i record per uid e non per id interno.
 # ---------------------------------------------------------------------------
 _MODELLI_SYNC = (Wallet, Category, Transaction)
 

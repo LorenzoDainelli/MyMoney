@@ -1,6 +1,6 @@
 /* MyMoney — grafico del patrimonio (dashboard).
-   Trasposizione 1:1 in vanilla JS del WealthChart del design freeze v1.0
-   (design_reference/DashboardScreen.jsx): area + linea, gridline, etichette
+   Trasposizione 1:1 in vanilla JS del WealthChart del design freeze v1.0:
+   area + linea, gridline, etichette
    €k, baseline tratteggiata, hover con tooltip, bottoni range.
    I dati sono REALI e arrivano dal backend nel JSON #wealth-data. */
 (function () {
