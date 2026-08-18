@@ -8,6 +8,7 @@
    ============================================================================ #}
 {% extends "base.html" %}
 {% from "_icons.html" import icon %}
+{% from "_filtri_movimenti.html" import filtri_riga with context %}
 {# La riga che, sul telefono, apre uno dei blocchi del PC.
 
    NON e' un <details>. Con <details open> nel markup, il PC dipendeva dal
@@ -388,7 +389,41 @@
   </div>
 
   {# ---------- tutti i movimenti (header ordinabili, default: data desc) ---------- #}
-  <div class="page-title" style="font-size:18px;margin-top:20px;">{{ t('fin.all_movements') }}</div>
+  {# La lente sta sulla stessa riga del titolo, alla sua altezza; i filtri
+     stanno chiusi finché non servono, così a riposo la pagina è identica a
+     prima. Le tendine le riempie app.js leggendo le righe: niente elenchi
+     scritti a mano che il giorno dopo non combaciano più coi dati. #}
+  <div class="mov-head">
+    <div class="page-title" style="font-size:18px;margin:0;">{{ t('fin.all_movements') }}</div>
+    <div class="mov-ctl">
+      <label class="mov-cerca">
+        {{ icon('search', 15) }}
+        <input type="search" id="mov-q" placeholder="{{ t('fin.cerca_ph') }}"
+               aria-label="{{ t('fin.cerca') }}" autocomplete="off">
+      </label>
+      <button type="button" class="btn sm" id="mov-apri" aria-expanded="false"
+              aria-controls="mov-pannello">{{ t('fin.filtri') }}<span class="mov-n" hidden></span></button>
+    </div>
+  </div>
+
+  <div class="mov-pannello" id="mov-pannello" hidden>
+    <div class="mov-tendine">
+      <select id="f-w" aria-label="{{ t('fin.wallet') }}"><option value="">{{ t('fin.wallet') }}</option></select>
+      <select id="f-t" aria-label="{{ t('fin.type') }}"><option value="">{{ t('fin.type') }}</option></select>
+      <select id="f-c" aria-label="{{ t('fin.category') }}"><option value="">{{ t('fin.category') }}</option></select>
+      <select id="f-p" aria-label="{{ t('fin.f_periodo') }}">
+        <option value="">{{ t('fin.f_periodo') }}</option>
+        <option value="mese">{{ t('fin.f_mese') }}</option>
+        <option value="scorso">{{ t('fin.f_mese_scorso') }}</option>
+        <option value="anno">{{ t('fin.f_anno') }}</option>
+      </select>
+    </div>
+    <div class="mov-chip" id="mov-chip"></div>
+    <div class="mov-esito" id="mov-esito"
+         data-esito="{{ t('fin.f_esito', n='{n}') }}"
+         data-effetto="{{ t('fin.f_effetto', w='{w}', v='{v}') }}"
+         data-niente="{{ t('fin.f_niente') }}"></div>
+  </div>
 
   {# --- telefono: la stessa cosa, ma come lista ---------------------------
      La tabella qui sotto diventa una scheda per riga: 174 punti l'una, che su
@@ -419,7 +454,8 @@
       </div>
       {% for m in g.righe %}
       {% set tt = m.t.tipo %}
-      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov">
+      {% set gamt_f = m.t.giro_importo_display if tt == 'giro' else None %}
+      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r" {{ filtri_riga(m, tt, gamt_f) }}>
         <span class="tel-mov-d">{{ m.t.descrizione or m.categoria or t('fin.' ~ tt) }}</span>
         <span class="tel-mov-q">{{ m.t.data.strftime('%H:%M') }} · {{ m.wallet }}{% if m.wallet_to and tt != 'giro' %} → {{ m.wallet_to }}{% endif %}{% if m.categoria and m.t.descrizione %} · {{ m.categoria }}{% endif %}</span>
         {% if tt == 'giro' %}{% set gamt = m.t.giro_importo_display %}
@@ -428,6 +464,13 @@
         <span class="num tel-mov-i {{ 'pos' if tt=='entrata' else 'neg' if tt=='uscita' else '' }}">{{ '+' if tt=='entrata' else ('−' if tt=='uscita' else '') }}{{ m.t.importo | eur }}</span>
         {% endif %}
       </a>
+      {% for f in m.figlie %}
+      <a href="/finanze/movimenti/{{ m.t.id }}/dettaglio" data-drawer class="tel-mov mov-r mov-gen" {{ filtri_riga(f, f.t.tipo, None) }}>
+        <span class="tel-mov-d">{{ f.t.descrizione or t('fin.f_generata') }}</span>
+        <span class="tel-mov-q">{{ f.t.data.strftime('%H:%M') }} · {{ f.wallet }}{% if f.wallet_to %} → {{ f.wallet_to }}{% endif %}</span>
+        <span class="num tel-mov-i {{ 'pos' if f.t.tipo=='entrata' else '' }}">{{ '+' if f.t.tipo=='entrata' else '' }}{{ f.t.importo | eur }}</span>
+      </a>
+      {% endfor %}
       {% endfor %}
     </section>
     {% else %}

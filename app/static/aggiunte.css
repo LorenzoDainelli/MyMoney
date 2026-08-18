@@ -55,3 +55,62 @@
 .ai-scroll::-webkit-scrollbar-thumb {
   background: var(--ai-bd); border-radius: var(--r-pill);
 }
+
+/* --- cerca e filtra i movimenti -------------------------------------------
+   La lente sta alla stessa altezza del titolo (34px, come i .btn.sm) e i
+   filtri restano chiusi: a riposo la pagina è quella di prima, e chi non
+   cerca niente non paga niente in altezza.
+   Niente `display` inline dal JavaScript: mostrare e nascondere passa da due
+   classi, così l'ordinamento della tabella può spostare le righe senza
+   portarsi dietro uno stile appiccicato addosso. */
+.mov-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-top: 20px;
+}
+.mov-ctl { display: flex; align-items: center; gap: 8px; }
+.mov-cerca {
+  display: flex; align-items: center; gap: 6px;
+  flex: 0 1 260px; height: 34px; padding: 0 10px; margin: 0;
+  border: 1px solid var(--border); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--muted);
+}
+.mov-cerca:focus-within { border-color: var(--accent); }
+/* min-width:0 non è un vezzo: dentro un flex un input ha una larghezza minima
+   automatica pari al suo contenuto intrinseco (~20 caratteri), che vincerebbe
+   sul 100% e farebbe uscire la lente dal riquadro. */
+.mov-cerca input {
+  flex: 1 1 auto; width: 100%; min-width: 0;
+  border: 0; background: transparent; padding: 0; height: auto;
+  font-size: var(--text-sm); color: var(--ink);
+}
+.mov-cerca input:focus { outline: none; box-shadow: none; }
+#mov-apri { height: 34px; display: inline-flex; align-items: center; gap: 6px; }
+.mov-n {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: var(--r-pill); background: var(--accent);
+  color: var(--on-accent); font-size: 11px; font-weight: var(--fw-bold);
+}
+.mov-pannello {
+  margin-top: 10px; padding: 12px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.mov-tendine { display: flex; gap: 8px; flex-wrap: wrap; }
+.mov-tendine select {
+  width: auto; min-width: 0; max-width: 100%;
+  height: 34px; padding: 0 10px; font-size: var(--text-sm);
+}
+.mov-chip { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.mov-chip:empty { display: none; }
+.chip-f {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 6px 3px 10px; border-radius: var(--r-pill);
+  border: 1px solid var(--accent-soft-bd); background: var(--accent-soft);
+  color: var(--accent-strong); font-size: var(--text-sm); cursor: pointer;
+}
+.chip-f:hover { border-color: var(--accent); }
+.mov-esito { margin-top: 10px; font-size: var(--text-sm); color: var(--muted); }
+.mov-esito b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.mov-off { display: none !important; }
+.mov-gen:not(.mov-on) { display: none; }

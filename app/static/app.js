@@ -656,7 +656,9 @@ document.addEventListener('click', function (e) {
     // Quanto «pesa» un'unità: un giorno vale i suoi movimenti, una scheda vale
     // uno. Senza il peso, dodici giorni da una riga e dodici giorni da dieci
     // darebbero due pagine lunghe in modo molto diverso.
-    function peso(u) { return u.querySelectorAll('.tel-mov').length || 1; }
+      // le righe generate sono nascoste finché non si filtra: contarle qui
+    // farebbe pesare un giorno il doppio di quello che si vede
+    function peso(u) { return u.querySelectorAll('.tel-mov:not(.mov-gen)').length || 1; }
 
     var bottone = document.createElement('button');
     bottone.type = 'button';
@@ -949,4 +951,227 @@ document.addEventListener('click', function (e) {
       }
     }).observe(document.body, { childList: true, subtree: true });
   }
+})();
+
+
+/* ==========================================================================
+   Cerca e filtra i movimenti — tutto qui nel browser.
+
+   Perché nel browser e non sul server: le righe sono già tutte in pagina (la
+   tabella mostra l'intero registro), quindi filtrare è confrontare stringhe.
+   Sul server sarebbe un giro di rete e un ricaricamento a ogni tendina, per
+   avere esattamente lo stesso risultato.
+
+   Le tendine si riempiono LEGGENDO le righe, non da un elenco scritto a mano:
+   un portafoglio archiviato non compare fra le scelte se non ha movimenti, e
+   nessuna scelta può puntare al vuoto.
+
+   La parte che conta davvero è l'effetto sul portafoglio: filtrando per un
+   portafoglio si somma quanto ci è entrato meno quanto ne è uscito, usando
+   `data-f-in` e `data-f-out`. È la risposta a «i Nascosti dicono 6,55: da
+   dove viene?», che col solo tipo di movimento non si potrebbe dare — un
+   trasferimento è un'entrata per uno e un'uscita per l'altro.
+   ========================================================================== */
+(function () {
+  var cerca = document.getElementById('mov-q');
+  var apri = document.getElementById('mov-apri');
+  var pannello = document.getElementById('mov-pannello');
+  if (!cerca || !apri || !pannello) return;
+
+  var righe = Array.prototype.slice.call(document.querySelectorAll('.mov-r'));
+  if (!righe.length) return;
+  // Ogni movimento sta in pagina DUE volte: la tabella del PC e la lista del
+  // telefono, una delle due nascosta dal CSS. Filtrarle entrambe è giusto —
+  // ma contarle entrambe no, o «12 movimenti» diventerebbe 24. Il conteggio
+  // guarda una copia sola, quella della tabella (che c'è sempre e per intero).
+  var daContare = righe.filter(function (r) { return r.tagName === 'TR'; });
+  if (!daContare.length) daContare = righe;
+  var esito = document.getElementById('mov-esito');
+  var chips = document.getElementById('mov-chip');
+  var contatore = apri.querySelector('.mov-n');
+  var tendine = {
+    w: document.getElementById('f-w'),
+    t: document.getElementById('f-t'),
+    c: document.getElementById('f-c'),
+    p: document.getElementById('f-p')
+  };
+
+  // ---- riempimento delle tendine dai dati veri ----------------------------
+  function aggiungi(sel, valori) {
+    valori.sort(function (a, b) { return a.testo.localeCompare(b.testo); });
+    for (var i = 0; i < valori.length; i++) {
+      var o = document.createElement('option');
+      o.value = valori[i].val;
+      o.textContent = valori[i].testo;
+      sel.appendChild(o);
+    }
+  }
+  var conti = {}, tipi = {}, categorie = {};
+  righe.forEach(function (r) {
+    (r.dataset.fW || '').split('|').forEach(function (n) {
+      if (n) conti[n] = n;
+    });
+    if (r.dataset.fT) tipi[r.dataset.fT] = r.dataset.fTl || r.dataset.fT;
+    if (r.dataset.fC) categorie[r.dataset.fC] = r.dataset.fC;
+  });
+  function inLista(mappa) {
+    return Object.keys(mappa).map(function (k) {
+      return { val: k, testo: mappa[k] };
+    });
+  }
+  aggiungi(tendine.w, inLista(conti));
+  aggiungi(tendine.t, inLista(tipi));
+  aggiungi(tendine.c, inLista(categorie));
+
+  // ---- il periodo, in date ISO da confrontare come stringhe ---------------
+  // Costruite a mano e non con toISOString(): quella passa per UTC e a
+  // gennaio, di sera, restituirebbe il primo giorno dell'anno prima.
+  function iso(a, m, g) {
+    return a + '-' + ('0' + (m + 1)).slice(-2) + '-' + ('0' + g).slice(-2);
+  }
+  function primoDelMese(a, m) {
+    var d = new Date(a, m, 1);
+    return iso(d.getFullYear(), d.getMonth(), 1);
+  }
+  function periodo(quale) {
+    var oggi = new Date();
+    var a = oggi.getFullYear(), m = oggi.getMonth();
+    if (quale === 'mese') return [primoDelMese(a, m), primoDelMese(a, m + 1)];
+    if (quale === 'scorso') return [primoDelMese(a, m - 1), primoDelMese(a, m)];
+    if (quale === 'anno') return [iso(a, 0, 1), iso(a + 1, 0, 1)];
+    return null;
+  }
+
+  function euro(v) {
+    var s = Math.abs(v).toFixed(2).replace('.', ',');
+    return (v < 0 ? '−' : '+') + s + ' €';
+  }
+
+  // ---- il filtro ----------------------------------------------------------
+  function stato() {
+    return {
+      q: cerca.value.trim().toLowerCase(),
+      w: tendine.w.value, t: tendine.t.value,
+      c: tendine.c.value, p: tendine.p.value
+    };
+  }
+
+  function attivi(s) {
+    var fuori = [];
+    if (s.q) fuori.push({ k: 'q', testo: '“' + s.q + '”' });
+    if (s.w) fuori.push({ k: 'w', testo: s.w });
+    if (s.t) fuori.push({ k: 't', testo: tipi[s.t] || s.t });
+    if (s.c) fuori.push({ k: 'c', testo: s.c });
+    if (s.p) fuori.push({ k: 'p', testo: tendine.p.options[tendine.p.selectedIndex].textContent });
+    return fuori;
+  }
+
+  function passa(r, s, arco) {
+    if (s.q && (r.dataset.fQ || '').indexOf(s.q) < 0) return false;
+    if (s.t && r.dataset.fT !== s.t) return false;
+    if (s.c && r.dataset.fC !== s.c) return false;
+    if (s.w && (r.dataset.fW || '').split('|').indexOf(s.w) < 0) return false;
+    if (arco) {
+      var d = r.dataset.fD || '';
+      if (d < arco[0] || d >= arco[1]) return false;
+    }
+    return true;
+  }
+
+  // Il telefono mostra i giorni un pezzo alla volta («mostra altri»). Appena
+  // si filtra quella paginazione diventa una trappola: cercheresti dentro
+  // dodici giorni credendo di cercare in tutti. Alla prima ricerca si apre
+  // tutto e il pulsante sparisce, per il resto della visita.
+  var apertoTutto = false;
+  function apriTutto() {
+    if (apertoTutto) return;
+    apertoTutto = true;
+    var giorni = document.querySelectorAll('.tel-giorno');
+    for (var i = 0; i < giorni.length; i++) giorni[i].style.display = '';
+    var altri = document.querySelector('.tel-altri');
+    if (altri) altri.remove();
+  }
+
+  function applica() {
+    var s = stato();
+    var lista = attivi(s);
+    var acceso = lista.length > 0;
+    var arco = periodo(s.p);
+    if (acceso) apriTutto();
+
+    var quanti = 0, saldo = 0;
+    righe.forEach(function (r) {
+      var gen = r.classList.contains('mov-gen');
+      // Le righe generate (arrotondamento, saveback) restano invisibili finché
+      // non filtri: fuori da una ricerca sarebbero solo rumore, dentro sono
+      // proprio quelle che stai cercando.
+      var ok = passa(r, s, arco) && (!gen || acceso);
+      r.classList.toggle('mov-off', !ok);
+      if (gen) r.classList.toggle('mov-on', ok);
+      if (!ok || daContare.indexOf(r) < 0) return;
+      quanti++;
+      if (s.w) {
+        var imp = parseFloat(r.dataset.fImp || '0') || 0;
+        if (r.dataset.fIn === s.w) saldo += imp;
+        if (r.dataset.fOut === s.w) saldo -= imp;
+      }
+    });
+
+    // i giorni del telefono rimasti senza righe non devono lasciare una data
+    // sospesa nel vuoto
+    var giorni = document.querySelectorAll('.tel-giorno');
+    for (var i = 0; i < giorni.length; i++) {
+      var vive = giorni[i].querySelectorAll('.tel-mov:not(.mov-off)').length;
+      giorni[i].classList.toggle('mov-off', acceso && !vive);
+    }
+
+    if (contatore) {
+      contatore.textContent = lista.length;
+      contatore.hidden = !acceso;
+    }
+
+    if (chips) {
+      chips.textContent = '';
+      lista.forEach(function (f) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip-f';
+        b.dataset.via = f.k;
+        b.textContent = f.testo + ' ×';
+        chips.appendChild(b);
+      });
+    }
+
+    if (esito) {
+      if (!acceso) { esito.textContent = ''; return; }
+      var testo = (esito.dataset.esito || '{n}').replace('{n}', quanti);
+      if (!quanti) testo = esito.dataset.niente || testo;
+      else if (s.w) {
+        testo += ' · ' + (esito.dataset.effetto || '{w}: {v}')
+          .replace('{w}', s.w).replace('{v}', euro(saldo));
+      }
+      esito.textContent = testo;
+    }
+  }
+
+  apri.addEventListener('click', function () {
+    var chiuso = pannello.hidden;
+    pannello.hidden = !chiuso;
+    apri.setAttribute('aria-expanded', chiuso ? 'true' : 'false');
+  });
+
+  cerca.addEventListener('input', applica);
+  Object.keys(tendine).forEach(function (k) {
+    tendine[k].addEventListener('change', applica);
+  });
+  if (chips) {
+    chips.addEventListener('click', function (e) {
+      var b = e.target.closest('.chip-f');
+      if (!b) return;
+      if (b.dataset.via === 'q') cerca.value = '';
+      else tendine[b.dataset.via].value = '';
+      applica();
+    });
+  }
+  applica();
 })();

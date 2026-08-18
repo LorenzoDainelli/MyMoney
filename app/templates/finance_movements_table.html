@@ -6,6 +6,7 @@
    importo NEUTRO (non è una vera entrata/uscita: conta solo il netto della
    partita, e solo quando è chiusa). Il cestino elimina l'INTERA partita. #}
 {% from "_icons.html" import icon %}
+{% from "_filtri_movimenti.html" import filtri_riga with context %}
 <div class="table-wrap">
   <table>
     <thead><tr>
@@ -22,7 +23,10 @@
       {% set tt = m.t.tipo %}
       {% set gk = m.t.giro_kind if tt == 'giro' else None %}
       {% set gamt = m.t.giro_importo_display if tt == 'giro' else None %}
-      <tr>
+      {# Attributi per «cerca e filtra» (app.js). `in`/`out` dicono su quale
+         portafoglio la riga fa salire o scendere il saldo: serve a rispondere
+         «quanto è entrato nei Nascosti?» senza sommare a mano. #}
+      <tr class="mov-r" {{ filtri_riga(m, tt, gamt) }}>
         <td data-s="{{ m.t.data.isoformat() }}"><span class="muted">{{ m.t.data.strftime('%d/%m') }} · {{ m.t.data.strftime('%H:%M') }}</span></td>
         <td data-s="{{ t('fin.' ~ tt) }}">
           <span class="pill {{ 'green' if tt=='entrata' else 'red' if tt=='uscita' else 'accent' if tt=='giro' else 'gray' }}">{{ t('fin.' ~ tt) }}</span>
@@ -71,6 +75,21 @@
           </div>
         </td>
       </tr>
+      {# Le righe generate (arrotondamento, saveback) non si elencano mai: si
+         vedono aprendo il movimento. Ma se filtri per portafoglio DEVONO
+         comparire, altrimenti i «Nascosti» risulterebbero quasi vuoti e il
+         filtro racconterebbe una bugia. Nascoste finché non filtri. #}
+      {% for f in m.figlie %}
+      <tr class="mov-r mov-gen" {{ filtri_riga(f, f.t.tipo, None) }}>
+        <td data-s="{{ f.t.data.isoformat() }}"><span class="muted">{{ f.t.data.strftime('%d/%m') }} · {{ f.t.data.strftime('%H:%M') }}</span></td>
+        <td><span class="pill gray">{{ t('fin.f_generata') }}</span></td>
+        <td class="num {{ 'pos' if f.t.tipo=='entrata' else '' }}" style="font-weight:600;">{{ '+' if f.t.tipo=='entrata' else '' }}{{ f.t.importo | eur }}</td>
+        <td>{{ f.wallet }}{% if f.wallet_to %} → {{ f.wallet_to }}{% endif %}</td>
+        <td><span class="muted">—</span></td>
+        <td>{{ f.t.descrizione or '—' }}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
     {% else %}
       <tr><td colspan="7" class="faint">{{ t('fin.no_movements') }}</td></tr>
     {% endfor %}

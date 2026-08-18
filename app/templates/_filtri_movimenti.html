@@ -1,0 +1,37 @@
+{# Gli attributi che rendono una riga di movimento filtrabile nel browser.
+   Stanno qui e non nei due template perché la tabella del PC e la lista del
+   telefono devono filtrare per gli STESSI valori: due copie divergono, e il
+   giorno che divergono il telefono dà un totale diverso dal PC senza che
+   nessuno capisca perché.
+
+   `in` e `out` sono il punto: dicono su quale portafoglio la riga fa salire e
+   su quale fa scendere il saldo. Con quelli, filtrando per «Nascosti» si può
+   dire quanto è davvero entrato lì dentro — che è la domanda per cui questa
+   ricerca è nata. Il tipo da solo non basterebbe: un trasferimento è
+   un'entrata per uno e un'uscita per l'altro.
+
+   Sul giro l'importo firmato è già calcolato dal server (`giro_importo_display`):
+   la gamba negativa esce dal portafoglio, quella positiva ci rientra. #}
+
+{% macro filtri_riga(m, tt, gamt) -%}
+{%- if tt == 'giro' -%}
+  {%- set entra = m.wallet if (gamt or 0) > 0 else '' -%}
+  {%- set esce = m.wallet if (gamt or 0) < 0 else '' -%}
+  {%- set imp = (gamt or 0) | abs -%}
+{%- elif tt == 'entrata' -%}
+  {%- set entra, esce, imp = m.wallet, '', m.t.importo or 0 -%}
+{%- elif tt == 'uscita' -%}
+  {%- set entra, esce, imp = '', m.wallet, m.t.importo or 0 -%}
+{%- else -%}
+  {%- set entra, esce, imp = m.wallet_to or '', m.wallet, m.t.importo or 0 -%}
+{%- endif -%}
+data-f-t="{{ tt }}"
+data-f-tl="{{ t('fin.' ~ tt) }}"
+data-f-d="{{ m.t.data.strftime('%Y-%m-%d') }}"
+data-f-c="{{ (m.categoria or '') }}"
+data-f-w="{{ m.wallet or '' }}|{{ m.wallet_to or '' }}"
+data-f-in="{{ entra }}"
+data-f-out="{{ esce }}"
+data-f-imp="{{ '%.4f' | format(imp) }}"
+data-f-q="{{ ((m.t.descrizione or '') ~ ' ' ~ (m.categoria or '') ~ ' ' ~ (m.wallet or '') ~ ' ' ~ (m.wallet_to or '') ~ ' ' ~ (m.t.controparte or '')) | lower }}"
+{%- endmacro %}
