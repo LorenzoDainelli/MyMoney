@@ -1,86 +1,6 @@
 {
   "items": [
     {
-      "id": "ibm-q2-crollo-25pct",
-      "ticker": "IBM",
-      "titolo": "IBM crolla del 25% in un solo giorno: i risultati preliminari Q2 deludono e si teme un taglio della guidance annuale",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=7515c55fbf97b6944ee200859612b248e4d9a3ffcbf0e5e9732076e4c4bd66d3",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "orcl-credito-junk-52w-low",
-      "ticker": "ORCL",
-      "titolo": "Oracle: rating del credito tagliato verso il territorio junk e nuovo minimo annuale — il piano capex AI non convince il mercato",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=868679b71c248572c8b429c64ac3c01020340aba3faa69927cfd8002fb7f81ca",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "jnj-earnings-blowout-ma-fda",
-      "ticker": "JNJ",
-      "titolo": "Johnson & Johnson: trimestre eccellente, acquisizione nella chirurgia spinale e via libera FDA per un dispositivo cardiaco",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=8d88b130ffa95c1632bba1a2a2e600b109439fdb1e85c0c8ffa6f37540cd5258",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "shel-iran-petroliere-hormuz-brent90",
-      "ticker": "SHEL",
-      "titolo": "USA-Iran: nona notte consecutiva di attacchi, due petroliere esplodono nello Stretto di Hormuz — Brent supera 90 dollari",
-      "tipo_evento": "macro",
-      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPbmtOemhMR1UtaVNoMENBMHltNEpKTWJNekRXUEtSa3hidndTM0VZVnRoTEJlV2ZENWtkYVFCUkJtSk8zdFhPeEJQSXRNMS1vWC03N2NJek14WklXdzhNZWkzMnZRUFpGcHg2OXotaHpyVW9jblFTYUM4U2lGcXFWa1NFbnZSQnpreVF6OXVhMW1oeHdIdkFNMjBJa09UZGgycjRkMjZ6Z1dxNC10enJIVDZJdlVSQjRxQlBZc05Tdw?oc=5",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "avgo-standard-chartered-cloud-54mercati",
-      "ticker": "AVGO",
-      "titolo": "Broadcom porta il cloud banking di Standard Chartered in 54 mercati mondiali con un grande accordo infrastrutturale",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=6216c1903bfb5069a67eec855674b51bf77cd49c59ac878578c693d214b7dab8",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "nflx-acquisizione-interpositive-587m",
-      "ticker": "NFLX",
-      "titolo": "Netflix spende 587 milioni per la startup di AI cinematografica co-fondata da Ben Affleck",
-      "tipo_evento": "M&A",
-      "url": "https://finnhub.io/api/news?id=f37df1127ddd6aaed4ca2c8688ee32f66c90aa33ede187c6017586de7cffbcc8",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "aapl-causa-openai-hardware",
-      "ticker": "AAPL",
-      "titolo": "Apple cita in giudizio OpenAI: la causa potrebbe bloccare i piani di espansione hardware dello storico rivale",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=9b620eb1272a611f663ff7120ac487af26f4fc94cb6084eacf3d4617bbe7a3ef",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "wmt-richiamo-taylorfarms-cyclospora",
-      "ticker": "WMT",
-      "titolo": "Cyclospora nei sacchi insalata: Walmart ritira quattro prodotti Taylor Farms, volatilità sul titolo",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=3a907727516ab43302cf43fe0ce306f9c4aee4ebcbc68a1c53064af952b17307",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "spcx-morgan-stanley-target300",
-      "ticker": "SPCX",
-      "titolo": "Morgan Stanley fissa un target da 300 dollari su SpaceX mentre il titolo è ai minimi da 52 settimane",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=be6ecbbf1eeaf6225cfe625dc7ad69f9dc740f3d1334cb6bb6e1c731460dd544",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
-      "id": "amzn-anthropic-ipo-1200mld",
-      "ticker": "AMZN",
-      "titolo": "Anthropic verso un'IPO da 1.200 miliardi: Amazon, tra i principali azionisti, potrebbe essere un grande beneficiario",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=53325a2ad4f0ed7a4ff404f670b6d6de71c4895d5aad481e74a83ca9b1b030a5",
-      "data_invio": "2026-07-20T05:10:00+00:00"
-    },
-    {
       "id": "ssnlf-job-cuts-us-20260720",
       "ticker": "SSNLF",
       "titolo": "Samsung taglia centinaia di dipendenti negli USA e sposta le operazioni",
@@ -2855,6 +2775,86 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=3a176e26ab5015fc893e0e97c4cbff05ea224917184efc7003daf98949da3bb6",
       "data_invio": "2026-08-18T17:10:00+00:00"
+    },
+    {
+      "id": "aapl-eu-app-store-aug2026",
+      "ticker": "AAPL",
+      "titolo": "Apple cambia le regole dell'App Store in Europa per chiudere i conflitti con i regolatori UE",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=8fa782bfff7fdb4ff64cca3fffbd1b5745f2e8a193855905744ee87b7e54aacc",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "wdc-selloff-aug19-2026",
+      "ticker": "WDC",
+      "titolo": "Western Digital cede quasi il 7% nel selloff tecnologico di martedì",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=559d850af0b5f2ead9b97923ea866e0ba7f2a35b02eb27727c624110b8040178",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "pltr-q2-beat-raise-aug2026",
+      "ticker": "PLTR",
+      "titolo": "Palantir supera le attese nel Q2 e alza le guidance: l'AI e la piattaforma AIP accelerano",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=df627907967623836cb614b6d9f84806172c0d8d1b4b25a8f505c339c345c9d0",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "goldman-space-1800bn-aug2026",
+      "ticker": "SPCX",
+      "titolo": "Goldman Sachs: il mercato spaziale globale raggiungerà 1.800 miliardi di dollari entro il 2035",
+      "tipo_evento": "macro tematica",
+      "url": "https://finnhub.io/api/news?id=2d24f9b4daa34363473af59ba65821fe60341732d839c1b7794d6112f516a29a",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "anthropic-10b-credit-aug2026",
+      "ticker": "GOOG",
+      "titolo": "La linea di credito pre-IPO di Anthropic supera i 10 miliardi di dollari: Google e Amazon rafforzano la posta",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=912557a963c654d0c80ccdba4466965f75facd0f65a69f8ba1aa600c717658db",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "oracle-pipeline-rerouted-aug2026",
+      "ticker": "ORCL",
+      "titolo": "Il gasdotto del data center Oracle-OpenAI viene reindirizzato dopo i rifiuti delle autorizzazioni",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=64c052e9cca69968749e216be5bcb5f80496f4c429dae775bb3657569b6b0043",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "samsung-netlist-ip-aug2026",
+      "ticker": "SSNLF",
+      "titolo": "Netlist ottiene accesso ai documenti tecnici di Samsung nel contenzioso sulla proprietà intellettuale delle memorie",
+      "tipo_evento": "legale/regolatorio",
+      "url": "https://finnhub.io/api/news?id=41afdf86402b2392651a017999072cb9e5fc250084b7ab1aac46ac64cc1e9d0b",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "tech-selloff-bond-yields-aug19",
+      "ticker": "AVGO",
+      "titolo": "Il rialzo dei rendimenti obbligazionari USA innesca un selloff nei titoli tech e AI",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=8be0662f56a93fc1a3eafb7348c7ea178f1847ba7757168a8bfdfcfd45768efa",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "amzn-louisiana-18b-aug2026",
+      "ticker": "AMZN",
+      "titolo": "Amazon porta a 18 miliardi di dollari l'investimento in Louisiana con un terzo campus di data center",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=1daab516f2aba00367e141f0f7c9e8faddf771e5aeb4d31f3db6a514bacdd286",
+      "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "amgn-tscan-terminated-aug2026",
+      "ticker": "AMGN",
+      "titolo": "Amgen rescinde l'accordo di ricerca con TScan Therapeutics con effetto a novembre 2026",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=1011302742ecb6c729b832b6fcd1571d9373383ba3f323443bed1b8b593db274",
+      "data_invio": "2026-08-19T05:10:00+00:00"
     }
   ]
 }
