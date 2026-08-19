@@ -2855,6 +2855,70 @@
       "tipo_evento": "prodotto",
       "url": "https://finnhub.io/api/news?id=1011302742ecb6c729b832b6fcd1571d9373383ba3f323443bed1b8b593db274",
       "data_invio": "2026-08-19T05:10:00+00:00"
+    },
+    {
+      "id": "goog-marvell-tpu-deal-0819",
+      "ticker": "GOOG",
+      "titolo": "Google sigla un accordo da 12 miliardi con Marvell per i chip AI e ottiene diritto d'acquisto su una quota rilevante",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=ee610846551e06b5814d7484d6a8749e30197f4ffe09530a339f56f4264a3b15",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "samsung-foundry-price-hike-0819",
+      "ticker": "SSNLF",
+      "titolo": "Samsung alza i prezzi per i servizi di fonderia avanzata fino al +15%, sfruttando la carenza di capacità TSMC",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=d3e68ad50cd62bb2eda41d53822a55b0ed049f85c81afb4a03b02db6193e0b92",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "intel-tsmc-ai-packaging-0819",
+      "ticker": "INTC",
+      "titolo": "Intel sfida TSMC nell'advanced packaging per i chip AI, puntando a un mercato da 2.000 miliardi",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=d7b8d9a8df655952f22aceb3fbb26d322a316cb314383e7106c8660a73a44372",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "novo-wegovy-low-dose-0819",
+      "ticker": "LLY",
+      "titolo": "Novo Nordisk testa dosi ridotte di Wegovy, la pillola dimagrante: si intensifica la concorrenza per Eli Lilly",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=40d0dc36eaffbf7f2dddc10fc9074ea75de80d9df3b566c59606cdb6b5eb3a5a",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "amgn-argus-buy-460-0819",
+      "ticker": "AMGN",
+      "titolo": "Argus Research conferma il Buy su Amgen e alza il target a 460 dollari (da 375)",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=2afae83d45198e3ee1a982126a207dda65d46012649e8de405588bec034eab7c",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "meta-q2-ai-monetization-0819",
+      "ticker": "META",
+      "titolo": "Meta Q2 2026: ricavi a 60,8 miliardi (+28%) — l'AI accelera già la monetizzazione pubblicitaria",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=b6a7199220883383f51ad312554012cf201dbdd176417aa13df3ca3d0bef216f",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "nvda-ai-price-drop-demand-0819",
+      "ticker": "NVDA",
+      "titolo": "Il calo dei prezzi dell'AI potrebbe aumentare la domanda di GPU Nvidia grazie all'effetto di adozione di massa",
+      "tipo_evento": "macro tematica",
+      "url": "https://finnhub.io/api/news?id=ee70e602e4fbf100b1bc05dc912afc1bd8514b2a1b0473ed81f3cbdb8f3c3250",
+      "data_invio": "2026-08-19T17:10:00+00:00"
+    },
+    {
+      "id": "ibm-quantum-cryogenic-0819",
+      "ticker": "IBM",
+      "titolo": "IBM raggiunge un traguardo nel quantum computing: due moduli criogenici collegati in un unico sistema",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=828118656b88c426df09814abe89112ff98db1082259303b774dd42d8c8b097a",
+      "data_invio": "2026-08-19T17:10:00+00:00"
     }
   ]
 }
