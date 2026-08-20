@@ -10874,6 +10874,91 @@
       "inviata": true,
       "titolo": "IBM raggiunge un traguardo nel quantum computing: due moduli criogenici collegati in un unico sistema",
       "url": "https://finnhub.io/api/news?id=828118656b88c426df09814abe89112ff98db1082259303b774dd42d8c8b097a"
+    },
+    {
+      "id": "nflx-ackman-pershing-square-20260820",
+      "ticker": "NFLX",
+      "data": "2026-08-20T05:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Bill Ackman entra in Netflix con una quota del 4,9% del portafoglio Pershing Square",
+      "url": "https://finnhub.io/api/news?id=58131e8aa74ac8c8410f9feb712a43e34fe74e511faab0f8c06584131b0e784c"
+    },
+    {
+      "id": "shel-trump-no-iran-talks-20260820",
+      "ticker": "SHEL",
+      "data": "2026-08-20T05:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "negativo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 62,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Trump esclude negoziati con l'Iran: il rischio geopolitico pesa sul mercato petrolifero",
+      "url": "https://finnhub.io/api/news?id=41b03692f54c7aa92afd8531d39a472591489a9a68e957790a2f5c189758c5c0"
+    },
+    {
+      "id": "aapl-ai-megacap-analyst-20260820",
+      "ticker": "AAPL",
+      "data": "2026-08-20T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 56,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Apple rimbalza del 3%: analista la definisce la mega-cap AI più sottovalutata di Wall Street",
+      "url": "https://finnhub.io/api/news?id=f3bac775314cca96badd075dba2e49684c8374ddc4c498d368d720281f12a604"
+    },
+    {
+      "id": "ssnlf-cathie-wood-memory-avoid-20260820",
+      "ticker": "SSNLF",
+      "data": "2026-08-20T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Cathie Wood consiglia di evitare i chip di memoria: potenziale rischio di eccessivo ottimismo sul settore",
+      "url": "https://finnhub.io/api/news?id=93acccb3f681c0890b484f9540cfc3dc84853b5e319f79541fdcd87c46c3cbff"
+    },
+    {
+      "id": "orcl-recovery-analyst-buy-20260820",
+      "ticker": "ORCL",
+      "data": "2026-08-20T05:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 53,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Oracle recupera la media mobile a 20 giorni: analisti confermano Buy prima degli utili di settembre",
+      "url": "https://finnhub.io/api/news?id=929e6ef72946a44476b63598842c7240540655af5e5e01da299978348b5c4d84"
     }
   ]
 }
