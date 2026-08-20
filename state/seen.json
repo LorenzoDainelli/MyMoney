@@ -1,78 +1,6 @@
 {
   "items": [
     {
-      "id": "tsm-q2-beat-capex",
-      "ticker": "TSM",
-      "titolo": "TSMC batte le attese Q2 e alza la guidance, ma il titolo scende per l'elevato capex e le pressioni sui margini",
-      "tipo_evento": "earnings",
-      "url": "https://finnhub.io/api/news?id=abf5fcb41944ddf3a68f61fe7074b9448a552c3a0d47bc2d2770a4006a3b23ae",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "orcl-wisconsin-collateral",
-      "ticker": "ORCL",
-      "titolo": "Oracle rischia un obbligo di collaterale da 7 miliardi di dollari per il mega data center nel Wisconsin",
-      "tipo_evento": "legale/regolatorio",
-      "url": "https://finnhub.io/api/news?id=2a0b0ec5289db32a2f66ac910fd222661254623c4432c8cffca9ba57b3d554c7",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "shel-houthi-blocco-navale",
-      "ticker": "SHEL",
-      "titolo": "Gli Houthi dichiarano un blocco navale contro l'Arabia Saudita: nuova escalation nel Mar Rosso",
-      "tipo_evento": "macro",
-      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQcUowRTU0M2hEUzRtdXAxY1FENjh0OWdXcEJlb2h4VlpBOVdGM2YzZ1BQSVhLMFQwOXhRN01aQ1poMVd5TTNRUHBZbV9jNWZRaGFaejU2ckpkNW5HUlZSdlJXWU5GNTlFU0NFUU9DYkJ1LXVFNHZBanlSemdrb3M1Vm80azBhNlRmTGRWbjQ2dEtkQVNfbTVNMUVReDIwYXB6aDNjN0pReHQ5S1BBUFl1NUc0Z1VyVHB4MWNnQ09JZw?oc=5",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "nvda-nbis-stake-9pct",
-      "ticker": "NVDA",
-      "titolo": "Nvidia rivela una partecipazione superiore al 9% in Nebius Group, più alta delle stime di marzo",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=4b34426e1ff56d4ec051a0296ee47d268cf9bdd6ed5359ac280609e7af549a13",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "nato-etf-budget-usa-2027",
-      "ticker": "NATO",
-      "titolo": "Budget difesa USA FY2027 proposto a 1.450 miliardi con il procurement militare in salto dell'88%; NATO summit di Ankara conferma l'impegno al 5% del PIL",
-      "tipo_evento": "macro tematica",
-      "url": "https://etfexpress.com/2026/07/15/hanetf-launches-us-defence-etf-gijo/",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "jpm-iraq-60bn-deals",
-      "ticker": "JPM",
-      "titolo": "JPMorgan guida accordi commerciali USA-Iraq da 60 miliardi di dollari",
-      "tipo_evento": "news aziendale",
-      "url": "https://finnhub.io/api/news?id=24acb67eccb8bc2232a75bd6932a3f4e7eeb6d5a94e290196683a803161a68af",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "wdc-memoria-rimbalzo-ms",
-      "ticker": "WDC",
-      "titolo": "Le azioni di memoria rimbalzano del 4-6%: Morgan Stanley indica un punto d'ingresso forte dopo la sell-off",
-      "tipo_evento": "macro",
-      "url": "https://finnhub.io/api/news?id=1374947665d5a8790829b4d41b3ec24bb3cf81821497689b392213eb1e69ce0c",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "lly-illumina-atlas-ai",
-      "ticker": "LLY",
-      "titolo": "Eli Lilly entra nell'Illumina Billion Cell Atlas come membro fondatore per mappare le malattie con l'AI",
-      "tipo_evento": "prodotto",
-      "url": "https://finnhub.io/api/news?id=3d9813fceba3cf5e2cd0c0d79b98773b1e68786cdc6c96489fa8468aba8b674d",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
-      "id": "ko-ubs-q2-preview",
-      "ticker": "KO",
-      "titolo": "UBS prevede un Q2 solido per Coca-Cola con guidance annuale confermata",
-      "tipo_evento": "upgrade/downgrade analisti",
-      "url": "https://finnhub.io/api/news?id=4127faed0d19ec3b530137d14f8504b99584179dff94c0234d60465af5bfd174",
-      "data_invio": "2026-07-21T05:15:00+00:00"
-    },
-    {
       "id": "nflx-q2-earnings-20260722",
       "ticker": "NFLX",
       "titolo": "Netflix batte le attese nel Q2 e lancia il buyback trimestrale piu' grande della sua storia, ma il titolo crolla",
@@ -2895,6 +2823,46 @@
       "tipo_evento": "upgrade/downgrade analisti",
       "url": "https://finnhub.io/api/news?id=929e6ef72946a44476b63598842c7240540655af5e5e01da299978348b5c4d84",
       "data_invio": "2026-08-20T05:10:00+00:00"
+    },
+    {
+      "id": "jnj-monarch-quest-3-2026-08-20",
+      "ticker": "JNJ",
+      "titolo": "Johnson & Johnson: la FDA approva MONARCH QUEST 3, aggiornamento AI e navigazione 3D per la broncoscopia robotica",
+      "tipo_evento": "prodotto",
+      "url": "https://finnhub.io/api/news?id=7a9607d856e0e82042b208f8482169a113e1eb6033cde411e37384ae17f4bbe1",
+      "data_invio": "2026-08-20T17:10:00+00:00"
+    },
+    {
+      "id": "meta-bnp-target-855-2026-08-20",
+      "ticker": "META",
+      "titolo": "Meta: BNP Paribas alza il target a 855 dollari (+57% dalla quotazione) puntando sui ricavi dell'AI",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=8ab1392b81288948cad7e5b3c0d10d7c9e9b2ebfbbf36598f4a89c2426038567",
+      "data_invio": "2026-08-20T17:10:00+00:00"
+    },
+    {
+      "id": "orcl-quantinuum-helios-2026-08-20",
+      "ticker": "ORCL",
+      "titolo": "Oracle e Quantinuum: la partnership sul calcolo quantistico raggiunge il 99,92% di fedeltà a due qubit",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=26e39312b0a20c9b8e439281fdf5f2daa8121afdd5d8536f433547e1c3cc9c96",
+      "data_invio": "2026-08-20T17:10:00+00:00"
+    },
+    {
+      "id": "lly-amplitude-tarna-2026-08-20",
+      "ticker": "LLY",
+      "titolo": "Eli Lilly stringe una partnership con Amplitude Therapeutics per vaccini taRNA contro malattie infettive",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=d209f8d1cd473fe3476d9967700e9a22635d6821755b8f5784f3c87ab02146b9",
+      "data_invio": "2026-08-20T17:10:00+00:00"
+    },
+    {
+      "id": "shel-kazakhstan-peak-2026-08-20",
+      "ticker": "SHEL",
+      "titolo": "Bloomberg: Exxon avverte che il maggior giacimento petrolifero del Kazakistan raggiungerà il picco in pochi anni",
+      "tipo_evento": "macro",
+      "url": "https://finnhub.io/api/news?id=8c06d1fd42a76f2e2f3cda2368f8e353682e8c4ccb1809125391c9f7db00bab1",
+      "data_invio": "2026-08-20T17:10:00+00:00"
     }
   ]
 }

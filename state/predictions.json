@@ -10959,6 +10959,91 @@
       "inviata": true,
       "titolo": "Oracle recupera la media mobile a 20 giorni: analisti confermano Buy prima degli utili di settembre",
       "url": "https://finnhub.io/api/news?id=929e6ef72946a44476b63598842c7240540655af5e5e01da299978348b5c4d84"
+    },
+    {
+      "id": "jnj-monarch-quest-3-2026-08-20",
+      "ticker": "JNJ",
+      "data": "2026-08-20T17:10:00+00:00",
+      "tipo_evento": "prodotto",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Johnson & Johnson: la FDA approva MONARCH QUEST 3, aggiornamento AI e navigazione 3D per la broncoscopia robotica",
+      "url": "https://finnhub.io/api/news?id=7a9607d856e0e82042b208f8482169a113e1eb6033cde411e37384ae17f4bbe1"
+    },
+    {
+      "id": "meta-bnp-target-855-2026-08-20",
+      "ticker": "META",
+      "data": "2026-08-20T17:10:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "media",
+      "rilevanza": 55,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Meta: BNP Paribas alza il target a 855 dollari (+57% dalla quotazione) puntando sui ricavi dell'AI",
+      "url": "https://finnhub.io/api/news?id=8ab1392b81288948cad7e5b3c0d10d7c9e9b2ebfbbf36598f4a89c2426038567"
+    },
+    {
+      "id": "orcl-quantinuum-helios-2026-08-20",
+      "ticker": "ORCL",
+      "data": "2026-08-20T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Oracle e Quantinuum: la partnership sul calcolo quantistico raggiunge il 99,92% di fedeltà a due qubit",
+      "url": "https://finnhub.io/api/news?id=26e39312b0a20c9b8e439281fdf5f2daa8121afdd5d8536f433547e1c3cc9c96"
+    },
+    {
+      "id": "lly-amplitude-tarna-2026-08-20",
+      "ticker": "LLY",
+      "data": "2026-08-20T17:10:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Eli Lilly stringe una partnership con Amplitude Therapeutics per vaccini taRNA contro malattie infettive",
+      "url": "https://finnhub.io/api/news?id=d209f8d1cd473fe3476d9967700e9a22635d6821755b8f5784f3c87ab02146b9"
+    },
+    {
+      "id": "shel-kazakhstan-peak-2026-08-20",
+      "ticker": "SHEL",
+      "data": "2026-08-20T17:10:00+00:00",
+      "tipo_evento": "macro",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 50,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Bloomberg: Exxon avverte che il maggior giacimento petrolifero del Kazakistan raggiungerà il picco in pochi anni",
+      "url": "https://finnhub.io/api/news?id=8c06d1fd42a76f2e2f3cda2368f8e353682e8c4ccb1809125391c9f7db00bab1"
     }
   ]
 }
