@@ -2863,6 +2863,54 @@
       "tipo_evento": "macro",
       "url": "https://finnhub.io/api/news?id=8c06d1fd42a76f2e2f3cda2368f8e353682e8c4ccb1809125391c9f7db00bab1",
       "data_invio": "2026-08-20T17:10:00+00:00"
+    },
+    {
+      "id": "avgo-debt-deal-60b-ai-2026-08-21",
+      "ticker": "AVGO",
+      "titolo": "Broadcom cerca oltre 60 miliardi di dollari di debito per espansione nell'AI",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=be47314eef46f3b29cea6eeebfb187ebbd7607353b02e61277f02148e320b8f9",
+      "data_invio": "2026-08-21T05:05:00+00:00"
+    },
+    {
+      "id": "spcx-lockup-2-expiry-2026-08-21",
+      "ticker": "SPCX",
+      "titolo": "SpaceX in calo: scade il secondo lockup post-IPO, 319 milioni di azioni liberate",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=8a6682b57767a39be88b963967506193b14921358de027d9056242ea30cb87f6",
+      "data_invio": "2026-08-21T05:05:00+00:00"
+    },
+    {
+      "id": "wmt-earnings-q3-weak-2026-08-21",
+      "ticker": "WMT",
+      "titolo": "Walmart delude nel trimestre: vendite USA deboli, guidance cauta — segnale macro sui consumi",
+      "tipo_evento": "earnings",
+      "url": "https://finnhub.io/api/news?id=d0caa235c650c40f44b3efb5aee5166e624ed559c8db551a6c72ecf6e75a7b94",
+      "data_invio": "2026-08-21T05:05:00+00:00"
+    },
+    {
+      "id": "anthropic-ipo-mega-filing-2026-08-21",
+      "ticker": "GOOG",
+      "titolo": "Anthropic prepara l'IPO record entro fine agosto: potrebbe eguagliare o superare quello di SpaceX",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=f477a5bc0781fb216fec7a42849e6c182bdeec9bc55aacf1dd553561957290fe",
+      "data_invio": "2026-08-21T05:05:00+00:00"
+    },
+    {
+      "id": "aapl-downgrade-sell-q4-2026-08-21",
+      "ticker": "AAPL",
+      "titolo": "Apple declassata a Sell: la guida Q4 segnala crescita più lenta e pressione sui margini",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "url": "https://finnhub.io/api/news?id=050c0f2aa4bdaa3c3534896ea09737773f06b17e6cee5d63f78c4338ef7d6372",
+      "data_invio": "2026-08-21T05:05:00+00:00"
+    },
+    {
+      "id": "tsm-vp-insider-buy-174k-2026-08-21",
+      "ticker": "TSM",
+      "titolo": "Un vicepresidente di TSMC acquista azioni per 174.000 dollari: segnale interno positivo",
+      "tipo_evento": "news aziendale",
+      "url": "https://finnhub.io/api/news?id=4b9869a333e68cc77486bcc5894f56e1ef345161167646d224cf301caae4e67d",
+      "data_invio": "2026-08-21T05:05:00+00:00"
     }
   ]
 }

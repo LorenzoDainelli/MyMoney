@@ -11044,6 +11044,108 @@
       "inviata": true,
       "titolo": "Bloomberg: Exxon avverte che il maggior giacimento petrolifero del Kazakistan raggiungerà il picco in pochi anni",
       "url": "https://finnhub.io/api/news?id=8c06d1fd42a76f2e2f3cda2368f8e353682e8c4ccb1809125391c9f7db00bab1"
+    },
+    {
+      "id": "avgo-debt-deal-60b-ai-2026-08-21",
+      "ticker": "AVGO",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 78,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Broadcom cerca oltre 60 miliardi di dollari di debito per espansione nell'AI",
+      "url": "https://finnhub.io/api/news?id=be47314eef46f3b29cea6eeebfb187ebbd7607353b02e61277f02148e320b8f9"
+    },
+    {
+      "id": "spcx-lockup-2-expiry-2026-08-21",
+      "ticker": "SPCX",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "alta",
+      "rilevanza": 72,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "SpaceX in calo: scade il secondo lockup post-IPO, 319 milioni di azioni liberate",
+      "url": "https://finnhub.io/api/news?id=8a6682b57767a39be88b963967506193b14921358de027d9056242ea30cb87f6"
+    },
+    {
+      "id": "wmt-earnings-q3-weak-2026-08-21",
+      "ticker": "WMT",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "earnings",
+      "impatto": {
+        "breve": "negativo",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "alta",
+      "rilevanza": 70,
+      "descrittivo": true,
+      "inviata": true,
+      "titolo": "Walmart delude nel trimestre: vendite USA deboli, guidance cauta — segnale macro sui consumi",
+      "url": "https://finnhub.io/api/news?id=d0caa235c650c40f44b3efb5aee5166e624ed559c8db551a6c72ecf6e75a7b94"
+    },
+    {
+      "id": "anthropic-ipo-mega-filing-2026-08-21",
+      "ticker": "GOOG",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "positivo",
+        "medio": "neutro",
+        "lungo": "positivo"
+      },
+      "confidenza": "media",
+      "rilevanza": 65,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Anthropic prepara l'IPO record entro fine agosto: potrebbe eguagliare o superare quello di SpaceX",
+      "url": "https://finnhub.io/api/news?id=f477a5bc0781fb216fec7a42849e6c182bdeec9bc55aacf1dd553561957290fe"
+    },
+    {
+      "id": "aapl-downgrade-sell-q4-2026-08-21",
+      "ticker": "AAPL",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "upgrade/downgrade analisti",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "negativo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 58,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Apple declassata a Sell: la guida Q4 segnala crescita più lenta e pressione sui margini",
+      "url": "https://finnhub.io/api/news?id=050c0f2aa4bdaa3c3534896ea09737773f06b17e6cee5d63f78c4338ef7d6372"
+    },
+    {
+      "id": "tsm-vp-insider-buy-174k-2026-08-21",
+      "ticker": "TSM",
+      "data": "2026-08-21T05:05:00+00:00",
+      "tipo_evento": "news aziendale",
+      "impatto": {
+        "breve": "neutro",
+        "medio": "positivo",
+        "lungo": "neutro"
+      },
+      "confidenza": "bassa",
+      "rilevanza": 52,
+      "descrittivo": false,
+      "inviata": true,
+      "titolo": "Un vicepresidente di TSMC acquista azioni per 174.000 dollari: segnale interno positivo",
+      "url": "https://finnhub.io/api/news?id=4b9869a333e68cc77486bcc5894f56e1ef345161167646d224cf301caae4e67d"
     }
   ]
 }
